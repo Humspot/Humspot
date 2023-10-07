@@ -1,0 +1,7 @@
+{
+  "name": "Humspot",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
