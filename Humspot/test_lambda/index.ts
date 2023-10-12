@@ -18,6 +18,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   try {
     
     const connection = await pool.getConnection();
+    // await connection.beginTransaction(); // use transactions to ensure atomicity!
 
     const createTableSQL = `
       CREATE TABLE IF NOT EXISTS Users (
