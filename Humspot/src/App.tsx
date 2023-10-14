@@ -12,6 +12,10 @@ import {
 import { IonReactRouter } from '@ionic/react-router';
 import { calendar, compass, ellipse, map, person, square, triangle } from 'ionicons/icons';
 
+import { useEffect } from 'react';
+import { guestUser, useContext } from './my-context';
+import { Auth, Hub } from 'aws-amplify';
+
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
 import '@ionic/react/css/structure.css';
@@ -31,9 +35,53 @@ import MapPage from './pages/map';
 import ProfilePage from './pages/profile';
 import { useState } from 'react';
 
+import TestGoogleAuth from './pages/TestGoogleAuth';
+import { handleUserLogin } from './server';
+
 setupIonicReact({mode:"md"});
 
 const App: React.FC = () => {
+  const context = useContext();
+
+  useEffect(() => {
+    const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
+      switch (event) {
+        case "signIn":
+          const email: string | null = data?.signInUserSession?.idToken?.payload?.email ?? null;
+          const awsUsername: string | null = data?.username ?? null;
+          context.setHumspotUser({ email: email, awsUsername: awsUsername, imageUrl: '', role: 'user', loggedIn: true });
+          break;
+        case "signOut":
+          console.log("signed out!");
+          context.setHumspotUser(guestUser);
+          break;
+        case "customOAuthState":
+          console.log("customOAuthState");
+      }
+    });
+
+    getUser();
+
+    return unsubscribe;
+  }, []);
+
+  const getUser = async (): Promise<void> => {
+    try {
+      const currentUser = await Auth.currentAuthenticatedUser();
+      const email: string | null = currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
+      const awsUsername: string | null = currentUser?.username ?? null;
+      context.setHumspotUser({ email: email, awsUsername: awsUsername, imageUrl: '', role: 'user', loggedIn: true });
+      handleUserLogin(email, awsUsername).then(() => {
+        console.log("CALLED");
+      }).catch((err) => {
+        console.log(err);
+      });
+    } catch (error) {
+      console.error("Not signed in: " + error);
+      context.setHumspotUser(guestUser);
+    }
+  };
+
   const [currentTab, setCurrentTab] = useState("tab1");
   function handleTabChange(event: CustomEvent<{ tab: string; }>): void {
     setCurrentTab(event.detail.tab);
@@ -81,6 +129,7 @@ const App: React.FC = () => {
       </IonTabs>
     </IonReactRouter>
   </IonApp>
+
   );
 };
 
