@@ -67,11 +67,11 @@ const App: React.FC = () => {
       const email: string | null = currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
       const awsUsername: string | null = currentUser?.username ?? null;
       context.setHumspotUser({ email: email, awsUsername: awsUsername, imageUrl: '', role: 'user', loggedIn: true });
-      // handleUserLogin(email, awsUsername).then(() => {
-      //   console.log("CALLED");
-      // }).catch((err) => {
-      //   console.log(err);
-      // });
+      handleUserLogin(email, awsUsername).then(() => {
+        console.log("CALLED");
+      }).catch((err) => {
+        console.log(err);
+      });
     } catch (error) {
       console.error("Not signed in: " + error);
       context.setHumspotUser(guestUser);
