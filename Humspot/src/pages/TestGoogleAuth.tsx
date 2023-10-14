@@ -9,13 +9,12 @@ const TestGoogleAuth: React.FC = () => {
 
   const [present, dismiss] = useIonLoading();
 
-
   /**
    * @description runs when the user clicks the login button. It ensures the user is not already logged in.
    * If not, it calls handleGoogleLoginAndVerifyAWSUser and caches authentication credentials accordingly.
    */
   const handleLogin = async () => {
-    if (context.humspotUser.loggedIn) return; // if user is already logged in
+    if (context.humspotUser.email) return; // if user is already logged in
     present({ duration: 0, message: "Logging in..." });
     const success = await handleGoogleLoginAndVerifyAWSUser();
     dismiss();
@@ -27,9 +26,9 @@ const TestGoogleAuth: React.FC = () => {
         <IonContent>
           <IonCard>
             <IonCardContent>
-              {context.humspotUser.loggedIn ?
+              {context.humspotUser.email ?
                 <>
-                  <p>Currently logged in as: {context.humspotUser.email}</p>
+                  <p>Currently logged in as: {JSON.stringify(context.humspotUser)}</p>
                   <IonButton onClick={async () => await handleLogout()}>Logout</IonButton>
 
                 </>

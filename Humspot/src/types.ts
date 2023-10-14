@@ -7,6 +7,13 @@ export type HumspotUser = {
   email: string | null;
   imageUrl: string;
   awsUsername: string | null;
-  loggedIn: boolean;
-  role: 'user' | 'admin' | 'organizer' | 'guest';
+  accountType: 'user' | 'admin' | 'organizer' | 'guest';
+  accountStatus: 'active' | 'restricted';
+  authProvider: 'google' | 'custom'
+  dateCreated: string | Date;
+}
+
+export type AWSLoginResponse = {
+  message: string;
+  user?: HumspotUser;
 }

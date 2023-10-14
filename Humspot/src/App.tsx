@@ -37,8 +37,9 @@ import { useState } from 'react';
 
 import TestGoogleAuth from './pages/TestGoogleAuth';
 import { handleUserLogin } from './server';
+import { AWSLoginResponse } from './types';
 
-setupIonicReact({mode:"md"});
+setupIonicReact({ mode: "md" });
 
 const App: React.FC = () => {
   const context = useContext();
@@ -49,7 +50,7 @@ const App: React.FC = () => {
         case "signIn":
           const email: string | null = data?.signInUserSession?.idToken?.payload?.email ?? null;
           const awsUsername: string | null = data?.username ?? null;
-          context.setHumspotUser({ email: email, awsUsername: awsUsername, imageUrl: '', role: 'user', loggedIn: true });
+
           break;
         case "signOut":
           console.log("signed out!");
@@ -70,9 +71,11 @@ const App: React.FC = () => {
       const currentUser = await Auth.currentAuthenticatedUser();
       const email: string | null = currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
       const awsUsername: string | null = currentUser?.username ?? null;
-      context.setHumspotUser({ email: email, awsUsername: awsUsername, imageUrl: '', role: 'user', loggedIn: true });
-      handleUserLogin(email, awsUsername).then(() => {
-        console.log("CALLED");
+      handleUserLogin(email, awsUsername).then((res: AWSLoginResponse) => {
+        console.log(res.message);
+        if (!res.user) throw new Error(res.message);
+        console.log(JSON.stringify(res.user));
+        context.setHumspotUser(res.user);
       }).catch((err) => {
         console.log(err);
       });
@@ -88,47 +91,50 @@ const App: React.FC = () => {
   }
 
   return (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route path ="/">
-          <ExplorePage></ExplorePage>
-          </Route>
-          <Route exact path="/explore">
-            <ExplorePage></ExplorePage>
-          </Route>
-          <Route exact path="/calendar">
-            <CalendarPage></CalendarPage>
-          </Route>
-          <Route exact path="/map">
-            <MapPage></MapPage>
-          </Route>
-          <Route exact path="/profile">
-            <ProfilePage></ProfilePage>
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom" color="primary" onIonTabsWillChange={handleTabChange}>
-          <IonTabButton tab="tab1" href="/explore">
-            <IonIcon aria-hidden="true" icon={compass} color={currentTab=="tab1"?"icon-highlight":"icon-dark"} size="large" />
-            {/* <IonLabel>Tab 1</IonLabel> */}
-          </IonTabButton>
-          <IonTabButton tab="tab2" href="/map">
-            <IonIcon aria-hidden="true" icon={map} color={currentTab=="tab2"?"icon-highlight":"icon-dark"} size="large"/>
-            {/* <IonLabel>Tab 2</IonLabel> */}
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/calendar">
-            <IonIcon aria-hidden="true" icon={calendar} color={currentTab=="tab3"?"icon-highlight":"icon-dark"} size="large"/>
-            {/* <IonLabel>Tab 3</IonLabel> */}
-          </IonTabButton>
-          <IonTabButton tab="tab4" href="/profile">
-            <IonIcon aria-hidden="true" icon={person} color={currentTab=="tab4"?"icon-highlight":"icon-dark"} size="large"/>
-            {/* <IonLabel>Tab 3</IonLabel> */}
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
+    <IonApp>
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route path="/">
+              <ExplorePage></ExplorePage>
+            </Route>
+            <Route exact path="/explore">
+              <ExplorePage></ExplorePage>
+            </Route>
+            <Route exact path="/calendar">
+              <CalendarPage></CalendarPage>
+            </Route>
+            <Route exact path="/map">
+              <MapPage></MapPage>
+            </Route>
+            <Route exact path="/profile">
+              <ProfilePage></ProfilePage>
+            </Route>
+            <Route exact path="/google-auth">
+              <TestGoogleAuth />
+            </Route>
+          </IonRouterOutlet>
+          <IonTabBar slot="bottom" color="primary" onIonTabsWillChange={handleTabChange}>
+            <IonTabButton tab="tab1" href="/explore">
+              <IonIcon aria-hidden="true" icon={compass} color={currentTab == "tab1" ? "icon-highlight" : "icon-dark"} size="large" />
+              {/* <IonLabel>Tab 1</IonLabel> */}
+            </IonTabButton>
+            <IonTabButton tab="tab2" href="/map">
+              <IonIcon aria-hidden="true" icon={map} color={currentTab == "tab2" ? "icon-highlight" : "icon-dark"} size="large" />
+              {/* <IonLabel>Tab 2</IonLabel> */}
+            </IonTabButton>
+            <IonTabButton tab="tab3" href="/calendar">
+              <IonIcon aria-hidden="true" icon={calendar} color={currentTab == "tab3" ? "icon-highlight" : "icon-dark"} size="large" />
+              {/* <IonLabel>Tab 3</IonLabel> */}
+            </IonTabButton>
+            <IonTabButton tab="tab4" href="/profile">
+              <IonIcon aria-hidden="true" icon={person} color={currentTab == "tab4" ? "icon-highlight" : "icon-dark"} size="large" />
+              {/* <IonLabel>Tab 3</IonLabel> */}
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    </IonApp>
 
   );
 };

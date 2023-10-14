@@ -57,7 +57,8 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: `User ${requestData.email} already exists!`
+          message: `User ${requestData.email} already exists! Returning user info...`,
+          user: userResult[0]
         }),
       };
     }

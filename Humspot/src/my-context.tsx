@@ -5,7 +5,7 @@ type Props = {
   children: React.ReactNode;
 }
 
-export const guestUser: HumspotUser = { awsUsername: null, email: null, role: 'guest', imageUrl: '', loggedIn: false };
+export const guestUser: HumspotUser = { awsUsername: null, email: null, accountType: 'guest', imageUrl: '', accountStatus: 'restricted', authProvider: 'custom', dateCreated: ''};
 
 export type ContextType = {
   humspotUser: HumspotUser;

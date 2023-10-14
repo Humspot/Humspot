@@ -6,6 +6,7 @@
 import awsconfig from './aws-exports';
 import { Amplify, Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
+import { AWSLoginResponse } from './types';
 
 Amplify.configure(awsconfig);
 
@@ -47,7 +48,7 @@ export const handleLogout = async (): Promise<boolean> => {
  * @param {string | null} email 
  * @param {string | null} username 
  */
-export const handleUserLogin = async (email: string | null, username: string | null) => {
+export const handleUserLogin = async (email: string | null, username: string | null): Promise<AWSLoginResponse> => {
   try {
     if (!email || !username) throw new Error('Invalid email or username');
     const currentUserSession = await Auth.currentSession();
@@ -77,10 +78,13 @@ export const handleUserLogin = async (email: string | null, username: string | n
     });
 
     const responseData = await response.json();
-
     console.log(responseData);
+    return responseData;
   } catch (error) {
     console.error('Error calling API Gateway', error);
+    return (
+      { message: 'Error calling API Gateway' }
+    )
   }
 };
 
