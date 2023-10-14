@@ -1,0 +1,49 @@
+
+.MainCarousel {
+  background-color: slategrey;
+  height: 40%;
+  width: auto;
+  display: flex;
+}
+
+.MainCarouselSlide {
+    color: red;
+    border: thick black;
+    /* background-color: aqua; */
+    width: 90%;
+    height: 80%;
+    font-size: large;
+    font-weight: bold;
+    
+}
+
+.SecondaryCarousel{
+    background-color: gray;
+    margin-top: 2%;
+    height: 20%;
+    width: auto;
+    display: flex;
+}
+
+.SecondaryCarouselSlide {
+    color: red;
+    border: thick black;
+    background-color: aqua;
+    width: 90%;
+    height: 80%;
+    font-size: large;
+    font-weight: bold;
+}
+
+ 
+swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+IonHeader {
+  margin: 2px;
+  padding: 20px;
+}

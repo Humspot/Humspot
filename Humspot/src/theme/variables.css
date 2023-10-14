@@ -4,7 +4,7 @@ http://ionicframework.com/docs/theming/ */
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: #3880ff;
+  --ion-color-primary: #BCEFC4;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -74,7 +74,26 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  /* icon-dark */
+  --ion-color-icon-dark: #303030;
+	--ion-color-icon-dark-rgb: 48,48,48;
+	--ion-color-icon-dark-contrast: #ffffff;
+	--ion-color-icon-dark-contrast-rgb: 255,255,255;
+	--ion-color-icon-dark-shade: #2a2a2a;
+	--ion-color-icon-dark-tint: #454545;
+  
+/* icon-highlight */
+  --ion-color-icon-highlight: #800080;
+	--ion-color-icon-highlight-rgb: 128,0,128;
+	--ion-color-icon-highlight-contrast: #ffffff;
+	--ion-color-icon-highlight-contrast-rgb: 255,255,255;
+	--ion-color-icon-highlight-shade: #710071;
+	--ion-color-icon-highlight-tint: #8d1a8d;
 }
+
+
+
 
 @media (prefers-color-scheme: dark) {
   /*
@@ -83,7 +102,7 @@ http://ionicframework.com/docs/theming/ */
    */
 
   body {
-    --ion-color-primary: #428cff;
+    --ion-color-primary: #BCEFC4;
     --ion-color-primary-rgb: 66,140,255;
     --ion-color-primary-contrast: #ffffff;
     --ion-color-primary-contrast-rgb: 255,255,255;
@@ -233,4 +252,22 @@ http://ionicframework.com/docs/theming/ */
 
     --ion-card-background: #1e1e1e;
   }
+}
+
+.ion-color-icon-dark {
+	--ion-color-base: var(--ion-color-icon-dark);
+	--ion-color-base-rgb: var(--ion-color-icon-dark-rgb);
+	--ion-color-contrast: var(--ion-color-icon-dark-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-icon-dark-contrast-rgb);
+	--ion-color-shade: var(--ion-color-icon-dark-shade);
+	--ion-color-tint: var(--ion-color-icon-dark-tint);
+}
+
+.ion-color-icon-highlight {
+	--ion-color-base: var(--ion-color-icon-highlight);
+	--ion-color-base-rgb: var(--ion-color-icon-highlight-rgb);
+	--ion-color-contrast: var(--ion-color-icon-highlight-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-icon-highlight-contrast-rgb);
+	--ion-color-shade: var(--ion-color-icon-highlight-shade);
+	--ion-color-tint: var(--ion-color-icon-highlight-tint);
 }
