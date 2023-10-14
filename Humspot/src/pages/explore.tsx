@@ -15,6 +15,13 @@ function ExplorePage() {
         { title: "Attraction 4", description: "This is the fourth slide", imgsrc:"https://source.unsplash.com/random/?beach,trail" },
       ];
 
+      const secondCarouselData = [
+        { title: "Attraction 1", imgsrc:"https://source.unsplash.com/random/?forest"},
+        { title: "Attraction 2", imgsrc:"https://source.unsplash.com/random/?forest,trail" },
+        { title: "Attraction 3", imgsrc:"https://source.unsplash.com/random/?beach" },
+        { title: "Attraction 4", imgsrc:"https://source.unsplash.com/random/?beach,trail" },
+      ];
+
     const mainCarouselEntries = mainCarouselData.map((data, index) => (
         <SwiperSlide key={index}>
           <div className="MainCarouselSlide">
@@ -23,11 +30,19 @@ function ExplorePage() {
         </SwiperSlide>
       ));
 
+      const secondCarouselEntries = secondCarouselData.map((data, index) => (
+        <SwiperSlide key={index}>
+          <div className="SecondaryCarouselSlide">
+            <CarouselEntry title={data.title} imgsrc={data.imgsrc}/>
+          </div>
+        </SwiperSlide>
+      ));
+
     return(
         <>
         <IonPage>
             <IonContent>
-                <IonHeader>
+                <IonHeader className="Header">
                     Highlights
                   </IonHeader>
                 <div className="MainCarousel">
@@ -43,10 +58,7 @@ function ExplorePage() {
                 <div className="SecondaryCarousel"> 
                 <Swiper slidesPerView={1.2}>
                     
-                    <SwiperSlide><div className="SecondaryCarouselSlide">ATTRACTION 1</div></SwiperSlide>
-                    <SwiperSlide><div className="SecondaryCarouselSlide">ATTRACTION 2</div></SwiperSlide>
-                    <SwiperSlide><div className="SecondaryCarouselSlide">ATTRACTION 3</div></SwiperSlide>
-                    <SwiperSlide><div className="SecondaryCarouselSlide">ATTRACTION 4</div></SwiperSlide>
+                {secondCarouselEntries}
                     
                 </Swiper>
                 </div>

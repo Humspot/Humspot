@@ -25,7 +25,7 @@
     display: flex;
 }
 
-.SecondaryCarouselSlide {
+/* .SecondaryCarouselSlide {
     color: red;
     border: thick black;
     background-color: aqua;
@@ -33,7 +33,7 @@
     height: 80%;
     font-size: large;
     font-weight: bold;
-}
+} */
 
  
 swiper-slide {
@@ -43,7 +43,7 @@ swiper-slide {
   justify-content: center;
 }
 
-IonHeader {
+.Header {
   margin: 2px;
-  padding: 20px;
+  padding: 2px;
 }
