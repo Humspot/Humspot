@@ -4,6 +4,7 @@
  */
 
 export type HumspotUser = {
+  userId: string;
   email: string | null;
   imageUrl: string;
   awsUsername: string | null;

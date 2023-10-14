@@ -24,6 +24,27 @@ const pool = mysql.createPool({
   debug: true
 });
 
+type HumspotUser = {
+  userId: string;
+  email: string | null;
+  imageUrl: string;
+  username: string | null;
+  accountType: 'user' | 'admin' | 'organizer' | 'guest';
+  accountStatus: 'active' | 'restricted';
+  authProvider: 'google' | 'custom'
+  dateCreated: string | Date;
+}
+
+// Get current date in 'YYYY-MM-DD' format
+const getCurrentDate = (): string => {
+  const date = new Date();
+  const yyyy = date.getFullYear().toString();
+  const mm = (date.getMonth() + 1).toString().padStart(2, '0');
+  const dd = date.getDate().toString().padStart(2, '0');
+
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 
 export const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   const connection = await pool.getConnection();
@@ -63,15 +84,27 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       };
     }
 
+    const currentDate: string = getCurrentDate();
     const userID: string = crypto.randomBytes(12).toString('hex'); // Adjust to ensure uniqueness as needed
 
     const query = `
       INSERT INTO Users (userID, username, email, authProvider, accountType, accountStatus, profilePicURL, dateCreated) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, CURDATE());
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?);
     `;
-    const parameters = [userID, requestData.username, requestData.email, requestData.authProvider, requestData.accountType, 'active', requestData.profilePicURL || null];
+    const parameters = [userID, requestData.username, requestData.email, requestData.authProvider, requestData.accountType, 'active', requestData.profilePicURL || null, currentDate];
 
     await connection.query(query, parameters);
+
+    const humspotUser: HumspotUser = {
+      userId: userID,
+      username: requestData.username,
+      email: requestData.email,
+      authProvider: requestData.authProvider,
+      accountType: requestData.accountType,
+      accountStatus: 'active',
+      imageUrl: requestData.profilePicURL || null,
+      dateCreated: currentDate,
+    }
 
     return {
       statusCode: 200,
@@ -82,6 +115,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       },
       body: JSON.stringify({
         message: 'User created successfully',
+        user: JSON.stringify(humspotUser)
       }),
     };
   } catch (error) {
