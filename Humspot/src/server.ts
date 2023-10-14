@@ -3,117 +3,89 @@
  * @filetype contains the code used to access backend services like Google and AWS.
  */
 
-import { GoogleAuth, User } from '@codetrix-studio/capacitor-google-auth';
-import * as AWS from 'aws-sdk/global';
-import { GoogleAndAWSVerifyResult, HumspotUser } from './types';
-import { Preferences } from '@capacitor/preferences';
+import awsconfig from './aws-exports';
+import { Amplify, Auth } from 'aws-amplify';
+import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
-AWS.config.update({
-  region: 'us-west-1',
-});
+Amplify.configure(awsconfig);
 
-export const setGuestUser = () => {
-  const credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: import.meta.env.VITE_AWS_IDENTITY_POOL_ID,
-  });
-  AWS.config.credentials = credentials;
-}
 
 /**
  * @function handleGoogleLoginAndVerifyAWSUser
  * @description handles login through Google. If successful, the user will be created in AWS IdentityPool.
  * 
- * @returns {Promise<GoogleAndAWSVerifyResult>} whether the google login succeeded, and, if so, 
- * whether the AWS user was successfully created. If both are true, return the access key ID from AWS.
+ * @returns {Promise<boolean>} whether the auth federated sign in (GOOGLE) is successful/
  */
-export const handleGoogleLoginAndVerifyAWSUser = (): Promise<GoogleAndAWSVerifyResult> => {
-  return new Promise(async (resolve) => {
-    try {
-      const user: User = await GoogleAuth.signIn();
-
-      // Get google account info
-      const idToken: string = user.authentication.idToken;
-      const email: string = user.email;
-      const imageUrl: string = user.imageUrl;
-      const name: string = user.name;
-
-      // Check for AWS Identity Pool config
-      const credentials = new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: import.meta.env.VITE_AWS_IDENTITY_POOL_ID,
-        Logins: {
-          'accounts.google.com': idToken
-        },
-      });
-
-      credentials.expired = true;
-
-      AWS.config.credentials = credentials;
-
-      credentials.get((error) => {
-        if (error) {
-          console.error(error);
-          resolve({ success: false });
-          return;
-        }
-
-        // If no error, create frontend HumspotUser
-        const User: HumspotUser = {
-          email: email,
-          imageUrl: imageUrl,
-          username: name,
-          accessKeyId: credentials.accessKeyId,
-          loggedIn: true
-        };
-        resolve({ success: true, user: User });
-      });
-    } catch (err) {
-      console.error(err);
-      resolve({ success: false });
-    }
-  });
+export const handleGoogleLoginAndVerifyAWSUser = async (): Promise<boolean> => {
+  try {
+    await Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
+    return true;
+  } catch (error) {
+    console.error('Error during sign-in', error);
+    return false;
+  }
 };
 
 /**
- * @function handleAWSLogout
- * @description Handles the logout of AWS and clears the access key ID from cache.
+ * @function handleLogout
+ * @description logs the user out of the application
  * 
- * @returns {Promise<true | undefined>} true if logout success, otherwise error
-
+ * @returns {Promise<boolean>} true if the user successfully logged out, false otherwise
  */
-export const handleAWSLogout = async (): Promise<true | undefined> => {
+export const handleLogout = async (): Promise<boolean> => {
   try {
-    if (AWS.config.credentials instanceof AWS.CognitoIdentityCredentials) {
-      AWS.config.credentials.clearCachedId();
-      AWS.config.credentials.expired = true;
-    }
+    await Auth.signOut();
+    return true;
+  } catch (error) {
+    console.error('Error during sign out ' + error);
+    return false;
+  }
+};
 
-    const defaultCredentials = new AWS.CognitoIdentityCredentials({
-      IdentityPoolId: import.meta.env.VITE_AWS_IDENTITY_POOL_ID
+/**
+ * 
+ * @param {string | null} email 
+ * @param {string | null} username 
+ */
+export const handleUserLogin = async (email: string | null, username: string | null) => {
+  try {
+    if (!email || !username) throw new Error('Invalid email or username');
+    const currentUserSession = await Auth.currentSession();
+
+    if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const requestBody: Record<string, string> = {
+      username: username,
+      email: email,
+      authProvider: 'google',
+      accountType: 'user',
+      accountStatus: 'active'
+    };
+
+    console.log(requestBody);
+
+    const response = await fetch('https://5w69nrkqcj.execute-api.us-west-1.amazonaws.com/create-user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+      body: JSON.stringify(requestBody),
     });
-    AWS.config.credentials = defaultCredentials;
 
-    await Preferences.remove({ key: 'humspotUser' });
-    return true;
+    const responseData = await response.json();
 
+    console.log(responseData);
   } catch (error) {
-    console.error('Error logging out from AWS', error);
+    console.error('Error calling API Gateway', error);
   }
 };
 
-/**
- * @function handleGoogleLogout
- * @description Handles the logout of Google.
- * 
- * @returns {Promise<true | undefined>} true if logout success, otherwise error
- */
-export const handleGoogleLogout = async (): Promise<true | undefined> => {
-  try {
-    await GoogleAuth.signOut();
-    return true;
-  } catch (error) {
-    console.error('Error logging out from Google', error);
-  }
-};
+
+
 
 
 

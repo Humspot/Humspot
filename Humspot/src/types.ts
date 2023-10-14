@@ -4,14 +4,9 @@
  */
 
 export type HumspotUser = {
-  accessKeyId: string; // AWS
-  email: string;
-  imageUrl: string; 
-  username: string;
+  email: string | null;
+  imageUrl: string;
+  awsUsername: string | null;
   loggedIn: boolean;
+  role: 'user' | 'admin' | 'organizer' | 'guest';
 }
-
-export type GoogleAndAWSVerifyResult = {
-  success: boolean;
-  user?: HumspotUser;
-};
