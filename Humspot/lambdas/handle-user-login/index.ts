@@ -25,7 +25,7 @@ const pool = mysql.createPool({
 });
 
 type HumspotUser = {
-  userId: string;
+  userID: string;
   email: string | null;
   imageUrl: string;
   username: string | null;
@@ -85,7 +85,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
 
     const currentDate: string = getCurrentDate();
-    const userID: string = crypto.randomBytes(12).toString('hex'); // Adjust to ensure uniqueness as needed
+    const userID: string = crypto.randomBytes(12).toString('hex'); 
 
     const query = `
       INSERT INTO Users (userID, username, email, authProvider, accountType, accountStatus, profilePicURL, dateCreated) 
@@ -96,7 +96,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     await connection.query(query, parameters);
 
     const humspotUser: HumspotUser = {
-      userId: userID,
+      userID: userID,
       username: requestData.username,
       email: requestData.email,
       authProvider: requestData.authProvider,

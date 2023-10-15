@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.hum-spot',
+  appId: 'com.humspot',
   appName: 'Humspot',
   webDir: 'dist',
   server: {

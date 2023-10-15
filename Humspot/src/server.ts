@@ -44,9 +44,14 @@ export const handleLogout = async (): Promise<boolean> => {
 };
 
 /**
+ * @function handleUserLogin
+ * @description Calls the AWS API gateway /create-user. Will create a new user in the database if first time logging in.
  * 
  * @param {string | null} email 
  * @param {string | null} username 
+ * 
+ * @returns {Promise<AWSLoginResponse>} response containing a message of success or error.
+ * If success, the user object is returned of type HumspotUser.
  */
 export const handleUserLogin = async (email: string | null, username: string | null): Promise<AWSLoginResponse> => {
   try {
@@ -66,8 +71,6 @@ export const handleUserLogin = async (email: string | null, username: string | n
       accountStatus: 'active'
     };
 
-    console.log(requestBody);
-
     const response = await fetch('https://5w69nrkqcj.execute-api.us-west-1.amazonaws.com/create-user', {
       method: 'POST',
       headers: {
@@ -77,9 +80,9 @@ export const handleUserLogin = async (email: string | null, username: string | n
       body: JSON.stringify(requestBody),
     });
 
-    const responseData = await response.json();
-    console.log(responseData);
+    const responseData: AWSLoginResponse = await response.json();
     return responseData;
+
   } catch (error) {
     console.error('Error calling API Gateway', error);
     return (

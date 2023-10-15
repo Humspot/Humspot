@@ -50,7 +50,7 @@ const App: React.FC = () => {
         case "signIn":
           const email: string | null = data?.signInUserSession?.idToken?.payload?.email ?? null;
           const awsUsername: string | null = data?.username ?? null;
-
+          
           break;
         case "signOut":
           console.log("signed out!");
@@ -85,7 +85,7 @@ const App: React.FC = () => {
     }
   };
 
-  const [currentTab, setCurrentTab] = useState("tab1");
+  const [currentTab, setCurrentTab] = useState("explore");
   function handleTabChange(event: CustomEvent<{ tab: string; }>): void {
     setCurrentTab(event.detail.tab);
   }
@@ -95,40 +95,27 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/">
-              <ExplorePage></ExplorePage>
-            </Route>
-            <Route exact path="/explore">
-              <ExplorePage></ExplorePage>
-            </Route>
-            <Route exact path="/calendar">
-              <CalendarPage></CalendarPage>
-            </Route>
-            <Route exact path="/map">
-              <MapPage></MapPage>
-            </Route>
-            <Route exact path="/profile">
-              <ProfilePage></ProfilePage>
-            </Route>
-            <Route exact path="/google-auth">
-              <TestGoogleAuth />
-            </Route>
+            <Route exact path="/explore" component={ExplorePage} />
+            <Route exact path="/calendar" component={CalendarPage} />
+            <Route exact path="/map" component={MapPage} />
+            <Route exact path="/profile" component={TestGoogleAuth} />
+            <Route exact path="/" render={() => <Redirect to="/explore" />} />
           </IonRouterOutlet>
           <IonTabBar slot="bottom" color="primary" onIonTabsWillChange={handleTabChange}>
-            <IonTabButton tab="tab1" href="/explore">
-              <IonIcon aria-hidden="true" icon={compass} color={currentTab == "tab1" ? "icon-highlight" : "icon-dark"} size="large" />
+            <IonTabButton tab="explore" href="/explore">
+              <IonIcon aria-hidden="true" icon={compass} color={currentTab == "explore" ? "icon-highlight" : "icon-dark"} size="large" />
               {/* <IonLabel>Tab 1</IonLabel> */}
             </IonTabButton>
-            <IonTabButton tab="tab2" href="/map">
-              <IonIcon aria-hidden="true" icon={map} color={currentTab == "tab2" ? "icon-highlight" : "icon-dark"} size="large" />
+            <IonTabButton tab="map" href="/map">
+              <IonIcon aria-hidden="true" icon={map} color={currentTab == "map" ? "icon-highlight" : "icon-dark"} size="large" />
               {/* <IonLabel>Tab 2</IonLabel> */}
             </IonTabButton>
-            <IonTabButton tab="tab3" href="/calendar">
-              <IonIcon aria-hidden="true" icon={calendar} color={currentTab == "tab3" ? "icon-highlight" : "icon-dark"} size="large" />
+            <IonTabButton tab="calendar" href="/calendar">
+              <IonIcon aria-hidden="true" icon={calendar} color={currentTab == "calendar" ? "icon-highlight" : "icon-dark"} size="large" />
               {/* <IonLabel>Tab 3</IonLabel> */}
             </IonTabButton>
-            <IonTabButton tab="tab4" href="/profile">
-              <IonIcon aria-hidden="true" icon={person} color={currentTab == "tab4" ? "icon-highlight" : "icon-dark"} size="large" />
+            <IonTabButton tab="profile" href="/profile">
+              <IonIcon aria-hidden="true" icon={person} color={currentTab == "profile" ? "icon-highlight" : "icon-dark"} size="large" />
               {/* <IonLabel>Tab 3</IonLabel> */}
             </IonTabButton>
           </IonTabBar>

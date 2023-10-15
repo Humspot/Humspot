@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Humspot</string>
     <string name="title_activity_main">Humspot</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="package_name">com.humspot</string>
+    <string name="custom_url_scheme">com.humspot</string>
 </resources>

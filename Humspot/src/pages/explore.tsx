@@ -28,7 +28,7 @@ function ExplorePage() {
         <IonPage>
             <IonContent>
                 <IonHeader>
-                    Highlights
+                    Highlights TEST
                   </IonHeader>
                 <div className="MainCarousel">
                 <Swiper slidesPerView={1.2}>

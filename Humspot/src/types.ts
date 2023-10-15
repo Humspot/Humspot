@@ -4,7 +4,7 @@
  */
 
 export type HumspotUser = {
-  userId: string;
+  userID: string;
   email: string | null;
   imageUrl: string;
   awsUsername: string | null;
@@ -18,3 +18,21 @@ export type AWSLoginResponse = {
   message: string;
   user?: HumspotUser;
 }
+
+export type AWSAddEventResponse = {
+  message: string;
+  eventID?: string;
+}
+
+export type Event = {
+  name: string;
+  description: string;
+  location: string;
+  addedByUserID: string;
+  date: string;
+  time: string;
+  lat: number;
+  lng: number;
+  organizer: string;
+  tags: string[];
+};
