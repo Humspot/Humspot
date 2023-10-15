@@ -1,3 +1,9 @@
+/**
+ * AWS lambda function to add an event to the mySQL database.
+ * 
+ * Returns the eventID associated with the newly created event (assuming successful creation)
+ */
+
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
 import * as mysql from 'mysql2/promise';
 
@@ -32,6 +38,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
   try {
     const event: Event = JSON.parse(gatewayEvent.body || '{}');
 
+    // Ensure all data has bene passed through the event
     if (!event || typeof event.name !== 'string' || typeof event.description !== 'string' ||
       typeof event.location !== 'string' || typeof event.addedByUserID !== 'string' ||
       !Array.isArray(event.tags) || typeof event.lat !== 'number' || typeof event.lng !== 'number') {
@@ -50,30 +57,26 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     await conn.beginTransaction();
 
+    // Add to Activities table
     const activityID: string = crypto.randomBytes(16).toString('hex');
     let query: string = 'INSERT INTO Activities (activityID, name, description, location, addedByUserID, activityType) VALUES (?, ?, ?, ?, ?, ?)';
     let params: (string | number)[] = [activityID, event.name, event.description, event.location, event.addedByUserID, 'event'];
     await conn.query(query, params);
 
-
+    // Add to Events table
     const eventID: string = crypto.randomBytes(16).toString('hex');
     query = 'INSERT INTO Events (eventID, activityID, date, time, latitude, longitude, organizer) VALUES (?, ?, ?, ?, ?, ?, ?)';
     params = [eventID, activityID, event.date, event.time, event.lat, event.lng, event.organizer];
     await conn.query(query, params);
 
-    console.log("\nAFTER SECOND QUERY\n");
-
+    // Add to Tags and ActivityTags tables
     for (const tag of event.tags) {
       const tagID: string = crypto.randomBytes(16).toString('hex');
       await conn.query('INSERT IGNORE INTO Tags (tagID, tagName) VALUES (?, ?)', [tagID, tag]);
       await conn.query('INSERT INTO ActivityTags (activityID, tagID) VALUES (?, ?)', [activityID, tagID]);
     }
 
-    console.log("\nAfter for LOOP\n");
-
     await conn.commit();
-
-    console.log("\nCOMITTN\n");
 
     return {
       statusCode: 200,

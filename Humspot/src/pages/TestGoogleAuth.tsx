@@ -1,6 +1,19 @@
 import { IonButton, IonCard, IonCardContent, IonContent, IonPage, useIonLoading } from "@ionic/react";
-import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../server";
+import { handleAddEvent, handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../server";
 import { useContext } from "../my-context";
+
+const dummyEvent = {
+  name: "Sample Event",
+  description: "This is a sample description for the dummy event. It's going to be a fun time with various activities.",
+  location: "1 Harpst St, Arcata, CA 95521",
+  addedByUserID: "5e2e096461e516972e0b1ac2",
+  date: "2023-11-30",
+  time: "18:30",
+  lat: 40.868700737622106,
+  lng: -124.08785508438247,
+  organizer: "Sample Organizer Name",
+  tags: ["fun", "sample", "activities"], 
+};
 
 
 const TestGoogleAuth: React.FC = () => {
@@ -38,6 +51,8 @@ const TestGoogleAuth: React.FC = () => {
                   <IonButton onClick={async () => await handleLogin()}>Login</IonButton>
                 </>
               }
+
+              <IonButton onClick={async () => await handleAddEvent(dummyEvent)}>TEST SUBMIT EVENT (Change Dummy Event Variable)</IonButton>
 
             </IonCardContent>
           </IonCard>

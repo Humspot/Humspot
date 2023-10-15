@@ -24,7 +24,7 @@ export type AWSAddEventResponse = {
   eventID?: string;
 }
 
-export type Event = {
+export type HumspotEvent = {
   name: string;
   description: string;
   location: string;

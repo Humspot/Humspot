@@ -6,7 +6,7 @@
 import awsconfig from './aws-exports';
 import { Amplify, Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
-import { AWSLoginResponse } from './types';
+import { AWSAddEventResponse, AWSLoginResponse, HumspotEvent } from './types';
 
 Amplify.configure(awsconfig);
 
@@ -45,7 +45,7 @@ export const handleLogout = async (): Promise<boolean> => {
 
 /**
  * @function handleUserLogin
- * @description Calls the AWS API gateway /create-user. Will create a new user in the database if first time logging in.
+ * @description Calls the AWS API gateway /create-user. This will create a new user in the database if first time logging in.
  * 
  * @param {string | null} email 
  * @param {string | null} username 
@@ -71,7 +71,7 @@ export const handleUserLogin = async (email: string | null, username: string | n
       accountStatus: 'active'
     };
 
-    const response = await fetch('https://5w69nrkqcj.execute-api.us-west-1.amazonaws.com/create-user', {
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_CREATE_USER_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,14 +86,52 @@ export const handleUserLogin = async (email: string | null, username: string | n
   } catch (error) {
     console.error('Error calling API Gateway', error);
     return (
-      { message: 'Error calling API Gateway' }
+      { message: 'Error calling API Gateway' + error }
     )
   }
 };
 
 
+/**
+ * @function handleAddEvent
+ * @description Calls the AWS API gateway /add-event. This will add a new event to the database.
+ * 
+ * @param {HumspotEvent} newEvent the event to be added.
+ * 
+ * @returns {Promise<AWSAddEventResponse>} response containing a message of success or error.
+ * If success, the newly added eventID is returned.
+ */
+export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AWSAddEventResponse> => {
+  try {
+    console.log("handling add event");  
+    const currentUserSession = await Auth.currentSession();
 
+    if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
 
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_ADD_EVENT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+      body: JSON.stringify(newEvent),
+    });
+
+    const responseData: AWSAddEventResponse = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (error) {
+    console.error('Error calling API Gateway', error);
+    return (
+      { message: 'Error calling API Gateway' + error }
+    )
+  }
+};
 
 
 
