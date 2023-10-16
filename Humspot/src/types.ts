@@ -31,8 +31,21 @@ export type HumspotEvent = {
   addedByUserID: string;
   date: string;
   time: string;
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
   organizer: string;
   tags: string[];
 };
+
+type ExtendedHumspotEvent = HumspotEvent & {
+  eventID: string;
+  activityID: string;
+  activityType: string;
+  tagID: string;
+  tagName: string;
+};
+
+export type HumspotEventGetResponse = {
+  message: string;
+  events: ExtendedHumspotEvent[];
+}

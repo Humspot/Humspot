@@ -69,7 +69,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     const selectUserQuery = 'SELECT * FROM Users WHERE email = ?';
     const [userResult]: any = await connection.query(selectUserQuery, [requestData.email]);
 
-    if (userResult.length > 0) {
+    if (!userResult || userResult.length > 0) {
       return {
         statusCode: 400,
         headers: {

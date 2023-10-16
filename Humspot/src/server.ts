@@ -6,7 +6,7 @@
 import awsconfig from './aws-exports';
 import { Amplify, Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
-import { AWSAddEventResponse, AWSLoginResponse, HumspotEvent } from './types';
+import { AWSAddEventResponse, AWSLoginResponse, HumspotEvent, HumspotEventGetResponse } from './types';
 
 Amplify.configure(awsconfig);
 
@@ -15,7 +15,10 @@ Amplify.configure(awsconfig);
  * @function handleGoogleLoginAndVerifyAWSUser
  * @description handles login through Google. If successful, the user will be created in AWS IdentityPool.
  * 
- * @returns {Promise<boolean>} whether the auth federated sign in (GOOGLE) is successful/
+ * @todo this function will open the web browser to initiate google auth, and then redirect back to the application. 
+ * This redirection has not been implemented yet. Deep links are required.
+ * 
+ * @returns {Promise<boolean>} whether the auth federated sign in (GOOGLE) is successful
  */
 export const handleGoogleLoginAndVerifyAWSUser = async (): Promise<boolean> => {
   try {
@@ -26,6 +29,7 @@ export const handleGoogleLoginAndVerifyAWSUser = async (): Promise<boolean> => {
     return false;
   }
 };
+
 
 /**
  * @function handleLogout
@@ -103,7 +107,6 @@ export const handleUserLogin = async (email: string | null, username: string | n
  */
 export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AWSAddEventResponse> => {
   try {
-    console.log("handling add event");  
     const currentUserSession = await Auth.currentSession();
 
     if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
@@ -133,5 +136,45 @@ export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AWSAddEven
   }
 };
 
+
+/**
+ * @function handleGetEventGivenTag
+ * @description returns an array of events that have a certain tag associated with it.
+ * It returns 10 events at a time, and more can be loaded my incrementing the pageNum param.
+ * 
+ * @param {number} pageNum the page number which corresponds to the offset when selecting rows in the table
+ * @param {string} tag the event tag
+ */
+export const handleGetEventGivenTag = async (pageNum: number, tag: string): Promise<HumspotEventGetResponse> => {
+
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENT_GIVEN_TAG + "/" + pageNum + "/" + tag, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+    });
+
+    const responseData: HumspotEventGetResponse = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (error) {
+    console.error('Error calling API Gateway', error);
+    return (
+      { message: 'Error calling API Gateway' + error, events: [] }
+    )
+  }
+
+};
 
 

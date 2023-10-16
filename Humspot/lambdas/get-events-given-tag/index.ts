@@ -58,7 +58,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: "Success", events: rows }),
+      body: JSON.stringify({ message: "Success", events: rows}),
     };
 
   } catch (error) {

@@ -27,8 +27,8 @@ export type Event = {
   addedByUserID: string;
   date: string;
   time: string;
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
   organizer: string;
   tags: string[];
 };
@@ -41,7 +41,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     // Ensure all data has bene passed through the event
     if (!event || typeof event.name !== 'string' || typeof event.description !== 'string' ||
       typeof event.location !== 'string' || typeof event.addedByUserID !== 'string' ||
-      !Array.isArray(event.tags) || typeof event.lat !== 'number' || typeof event.lng !== 'number') {
+      !Array.isArray(event.tags) || typeof event.latitude !== 'number' || typeof event.longitude !== 'number') {
       return {
         statusCode: 400,
         headers: {
@@ -66,7 +66,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     // Add to Events table
     const eventID: string = crypto.randomBytes(16).toString('hex');
     query = 'INSERT INTO Events (eventID, activityID, date, time, latitude, longitude, organizer) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    params = [eventID, activityID, event.date, event.time, event.lat, event.lng, event.organizer];
+    params = [eventID, activityID, event.date, event.time, event.latitude, event.longitude, event.organizer];
     await conn.query(query, params);
 
     // Add to Tags and ActivityTags tables
