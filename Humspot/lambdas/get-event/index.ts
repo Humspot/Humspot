@@ -1,5 +1,5 @@
 /**
- * AWS lambda function to retrieve the events from the database given the eventID
+ * AWS lambda function to retrieve the event from the database given the eventID
  */
 
 import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";

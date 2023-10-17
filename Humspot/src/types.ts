@@ -46,7 +46,29 @@ type ExtendedHumspotEvent = HumspotEvent & {
   tagName: string;
 };
 
-export type HumspotEventGetResponse = {
+export type AWSGetEventsGivenTagResponse = {
   message: string;
   events: ExtendedHumspotEvent[];
 }
+
+export type AWSAddImageResponse = {
+  success: boolean;
+  photoUrls: string[];
+}
+
+export type AWSAddToFavoritesResponse = {
+  message: string;
+  favoriteID?: string;
+}
+
+export type AWSAddToVisitedResponse = {
+  message: string;
+  visitedID?: string;
+}
+
+export type HumspotComment = {
+  commentText: string;
+  commentDate: string;
+  userID: string;
+  activityID: string;
+};

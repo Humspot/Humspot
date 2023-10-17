@@ -59,10 +59,45 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     await conn.beginTransaction();
 
+    // Check if the user is an admin or organizer
+    const userID: string = event.addedByUserID;
+    let query: string = 'SELECT accountType FROM Users WHERE userID = ?';
+    let params: (string | number)[] = [userID];
+    const [result]: any[] = await conn.query(query, params);
+
+    if (result.length > 0) { // The user exists, and we have the accountType.
+      const accountType: string = result[0].accountType;
+      if (accountType !== 'admin' && accountType !== 'organizer') {
+        return {
+          statusCode: 400,
+          headers: {
+            "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+            "Access-Control-Allow-Methods": '*',
+            "Access-Control-Allow-Origin": '*'
+          },
+          body: JSON.stringify({
+            message: `User with ID ${userID} is not approved to add an event!`,
+          }),
+        };
+      }
+    } else {  // No user found with the provided userID.
+      return {
+        statusCode: 400,
+        headers: {
+          "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+          "Access-Control-Allow-Methods": '*',
+          "Access-Control-Allow-Origin": '*'
+        },
+        body: JSON.stringify({
+          message: `No user found with ID: ${userID}`,
+        }),
+      };
+    }
+
     // Add to Activities table
     const activityID: string = crypto.randomBytes(16).toString('hex');
-    let query: string = 'INSERT INTO Activities (activityID, name, description, location, addedByUserID, activityType) VALUES (?, ?, ?, ?, ?, ?)';
-    let params: (string | number)[] = [activityID, event.name, event.description, event.location, event.addedByUserID, 'event'];
+    query = 'INSERT INTO Activities (activityID, name, description, location, addedByUserID, activityType) VALUES (?, ?, ?, ?, ?, ?)';
+    params = [activityID, event.name, event.description, event.location, event.addedByUserID, 'event'];
     await conn.query(query, params);
 
     // Add to Events table
@@ -80,7 +115,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     // Add photoUrls to ActivityPhotos table
     for (const photoUrl of event.photoUrls) {
-      const photoID: string = crypto.randomBytes(16).toString('hex'); 
+      const photoID: string = crypto.randomBytes(16).toString('hex');
       const query: string = 'INSERT INTO ActivityPhotos (photoID, activityID, photoUrl) VALUES (?, ?, ?)';
       const params: string[] = [photoID, activityID, photoUrl];
       await conn.query(query, params);
@@ -123,6 +158,3 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     }
   }
 };
-
-
-// aws lambda update-function-code --function-name add-event --zip-file fileb://dist/index.zip --region us-west-1

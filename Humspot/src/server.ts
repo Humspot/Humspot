@@ -3,18 +3,17 @@
  * @filetype contains the code used to access backend services like Google and AWS.
  */
 
+import AWS from 'aws-sdk';
+
 import awsconfig from './aws-exports';
 import { Amplify, Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
-import { AWSAddEventResponse, AWSLoginResponse, HumspotEvent, HumspotEventGetResponse } from './types';
 
 import { nanoid } from "nanoid";
 
-import AWS from 'aws-sdk';
-
-import * as crypto from 'crypto';
-
 import { Camera, GalleryPhoto, GalleryPhotos } from '@capacitor/camera';
+
+import { AWSAddEventResponse, AWSAddImageResponse, AWSAddToFavoritesResponse, AWSAddToVisitedResponse, AWSGetEventsGivenTagResponse, AWSLoginResponse, HumspotComment, HumspotEvent } from './types';
 
 Amplify.configure(awsconfig);
 
@@ -149,13 +148,15 @@ export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AWSAddEven
 
 /**
  * @function handleGetEventGivenTag
- * @description returns an array of events that have a certain tag associated with it.
+ * @description gets an array of events that have a certain tag associated with it.
  * It returns 10 events at a time, and more can be loaded my incrementing the pageNum param.
  * 
  * @param {number} pageNum the page number which corresponds to the offset when selecting rows in the table
  * @param {string} tag the event tag
+ * 
+ * @returns {Promise<AWSGetEventsGivenTagResponse>} a status message along with an array of events that have a certain tag associated with it.
  */
-export const handleGetEventGivenTag = async (pageNum: number, tag: string): Promise<HumspotEventGetResponse> => {
+export const handleGetEventGivenTag = async (pageNum: number, tag: string): Promise<AWSGetEventsGivenTagResponse> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -164,7 +165,7 @@ export const handleGetEventGivenTag = async (pageNum: number, tag: string): Prom
     const idToken = currentUserSession.getIdToken();
     const jwtToken = idToken.getJwtToken();
 
-    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENT_GIVEN_TAG + "/" + pageNum + "/" + tag, {
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENT_GIVEN_TAG_URL + "/" + pageNum + "/" + tag, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -172,7 +173,7 @@ export const handleGetEventGivenTag = async (pageNum: number, tag: string): Prom
       },
     });
 
-    const responseData: HumspotEventGetResponse = await response.json();
+    const responseData: AWSGetEventsGivenTagResponse = await response.json();
 
     console.log(responseData);
     return responseData;
@@ -194,9 +195,9 @@ export const handleGetEventGivenTag = async (pageNum: number, tag: string): Prom
  * 
  * @param {string} userID the id of the user uploading the images
  * 
- * @returns {Promise<string[]>} the array of photoUrls returned from S3
+ * @returns {Promise<AWSAddImageResponse>} the success status as well as an array of photoUrls returned from S3
  */
-export const handleAddImages = async (userID: string): Promise<string[]> => {
+export const handleAddImages = async (userID: string): Promise<AWSAddImageResponse> => {
 
   AWS.config.update({
     accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
@@ -239,11 +240,17 @@ export const handleAddImages = async (userID: string): Promise<string[]> => {
       photoUrls.push(data.Location);
     } catch (error) {
       console.log('Error uploading file:', error);
-      return [];
+      return {
+        success: false,
+        photoUrls: []
+      };
     }
   }
 
-  return photoUrls;
+  return {
+    success: true,
+    photoUrls: photoUrls
+  };
 };
 
 
@@ -254,13 +261,15 @@ export const handleAddImages = async (userID: string): Promise<string[]> => {
  * 
  * @param {string} userID the ID of the currently logged in user
  * @param {string} activityID the ID of the activity (primary key of Activities table)
+ * 
+ * @returns {Promise<AWSAddToFavoritesResponse>} a status message along with the favoriteID.
  */
-export const handleAddToFavorites = async (userID: string, activityID: string) => {
+export const handleAddToFavorites = async (userID: string, activityID: string): Promise<AWSAddToFavoritesResponse> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
     if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
-    
+
     const idToken = currentUserSession.getIdToken();
     const jwtToken = idToken.getJwtToken();
 
@@ -289,4 +298,89 @@ export const handleAddToFavorites = async (userID: string, activityID: string) =
       { message: 'Error calling API Gateway' + error }
     )
   }
-}
+};
+
+
+/**
+ * @function handleAddToVisited
+ * @description adds an activity to a User's visited list
+ * 
+ * @param {string} userID 
+ * @param {string} activityID 
+ */
+export const handleAddToVisited = async (userID: string, activityID: string, visitDate: string): Promise<AWSAddToVisitedResponse> => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const params: Record<string, string> = {
+      userID: userID,
+      activityID: activityID,
+      visitDate: visitDate
+    };
+
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_ADD_TO_VISITED_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+      body: JSON.stringify(params),
+    });
+
+    const responseData: AWSAddToVisitedResponse = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (error) {
+    console.error('Error calling API Gateway', error);
+    return (
+      { message: 'Error calling API Gateway' + error }
+    )
+  }
+};
+
+
+/**
+ * @function handleAddComment
+ * @description calls the AWS API gateway /add-comment. This will add a row to the Comments table.
+ * 
+ * @param {HumspotComment} comment the user comment along with other attributes
+ * 
+ * @returns 
+ */
+export const handleAddComment = async (comment: HumspotComment) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_ADD_COMMENT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+      body: JSON.stringify(comment),
+    });
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (error) {
+    console.error('Error calling API Gateway', error);
+    return (
+      { message: 'Error calling API Gateway' + error }
+    )
+  }
+};

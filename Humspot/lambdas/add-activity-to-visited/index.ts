@@ -1,7 +1,7 @@
 /**
- * AWS lambda function to add an activity to a User's favorites list.
+ * AWS lambda function to add an activity to a User's visited list.
  * 
- * Returns the favoriteID associated with the newly created favorite row (assuming successful creation)
+ * Returns the visitedID associated with the newly created visit row (assuming successful creation)
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
@@ -20,18 +20,19 @@ const pool = mysql.createPool({
   debug: true
 });
 
-export type FavoritesParams = {
+export type VisitedParams = {
   userID: string;
   activityID: string;
-}
+  visitDate: string;
+};
 
 export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   const conn = await pool.getConnection();
   try {
-    const event: FavoritesParams = JSON.parse(gatewayEvent.body || '{}');
+    const event: VisitedParams = JSON.parse(gatewayEvent.body || '{}');
 
     // Ensure all data has bene passed through the event
-    if (!event || typeof event.userID !== 'string' || typeof event.activityID !== 'string') {
+    if (!event || typeof event.userID !== 'string' || typeof event.activityID !== 'string' || typeof event.visitDate !== 'string') {
       return {
         statusCode: 400,
         headers: {
@@ -47,10 +48,10 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     await conn.beginTransaction();
 
-    // Add activity to Favorites table
-    const favoriteID: string = crypto.randomBytes(16).toString('hex');
-    let query: string = 'INSERT INTO Favorites (favoriteID, userID, activityID) VALUES (?, ?, ?)';
-    let params: string[] = [favoriteID, event.userID, event.activityID];
+    // Add activity to Visited table
+    const visitedID: string = crypto.randomBytes(16).toString('hex');
+    let query: string = 'INSERT INTO Visited (visitedID, userID, activityID, visitDate) VALUES (?, ?, ?, ?)';
+    let params: string[] = [visitedID, event.userID, event.activityID, event.visitDate];
     await conn.query(query, params);
 
     await conn.commit();
@@ -63,8 +64,8 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
         "Access-Control-Allow-Origin": '*'
       },
       body: JSON.stringify({
-        message: 'Favorite added successfully.',
-        favoriteID: favoriteID,
+        message: 'Visit added successfully.',
+        visitedID: visitedID,
       }),
     };
 
