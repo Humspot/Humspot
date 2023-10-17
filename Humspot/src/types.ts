@@ -35,6 +35,7 @@ export type HumspotEvent = {
   longitude: number;
   organizer: string;
   tags: string[];
+  photoUrls: string[]
 };
 
 type ExtendedHumspotEvent = HumspotEvent & {

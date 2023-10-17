@@ -8,6 +8,14 @@ import { Amplify, Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 import { AWSAddEventResponse, AWSLoginResponse, HumspotEvent, HumspotEventGetResponse } from './types';
 
+import { nanoid } from "nanoid";
+
+import AWS from 'aws-sdk';
+
+import * as crypto from 'crypto';
+
+import { Camera, GalleryPhoto, GalleryPhotos } from '@capacitor/camera';
+
 Amplify.configure(awsconfig);
 
 
@@ -114,6 +122,8 @@ export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AWSAddEven
     const idToken = currentUserSession.getIdToken();
     const jwtToken = idToken.getJwtToken();
 
+    console.log(newEvent);
+
     const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_ADD_EVENT_URL, {
       method: 'POST',
       headers: {
@@ -146,7 +156,6 @@ export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AWSAddEven
  * @param {string} tag the event tag
  */
 export const handleGetEventGivenTag = async (pageNum: number, tag: string): Promise<HumspotEventGetResponse> => {
-
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -174,7 +183,110 @@ export const handleGetEventGivenTag = async (pageNum: number, tag: string): Prom
       { message: 'Error calling API Gateway' + error, events: [] }
     )
   }
-
 };
 
 
+/**
+ * @function handleAddImages 
+ * @description calls the Capacitor Camera API to pick images from the gallery for upload.
+ * It then uploads the images to the AWS S3 bucket 'activityphotos'. The photoUrls are returned to use later.
+ * NOTE: The uploading of the images is handled client side (no API gateway or lambda function).
+ * 
+ * @param {string} userID the id of the user uploading the images
+ * 
+ * @returns {Promise<string[]>} the array of photoUrls returned from S3
+ */
+export const handleAddImages = async (userID: string): Promise<string[]> => {
+
+  AWS.config.update({
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_KEY,
+    region: 'us-west-1'
+  });
+
+  const photos: GalleryPhotos = await Camera.pickImages({
+    quality: 90,
+    limit: 4
+  });
+
+  const s3 = new AWS.S3();
+  const photoUrls: string[] = [];
+
+  const limit: number = photos.photos.length < 4 ? photos.photos.length : 4;
+
+  for (let i = 0; i < limit; ++i) {
+    const photo: GalleryPhoto = photos.photos[i];
+    if ((photo.format !== 'jpeg') && (photo.format !== 'jpg') && (photo.format !== 'png')) continue;
+    const response: Response = await fetch(photo.webPath);
+    const blob: Blob = await response.blob();
+
+    if (blob.size > 15_000_000) continue;
+
+    const id: string = nanoid(8);
+    const fileName = `event-photos/${userID}-${id}-${Date.now()}-${photo.format}`;
+
+    const params: AWS.S3.PutObjectRequest = {
+      Bucket: 'activityphotos',
+      Key: fileName,
+      Body: blob,
+      ContentType: blob.type,
+      // ACL: 'public-read'
+    };
+
+    try {
+      const data = await s3.upload(params).promise();
+      console.log(`File uploaded successfully at ${data.Location}`);
+      photoUrls.push(data.Location);
+    } catch (error) {
+      console.log('Error uploading file:', error);
+      return [];
+    }
+  }
+
+  return photoUrls;
+};
+
+
+/** 
+ * @function handleAddToFavorites
+ * @description adds the activity (event or attraction) to the User's favorites list.
+ * NOTE: their favorites are not a list, but exist as a row entry in the Favorites table.
+ * 
+ * @param {string} userID the ID of the currently logged in user
+ * @param {string} activityID the ID of the activity (primary key of Activities table)
+ */
+export const handleAddToFavorites = async (userID: string, activityID: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
+    
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const params: Record<string, string> = {
+      userID: userID,
+      activityID: activityID
+    };
+
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_ADD_TO_FAVORITES_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+      body: JSON.stringify(params),
+    });
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (error) {
+    console.error('Error calling API Gateway', error);
+    return (
+      { message: 'Error calling API Gateway' + error }
+    )
+  }
+}
