@@ -13,7 +13,7 @@ import { nanoid } from "nanoid";
 
 import { Camera, GalleryPhoto, GalleryPhotos } from '@capacitor/camera';
 
-import { AWSAddEventResponse, AWSAddImageResponse, AWSAddToFavoritesResponse, AWSAddToVisitedResponse, AWSGetEventsGivenTagResponse, AWSLoginResponse, HumspotComment, HumspotEvent } from './types';
+import { AWSAddEventResponse, AWSAddImageResponse, AWSAddToFavoritesResponse, AWSAddToVisitedResponse, AWSGetCommentsGivenUserIdResponse, AWSGetEventsGivenTagResponse, AWSLoginResponse, HumspotComment, HumspotEvent } from './types';
 
 Amplify.configure(awsconfig);
 
@@ -384,3 +384,44 @@ export const handleAddComment = async (comment: HumspotComment) => {
     )
   }
 };
+
+
+/**
+ * @function handleGetCommentsGivenUserID 
+ * @description gets an array of comments from a specified user.
+ * It returns 10 comments at a time, and more can be loaded my incrementing the pageNum param.
+ * 
+ * @param {number} pageNum 
+ * @param {string} userID 
+ * 
+ * @returns {Promise<AWSGetCommentsGivenUserIdResponse>} a status message, and, if successful, an array of 10 comments of type GetCommentsResponse
+ */
+export const handleGetCommentsGivenUserID = async (pageNum: number, userID: string): Promise<AWSGetCommentsGivenUserIdResponse> => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_GET_COMMENTS_GIVEN_USERID_URL + "/" + pageNum + "/" + userID, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+    });
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (error) {
+    console.error('Error calling API Gateway', error);
+    return (
+      { message: 'Error calling API Gateway' + error }
+    )
+  }
+}

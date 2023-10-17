@@ -72,3 +72,15 @@ export type HumspotComment = {
   userID: string;
   activityID: string;
 };
+
+export type GetCommentsResponse = {
+  commentText: string;
+  commentDate: string;
+  activityID: string;
+  name: string;
+};
+
+export type AWSGetCommentsGivenUserIdResponse ={
+  message: string;
+  comments?: GetCommentsResponse[]
+};
