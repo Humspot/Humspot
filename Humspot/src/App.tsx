@@ -173,7 +173,12 @@ const App: React.FC = () => {
               />
               {/* <IonLabel>Tab 3</IonLabel> */}
             </IonTabButton>
-            <IonTabButton tab="tab4" href="/profile">
+            <IonTabButton
+              tab="tab4"
+              href={
+                context.humspotUser == guestUser ? "/google-auth" : "/profile"
+              }
+            >
               <IonIcon
                 aria-hidden="true"
                 icon={person}

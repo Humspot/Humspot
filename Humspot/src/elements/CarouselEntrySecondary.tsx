@@ -6,6 +6,7 @@ import {
   IonCardTitle,
   IonContent,
   IonHeader,
+  IonImg,
   IonPage,
   useIonRouter,
 } from "@ionic/react";
@@ -37,12 +38,12 @@ function CarouselEntrySecondary({ title, imgsrc, id }: any) {
       }}
     >
       <div style={secondarycontainerStyle}>
-        <img
+        <IonImg
           alt="Attraction Image"
           src={imgsrc}
           className="SecondaryCarouselEntryHeaderImage"
-          style={imgStyle as any} // Apply the custom styles to the image
-        />
+          style={imgStyle as any}
+        ></IonImg>
       </div>
       <IonCardHeader style={labelStyle}>
         <IonCardTitle>{title}</IonCardTitle>

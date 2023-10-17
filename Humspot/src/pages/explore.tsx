@@ -1,6 +1,9 @@
 import {
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
+  IonIcon,
   IonItemDivider,
   IonPage,
   useIonRouter,
@@ -13,6 +16,8 @@ import "../elements/CarouselEntry.css";
 import "@ionic/react/css/ionic-swiper.css";
 import CarouselEntry from "../elements/CarouselEntry";
 import SecondaryCarouselEntry from "../elements/CarouselEntrySecondary";
+import { add, fileTrayStackedSharp, filter, filterSharp } from "ionicons/icons";
+import FilterButton from "../elements/FilterButton";
 
 <link
   href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
@@ -144,6 +149,7 @@ function ExplorePage() {
   return (
     <>
       <IonPage>
+        <FilterButton></FilterButton>
         <IonContent>
           <IonItemDivider className="Header" color={"primary"}>
             Highlights
