@@ -1,41 +1,25 @@
-
 .MainCarousel {
-  background-color: slategrey;
-  height: 40%;
+  height: 40vh;
   width: auto;
   display: flex;
 }
 
 .MainCarouselSlide {
-    color: red;
-    border: thick black;
-    /* background-color: aqua; */
-    width: 90%;
-    height: 80%;
-    font-size: large;
-    font-weight: bold;
-    
+  width: 100%;
+  font-size: large;
+  font-weight: bold;
 }
 
-.SecondaryCarousel{
-    background-color: gray;
-    margin-top: 2%;
-    height: 20%;
-    width: auto;
-    display: flex;
+.SecondaryCarousel {
+  height: 20vh;
+  width: auto;
+  display: flex;
 }
 
 .SecondaryCarouselSlide {
-    color: red;
-    border: thick black;
-    background-color: aqua;
-    width: 90%;
-    height: 80%;
-    font-size: large;
-    font-weight: bold;
+  width: 100%;
 }
 
- 
 swiper-slide {
   display: flex;
   flex-direction: column;
@@ -43,7 +27,11 @@ swiper-slide {
   justify-content: center;
 }
 
-IonHeader {
-  margin: 2px;
-  padding: 20px;
+.Header {
+  padding: 4px;
+  padding-left: 10px;
+  font-family: "Atkinson Hyperlegible";
+  font-size: larger;
+  font-weight: bolder;
+  text-transform: capitalize;
 }
