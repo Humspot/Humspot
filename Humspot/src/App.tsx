@@ -43,9 +43,13 @@ import MapPage from "./pages/map";
 import ProfilePage from "./pages/profile";
 import { useState } from "react";
 
-import TestGoogleAuth from "./pages/TestGoogleAuth";
-import { handleUserLogin } from "./server";
+
+import TestGoogleAuth from './pages/TestGoogleAuth';
+import { handleUserLogin } from './server';
+import { AWSLoginResponse } from './types';
+
 import AttractionPage from "./pages/attraction";
+
 
 setupIonicReact({ mode: "md" });
 
@@ -59,13 +63,6 @@ const App: React.FC = () => {
           const email: string | null =
             data?.signInUserSession?.idToken?.payload?.email ?? null;
           const awsUsername: string | null = data?.username ?? null;
-          context.setHumspotUser({
-            email: email,
-            awsUsername: awsUsername,
-            imageUrl: "",
-            role: "user",
-            loggedIn: true,
-          });
           break;
         case "signOut":
           console.log("signed out!");
@@ -84,23 +81,16 @@ const App: React.FC = () => {
   const getUser = async (): Promise<void> => {
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
-      const email: string | null =
-        currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
+      const email: string | null = currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
       const awsUsername: string | null = currentUser?.username ?? null;
-      context.setHumspotUser({
-        email: email,
-        awsUsername: awsUsername,
-        imageUrl: "",
-        role: "user",
-        loggedIn: true,
+      handleUserLogin(email, awsUsername).then((res: AWSLoginResponse) => {
+        console.log(res.message);
+        if (!res.user) throw new Error(res.message);
+        console.log(JSON.stringify(res.user));
+        context.setHumspotUser(res.user);
+      }).catch((err) => {
+        console.log(err);
       });
-      handleUserLogin(email, awsUsername)
-        .then(() => {
-          console.log("CALLED");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     } catch (error) {
       console.error("Not signed in: " + error);
       context.setHumspotUser(guestUser);
@@ -191,6 +181,7 @@ const App: React.FC = () => {
         </IonTabs>
       </IonReactRouter>
     </IonApp>
+
   );
 };
 

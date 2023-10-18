@@ -4,9 +4,83 @@
  */
 
 export type HumspotUser = {
+  userID: string;
   email: string | null;
   imageUrl: string;
   awsUsername: string | null;
-  loggedIn: boolean;
-  role: 'user' | 'admin' | 'organizer' | 'guest';
+  accountType: 'user' | 'admin' | 'organizer' | 'guest';
+  accountStatus: 'active' | 'restricted';
+  authProvider: 'google' | 'custom'
+  dateCreated: string | Date;
 }
+
+export type AWSLoginResponse = {
+  message: string;
+  user?: HumspotUser;
+}
+
+export type AWSAddEventResponse = {
+  message: string;
+  eventID?: string;
+}
+
+export type HumspotEvent = {
+  name: string;
+  description: string;
+  location: string;
+  addedByUserID: string;
+  date: string;
+  time: string;
+  latitude: number;
+  longitude: number;
+  organizer: string;
+  tags: string[];
+  photoUrls: string[]
+};
+
+type ExtendedHumspotEvent = HumspotEvent & {
+  eventID: string;
+  activityID: string;
+  activityType: string;
+  tagID: string;
+  tagName: string;
+};
+
+export type AWSGetEventsGivenTagResponse = {
+  message: string;
+  events: ExtendedHumspotEvent[];
+}
+
+export type AWSAddImageResponse = {
+  success: boolean;
+  photoUrls: string[];
+}
+
+export type AWSAddToFavoritesResponse = {
+  message: string;
+  favoriteID?: string;
+}
+
+export type AWSAddToVisitedResponse = {
+  message: string;
+  visitedID?: string;
+}
+
+export type HumspotComment = {
+  commentText: string;
+  commentDate: string;
+  userID: string;
+  activityID: string;
+};
+
+export type HumspotCommentResponse = {
+  commentText: string;
+  commentDate: string;
+  activityID: string;
+  name: string;
+};
+
+export type AWSGetCommentsResponse ={
+  message: string;
+  comments?: HumspotCommentResponse[]
+};

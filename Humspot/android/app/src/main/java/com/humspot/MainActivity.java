@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.humspot;
 
 import com.getcapacitor.BridgeActivity;
 
