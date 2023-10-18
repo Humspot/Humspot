@@ -9,21 +9,34 @@ import {
   IonHeader,
   IonIcon,
   IonImg,
+  IonLabel,
   IonPage,
+  IonText,
 } from "@ionic/react";
 import { RouteComponentProps } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import "./attraction.css";
 import { Map, Marker } from "pigeon-maps";
-import { mapOutline, star, starOutline } from "ionicons/icons";
+import {
+  compass,
+  mapOutline,
+  pin,
+  star,
+  starOutline,
+  time,
+} from "ionicons/icons";
+import { useCallback, useEffect, useState } from "react";
+import { handleGetEvent } from "../server";
+import { useContext } from "../my-context";
 
-export function LocationMap() {
+export function LocationMap(props: any) {
+  console.log(props);
   return (
     <Map
-      defaultCenter={[40.87649434150835, -124.07918370203882]}
-      defaultZoom={15}
-      minZoom={15}
-      maxZoom={15}
+      defaultCenter={[parseFloat(props.latitude), parseFloat(props.longitude)]}
+      defaultZoom={12}
+      minZoom={12}
+      maxZoom={12}
       height={150}
       width={150}
       attribution={false}
@@ -33,7 +46,7 @@ export function LocationMap() {
       <Marker
         width={30}
         height={30}
-        anchor={[40.87649434150835, -124.07918370203882]}
+        anchor={[parseFloat(props.latitude), parseFloat(props.longitude)]}
       />
     </Map>
   );
@@ -41,12 +54,21 @@ export function LocationMap() {
 
 function AttractionPage() {
   const { id, imgsrc }: any = useParams();
+  const context = useContext();
   const imgStyle = {
     width: "100%", // Ensure the image takes up the full width of the container
     height: "30vh", // Ensure the image takes up the full height of the container
     objectFit: "cover", // Crop and fit the image within the container
     position: "absolute",
   };
+  const [activity, setActivity] = useState<any>(null);
+  const handleGetEventCallback = useCallback(async (id: string) => {
+    const res = await handleGetEvent(id);
+    if ("event" in res && res.event) setActivity(res.event);
+  }, []);
+  useEffect(() => {
+    if (id) handleGetEventCallback(id);
+  }, [id]);
   return (
     <>
       <IonPage>
@@ -79,7 +101,7 @@ function AttractionPage() {
           ></IonImg>
           <IonCard color={"primary"} className="headercard">
             <IonCardHeader>
-              <h1>Name</h1>
+              {activity && <h1>{activity.name}</h1>}
             </IonCardHeader>
           </IonCard>
           <IonChip color={"secondary"}>Campus</IonChip>
@@ -87,20 +109,29 @@ function AttractionPage() {
           <IonChip color={"secondary"}>Forest</IonChip>
           <IonCard>
             <IonCardContent className="locationcard">
-              <p>Location</p>
+              <IonText className="locationlabel">
+                <IonIcon icon={compass} size="small"></IonIcon>
+                <h2>{activity?.location ?? ""}</h2>
+
+                <IonIcon icon={time} size="small"></IonIcon>
+
+                <h3>{activity?.date ?? ""}</h3>
+                <h3>{activity?.time ?? ""}</h3>
+              </IonText>
+
               <div className="locationmap">
-                <LocationMap />
+                {activity && (
+                  <LocationMap
+                    latitude={activity.latitude}
+                    longitude={activity.longitude}
+                  />
+                )}
               </div>
             </IonCardContent>
           </IonCard>
           <IonCard>
             <IonCardContent>
-              <p>IF EVENT: Date & Time</p>
-            </IonCardContent>
-          </IonCard>
-          <IonCard>
-            <IonCardContent>
-              <p>Description</p>
+              <p>{activity?.description ?? ""}</p>
             </IonCardContent>
           </IonCard>
           {/* Comments Section */}

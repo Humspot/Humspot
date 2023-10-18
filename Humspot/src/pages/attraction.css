@@ -1,12 +1,13 @@
 .locationmap {
-  margin-left: auto;
-  margin-right: 0;
-  overflow: hidden;
-  border-radius: 10px;
+  /* margin-left: auto;
+  margin-right: 0; */
+  /* overflow: hidden; */
+  /* border-radius: 10px; */
 }
 
 .locationcard {
   display: flex;
+  padding: 20px;
 }
 
 .headercard {
@@ -29,4 +30,9 @@
   z-index: 5;
   top: 0;
   right: 80px;
+}
+
+.locationlabel {
+  font-size: xx-large;
+  text-align: left;
 }
