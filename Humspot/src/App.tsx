@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
   IonIcon,
@@ -7,38 +7,47 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  setupIonicReact
-} from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import { calendar, compass, ellipse, map, person, square, triangle } from 'ionicons/icons';
+  setupIonicReact,
+} from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+import {
+  calendar,
+  compass,
+  ellipse,
+  map,
+  person,
+  square,
+  triangle,
+} from "ionicons/icons";
 
-import { useEffect } from 'react';
-import { guestUser, useContext } from './my-context';
-import { Auth, Hub } from 'aws-amplify';
+import { useEffect } from "react";
+import { guestUser, useContext } from "./my-context";
+import { Auth, Hub } from "aws-amplify";
 
-import '@ionic/react/css/core.css';
-import '@ionic/react/css/normalize.css';
-import '@ionic/react/css/structure.css';
-import '@ionic/react/css/typography.css';
-import '@ionic/react/css/padding.css';
-import '@ionic/react/css/float-elements.css';
-import '@ionic/react/css/text-alignment.css';
-import '@ionic/react/css/text-transformation.css';
-import '@ionic/react/css/flex-utils.css';
-import '@ionic/react/css/display.css';
+import "@ionic/react/css/core.css";
+import "@ionic/react/css/normalize.css";
+import "@ionic/react/css/structure.css";
+import "@ionic/react/css/typography.css";
+import "@ionic/react/css/padding.css";
+import "@ionic/react/css/float-elements.css";
+import "@ionic/react/css/text-alignment.css";
+import "@ionic/react/css/text-transformation.css";
+import "@ionic/react/css/flex-utils.css";
+import "@ionic/react/css/display.css";
 
-import './theme/variables.css';
-import './theme/custom.css';
-import ExplorePage from './pages/explore';
-import CalendarPage from './pages/calendar';
-import MapPage from './pages/map';
-import ProfilePage from './pages/profile';
-import { useState } from 'react';
+import "./theme/variables.css";
+import "./theme/custom.css";
+import ExplorePage from "./pages/explore";
+import CalendarPage from "./pages/calendar";
+import MapPage from "./pages/map";
+import ProfilePage from "./pages/profile";
+import { useState } from "react";
 
-import TestGoogleAuth from './pages/TestGoogleAuth';
-import { handleUserLogin } from './server';
+import TestGoogleAuth from "./pages/TestGoogleAuth";
+import { handleUserLogin } from "./server";
+import AttractionPage from "./pages/attraction";
 
-setupIonicReact({mode:"md"});
+setupIonicReact({ mode: "md" });
 
 const App: React.FC = () => {
   const context = useContext();
@@ -47,9 +56,16 @@ const App: React.FC = () => {
     const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
       switch (event) {
         case "signIn":
-          const email: string | null = data?.signInUserSession?.idToken?.payload?.email ?? null;
+          const email: string | null =
+            data?.signInUserSession?.idToken?.payload?.email ?? null;
           const awsUsername: string | null = data?.username ?? null;
-          context.setHumspotUser({ email: email, awsUsername: awsUsername, imageUrl: '', role: 'user', loggedIn: true });
+          context.setHumspotUser({
+            email: email,
+            awsUsername: awsUsername,
+            imageUrl: "",
+            role: "user",
+            loggedIn: true,
+          });
           break;
         case "signOut":
           console.log("signed out!");
@@ -68,14 +84,23 @@ const App: React.FC = () => {
   const getUser = async (): Promise<void> => {
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
-      const email: string | null = currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
+      const email: string | null =
+        currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
       const awsUsername: string | null = currentUser?.username ?? null;
-      context.setHumspotUser({ email: email, awsUsername: awsUsername, imageUrl: '', role: 'user', loggedIn: true });
-      handleUserLogin(email, awsUsername).then(() => {
-        console.log("CALLED");
-      }).catch((err) => {
-        console.log(err);
+      context.setHumspotUser({
+        email: email,
+        awsUsername: awsUsername,
+        imageUrl: "",
+        role: "user",
+        loggedIn: true,
       });
+      handleUserLogin(email, awsUsername)
+        .then(() => {
+          console.log("CALLED");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (error) {
       console.error("Not signed in: " + error);
       context.setHumspotUser(guestUser);
@@ -83,53 +108,89 @@ const App: React.FC = () => {
   };
 
   const [currentTab, setCurrentTab] = useState("tab1");
-  function handleTabChange(event: CustomEvent<{ tab: string; }>): void {
+  function handleTabChange(event: CustomEvent<{ tab: string }>): void {
     setCurrentTab(event.detail.tab);
   }
 
   return (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route path ="/">
-          <ExplorePage></ExplorePage>
-          </Route>
-          <Route exact path="/explore">
-            <ExplorePage></ExplorePage>
-          </Route>
-          <Route exact path="/calendar">
-            <CalendarPage></CalendarPage>
-          </Route>
-          <Route exact path="/map">
-            <MapPage></MapPage>
-          </Route>
-          <Route exact path="/profile">
-            <ProfilePage></ProfilePage>
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom" color="primary" onIonTabsWillChange={handleTabChange}>
-          <IonTabButton tab="tab1" href="/explore">
-            <IonIcon aria-hidden="true" icon={compass} color={currentTab=="tab1"?"icon-highlight":"icon-dark"} size="large" />
-            {/* <IonLabel>Tab 1</IonLabel> */}
-          </IonTabButton>
-          <IonTabButton tab="tab2" href="/map">
-            <IonIcon aria-hidden="true" icon={map} color={currentTab=="tab2"?"icon-highlight":"icon-dark"} size="large"/>
-            {/* <IonLabel>Tab 2</IonLabel> */}
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/calendar">
-            <IonIcon aria-hidden="true" icon={calendar} color={currentTab=="tab3"?"icon-highlight":"icon-dark"} size="large"/>
-            {/* <IonLabel>Tab 3</IonLabel> */}
-          </IonTabButton>
-          <IonTabButton tab="tab4" href="/profile">
-            <IonIcon aria-hidden="true" icon={person} color={currentTab=="tab4"?"icon-highlight":"icon-dark"} size="large"/>
-            {/* <IonLabel>Tab 3</IonLabel> */}
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
-
+    <IonApp>
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route path="/">
+              <ExplorePage></ExplorePage>
+            </Route>
+            <Route exact path="/explore">
+              <ExplorePage></ExplorePage>
+            </Route>
+            <Route exact path="/calendar">
+              <CalendarPage></CalendarPage>
+            </Route>
+            <Route exact path="/map">
+              <MapPage></MapPage>
+            </Route>
+            <Route exact path="/profile">
+              <ProfilePage></ProfilePage>
+            </Route>
+            <Route exact path="/google-auth">
+              <TestGoogleAuth></TestGoogleAuth>
+            </Route>
+            <Route
+              exact
+              path="/attraction/:id"
+              component={AttractionPage}
+            ></Route>
+          </IonRouterOutlet>
+          <IonTabBar
+            slot="bottom"
+            color="primary"
+            onIonTabsWillChange={handleTabChange}
+          >
+            <IonTabButton tab="tab1" href="/explore">
+              <IonIcon
+                aria-hidden="true"
+                icon={compass}
+                color={currentTab == "tab1" ? "icon-highlight" : "icon-dark"}
+                size="large"
+              />
+              {/* <IonLabel>Tab 1</IonLabel> */}
+            </IonTabButton>
+            <IonTabButton tab="tab2" href="/map">
+              <IonIcon
+                aria-hidden="true"
+                icon={map}
+                color={currentTab == "tab2" ? "icon-highlight" : "icon-dark"}
+                size="large"
+              />
+              {/* <IonLabel>Tab 2</IonLabel> */}
+            </IonTabButton>
+            <IonTabButton tab="tab3" href="/calendar">
+              <IonIcon
+                aria-hidden="true"
+                icon={calendar}
+                color={currentTab == "tab3" ? "icon-highlight" : "icon-dark"}
+                size="large"
+              />
+              {/* <IonLabel>Tab 3</IonLabel> */}
+            </IonTabButton>
+            <IonTabButton
+              tab="tab4"
+              href={
+                context.humspotUser == guestUser ? "/google-auth" : "/profile"
+              }
+            >
+              <IonIcon
+                aria-hidden="true"
+                icon={person}
+                color={currentTab == "tab4" ? "icon-highlight" : "icon-dark"}
+                size="large"
+              />
+              {/* <IonLabel>Tab 3</IonLabel> */}
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    </IonApp>
   );
 };
 

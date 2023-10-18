@@ -1,0 +1,18 @@
+.locationmap {
+  margin-left: auto;
+  margin-right: 0;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.locationcard {
+  display: flex;
+}
+
+.headercard {
+  margin-top: 25vh;
+}
+
+.commentbox {
+  display: flex;
+}
