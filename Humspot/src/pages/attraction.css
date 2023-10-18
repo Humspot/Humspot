@@ -16,3 +16,17 @@
 .commentbox {
   display: flex;
 }
+
+.FavoritesButton {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+}
+
+.VisitedButton {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 80px;
+}

@@ -25,12 +25,14 @@ import {
 import "./profile.css";
 import { useState } from "react";
 import { map, pin, star } from "ionicons/icons";
+import { guestUser, useContext } from "../my-context";
 
 function ProfilePage() {
+  const context = useContext();
   const user = {
-    name: "John Doe",
-    signUpDate: "October 10, 2023",
-    photoUrl: "https://ionicframework.com/docs/img/demos/avatar.svg",
+    name: context.humspotUser.userID,
+    signUpDate: context.humspotUser.dateCreated,
+    photoUrl: context.humspotUser.imageUrl,
   };
   const visited = [
     "Location 1",

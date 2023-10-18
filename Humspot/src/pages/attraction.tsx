@@ -1,5 +1,6 @@
 import {
   IonAvatar,
+  IonButton,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -7,12 +8,14 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonImg,
   IonPage,
 } from "@ionic/react";
 import { RouteComponentProps } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import "./attraction.css";
 import { Map, Marker } from "pigeon-maps";
+import { mapOutline, star, starOutline } from "ionicons/icons";
 
 export function LocationMap() {
   return (
@@ -48,12 +51,32 @@ function AttractionPage() {
     <>
       <IonPage>
         <IonContent>
-          <img
+          {/* Favorites Button */}
+          <IonButton
+            className="FavoritesButton"
+            fill="clear"
+            color={"secondary"}
+            size="large"
+            id="FavoritesButton"
+          >
+            <IonIcon slot="icon-only" icon={starOutline}></IonIcon>
+          </IonButton>
+          {/* Visited Button for Locations */}
+          <IonButton
+            className="VisitedButton"
+            fill="clear"
+            color={"secondary"}
+            size="large"
+            id="VisitedButton"
+          >
+            <IonIcon slot="icon-only" icon={mapOutline}></IonIcon>
+          </IonButton>
+          <IonImg
             alt="Attraction Image"
             src="https://source.unsplash.com/random/?forest,day"
             className="MainCarouselEntryHeaderImage"
-            style={imgStyle as any} // Apply the custom styles to the image
-          />
+            style={imgStyle as any}
+          ></IonImg>
           <IonCard color={"primary"} className="headercard">
             <IonCardHeader>
               <h1>Name</h1>
