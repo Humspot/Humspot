@@ -12,17 +12,17 @@ export type HumspotUser = {
   accountStatus: 'active' | 'restricted';
   authProvider: 'google' | 'custom'
   dateCreated: string | Date;
-}
+};
 
 export type AWSLoginResponse = {
   message: string;
   user?: HumspotUser;
-}
+};
 
 export type AWSAddEventResponse = {
   message: string;
   eventID?: string;
-}
+};
 
 export type HumspotEvent = {
   name: string;
@@ -38,7 +38,33 @@ export type HumspotEvent = {
   photoUrls: string[]
 };
 
+export type AWSAddAttractionResponse = {
+  message: string;
+  attractionID?: string;
+};
+
+export type HumspotAttraction = {
+  name: string;
+  description: string;
+  location: string;
+  addedByUserID: string;
+  websiteUrl: string;
+  latitude: number;
+  longitude: number;
+  openTimes: string;
+  tags: string[];
+  photoUrls: string[];
+};
+
 type ExtendedHumspotEvent = HumspotEvent & {
+  eventID: string;
+  activityID: string;
+  activityType: string;
+  tagID: string;
+  tagName: string;
+};
+
+type ExtendedHumspotAttraction = HumspotAttraction & {
   eventID: string;
   activityID: string;
   activityType: string;

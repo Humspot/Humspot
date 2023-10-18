@@ -1,7 +1,7 @@
 import { IonButton, IonCard, IonCardContent, IonContent, IonPage, useIonLoading } from "@ionic/react";
-import { handleAddComment, handleAddEvent, handleAddImages, handleAddToFavorites, handleAddToVisited, handleGetCommentsGivenUserID, handleGetEventGivenTag, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID, handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../server";
+import { handleAddAttraction, handleAddComment, handleAddEvent, handleAddImages, handleAddToFavorites, handleAddToVisited, handleGetCommentsGivenUserID, handleGetEventGivenTag, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID, handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../server";
 import { useContext } from "../my-context";
-import { HumspotComment, HumspotEvent } from "../types";
+import { HumspotAttraction, HumspotComment, HumspotEvent } from "../types";
 
 const dummyEvent: HumspotEvent = {
   name: "THIS IS A TEST 100",
@@ -16,6 +16,19 @@ const dummyEvent: HumspotEvent = {
   tags: ["test100"],
   photoUrls: []
 };
+
+const dummyAttraction: HumspotAttraction = {
+  name: "NEW ATTRACTION AT HUMBOLDT",
+  description: "This is a test attraction, go there now!",
+  location: "2023 Humspot Ave, Arcata, CA 95521",
+  addedByUserID: "5e2e096461e516972e0b1ac2",
+  websiteUrl: "https://www.google.com",
+  latitude: 39.879700737622106,
+  longitude: -122.28785508438247,
+  openTimes: "9am to 9pm",
+  tags: ["attractionTest", "anotherAttractionTest", "fun"],
+  photoUrls: []
+}
 
 const dummyComment: HumspotComment = {
   userID: '',
@@ -91,6 +104,10 @@ const TestGoogleAuth: React.FC = () => {
     const res = await handleGetVisitedGivenUserID(1, userID);
   }
 
+  async function handleTestAddAttraction() {
+    const res = await handleAddAttraction(dummyAttraction);
+  }
+
   return (
     <>
       <IonPage>
@@ -102,6 +119,8 @@ const TestGoogleAuth: React.FC = () => {
                   <p>Currently logged in as: {JSON.stringify(context.humspotUser)}</p>
 
                   <IonButton color='dark' /* REMOVE DISABLED TO TEST */ disabled onClick={async () => await handleTestAddEvent()}>TEST SUBMIT EVENT (Change Dummy Event Variable)</IonButton>
+
+                  <IonButton color='dark' /* REMOVE DISABLED TO TEST */ disabled onClick={async () => await handleTestAddAttraction()}>TEST SUBMIT ATTRACTION (Change Dummy Attraction Variable)</IonButton>
 
                   <IonButton color='dark' onClick={async () => await handleTestGetEventGivenTag()}>TEST GET EVENTS GIVEN TAG</IonButton>
 

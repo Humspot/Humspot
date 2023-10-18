@@ -14,8 +14,9 @@ import { nanoid } from "nanoid";
 import { Camera, GalleryPhoto, GalleryPhotos } from '@capacitor/camera';
 
 import {
+  AWSAddAttractionResponse,
   AWSAddEventResponse, AWSAddImageResponse, AWSAddToFavoritesResponse, AWSAddToVisitedResponse,
-  AWSGetCommentsResponse, AWSGetEventsGivenTagResponse, AWSLoginResponse, HumspotComment, HumspotEvent
+  AWSGetCommentsResponse, AWSGetEventsGivenTagResponse, AWSLoginResponse, HumspotAttraction, HumspotComment, HumspotEvent
 } from './types';
 
 Amplify.configure(awsconfig);
@@ -124,8 +125,6 @@ export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AWSAddEven
     const idToken = currentUserSession.getIdToken();
     const jwtToken = idToken.getJwtToken();
 
-    console.log(newEvent);
-
     const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_ADD_EVENT_URL, {
       method: 'POST',
       headers: {
@@ -147,6 +146,47 @@ export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AWSAddEven
     )
   }
 };
+
+
+/**
+ * @function handleAddEvent
+ * @description Calls the AWS API gateway /add-attraction. This will add a new attraction to the database
+ * 
+ * @param {HumspotAttraction} newAttraction the attraction to be added.
+ * 
+ * @returns {Promise<AWSAddAttractionResponse>} response containing a message of success or error.
+ * If success, the newly added attractionID is returned.
+ */
+export const handleAddAttraction = async (newAttraction: HumspotAttraction): Promise<AWSAddAttractionResponse> => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(import.meta.env.  VITE_AWS_API_GATEWAY_ADD_ATTRACTION_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+      body: JSON.stringify(newAttraction),
+    });
+
+    const responseData: AWSAddAttractionResponse = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (error) {
+    console.error('Error calling API Gateway', error);
+    return (
+      { message: 'Error calling API Gateway' + error }
+    )
+  }
+}
 
 
 /**
