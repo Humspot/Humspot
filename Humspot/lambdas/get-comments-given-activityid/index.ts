@@ -1,6 +1,9 @@
 /**
- * AWS lambda function to retrieve a User's comments from the database given the page number and the userID.
- * Each page pulls 10 comments from the database. 
+ * AWS lambda function to retrieve an Activity's (event or attraction) comments from the database given the page number.
+ * Each page pulls 10 comments at a time.
+ * 
+ * @todo THIS FUNCTION IS NOT IMPLEMENTED YET, SQL QUERY IS TBD!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * .!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
@@ -23,9 +26,9 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   const conn = await pool.getConnection();
   try {
     const page = event.pathParameters && event.pathParameters["page"];
-    const userID = event.pathParameters && event.pathParameters["userID"];
+    const activityID = event.pathParameters && event.pathParameters["activityID"];
 
-    if (!page || !userID) {
+    if (!page || !activityID) {
       return {
         statusCode: 400,
         headers: { "Content-Type": "application/json" },
@@ -35,7 +38,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     const pageNum: number = Number(page);
     const offset: number = (pageNum - 1) * 10;
 
-    if (isNaN(pageNum) || pageNum < 1 || !userID) {
+    if (isNaN(pageNum) || pageNum < 1 || !activityID) {
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
@@ -43,16 +46,11 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       };
     }
 
-    const query: string = `
-      SELECT c.commentID, c.commentText, c.commentDate, a.activityID, a.name
-      FROM Comments c
-      JOIN Activities a ON c.activityID = a.activityID
-      WHERE c.userID = ?
-      ORDER BY c.commentDate DESC
-      LIMIT 10 OFFSET ?;
-    `;
+    //const query: string = `
 
-    const [rows] = await conn.query(query, [userID, offset]);
+    //`;
+
+    const [rows] = await conn.query(query, [activityID, offset]);
 
     return {
       statusCode: 200,

@@ -1,5 +1,5 @@
 import { IonButton, IonCard, IonCardContent, IonContent, IonPage, useIonLoading } from "@ionic/react";
-import { handleAddComment, handleAddEvent, handleAddImages, handleAddToFavorites, handleAddToVisited, handleGetCommentsGivenUserID, handleGetEventGivenTag, handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../server";
+import { handleAddComment, handleAddEvent, handleAddImages, handleAddToFavorites, handleAddToVisited, handleGetCommentsGivenUserID, handleGetEventGivenTag, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID, handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../server";
 import { useContext } from "../my-context";
 import { HumspotComment, HumspotEvent } from "../types";
 
@@ -20,8 +20,8 @@ const dummyEvent: HumspotEvent = {
 const dummyComment: HumspotComment = {
   userID: '',
   activityID: '59c7351a86b71e1b8c6693a0d',
-  commentDate: '2023-10-17',
-  commentText: 'Wow! This is an amazing event! I cannot wait to go to this 🙏🏽😊'
+  commentDate: '2023-10-16',
+  commentText: 'WOWOWOWOWWO I cannnnnottt waitttt to go to this 🙏🏽😊'
 };
 
 
@@ -31,12 +31,8 @@ const TestGoogleAuth: React.FC = () => {
 
   const [present, dismiss] = useIonLoading();
 
-  // TEST FUNCTIONS
+  // TEST FUNCTIONS (preferrably run these in order! And check the console log for stuff - David)
 
-  /**
-   * @description runs when the user clicks the login button. It ensures the user is not already logged in.
-   * If not, it calls handleGoogleLoginAndVerifyAWSUser and caches authentication credentials accordingly.
-   */
   const handleLogin = async () => {
     if (context.humspotUser.email) return; // if user is already logged in
     present({ duration: 0, message: "Logging in..." });
@@ -85,6 +81,16 @@ const TestGoogleAuth: React.FC = () => {
     const res = await handleGetCommentsGivenUserID(1, userID)
   };
 
+  const handleTestGetFavorites = async () => {
+    const userID: string = context.humspotUser.userID;
+    const res = await handleGetFavoritesGivenUserID(1, userID);
+  }
+
+  const handleTestGetVisited = async () => {
+    const userID: string = context.humspotUser.userID;
+    const res = await handleGetVisitedGivenUserID(1, userID);
+  }
+
   return (
     <>
       <IonPage>
@@ -94,30 +100,34 @@ const TestGoogleAuth: React.FC = () => {
               {context.humspotUser.email ?
                 <>
                   <p>Currently logged in as: {JSON.stringify(context.humspotUser)}</p>
+
+                  <IonButton color='dark' /* REMOVE DISABLED TO TEST */ disabled onClick={async () => await handleTestAddEvent()}>TEST SUBMIT EVENT (Change Dummy Event Variable)</IonButton>
+
+                  <IonButton color='dark' onClick={async () => await handleTestGetEventGivenTag()}>TEST GET EVENTS GIVEN TAG</IonButton>
+
+                  <IonButton color='dark' onClick={async () => await handleTestImages()}>Test Image Upload</IonButton>
+
+                  <IonButton color='dark' onClick={async () => await handleTestFavorite('59c7351a86b71e1b8c6693a0d')}>Test Favorite ActivityID: 59c7351a86b71e1b8c6693a0d</IonButton>
+
+                  <IonButton color='dark' onClick={async () => await handleTestVisited('59c7351a86b71e1b8c6693a0d')}>Test Visited, ActivityID: 59c7351a86b71e1b8c6693a0d</IonButton>
+
+                  <IonButton color='dark' onClick={async () => await handleTestComment()}>Test comment on ActivityID: 59c7351a86b71e1b8c6693a0d</IonButton>
+
+                  <IonButton color='dark' onClick={async () => await handleTestGetComments()}>Get current users comments as a list</IonButton>
+
+                  <IonButton color='dark' onClick={async () => await handleTestGetFavorites()}>Get current users favorites as a list</IonButton>
+
+                  <IonButton color='dark' onClick={async () => await handleTestGetVisited()}>Get current users places visited as a list</IonButton>
+
+
                   <IonButton color='dark' onClick={async () => await handleLogout()}>Logout</IonButton>
                 </>
                 :
                 <>
-                  <p>Currently a Guest User</p>
+                  <p>Currently a Guest User, login to test functions</p>
                   <IonButton color='dark' onClick={async () => await handleLogin()}>Login</IonButton>
                 </>
               }
-
-              <IonButton color='dark' disabled onClick={async () => await handleTestAddEvent()}>TEST SUBMIT EVENT (Change Dummy Event Variable)</IonButton>
-
-              <IonButton color='dark' onClick={async () => await handleTestGetEventGivenTag()}>TEST GET EVENTS GIVEN TAG</IonButton>
-
-              <IonButton color='dark' onClick={async () => await handleTestImages()}>Test Image Upload</IonButton>
-
-              <IonButton color='dark' onClick={async () => await handleTestFavorite('59c7351a86b71e1b8c6693a0d')}>Test Favorite ActivityID: 59c7351a86b71e1b8c6693a0d</IonButton>
-
-              <IonButton color='dark' onClick={async () => await handleTestVisited('59c7351a86b71e1b8c6693a0d')}>Test Visited, ActivityID: 59c7351a86b71e1b8c6693a0d</IonButton>
-
-              <IonButton color='dark' onClick={async () => await handleTestComment()}>Test comment on ActivityID: 59c7351a86b71e1b8c6693a0d</IonButton>
-
-              <IonButton color='dark' onClick={async () => await handleTestGetComments()}>Get current users comments as a list</IonButton>
-
-
 
             </IonCardContent>
           </IonCard>

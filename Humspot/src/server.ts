@@ -13,7 +13,10 @@ import { nanoid } from "nanoid";
 
 import { Camera, GalleryPhoto, GalleryPhotos } from '@capacitor/camera';
 
-import { AWSAddEventResponse, AWSAddImageResponse, AWSAddToFavoritesResponse, AWSAddToVisitedResponse, AWSGetCommentsGivenUserIdResponse, AWSGetEventsGivenTagResponse, AWSLoginResponse, HumspotComment, HumspotEvent } from './types';
+import {
+  AWSAddEventResponse, AWSAddImageResponse, AWSAddToFavoritesResponse, AWSAddToVisitedResponse,
+  AWSGetCommentsResponse, AWSGetEventsGivenTagResponse, AWSLoginResponse, HumspotComment, HumspotEvent
+} from './types';
 
 Amplify.configure(awsconfig);
 
@@ -394,9 +397,9 @@ export const handleAddComment = async (comment: HumspotComment) => {
  * @param {number} pageNum 
  * @param {string} userID 
  * 
- * @returns {Promise<AWSGetCommentsGivenUserIdResponse>} a status message, and, if successful, an array of 10 comments of type GetCommentsResponse
+ * @returns {Promise<AWSGetCommentsResponse>} a status message, and, if successful, an array of 10 comments of type GetCommentsResponse
  */
-export const handleGetCommentsGivenUserID = async (pageNum: number, userID: string): Promise<AWSGetCommentsGivenUserIdResponse> => {
+export const handleGetCommentsGivenUserID = async (pageNum: number, userID: string): Promise<AWSGetCommentsResponse> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -424,4 +427,87 @@ export const handleGetCommentsGivenUserID = async (pageNum: number, userID: stri
       { message: 'Error calling API Gateway' + error }
     )
   }
-}
+};
+
+
+/**
+ * @function handleGetFavoritesGivenUserID
+ * @description gets an array of favorites from a specified user.
+ * It returns 10 favorites at a time, and more can be loaded by incrementing the pageNum param.
+ * 
+ * @param {number} pageNum 
+ * @param {string} userID 
+ * 
+ * @returns {} a status message, and if successful, an array of 10 favorites
+ */
+export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_GET_FAVORITES_GIVEN_USERID_URL + "/" + pageNum + "/" + userID, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+    });
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (error) {
+    console.error('Error calling API Gateway', error);
+    return (
+      { message: 'Error calling API Gateway' + error }
+    )
+  }
+};
+
+
+
+/**
+ * @function handleGetVisitedGivenUserID
+ * @description gets an array of places visited from a specified user.
+ * It returns 10 places the user has visited at a time, and more can be loaded by incrementing the pageNum param.
+ * 
+ * @param {number} pageNum 
+ * @param {string} userID 
+ * 
+ * @returns {} a status message, and if successful, an array of 10 places most recently visited.
+ */
+export const handleGetVisitedGivenUserID = async (pageNum: number, userID: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!(currentUserSession.isValid())) throw new Error('Invalid auth session');
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_GET_VISITED_GIVEN_USERID_URL + "/" + pageNum + "/" + userID, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+    });
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (error) {
+    console.error('Error calling API Gateway', error);
+    return (
+      { message: 'Error calling API Gateway' + error }
+    )
+  }
+};

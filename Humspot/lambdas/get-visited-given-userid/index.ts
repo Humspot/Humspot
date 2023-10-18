@@ -1,6 +1,6 @@
 /**
- * AWS lambda function to retrieve a User's comments from the database given the page number and the userID.
- * Each page pulls 10 comments from the database. 
+ * AWS lambda function to retrieve places a User has visited from the database given the page number and the userID.
+ * Each page pulls 10 places they have visited from the database. 
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
@@ -44,20 +44,31 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
 
     const query: string = `
-      SELECT c.commentID, c.commentText, c.commentDate, a.activityID, a.name
-      FROM Comments c
-      JOIN Activities a ON c.activityID = a.activityID
-      WHERE c.userID = ?
-      ORDER BY c.commentDate DESC
+      SELECT 
+        a.*,
+        e.*,
+        attr.* 
+      FROM 
+        Visited v
+      JOIN 
+        Activities a ON v.activityID = a.activityID
+      LEFT JOIN 
+        Events e ON a.activityID = e.activityID
+      LEFT JOIN 
+        Attractions attr ON a.activityID = attr.activityID
+      WHERE 
+        v.userID = ?
+      ORDER BY 
+        v.visitDate DESC
       LIMIT 10 OFFSET ?;
     `;
 
-    const [rows] = await conn.query(query, [userID, offset]);
+    const [rows]: any = await conn.query(query, [userID, offset]);
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: "Success", comments: rows }),
+      body: JSON.stringify({ message: "Success", visited: rows }),
     };
 
   } catch (error) {
@@ -73,4 +84,5 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
   }
 };
+
 
