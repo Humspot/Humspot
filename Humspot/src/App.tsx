@@ -43,13 +43,11 @@ import MapPage from "./pages/map";
 import ProfilePage from "./pages/profile";
 import { useState } from "react";
 
-
-import TestGoogleAuth from './pages/TestGoogleAuth';
-import { handleUserLogin } from './server';
-import { AWSLoginResponse } from './types';
+import TestGoogleAuth from "./pages/TestGoogleAuth";
+import { handleUserLogin } from "./server";
+import { AWSLoginResponse } from "./types";
 
 import AttractionPage from "./pages/attraction";
-
 
 setupIonicReact({ mode: "md" });
 
@@ -81,16 +79,19 @@ const App: React.FC = () => {
   const getUser = async (): Promise<void> => {
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
-      const email: string | null = currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
+      const email: string | null =
+        currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
       const awsUsername: string | null = currentUser?.username ?? null;
-      handleUserLogin(email, awsUsername).then((res: AWSLoginResponse) => {
-        console.log(res.message);
-        if (!res.user) throw new Error(res.message);
-        console.log(JSON.stringify(res.user));
-        context.setHumspotUser(res.user);
-      }).catch((err) => {
-        console.log(err);
-      });
+      handleUserLogin(email, awsUsername)
+        .then((res: AWSLoginResponse) => {
+          console.log(res.message);
+          if (!res.user) throw new Error(res.message);
+          console.log(JSON.stringify(res.user));
+          context.setHumspotUser(res.user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (error) {
       console.error("Not signed in: " + error);
       context.setHumspotUser(guestUser);
@@ -107,9 +108,7 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/">
-              <ExplorePage></ExplorePage>
-            </Route>
+            <Route exact path="/" render={() => <Redirect to="/explore" />} />
             <Route exact path="/explore">
               <ExplorePage></ExplorePage>
             </Route>
@@ -143,7 +142,6 @@ const App: React.FC = () => {
                 color={currentTab == "tab1" ? "icon-highlight" : "icon-dark"}
                 size="large"
               />
-              {/* <IonLabel>Tab 1</IonLabel> */}
             </IonTabButton>
             <IonTabButton tab="tab2" href="/map">
               <IonIcon
@@ -152,7 +150,6 @@ const App: React.FC = () => {
                 color={currentTab == "tab2" ? "icon-highlight" : "icon-dark"}
                 size="large"
               />
-              {/* <IonLabel>Tab 2</IonLabel> */}
             </IonTabButton>
             <IonTabButton tab="tab3" href="/calendar">
               <IonIcon
@@ -161,7 +158,6 @@ const App: React.FC = () => {
                 color={currentTab == "tab3" ? "icon-highlight" : "icon-dark"}
                 size="large"
               />
-              {/* <IonLabel>Tab 3</IonLabel> */}
             </IonTabButton>
             <IonTabButton
               tab="tab4"
@@ -175,13 +171,11 @@ const App: React.FC = () => {
                 color={currentTab == "tab4" ? "icon-highlight" : "icon-dark"}
                 size="large"
               />
-              {/* <IonLabel>Tab 3</IonLabel> */}
             </IonTabButton>
           </IonTabBar>
         </IonTabs>
       </IonReactRouter>
     </IonApp>
-
   );
 };
 

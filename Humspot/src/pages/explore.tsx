@@ -113,6 +113,7 @@ function ExplorePage() {
           title={data.title}
           description={data.description}
           imgsrc={data.imgsrc}
+          id={index}
         />
       </div>
     </SwiperSlide>
@@ -133,7 +134,11 @@ function ExplorePage() {
   const thirdCarouselEntries = thirdCarouselData.map((data, index) => (
     <SwiperSlide key={index}>
       <div className="SecondaryCarouselSlide">
-        <SecondaryCarouselEntry title={data.title} imgsrc={data.imgsrc} />
+        <SecondaryCarouselEntry
+          title={data.title}
+          imgsrc={data.imgsrc}
+          id={index}
+        />
       </div>
     </SwiperSlide>
   ));
@@ -141,7 +146,11 @@ function ExplorePage() {
   const fourthCarouselEntries = fourthCarouselData.map((data, index) => (
     <SwiperSlide key={index}>
       <div className="SecondaryCarouselSlide">
-        <SecondaryCarouselEntry title={data.title} imgsrc={data.imgsrc} />
+        <SecondaryCarouselEntry
+          title={data.title}
+          imgsrc={data.imgsrc}
+          id={index}
+        />
       </div>
     </SwiperSlide>
   ));
