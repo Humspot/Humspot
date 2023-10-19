@@ -19,6 +19,7 @@ import {
   IonPage,
   IonSegment,
   IonSegmentButton,
+  IonThumbnail,
   IonTitle,
   IonToggle,
   IonToolbar,
@@ -26,7 +27,7 @@ import {
 } from "@ionic/react";
 import "./profile.css";
 import { useCallback, useEffect, useState } from "react";
-import { map, pin, star } from "ionicons/icons";
+import { map, pin, star, walk } from "ionicons/icons";
 import { guestUser, useContext } from "../my-context";
 import avatar from "../elements/avatar.svg";
 import {
@@ -34,6 +35,7 @@ import {
   handleGetVisitedGivenUserID,
   handleLogout,
 } from "../server";
+import Timestamp from "react-timestamp";
 function ProfilePage() {
   const context = useContext();
   const [visited, setVisited] = useState([]);
@@ -87,7 +89,12 @@ function ProfilePage() {
               </IonAvatar>
               <IonCardTitle>{context.humspotUser?.username ?? ""}</IonCardTitle>
               <IonCardSubtitle>
-                Member since {context.humspotUser?.dateCreated ?? ""}
+                <p>
+                  Member since{" "}
+                  <Timestamp
+                    date={context.humspotUser?.dateCreated ?? ""}
+                  ></Timestamp>
+                </p>
               </IonCardSubtitle>
             </IonCardHeader>
           </IonCard>
@@ -98,13 +105,21 @@ function ProfilePage() {
           >
             <IonSegmentButton value="favorites">
               <div className="segmentbutton">
-                <IonIcon icon={star} style={{ marginRight: "5px" }}></IonIcon>
+                <IonIcon
+                  icon={star}
+                  style={{ marginRight: "5px" }}
+                  size="large"
+                ></IonIcon>
                 <IonLabel>Favorites</IonLabel>
               </div>
             </IonSegmentButton>
             <IonSegmentButton value="visited" className="segmentbutton">
               <div className="segmentbutton">
-                <IonIcon icon={map} style={{ marginRight: "5px" }}></IonIcon>
+                <IonIcon
+                  icon={walk}
+                  style={{ marginRight: "5px" }}
+                  size="large"
+                ></IonIcon>
                 <IonLabel>Visited</IonLabel>
               </div>
             </IonSegmentButton>
@@ -117,10 +132,17 @@ function ProfilePage() {
                   {favorites.map((item: any, index) => (
                     <IonItem
                       key={index}
+                      button={true}
                       onClick={() => {
                         handleRoute(item);
                       }}
                     >
+                      <IonThumbnail slot="start">
+                        <img
+                          alt="Silhouette of mountains"
+                          src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+                        />
+                      </IonThumbnail>
                       <IonLabel>{item.name}</IonLabel>
                     </IonItem>
                   ))}
@@ -133,7 +155,13 @@ function ProfilePage() {
               <IonCardContent>
                 <IonList>
                   {visited.map((item: any, index) => (
-                    <IonItem key={index}>
+                    <IonItem key={index} button={true}>
+                      <IonThumbnail slot="start">
+                        <img
+                          alt="Silhouette of mountains"
+                          src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+                        />
+                      </IonThumbnail>
                       <IonLabel>{item.name}</IonLabel>
                     </IonItem>
                   ))}

@@ -1,4 +1,4 @@
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonPage, IonThumbnail } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 import {
   IonInfiniteScroll,
@@ -48,12 +48,12 @@ function CalendarPage() {
             </IonItemDivider>
             {weekitems.map((item, index) => (
               <IonItem key={item}>
-                <IonAvatar slot="start">
+                <IonThumbnail slot="start">
                   <img
                     src={"https://picsum.photos/80/80?random=" + index}
                     alt="avatar"
                   />
-                </IonAvatar>
+                </IonThumbnail>
                 <IonLabel>{item}</IonLabel>
               </IonItem>
             ))}
@@ -62,12 +62,12 @@ function CalendarPage() {
             </IonItemDivider>
             {monthitems.map((item, index) => (
               <IonItem key={item}>
-                <IonAvatar slot="start">
+                <IonThumbnail slot="start">
                   <img
                     src={"https://picsum.photos/80/80?random=" + index}
                     alt="avatar"
                   />
-                </IonAvatar>
+                </IonThumbnail>
                 <IonLabel>{item}</IonLabel>
               </IonItem>
             ))}
