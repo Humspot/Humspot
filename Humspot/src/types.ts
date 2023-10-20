@@ -6,12 +6,13 @@
 export type HumspotUser = {
   userID: string;
   email: string | null;
-  imageUrl: string;
+  profilePicURL: string;
   awsUsername: string | null;
-  accountType: 'user' | 'admin' | 'organizer' | 'guest';
-  accountStatus: 'active' | 'restricted';
-  authProvider: 'google' | 'custom'
+  accountType: "user" | "admin" | "organizer" | "guest";
+  accountStatus: "active" | "restricted";
+  authProvider: "google" | "custom";
   dateCreated: string | Date;
+  username?: string;
 };
 
 export type AWSLoginResponse = {
@@ -35,7 +36,7 @@ export type HumspotEvent = {
   longitude: number;
   organizer: string;
   tags: string[];
-  photoUrls: string[]
+  photoUrls: string[];
 };
 
 export type AWSAddAttractionResponse = {
@@ -75,22 +76,22 @@ type ExtendedHumspotAttraction = HumspotAttraction & {
 export type AWSGetEventsGivenTagResponse = {
   message: string;
   events: ExtendedHumspotEvent[];
-}
+};
 
 export type AWSAddImageResponse = {
   success: boolean;
   photoUrls: string[];
-}
+};
 
 export type AWSAddToFavoritesResponse = {
   message: string;
   favoriteID?: string;
-}
+};
 
 export type AWSAddToVisitedResponse = {
   message: string;
   visitedID?: string;
-}
+};
 
 export type HumspotComment = {
   commentText: string;
@@ -106,7 +107,7 @@ export type HumspotCommentResponse = {
   name: string;
 };
 
-export type AWSGetCommentsResponse ={
+export type AWSGetCommentsResponse = {
   message: string;
-  comments?: HumspotCommentResponse[]
+  comments?: HumspotCommentResponse[];
 };

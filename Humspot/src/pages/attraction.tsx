@@ -1,28 +1,52 @@
 import {
   IonAvatar,
+  IonButton,
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonCardTitle,
   IonChip,
   IonContent,
   IonHeader,
   IonIcon,
+  IonImg,
+  IonLabel,
+  IonNote,
   IonPage,
+  IonText,
 } from "@ionic/react";
 import { RouteComponentProps } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import "./attraction.css";
 import { Map, Marker } from "pigeon-maps";
+import {
+  compass,
+  mapOutline,
+  pin,
+  pinOutline,
+  star,
+  starOutline,
+  time,
+  trailSign,
+  trailSignOutline,
+  walkOutline,
+} from "ionicons/icons";
+import { useCallback, useEffect, useState } from "react";
+import { handleGetEvent } from "../server";
+import { useContext } from "../my-context";
+import Timestamp from "react-timestamp";
+import avatar from "../elements/avatar.svg";
 
-export function LocationMap() {
+export function LocationMap(props: any) {
+  console.log(props);
   return (
     <Map
-      defaultCenter={[40.87649434150835, -124.07918370203882]}
-      defaultZoom={15}
-      minZoom={15}
-      maxZoom={15}
-      height={150}
-      width={150}
+      defaultCenter={[parseFloat(props.latitude), parseFloat(props.longitude)]}
+      defaultZoom={12}
+      minZoom={12}
+      maxZoom={12}
+      height={120}
+      width={120}
       attribution={false}
       mouseEvents={false}
       touchEvents={false}
@@ -30,7 +54,7 @@ export function LocationMap() {
       <Marker
         width={30}
         height={30}
-        anchor={[40.87649434150835, -124.07918370203882]}
+        anchor={[parseFloat(props.latitude), parseFloat(props.longitude)]}
       />
     </Map>
   );
@@ -38,82 +62,118 @@ export function LocationMap() {
 
 function AttractionPage() {
   const { id, imgsrc }: any = useParams();
+  const context = useContext();
   const imgStyle = {
     width: "100%", // Ensure the image takes up the full width of the container
     height: "30vh", // Ensure the image takes up the full height of the container
     objectFit: "cover", // Crop and fit the image within the container
     position: "absolute",
   };
+  const [activity, setActivity] = useState<any>(null);
+  const handleGetEventCallback = useCallback(async (id: string) => {
+    const res = await handleGetEvent(id);
+    if ("event" in res && res.event) setActivity(res.event);
+  }, []);
+  useEffect(() => {
+    if (id) handleGetEventCallback(id);
+  }, [id]);
   return (
     <>
       <IonPage>
         <IonContent>
-          <img
+          {/* Favorites Button */}
+          <IonButton
+            className="FavoritesButton"
+            fill="clear"
+            color={"secondary"}
+            size="large"
+            id="FavoritesButton"
+          >
+            <IonIcon slot="icon-only" icon={starOutline}></IonIcon>
+          </IonButton>
+          {/* Visited Button for Locations */}
+          <IonButton
+            className="VisitedButton"
+            fill="clear"
+            color={"secondary"}
+            size="large"
+            id="VisitedButton"
+          >
+            <IonIcon slot="icon-only" icon={walkOutline}></IonIcon>
+          </IonButton>
+          <IonImg
             alt="Attraction Image"
             src="https://source.unsplash.com/random/?forest,day"
             className="MainCarouselEntryHeaderImage"
-            style={imgStyle as any} // Apply the custom styles to the image
-          />
+            style={imgStyle as any}
+          ></IonImg>
           <IonCard color={"primary"} className="headercard">
             <IonCardHeader>
-              <h1>Name</h1>
+              <IonCardTitle>
+                {activity && <h1>{activity.name}</h1>}
+              </IonCardTitle>
             </IonCardHeader>
           </IonCard>
-          <IonChip color={"secondary"}>Campus</IonChip>
-          <IonChip color={"secondary"}>Hike</IonChip>
-          <IonChip color={"secondary"}>Forest</IonChip>
+          <div>
+            <IonChip color={"secondary"}>{activity?.tags}</IonChip>
+          </div>
           <IonCard>
             <IonCardContent className="locationcard">
-              <p>Location</p>
+              <IonText color={"dark"}>
+                <div className="locationlabel">
+                  <IonIcon icon={compass} size="small"></IonIcon>
+                  <h2>{activity?.location ?? ""}</h2>
+                </div>
+                <div className="locationlabel">
+                  <IonIcon icon={time} size="small"></IonIcon>
+                  <h2>
+                    <Timestamp
+                      date={activity?.date ?? ""}
+                      options={{ includeDay: true }}
+                    ></Timestamp>
+                  </h2>
+                </div>
+              </IonText>
+
               <div className="locationmap">
-                <LocationMap />
+                {activity && (
+                  <LocationMap
+                    latitude={activity.latitude}
+                    longitude={activity.longitude}
+                  />
+                )}
               </div>
             </IonCardContent>
           </IonCard>
           <IonCard>
             <IonCardContent>
-              <p>IF EVENT: Date & Time</p>
-            </IonCardContent>
-          </IonCard>
-          <IonCard>
-            <IonCardContent>
-              <p>Description</p>
+              <IonText color={"dark"}>
+                <p>{activity?.description ?? ""}</p>
+              </IonText>
             </IonCardContent>
           </IonCard>
           {/* Comments Section */}
           <IonCard>
             <IonCardHeader>
-              <h3>Comments</h3>
+              <IonCardTitle>Comments</IonCardTitle>
             </IonCardHeader>
-            <IonCard className="commentbox">
-              <IonAvatar>
-                <img
-                  alt="Silhouette of a person's head"
-                  src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                />
-              </IonAvatar>
-              <IonCardContent>This place is SO FUN!!!</IonCardContent>
-            </IonCard>
-            <IonCard className="commentbox">
-              <IonAvatar>
-                <img
-                  alt="Silhouette of a person's head"
-                  src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                />
-              </IonAvatar>
-              <IonCardContent>This place SUCKS!!!</IonCardContent>
-            </IonCard>
-            <IonCard className="commentbox">
-              <IonAvatar>
-                <img
-                  alt="Silhouette of a person's head"
-                  src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                />
-              </IonAvatar>
-              <IonCardContent>
-                I have no strong feelings one way or the other.
-              </IonCardContent>
-            </IonCard>
+            {activity?.comments?.map((comment: any, index: any) => (
+              <IonCard className="commentbox" key={index}>
+                <IonAvatar className="commentavatar">
+                  <IonImg
+                    alt="Silhouette of a person's head"
+                    src={avatar}
+                  ></IonImg>
+                </IonAvatar>
+                <IonCardContent className="commentcontents">
+                  <h2>{comment.userID}</h2>
+                  {comment.commentText}
+                  <IonNote>
+                    <Timestamp date={comment.commentDate}></Timestamp>
+                  </IonNote>
+                </IonCardContent>
+              </IonCard>
+            ))}
           </IonCard>
         </IonContent>
       </IonPage>
