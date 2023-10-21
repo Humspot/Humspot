@@ -60,12 +60,12 @@
 }
 
 .login-label {
-  align-self: stretch; /* Takes full width of the parent */
-  text-align: left; /* Aligns the content to the left */
+  align-self: stretch; 
+  text-align: left; 
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 7.5%; /* Provide some spacing from the sides */
+  padding: 0 7.5%;
   color: var(--ion-color-primary);
 }
 
@@ -78,6 +78,24 @@ ion-item.login-input {
   height: 50px;
   --border-radius: 5px;
 }
+
+.avatar-wrapper-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.user-avatar-settings {
+  height: 85px;
+  width: 85px;
+  display: inline-block;
+  border: 1px solid rgb(119, 119, 119);
+  overflow: hidden;
+  text-align: center;
+}
+
+
 
 
 /* GOOGLE LOGIN BUTTON CSS */

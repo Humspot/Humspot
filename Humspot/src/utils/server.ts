@@ -219,10 +219,10 @@ export const handleGetEventGivenTag = async (
   try {
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENT_GIVEN_TAG_URL +
-        "/" +
-        pageNum +
-        "/" +
-        tag,
+      "/" +
+      pageNum +
+      "/" +
+      tag,
       {
         method: "GET",
         headers: {
@@ -248,27 +248,37 @@ export const handleGetEventGivenTag = async (
  * NOTE: The uploading of the images is handled client side (no API gateway or lambda function).
  *
  * @param {string} userID the id of the user uploading the images
+ * @param {string} bucketName the name of the S3 bucket to upload the images to
+ * @param {string} fileName the name of the file path to upload the images to (e.g. event-photos/1234-.jpg)
+ * @param {boolean} isUnique whether the image should be a unique upload or override an existing image 
+ * (as is the case with profile photos). Defaults to true.
+ * @param {number} limit the maximum number of images to be uploaded. Defaults to 1.
  *
  * @returns {Promise<AWSAddImageResponse>} the success status as well as an array of photoUrls returned from S3
  */
 export const handleAddImages = async (
-  userID: string
+  userID: string,
+  bucketName: string,
+  fileName: string,
+  isUnique: boolean = true,
+  limit: number = 1
 ): Promise<AWSAddImageResponse> => {
+
   AWS.config.update({
     accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
     secretAccessKey: import.meta.env.VITE_AWS_SECRET_KEY,
     region: "us-west-1",
   });
 
+  let message = "";
+
   const photos: GalleryPhotos = await Camera.pickImages({
     quality: 90,
-    limit: 4,
+    limit: limit,
   });
 
   const s3 = new AWS.S3();
   const photoUrls: string[] = [];
-
-  const limit: number = photos.photos.length < 4 ? photos.photos.length : 4;
 
   for (let i = 0; i < limit; ++i) {
     const photo: GalleryPhoto = photos.photos[i];
@@ -276,24 +286,32 @@ export const handleAddImages = async (
       photo.format !== "jpeg" &&
       photo.format !== "jpg" &&
       photo.format !== "png"
-    )
+    ) {
+      message = "One or more images are not in jpg / png format!";
       continue;
+    }
     const response: Response = await fetch(photo.webPath);
     const blob: Blob = await response.blob();
 
-    if (blob.size > 15_000_000) continue;
+    if (blob.size > 15_000_000) {
+      message = "One or more images exceeds the maximum file size limit (15 MB)";
+      continue;
+    }
 
-    const id: string = nanoid(8);
-    const fileName = `event-photos/${userID}-${id}-${Date.now()}-${
-      photo.format
-    }`;
+    let uploadedFileName: string = '';
+
+    if (isUnique) {
+      const id: string = nanoid(8);
+      uploadedFileName = `${fileName}-${id}-${Date.now()}-${photo.format}`;
+    } else {
+      uploadedFileName = `${fileName}`;
+    }
 
     const params: AWS.S3.PutObjectRequest = {
-      Bucket: "activityphotos",
-      Key: fileName,
+      Bucket: bucketName,
+      Key: uploadedFileName,
       Body: blob,
       ContentType: blob.type,
-      // ACL: 'public-read'
     };
 
     try {
@@ -304,15 +322,25 @@ export const handleAddImages = async (
       console.log("Error uploading file:", error);
       return {
         success: false,
+        message: "Error uploading 1 or more files",
         photoUrls: [],
       };
     }
   }
 
+  if (message !== "") { // if there is an error message (outside of failing to upload)
+    return {
+      success: true,
+      message: message,
+      photoUrls: photoUrls,
+    };
+  }
   return {
     success: true,
     photoUrls: photoUrls,
   };
+
+
 };
 
 /**
@@ -468,10 +496,10 @@ export const handleGetCommentsGivenUserID = async (
   try {
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_COMMENTS_GIVEN_USERID_URL +
-        "/" +
-        pageNum +
-        "/" +
-        userID,
+      "/" +
+      pageNum +
+      "/" +
+      userID,
       {
         method: "GET",
         headers: {
@@ -486,7 +514,7 @@ export const handleGetCommentsGivenUserID = async (
     return responseData;
   } catch (error) {
     console.error("Error calling API Gateway", error);
-    return { message: "Error calling API Gateway" + error, success : false, comments: [] };
+    return { message: "Error calling API Gateway" + error, success: false, comments: [] };
   }
 };
 
@@ -514,10 +542,10 @@ export const handleGetFavoritesGivenUserID = async (
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_FAVORITES_GIVEN_USERID_URL +
-        "/" +
-        pageNum +
-        "/" +
-        userID,
+      "/" +
+      pageNum +
+      "/" +
+      userID,
       {
         method: "GET",
         headers: {
@@ -561,10 +589,10 @@ export const handleGetVisitedGivenUserID = async (
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_VISITED_GIVEN_USERID_URL +
-        "/" +
-        pageNum +
-        "/" +
-        userID,
+      "/" +
+      pageNum +
+      "/" +
+      userID,
       {
         method: "GET",
         headers: {

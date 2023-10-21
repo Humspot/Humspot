@@ -1,3 +1,8 @@
+/**
+ * @file my-context.txt 
+ * @fileoverview contains the global variables used throughout the application.
+ */
+
 import React from "react";
 import { HumspotUser } from "./types";
 
@@ -6,7 +11,7 @@ type Props = {
 };
 
 export type ContextType = {
-  humspotUser: HumspotUser | null | undefined;
+  humspotUser: HumspotUser | null | undefined; // null if loading, undefined if not logged in
   setHumspotUser: React.Dispatch<React.SetStateAction<HumspotUser | null | undefined>>;
   darkMode: boolean;
   setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;

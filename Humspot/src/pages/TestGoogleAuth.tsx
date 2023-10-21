@@ -81,7 +81,7 @@ const TestGoogleAuth: React.FC = () => {
 
   const handleTestImages = async () => {
     if (!context.humspotUser) return;
-    const addImageRes = await handleAddImages(context.humspotUser.userID);
+    const addImageRes = await handleAddImages(context.humspotUser.userID, "activityphotos", `event-photos/${context.humspotUser.userID}`);
     if (addImageRes.photoUrls?.length < 0) {
       console.log("Something went wrong when uploading photos!");
     }
@@ -141,7 +141,6 @@ const TestGoogleAuth: React.FC = () => {
               <>
                 <p>
                   Currently logged in as:{" "}
-                  sr407 ADMIN
                 </p>
 
                 <IonButton
@@ -150,7 +149,7 @@ const TestGoogleAuth: React.FC = () => {
                 >
                   Login
                 </IonButton>
-                
+
                 <IonButton color='primary'>
                   Test notification: 715d07c9d97dde03808d03bb
                 </IonButton>
