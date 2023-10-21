@@ -1,11 +1,10 @@
-import { IonAvatar, IonButton, IonButtons, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonFab, IonFabButton, IonIcon, IonSkeletonText, useIonRouter } from "@ionic/react";
+import { IonAvatar, IonCard, IonCardHeader, IonCardSubtitle, IonChip, IonRow, IonSkeletonText } from "@ionic/react";
 
 import { useContext } from "../../utils/my-context";
 import { formatDate } from "../../utils/formatDate";
 import avatar from '../../elements/avatar.svg';
 
 import './Profile.css';
-import { settingsOutline } from "ionicons/icons";
 
 
 const ProfileBio: React.FC = () => {
@@ -14,20 +13,43 @@ const ProfileBio: React.FC = () => {
   return (
     <IonCard>
       <IonCardHeader>
-        <IonAvatar>
-          {!context.humspotUser ?
-            <IonSkeletonText animated />
-            :
-            <img
-              src={context.humspotUser?.profilePicURL ?? avatar}
-              alt="User Profile Picture"
-            />
-          }
-        </IonAvatar>
-        <br />
+        <IonRow>
+          <IonAvatar style={{marginRight : "15%"}}>
+            {!context.humspotUser ?
+              <IonSkeletonText animated />
+              :
+              <img
+                src={context.humspotUser?.profilePicURL ?? avatar}
+                alt="User Profile Picture"
+              />
+            }
+          </IonAvatar>
+          {context.humspotUser && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
+              <div className="user-stat" style={{ textAlign: 'center', marginRight: '20px' }}>
+                <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                  100
+                </div>
+                <div style={{ fontSize: '1rem' }}>Visited</div>
+              </div>
+              <div className="user-stat" style={{ textAlign: 'center', marginRight: '20px' }}>
+                <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                  50
+                </div>
+                <div style={{ fontSize: '1rem' }}>Humspots</div>
+              </div>
+              <div className="user-stat" style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                  3
+                </div>
+                <div style={{ fontSize: '1rem' }}>Stuffs</div>
+              </div>
+            </div>
+          )}
+        </IonRow>
 
         {context.humspotUser &&
-          <IonChip color='primary' style={{ position: 'absolute', top: '10px', right: '10px' }}>{context.humspotUser.accountType}</IonChip>
+          <IonChip outline color='primary' style={{ position: 'absolute', bottom: '10px', right: '10px' }}>{context.humspotUser.accountType}</IonChip>
         }
 
         <IonCardSubtitle style={{ marginLeft: '1%' }}>

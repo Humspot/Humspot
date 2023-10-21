@@ -1,7 +1,7 @@
-import { IonModal, IonList, IonItem, IonIcon, IonLabel, IonToggle, IonAlert, IonButton, IonCardTitle, IonFooter, IonContent, IonTitle } from "@ionic/react";
+import { IonModal, IonList, IonItem, IonIcon, IonLabel, IonToggle, IonAlert, IonContent, IonTitle } from "@ionic/react";
 import { notificationsOutline, moonOutline, logOutOutline, settingsOutline } from "ionicons/icons";
 import { useContext } from "../../utils/my-context";
-import { handleLogout } from "../../utils/server";
+import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../../utils/server";
 import { Dialog } from "@capacitor/dialog";
 
 const ProfileSettingsModal = () => {
@@ -23,7 +23,7 @@ const ProfileSettingsModal = () => {
 
   return (
     <IonModal trigger="open-profile-page-modal" handle breakpoints={[0, 0.55, 0.99]} initialBreakpoint={0.55}>
-      <IonContent style={{'--background' : 'var(--ion-item-background'}}>
+      <IonContent style={{ '--background': 'var(--ion-item-background' }}>
         <br />
         <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Settings</IonTitle>
         <IonList lines='full'>
@@ -42,10 +42,18 @@ const ProfileSettingsModal = () => {
             <IonLabel>More Settings...</IonLabel>
           </IonItem>
           <br />
-          <IonItem role='button' id="modal-logout-button">
-            <IonIcon aria-hidden="true" icon={logOutOutline} slot="start"></IonIcon>
-            <IonLabel color='danger'>Log Out</IonLabel>
-          </IonItem>
+          {context.humspotUser === undefined ?
+            <IonItem role='button' onClick={async () => { await handleGoogleLoginAndVerifyAWSUser() }}>
+              <IonIcon aria-hidden="true" icon={logOutOutline} slot="start"></IonIcon>
+              <IonLabel color='primary'>Log In</IonLabel>
+            </IonItem>
+            :
+            <IonItem role='button' id="modal-logout-button">
+              <IonIcon aria-hidden="true" icon={logOutOutline} slot="start"></IonIcon>
+              <IonLabel color='danger'>Log Out</IonLabel>
+            </IonItem>
+          }
+
           <br />
 
           <IonAlert
@@ -72,7 +80,7 @@ const ProfileSettingsModal = () => {
             }
           />
         </IonList>
-        <IonCardTitle style={{ padding: "10%" }} className='ion-text-center'>v.1.0.0 - Humspot</IonCardTitle>
+        <p className='ion-text-center'>v.1.0.0 - Humspot</p>
       </IonContent>
     </IonModal>
   )

@@ -15,12 +15,12 @@ const ProfileAddActivityModal = () => {
         <IonList lines='full'>
           <IonItem>
             <IonIcon aria-hidden="true" icon={calendarOutline} slot="start"></IonIcon>
-            <IonLabel>Submit an Event for Approval</IonLabel>
+            <IonLabel>Submit an Event</IonLabel>
           </IonItem>
           <br />
           <IonItem>
             <IonIcon aria-hidden="true" icon={compassOutline} slot="start"></IonIcon>
-            <IonLabel>Submit an Attraction for Approval</IonLabel>
+            <IonLabel>Submit an Attraction</IonLabel>
           </IonItem>
           <br />
           <IonItem>
@@ -30,7 +30,7 @@ const ProfileAddActivityModal = () => {
           <br />
           <IonItem role='button' id="modal-logout-button">
             <IonIcon aria-hidden="true" icon={clipboardOutline} slot="start"></IonIcon>
-            <IonLabel>Request to Become a Humspot Coordinator</IonLabel>
+            <IonLabel>Become a Coordinator</IonLabel>
           </IonItem>
           <br />
         </IonList>
