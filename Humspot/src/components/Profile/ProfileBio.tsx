@@ -1,4 +1,4 @@
-import { IonAvatar, IonButton, IonButtons, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonFabButton, IonIcon, IonSkeletonText, useIonRouter } from "@ionic/react";
+import { IonAvatar, IonButton, IonButtons, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonFab, IonFabButton, IonIcon, IonSkeletonText, useIonRouter } from "@ionic/react";
 
 import { useContext } from "../../utils/my-context";
 import { formatDate } from "../../utils/formatDate";
@@ -10,7 +10,6 @@ import { settingsOutline } from "ionicons/icons";
 
 const ProfileBio: React.FC = () => {
   const context = useContext();
-  const router = useIonRouter();
 
   return (
     <IonCard>
@@ -26,18 +25,11 @@ const ProfileBio: React.FC = () => {
           }
         </IonAvatar>
         <br />
-        <IonCardTitle style={{ marginLeft: '1%' }}>
-          {!context.humspotUser ?
-            <IonSkeletonText animated style={{ width: "25%", height: "1.25rem" }} />
-            :
-            <>
-              {context.humspotUser.accountType !== 'user' ?
-                context.humspotUser.username + ' (' + context.humspotUser.accountType + ')' :
-                context.humspotUser.username
-              }
-            </>
-          }
-        </IonCardTitle>
+
+        {context.humspotUser &&
+          <IonChip color='primary' style={{ position: 'absolute', top: '10px', right: '10px' }}>{context.humspotUser.accountType}</IonChip>
+        }
+
         <IonCardSubtitle style={{ marginLeft: '1%' }}>
           <p style={{ fontSize: "1.1rem" }}>
             {!context.humspotUser ?

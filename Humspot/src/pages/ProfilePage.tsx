@@ -1,7 +1,5 @@
 import {
-  IonContent,
   IonPage,
-  useIonToast,
 } from "@ionic/react";
 
 import ProfileBio from "../components/Profile/ProfileBio";
@@ -9,53 +7,32 @@ import ProfileSegments from "../components/Profile/ProfileSegments";
 import ProfileHeader from "../components/Profile/ProfileHeader";
 import ProfileSettingsModal from "../components/Profile/ProfileSettingsModal";
 import ProfileLoginModal from "../components/Profile/ProfileLoginModal";
-import { useEffect } from "react";
-import { timeout } from "../utils/timeout";
+import ProfileAddActivityModal from "../components/Profile/ProfileAddActivityModal";
 
 function ProfilePage() {
-
-  const [present] = useIonToast();
-
-  // useEffect(() => {
-  //   timeout(1000).then(() => {
-  //     present({
-  //       message: 'This is a test notification!',
-  //       duration: 3500,
-  //       position: 'top',
-  //       buttons: [
-  //         {
-  //           text: 'Dismiss',
-  //           role: 'cancel',
-  //           handler: () => { }
-  //         }
-  //       ],
-  //       // cssClass: 'toast-options',
-  //     });
-  //   })
-
-  // }, []);
 
   return (
     <>
       <IonPage>
-        <IonContent>
 
-          {/* Settings button */}
-          <ProfileHeader />
+        {/* Settings button */}
+        <ProfileHeader />
 
-          {/* Top Bio */}
-          <ProfileBio />
+        {/* Top Bio */}
+        <ProfileBio />
 
-          {/* Middle Segmented Area */}
-          <ProfileSegments />
+        {/* Middle Segmented Area */}
+        <ProfileSegments />
 
-          {/* Modal that pops in at the bottom of the page */}
-          <ProfileSettingsModal />
+        {/* Modal that pops in at the bottom of the page where a user can request to submit events/attractions */}
+        <ProfileAddActivityModal />
 
-          {/* Modal that prompts the user to login (if not already logged in) */}
-          <ProfileLoginModal />
+        {/* Modal that pops in at the bottom of the page where users can tinker with app settings */}
+        <ProfileSettingsModal />
 
-        </IonContent>
+        {/* Modal that prompts the user to login (if not already logged in) */}
+        <ProfileLoginModal />
+
       </IonPage>
     </>
   );
