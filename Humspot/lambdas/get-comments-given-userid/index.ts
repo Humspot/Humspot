@@ -29,7 +29,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       return {
         statusCode: 400,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: "Invalid path parameters" })
+        body: JSON.stringify({ message: "Invalid path parameters", success: false, comments: [] })
       };
     }
     const pageNum: number = Number(page);
@@ -39,16 +39,30 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: 'Invalid path parameters' }),
+        body: JSON.stringify({ message: 'Invalid path parameters', success: false, comments: [] }),
       };
     }
 
     const query: string = `
-      SELECT c.commentID, c.commentText, c.commentDate, a.activityID, a.name
-      FROM Comments c
-      JOIN Activities a ON c.activityID = a.activityID
-      WHERE c.userID = ?
-      ORDER BY c.commentDate DESC
+      SELECT 
+        c.commentID, 
+        c.commentText, 
+        c.commentDate, 
+        a.activityID, 
+        a.name, 
+        ap.photoUrl
+      FROM 
+        Comments c
+      JOIN 
+        Activities a ON c.activityID = a.activityID
+      LEFT JOIN 
+        (SELECT activityID, MIN(photoUrl) as photoUrl 
+         FROM ActivityPhotos 
+         GROUP BY activityID) ap ON a.activityID = ap.activityID
+      WHERE 
+        c.userID = ?
+      ORDER BY 
+        c.commentDate DESC
       LIMIT 10 OFFSET ?;
     `;
 
@@ -57,7 +71,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: "Success", comments: rows }),
+      body: JSON.stringify({ message: "Success", success: true, comments: rows }),
     };
 
   } catch (error) {
@@ -65,7 +79,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'Internal Server Error, query execution error' }),
+      body: JSON.stringify({ message: 'Internal Server Error, query execution error', success: false, comments: [] }),
     };
   } finally {
     if (conn) {

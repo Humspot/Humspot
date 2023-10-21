@@ -18,6 +18,32 @@ const pool: mysql.Pool = mysql.createPool({
   debug: true
 });
 
+type HumspotFavoriteResponse = {
+  activityID: string | null;
+  activityType: string;
+  addedByUserID: string;
+  attractionID: string | null;
+  date: string | Date;
+  description: string;
+  eventID: string;
+  latitude: string | number;
+  location: string;
+  longitude: string | number;
+  name: string;
+  openTimes: string | null;
+  organizer: string;
+  time: string;
+  websiteUrl: string | null;
+}
+
+type AWSGetFavoritesResponse = {
+  message: string;
+  success: boolean;
+  favorites: HumspotFavoriteResponse[];
+};
+
+
+
 export const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   context.callbackWaitsForEmptyEventLoop = false;
   const conn = await pool.getConnection();
@@ -36,10 +62,11 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     const offset: number = (pageNum - 1) * 10;
 
     if (isNaN(pageNum) || pageNum < 1 || !userID) {
+      const resBody: AWSGetFavoritesResponse = { message: 'Invalid path parameters', success: false, favorites: [] };
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: 'Invalid path parameters' }),
+        body: JSON.stringify(resBody),
       };
     }
 
@@ -47,7 +74,8 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       SELECT 
         a.*,
         e.*,
-        attr.* 
+        attr.*,
+        ph.photoUrl
       FROM 
         Favorites f
       JOIN 
@@ -56,6 +84,8 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
         Events e ON a.activityID = e.activityID
       LEFT JOIN 
         Attractions attr ON a.activityID = attr.activityID
+      LEFT JOIN 
+        (SELECT activityID, photoUrl FROM ActivityPhotos GROUP BY activityID) ph ON a.activityID = ph.activityID
       WHERE 
         f.userID = ?
       ORDER BY 
@@ -65,18 +95,20 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
 
     const [rows]: any = await conn.query(query, [userID, offset]);
 
+    const resBody: AWSGetFavoritesResponse = { message: "Favorites query successful", success: true, favorites: rows };
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: "Success", favorites: rows }),
+      body: JSON.stringify(resBody),
     };
 
   } catch (error) {
     console.error('Query execution error:', error);
+    const resBody: AWSGetFavoritesResponse = { message: 'Internal Server Error, query execution error', success: false, favorites: [] };
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'Internal Server Error, query execution error' }),
+      body: JSON.stringify(resBody),
     };
   } finally {
     if (conn) {
@@ -84,5 +116,3 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
   }
 };
-
-

@@ -11,8 +11,9 @@ export type HumspotUser = {
   accountType: "user" | "admin" | "organizer" | "guest";
   accountStatus: "active" | "restricted";
   authProvider: "google" | "custom";
-  dateCreated: string | Date;
+  dateCreated: string;
   username?: string;
+  bio: string;
 };
 
 export type AWSLoginResponse = {
@@ -93,7 +94,7 @@ export type AWSAddToVisitedResponse = {
   visitedID?: string;
 };
 
-export type HumspotComment = {
+export type HumspotCommentSubmit = {
   commentText: string;
   commentDate: string;
   userID: string;
@@ -105,9 +106,55 @@ export type HumspotCommentResponse = {
   commentDate: string;
   activityID: string;
   name: string;
+  photoUrl: string | null;
 };
 
 export type AWSGetCommentsResponse = {
   message: string;
-  comments?: HumspotCommentResponse[];
+  success: boolean;
+  comments: HumspotCommentResponse[];
 };
+
+export type HumspotFavoriteResponse = {
+  activityID: string | null;
+  activityType: string;
+  addedByUserID: string;
+  attractionID: string | null;
+  date: string | Date;
+  description: string;
+  eventID: string | null;
+  latitude: string | number | null;
+  location: string;
+  longitude: string | number | null;
+  name: string;
+  openTimes: string | null;
+  organizer: string;
+  time: string;
+  websiteUrl: string | null;
+  photoUrl: string | null;
+};
+
+export type HumspotVisitedResponse = {
+  activityID: string | null;
+  activityType: 'event' | 'attraction' | 'custom';
+  addedByUserID: string;
+  attractionID: string | null;
+  date: string;
+  description: string;
+  eventID: string;
+  latitude: string | number | null;
+  location: string;
+  longitude: string | number | null;
+  name: string;
+  openTimes: string | null;
+  organizer: string;
+  photoUrl: string | null;
+  time: string;
+  websiteUrl: string | null;
+}
+
+export type AWSGetFavoritesResponse = {
+  message: string;
+  success: boolean;
+  favorites: HumspotFavoriteResponse[];
+}
