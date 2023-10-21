@@ -2,7 +2,6 @@ import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
   IonIcon,
-  IonLabel,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
@@ -13,15 +12,12 @@ import { IonReactRouter } from "@ionic/react-router";
 import {
   calendar,
   compass,
-  ellipse,
   map,
   person,
-  square,
-  triangle,
 } from "ionicons/icons";
 
 import { useEffect } from "react";
-import { guestUser, useContext } from "./my-context";
+import { useContext } from "./utils/my-context";
 import { Auth, Hub } from "aws-amplify";
 
 import "@ionic/react/css/core.css";
@@ -37,17 +33,20 @@ import "@ionic/react/css/display.css";
 
 import "./theme/variables.css";
 import "./theme/custom.css";
+
 import ExplorePage from "./pages/explore";
 import CalendarPage from "./pages/calendar";
 import MapPage from "./pages/map";
-import ProfilePage from "./pages/profile";
+import ProfilePage from "./pages/ProfilePage";
 import { useState } from "react";
 
 import TestGoogleAuth from "./pages/TestGoogleAuth";
-import { handleUserLogin } from "./server";
-import { AWSLoginResponse } from "./types";
+import { handleUserLogin } from "./utils/server";
+import { AWSLoginResponse } from "./utils/types";
 
 import AttractionPage from "./pages/attraction";
+import { ToastProvider } from "@agney/ir-toast";
+import SubmitEventPage from "./pages/SubmitEvent";
 
 setupIonicReact({ mode: "md" });
 
@@ -64,7 +63,7 @@ const App: React.FC = () => {
           break;
         case "signOut":
           console.log("signed out!");
-          context.setHumspotUser(guestUser);
+          context.setHumspotUser(null);
           break;
         case "customOAuthState":
           console.log("customOAuthState");
@@ -86,7 +85,7 @@ const App: React.FC = () => {
         .then((res: AWSLoginResponse) => {
           console.log(res.message);
           if (!res.user) throw new Error(res.message);
-          console.log(JSON.stringify(res.user));
+          console.log(res.user);
           context.setHumspotUser(res.user);
         })
         .catch((err) => {
@@ -94,7 +93,7 @@ const App: React.FC = () => {
         });
     } catch (error) {
       console.error("Not signed in: " + error);
-      context.setHumspotUser(guestUser);
+      context.setHumspotUser(undefined);
     }
   };
 
@@ -105,76 +104,66 @@ const App: React.FC = () => {
 
   return (
     <IonApp>
-      <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route exact path="/" render={() => <Redirect to="/explore" />} />
-            <Route exact path="/explore">
-              <ExplorePage></ExplorePage>
-            </Route>
-            <Route exact path="/calendar">
-              <CalendarPage></CalendarPage>
-            </Route>
-            <Route exact path="/map">
-              <MapPage></MapPage>
-            </Route>
-            <Route exact path="/profile">
-              <ProfilePage></ProfilePage>
-            </Route>
-            <Route exact path="/google-auth">
-              <TestGoogleAuth></TestGoogleAuth>
-            </Route>
-            <Route
-              exact
-              path="/attraction/:id"
-              component={AttractionPage}
-            ></Route>
-          </IonRouterOutlet>
-          <IonTabBar
-            slot="bottom"
-            color="primary"
-            onIonTabsWillChange={handleTabChange}
-          >
-            <IonTabButton tab="tab1" href="/explore">
-              <IonIcon
-                aria-hidden="true"
-                icon={compass}
-                color={currentTab == "tab1" ? "icon-highlight" : "icon-dark"}
-                size="large"
-              />
-            </IonTabButton>
-            <IonTabButton tab="tab2" href="/map">
-              <IonIcon
-                aria-hidden="true"
-                icon={map}
-                color={currentTab == "tab2" ? "icon-highlight" : "icon-dark"}
-                size="large"
-              />
-            </IonTabButton>
-            <IonTabButton tab="tab3" href="/calendar">
-              <IonIcon
-                aria-hidden="true"
-                icon={calendar}
-                color={currentTab == "tab3" ? "icon-highlight" : "icon-dark"}
-                size="large"
-              />
-            </IonTabButton>
-            <IonTabButton
-              tab="tab4"
-              href={
-                context.humspotUser == guestUser ? "/google-auth" : "/profile"
-              }
+
+      <ToastProvider>
+
+        <IonReactRouter>
+          <IonTabs>
+
+            <IonRouterOutlet>
+              <Route exact path="/" render={() => <Redirect to="/explore" />} />
+              <Route exact path="/explore" component={ExplorePage} />
+              <Route exact path="/calendar" component={CalendarPage} />
+              <Route exact path="/map" component={MapPage} />
+              <Route exact path="/profile" component={ProfilePage} />
+              <Route exact path="/google-auth" component={TestGoogleAuth} />
+              <Route exact path="/submit-event" component={SubmitEventPage} />
+              <Route exact path="/attraction/:id" component={AttractionPage} />
+            </IonRouterOutlet>
+
+            <IonTabBar
+              slot="bottom"
+              color="primary"
+              onIonTabsWillChange={handleTabChange}
             >
-              <IonIcon
-                aria-hidden="true"
-                icon={person}
-                color={currentTab == "tab4" ? "icon-highlight" : "icon-dark"}
-                size="large"
-              />
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
-      </IonReactRouter>
+              <IonTabButton tab="tab1" href="/explore">
+                <IonIcon
+                  aria-hidden="true"
+                  icon={compass}
+                  color={currentTab == "tab1" ? "icon-highlight" : "icon-dark"}
+                  size="large"
+                />
+              </IonTabButton>
+              <IonTabButton tab="tab2" href="/map">
+                <IonIcon
+                  aria-hidden="true"
+                  icon={map}
+                  color={currentTab == "tab2" ? "icon-highlight" : "icon-dark"}
+                  size="large"
+                />
+              </IonTabButton>
+              <IonTabButton tab="tab3" href="/calendar">
+                <IonIcon
+                  aria-hidden="true"
+                  icon={calendar}
+                  color={currentTab == "tab3" ? "icon-highlight" : "icon-dark"}
+                  size="large"
+                />
+              </IonTabButton>
+              <IonTabButton tab="tab4" href="/profile">
+                <IonIcon
+                  aria-hidden="true"
+                  icon={person}
+                  color={currentTab == "tab4" ? "icon-highlight" : "icon-dark"}
+                  size="large"
+                />
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+
+      </ToastProvider>
+
     </IonApp>
   );
 };

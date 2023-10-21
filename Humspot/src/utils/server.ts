@@ -5,7 +5,7 @@
 
 import AWS from "aws-sdk";
 
-import awsconfig from "./aws-exports";
+import awsconfig from "../aws-exports";
 import { Amplify, Auth } from "aws-amplify";
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
@@ -21,9 +21,10 @@ import {
   AWSAddToVisitedResponse,
   AWSGetCommentsResponse,
   AWSGetEventsGivenTagResponse,
+  AWSGetFavoritesResponse,
   AWSLoginResponse,
   HumspotAttraction,
-  HumspotComment,
+  HumspotCommentSubmit,
   HumspotEvent,
 } from "./types";
 
@@ -216,13 +217,6 @@ export const handleGetEventGivenTag = async (
   tag: string
 ): Promise<AWSGetEventsGivenTagResponse> => {
   try {
-    const currentUserSession = await Auth.currentSession();
-
-    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
-
-    const idToken = currentUserSession.getIdToken();
-    const jwtToken = idToken.getJwtToken();
-
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENT_GIVEN_TAG_URL +
         "/" +
@@ -233,7 +227,6 @@ export const handleGetEventGivenTag = async (
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
@@ -423,11 +416,11 @@ export const handleAddToVisited = async (
  * @function handleAddComment
  * @description calls the AWS API gateway /add-comment. This will add a row to the Comments table.
  *
- * @param {HumspotComment} comment the user comment along with other attributes
+ * @param {HumspotCommentSubmit} comment the user comment along with other attributes
  *
  * @returns
  */
-export const handleAddComment = async (comment: HumspotComment) => {
+export const handleAddComment = async (comment: HumspotCommentSubmit) => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -473,13 +466,6 @@ export const handleGetCommentsGivenUserID = async (
   userID: string
 ): Promise<AWSGetCommentsResponse> => {
   try {
-    const currentUserSession = await Auth.currentSession();
-
-    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
-
-    const idToken = currentUserSession.getIdToken();
-    const jwtToken = idToken.getJwtToken();
-
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_COMMENTS_GIVEN_USERID_URL +
         "/" +
@@ -490,18 +476,17 @@ export const handleGetCommentsGivenUserID = async (
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
 
-    const responseData = await response.json();
+    const responseData: AWSGetCommentsResponse = await response.json();
 
     console.log(responseData);
     return responseData;
   } catch (error) {
     console.error("Error calling API Gateway", error);
-    return { message: "Error calling API Gateway" + error };
+    return { message: "Error calling API Gateway" + error, success : false, comments: [] };
   }
 };
 
@@ -513,12 +498,12 @@ export const handleGetCommentsGivenUserID = async (
  * @param {number} pageNum
  * @param {string} userID
  *
- * @returns {} a status message, and if successful, an array of 10 favorites
+ * @returns {Promise<AWSGetFavoritesResponse>} a status message, and if successful, an array of 10 favorites
  */
 export const handleGetFavoritesGivenUserID = async (
   pageNum: number,
   userID: string
-) => {
+): Promise<AWSGetFavoritesResponse> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -542,13 +527,13 @@ export const handleGetFavoritesGivenUserID = async (
       }
     );
 
-    const responseData = await response.json();
+    const responseData: AWSGetFavoritesResponse = await response.json();
 
     console.log(responseData);
     return responseData;
   } catch (error) {
     console.error("Error calling API Gateway", error);
-    return { message: "Error calling API Gateway" + error };
+    return { message: "Error calling API Gateway" + error, favorites: [], success: false };
   }
 };
 
@@ -601,12 +586,6 @@ export const handleGetVisitedGivenUserID = async (
 
 export const handleGetEvent = async (eventID: string) => {
   try {
-    const currentUserSession = await Auth.currentSession();
-
-    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
-
-    const idToken = currentUserSession.getIdToken();
-    const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENT_URL + "/" + eventID,
@@ -614,7 +593,6 @@ export const handleGetEvent = async (eventID: string) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
         },
       }
     );

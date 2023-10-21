@@ -29,7 +29,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       return {
         statusCode: 400,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: "Invalid path parameters" })
+        body: JSON.stringify({ message: "Invalid path parameters", success: false, visited: [] })
       };
     }
     const pageNum: number = Number(page);
@@ -39,7 +39,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: 'Invalid path parameters' }),
+        body: JSON.stringify({ message: 'Invalid path parameters', success: false, visited: [] }),
       };
     }
 
@@ -47,7 +47,8 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       SELECT 
         a.*,
         e.*,
-        attr.* 
+        attr.*,
+        ap.photoUrl
       FROM 
         Visited v
       JOIN 
@@ -56,6 +57,10 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
         Events e ON a.activityID = e.activityID
       LEFT JOIN 
         Attractions attr ON a.activityID = attr.activityID
+      LEFT JOIN 
+        (SELECT activityID, MIN(photoUrl) as photoUrl 
+         FROM ActivityPhotos 
+         GROUP BY activityID) ap ON a.activityID = ap.activityID
       WHERE 
         v.userID = ?
       ORDER BY 
@@ -68,7 +73,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: "Success", visited: rows }),
+      body: JSON.stringify({ message: "Success", success: true, visited: rows }),
     };
 
   } catch (error) {
@@ -76,7 +81,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'Internal Server Error, query execution error' }),
+      body: JSON.stringify({ message: 'Internal Server Error, query execution error', success: false, visited: [] }),
     };
   } finally {
     if (conn) {
@@ -84,5 +89,3 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
   }
 };
-
-

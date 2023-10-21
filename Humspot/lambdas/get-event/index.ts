@@ -36,27 +36,65 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
       };
     }
 
-    const query: string = `
-      SELECT Events.*, Activities.*, GROUP_CONCAT(Tags.tagName) as tags FROM Events
-      INNER JOIN Activities ON Events.activityID = Activities.activityID
-      INNER JOIN ActivityTags ON Activities.activityID = ActivityTags.activityID
-      INNER JOIN Tags ON ActivityTags.tagID = Tags.tagID
-      WHERE Events.eventID = ?
-      GROUP BY Events.eventID;
+    // Main event details query
+    const queryEventDetails: string = `
+      SELECT 
+        Events.*, 
+        Activities.*, 
+        GROUP_CONCAT(Tags.tagName) as tags, 
+        MIN(ActivityPhotos.photoUrl) as photoUrl
+      FROM 
+        Events
+      INNER JOIN 
+        Activities ON Events.activityID = Activities.activityID
+      INNER JOIN 
+        ActivityTags ON Activities.activityID = ActivityTags.activityID
+      INNER JOIN 
+        Tags ON ActivityTags.tagID = Tags.tagID
+      LEFT JOIN 
+        ActivityPhotos ON Activities.activityID = ActivityPhotos.activityID
+      WHERE 
+        Events.eventID = ?
+      GROUP BY 
+        Events.eventID;
     `;
 
-    const [rows]: any = await conn.execute(query, [eventId]);
+    const [eventRows]: any = await conn.execute(queryEventDetails, [eventId]);
 
-    if (!rows || rows.length === 0) {
+    if (!eventRows || eventRows.length === 0) {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: `Event with ID: ${eventId} not found` }),
       };
     }
 
+    const event = eventRows[0];
+    const activityId = event.activityID;
+
+    // Photos query
+    const queryPhotos: string = `
+      SELECT * FROM ActivityPhotos WHERE activityID = ?;
+    `;
+
+    const [photoRows]: any = await conn.execute(queryPhotos, [activityId]);
+
+    // Comments query
+    const queryComments: string = `
+      SELECT * FROM Comments WHERE activityID = ?;
+    `;
+
+    const [commentRows]: any = await conn.execute(queryComments, [activityId]);
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Event retrieved successfully', event: rows[0] }),
+      body: JSON.stringify({
+        message: 'Event retrieved successfully',
+        event: {
+          ...event,
+          photos: photoRows,
+          comments: commentRows
+        }
+      }),
     };
 
   } catch (err) {

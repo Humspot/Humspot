@@ -5,34 +5,26 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const guestUser: HumspotUser = {
-  userID: "0",
-  awsUsername: null,
-  email: null,
-  accountType: "guest",
-  profilePicURL: "",
-  accountStatus: "restricted",
-  authProvider: "custom",
-  dateCreated: "",
-};
-
 export type ContextType = {
-  humspotUser: HumspotUser | null;
-  setHumspotUser: React.Dispatch<React.SetStateAction<HumspotUser | null>>;
+  humspotUser: HumspotUser | null | undefined;
+  setHumspotUser: React.Dispatch<React.SetStateAction<HumspotUser | null | undefined>>;
+  darkMode: boolean;
+  setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Context = React.createContext<ContextType | null>(null);
 export const ContextProvider = ({ children }: Props) => {
-  const [humspotUser, setHumspotUser] = React.useState<HumspotUser | null>(
-    null
-  );
+  const [humspotUser, setHumspotUser] = React.useState<HumspotUser | null | undefined>(null);
+  const [darkMode, setDarkMode] = React.useState<boolean>(true);
 
   const memoizedContextValue = React.useMemo(
     () => ({
       humspotUser,
       setHumspotUser,
+      darkMode,
+      setDarkMode
     }),
-    [humspotUser, setHumspotUser]
+    [humspotUser, setHumspotUser, darkMode, setDarkMode]
   );
 
   return (

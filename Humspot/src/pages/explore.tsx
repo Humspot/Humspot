@@ -28,9 +28,9 @@ function ExplorePage() {
 
   const mainCarouselData = [
     {
-      title: "Attraction 1",
+      title: "Redwood Fest",
       description: "This is the first slide",
-      imgsrc: "https://source.unsplash.com/random/?forest",
+      imgsrc: "https://activityphotos.s3.us-west-1.amazonaws.com/event-photos/715d07c9d97dde03808d03bb-R7CeCVUf-1697853939858-jpeg",
     },
     {
       title: "Attraction 2",
