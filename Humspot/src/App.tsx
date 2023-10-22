@@ -60,6 +60,7 @@ const App: React.FC = () => {
           const email: string | null =
             data?.signInUserSession?.idToken?.payload?.email ?? null;
           const awsUsername: string | null = data?.username ?? null;
+          getUser();
           break;
         case "signOut":
           console.log("signed out!");
