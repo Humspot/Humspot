@@ -78,12 +78,17 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     const [photoRows]: any = await conn.execute(queryPhotos, [activityId]);
 
-    // Comments query
+    // Comments query with User data for each comment
     const queryComments: string = `
-      SELECT * FROM Comments WHERE activityID = ?;
+      SELECT Comments.*, Users.username, Users.profilePicURL 
+      FROM Comments 
+      JOIN Users ON Comments.userID = Users.userID 
+      WHERE Comments.activityID = ? 
+      ORDER BY Comments.commentDate DESC;
     `;
 
     const [commentRows]: any = await conn.execute(queryComments, [activityId]);
+
 
     return {
       statusCode: 200,
@@ -97,11 +102,8 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
       }),
     };
 
-  } catch (err) {
-    if (conn) {
-      await conn.rollback();
-    }
 
+  } catch (err) {
     return {
       statusCode: 500,
       headers: {

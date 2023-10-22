@@ -40,7 +40,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: 'Missing or incorrect fields in event data.', gatewayEvent: event,
+          message: 'Missing or incorrect fields in event data.', success: false
         }),
       };
     }
@@ -65,6 +65,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
       body: JSON.stringify({
         message: 'Favorite added successfully.',
         favoriteID: favoriteID,
+        success: true
       }),
     };
 
@@ -81,7 +82,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
         "Access-Control-Allow-Origin": '*'
       },
       body: JSON.stringify({
-        message: 'Internal Server/mySQL Error',
+        message: 'Internal Server/mySQL Error', success: false
       }),
     };
   } finally {
