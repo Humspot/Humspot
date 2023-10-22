@@ -1,5 +1,6 @@
 import {
   IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem,
+  IonLabel,
   IonList, IonLoading, IonModal, IonTextarea, IonTitle, IonToolbar, useIonLoading
 } from "@ionic/react";
 import { useContext } from "../../utils/my-context";
@@ -99,7 +100,7 @@ const ProfileEditModal = () => {
             <section className='avatar-wrapper-center'>
               <IonAvatar className="user-avatar-settings">
                 <img
-                  src={context.humspotUser.profilePicURL}
+                  src={context.humspotUser.profilePicURL ?? avatar}
                   alt="User Profile Picture"
                 />
                 <IonIcon size="large" icon={cameraReverseOutline}
@@ -113,13 +114,16 @@ const ProfileEditModal = () => {
             <section id="update-profile-inputs">
               <IonList lines='none'>
                 <IonItem>
-                  <IonInput ref={usernameRef} maxlength={50} label="Username" value={context.humspotUser.username} ></IonInput>
+                  <IonLabel position="fixed">Username</IonLabel>
+                  <IonInput ref={usernameRef} maxlength={50} value={context.humspotUser.username}></IonInput>
                 </IonItem>
                 <IonItem style={{ height: "25vh" }}>
-                  <IonTextarea ref={bioRef} label="Bio" maxlength={250} rows={5} value={context.humspotUser.bio} />
+                  <IonLabel position="fixed" style={{ alignSelf: 'flex-start' }}>About</IonLabel>
+                  <IonTextarea ref={bioRef} maxlength={250} rows={3} value={context.humspotUser.bio} />
                 </IonItem>
               </IonList>
             </section>
+
 
             <br />
 
