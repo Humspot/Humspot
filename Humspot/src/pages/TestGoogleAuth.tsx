@@ -81,7 +81,7 @@ const TestGoogleAuth: React.FC = () => {
 
   const handleTestImages = async () => {
     if (!context.humspotUser) return;
-    const addImageRes = await handleAddImages(context.humspotUser.userID, "activityphotos", `event-photos/${context.humspotUser.userID}`);
+    const addImageRes = await handleAddImages("activityphotos", `event-photos/${context.humspotUser.userID}`);
     if (addImageRes.photoUrls?.length < 0) {
       console.log("Something went wrong when uploading photos!");
     }

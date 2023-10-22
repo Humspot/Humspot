@@ -247,9 +247,8 @@ export const handleGetEventGivenTag = async (
  * It then uploads the images to the AWS S3 bucket 'activityphotos'. The photoUrls are returned to use later.
  * NOTE: The uploading of the images is handled client side (no API gateway or lambda function).
  *
- * @param {string} userID the id of the user uploading the images
  * @param {string} bucketName the name of the S3 bucket to upload the images to
- * @param {string} fileName the name of the file path to upload the images to (e.g. event-photos/1234-.jpg)
+ * @param {string} fileName the name of the file path to upload the images to (e.g. event-photos/1234)
  * @param {boolean} isUnique whether the image should be a unique upload or override an existing image 
  * (as is the case with profile photos). Defaults to true.
  * @param {number} limit the maximum number of images to be uploaded. Defaults to 1.
@@ -257,11 +256,11 @@ export const handleGetEventGivenTag = async (
  * @returns {Promise<AWSAddImageResponse>} the success status as well as an array of photoUrls returned from S3
  */
 export const handleAddImages = async (
-  userID: string,
   bucketName: string,
   fileName: string,
   isUnique: boolean = true,
-  limit: number = 1
+  limit: number = 1,
+  present?: any
 ): Promise<AWSAddImageResponse> => {
 
   AWS.config.update({
@@ -277,6 +276,7 @@ export const handleAddImages = async (
     limit: limit,
   });
 
+  present({ message: "Uploading..." });
   const s3 = new AWS.S3();
   const photoUrls: string[] = [];
 
@@ -339,8 +339,6 @@ export const handleAddImages = async (
     success: true,
     photoUrls: photoUrls,
   };
-
-
 };
 
 /**
@@ -632,5 +630,53 @@ export const handleGetEvent = async (eventID: string) => {
   } catch (error) {
     console.error("Error calling API Gateway", error);
     return { message: "Error calling API Gateway" + error };
+  }
+};
+
+
+/**
+ * @function handleUpdateUserProfile
+ * @description updates the user information in the Users table.
+ * 
+ * @param userID 
+ * @param username 
+ * @param bio 
+ * @param profilePicUrl 
+ */
+export const handleUpdateUserProfile = async (userID: string, username: string, bio: string, profilePicUrl: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const attemptedUpdateFields: Record<string, string> = {
+      userID: userID,
+      username: username,
+      bio: bio,
+      profilePicUrl: profilePicUrl
+    }
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_UPDATE_USER_PROFILE_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(attemptedUpdateFields),
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
   }
 };
