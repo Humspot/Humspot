@@ -34,7 +34,7 @@ function CarouselEntry({ title, description, imgsrc, id }: any) {
   return (
     <IonCard
       onClick={() => {
-        router.push('/attraction/' + '61323d5e12d35d8f5ffc48621');
+        router.push("/attraction/" + id);
       }}
     >
       <div style={containerStyle}>
@@ -44,12 +44,6 @@ function CarouselEntry({ title, description, imgsrc, id }: any) {
           className="MainCarouselEntryHeaderImage"
           style={imgStyle as any}
         ></IonImg>
-        {/* <img
-          alt="Attraction Image"
-          src={imgsrc}
-          className="MainCarouselEntryHeaderImage"
-          style={imgStyle as any} // Apply the custom styles to the image
-        /> */}
       </div>
       <IonCardHeader style={headerStyle}>
         <IonCardTitle>{title}</IonCardTitle>

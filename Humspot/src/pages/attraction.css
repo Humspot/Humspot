@@ -22,9 +22,18 @@
   gap: 5px;
 }
 
+.commentusername {
+  font-size: medium;
+}
+
 .commentbox {
-  display: flex;
-  align-items: start;
+  /* display: flex; */
+  /* align-items: start; */
+}
+
+.commentlist {
+  overflow: scroll;
+  height: 40vh;
 }
 
 .commentavatar {
@@ -32,6 +41,10 @@
   height: 50px; /* Adjust the height to your desired size */
   flex-shrink: 0; /* Prevents the avatar from shrinking */
   margin-right: 10px; /* Adds spacing between the avatar and content */
+}
+
+.commentdate {
+  font-style: italic;
 }
 
 .FavoritesButton {
