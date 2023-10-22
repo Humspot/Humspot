@@ -31,9 +31,9 @@ const ProfileSettingsModal = () => {
         <br />
         <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Settings</IonTitle>
         <IonList lines='full'>
-          <IonItem style={{}}>
+          <IonItem disabled={!context.humspotUser} style={{}}>
             <IonIcon aria-hidden="true" icon={notificationsOutline} slot="start"></IonIcon>
-            <IonLabel><IonToggle>Notifications </IonToggle></IonLabel>
+            <IonLabel><IonToggle disabled={!context.humspotUser}>Notifications </IonToggle></IonLabel>
           </IonItem>
           <br />
           <IonItem>
@@ -59,7 +59,7 @@ const ProfileSettingsModal = () => {
           {context.humspotUser === undefined ?
             <IonItem role='button' onClick={async () => { await handleGoogleLoginAndVerifyAWSUser() }}>
               <IonIcon aria-hidden="true" icon={logOutOutline} slot="start"></IonIcon>
-              <IonLabel color='primary'>Log In</IonLabel>
+              <IonLabel color='primary'>Google Log In</IonLabel>
             </IonItem>
             :
             <IonItem role='button' id="modal-logout-button">
