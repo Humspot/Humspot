@@ -1,12 +1,16 @@
-import { IonModal, IonList, IonItem, IonIcon, IonLabel, IonToggle, IonAlert, IonContent, IonTitle } from "@ionic/react";
-import { notificationsOutline, moonOutline, logOutOutline, settingsOutline } from "ionicons/icons";
+import { IonModal, IonList, IonItem, IonIcon, IonLabel, IonToggle, IonAlert, IonContent, IonTitle, useIonRouter } from "@ionic/react";
+import { notificationsOutline, moonOutline, logOutOutline, mailOutline, shieldOutline, readerOutline } from "ionicons/icons";
 import { useContext } from "../../utils/my-context";
 import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../../utils/server";
 import { Dialog } from "@capacitor/dialog";
+import { useRef } from "react";
 
 const ProfileSettingsModal = () => {
 
   const context = useContext();
+  const router = useIonRouter();
+
+  const modalRef = useRef<HTMLIonModalElement | null>(null);
 
   const logout = async () => {
     // USE DIALOG WHEN PORTING TO iOS and MD
@@ -22,30 +26,40 @@ const ProfileSettingsModal = () => {
 
 
   return (
-    <IonModal trigger="open-profile-page-modal" handle breakpoints={[0, 0.55, 0.99]} initialBreakpoint={0.55}>
+    <IonModal ref={modalRef} trigger="open-profile-page-modal" handle breakpoints={[0, 0.75, 0.99]} initialBreakpoint={0.75}>
       <IonContent style={{ '--background': 'var(--ion-item-background' }}>
         <br />
         <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Settings</IonTitle>
         <IonList lines='full'>
-          <IonItem style={{}}>
+          <IonItem disabled={!context.humspotUser} style={{}}>
             <IonIcon aria-hidden="true" icon={notificationsOutline} slot="start"></IonIcon>
-            <IonLabel><IonToggle>Notifications </IonToggle></IonLabel>
+            <IonLabel><IonToggle disabled={!context.humspotUser}>Notifications </IonToggle></IonLabel>
           </IonItem>
           <br />
           <IonItem>
             <IonIcon aria-hidden="true" icon={moonOutline} slot="start"></IonIcon>
-            <IonLabel><IonToggle checked={context.darkMode}>Dark Mode</IonToggle></IonLabel>
+            <IonLabel><IonToggle checked={context.darkMode} onIonChange={(e) => { }}>Dark Mode</IonToggle></IonLabel>
           </IonItem>
           <br />
-          <IonItem>
-            <IonIcon aria-hidden="true" icon={settingsOutline} slot="start"></IonIcon>
-            <IonLabel>More Settings...</IonLabel>
+          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/contact-us") }}>
+            <IonIcon aria-hidden="true" icon={mailOutline} slot="start"></IonIcon>
+            <IonLabel color='primary'>Contact Us</IonLabel>
+          </IonItem>
+          <br />
+          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/privacy-policy") }}>
+            <IonIcon aria-hidden="true" icon={shieldOutline} slot="start"></IonIcon>
+            <IonLabel color='primary'>Privacy Policy</IonLabel>
+          </IonItem>
+          <br />
+          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/terms-and-conditions") }}>
+            <IonIcon aria-hidden="true" icon={readerOutline} slot="start"></IonIcon>
+            <IonLabel color='primary'>Terms and Conditions</IonLabel>
           </IonItem>
           <br />
           {context.humspotUser === undefined ?
             <IonItem role='button' onClick={async () => { await handleGoogleLoginAndVerifyAWSUser() }}>
               <IonIcon aria-hidden="true" icon={logOutOutline} slot="start"></IonIcon>
-              <IonLabel color='primary'>Log In</IonLabel>
+              <IonLabel color='primary'>Google Log In</IonLabel>
             </IonItem>
             :
             <IonItem role='button' id="modal-logout-button">

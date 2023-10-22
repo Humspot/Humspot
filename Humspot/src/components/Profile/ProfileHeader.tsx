@@ -30,7 +30,7 @@ const ProfileHeader: React.FC = () => {
           <IonButton disabled={!context.humspotUser} id='open-edit-profile-modal' slot='end'>
             <IonIcon size='large' style={{ padding: "1%" }} icon={pencilOutline} />
           </IonButton>
-          <IonButton disabled={!context.humspotUser} id='open-profile-page-modal' slot='end'>
+          <IonButton id='open-profile-page-modal' slot='end'>
             <IonIcon size='large' style={{ padding: "2.5%" }} icon={settingsOutline} />
           </IonButton>
         </IonButtons>

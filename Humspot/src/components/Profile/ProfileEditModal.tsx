@@ -100,14 +100,15 @@ const ProfileEditModal = () => {
             <section className='avatar-wrapper-center'>
               <IonAvatar className="user-avatar-settings">
                 <img
+                  style={{ opacity: "0.5" }}
                   src={context.humspotUser.profilePicURL ?? avatar}
                   alt="User Profile Picture"
                 />
                 <IonIcon size="large" icon={cameraReverseOutline}
-                  role='button' onClick={async () => await handleUpdateProfilePhoto()}
-                  style={{ position: "absolute", zIndex: 1000 }} />
+                  role='button' onClick={async () => await handleUpdateProfilePhoto()} />
               </IonAvatar>
             </section>
+
 
             <br />
 
@@ -115,11 +116,11 @@ const ProfileEditModal = () => {
               <IonList lines='none'>
                 <IonItem>
                   <IonLabel position="fixed">Username</IonLabel>
-                  <IonInput ref={usernameRef} maxlength={50} value={context.humspotUser.username}></IonInput>
+                  <IonInput aria-label="Username" ref={usernameRef} maxlength={50} value={context.humspotUser.username}></IonInput>
                 </IonItem>
-                <IonItem style={{ height: "25vh" }}>
+                <IonItem>
                   <IonLabel position="fixed" style={{ alignSelf: 'flex-start' }}>About</IonLabel>
-                  <IonTextarea ref={bioRef} maxlength={250} rows={3} value={context.humspotUser.bio} />
+                  <IonTextarea aria-label="About" ref={bioRef} maxlength={250} rows={3} value={context.humspotUser.bio} />
                 </IonItem>
               </IonList>
             </section>
