@@ -81,6 +81,7 @@ export type AWSGetEventsGivenTagResponse = {
 
 export type AWSAddImageResponse = {
   success: boolean;
+  message?: string;
   photoUrls: string[];
 };
 
