@@ -46,9 +46,9 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       };
     }
 
-    //const query: string = `
-
-    //`;
+    const query: string = `
+      
+    `;
 
     const [rows] = await conn.query(query, [activityID, offset]);
 

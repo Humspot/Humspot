@@ -1,5 +1,5 @@
 {
-  "name": "add-comment",
+  "name": "get-visited-and-favorites-status",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
