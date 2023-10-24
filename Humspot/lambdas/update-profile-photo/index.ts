@@ -1,5 +1,5 @@
 /**
- * AWS lambda function that updates a user's profile info (username and bio).
+ * AWS lambda function that updates a user's profile picture.
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';
@@ -19,10 +19,11 @@ const pool = mysql.createPool({
 
 export const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   const connection = await pool.getConnection();
+  context.callbackWaitsForEmptyEventLoop = false;
   try {
     const requestData = JSON.parse(event.body || '{}');
 
-    if (!requestData || requestData.username === undefined || requestData.bio === undefined) {
+    if (!requestData || !requestData.userID || !requestData.profilePicURL) {
       return {
         statusCode: 400,
         headers: {
@@ -31,44 +32,15 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: 'Missing fields in user data!! Fields (username, bio) are required.',
+          message: 'Missing fields in user data!! Fields (userID, profilePicURL) are required.',
           success: false
         }),
       };
     }
 
-    const { userID, username, bio } = requestData;
-    let updateFields = [];
-    let values = [];
-
-    if (username !== '') {
-      updateFields.push('`username` = ?');
-      values.push(username);
-    }
-    if (bio !== '') {
-      updateFields.push('`bio` = ?');
-      values.push(bio);
-    }
-
-    if (updateFields.length === 0) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-          "Access-Control-Allow-Methods": '*',
-          "Access-Control-Allow-Origin": '*'
-        },
-        body: JSON.stringify({
-          message: 'Empty fields. Nothing to update.',
-          success: false
-        }),
-      };
-    }
-
-    const sql = `UPDATE Users SET ${updateFields.join(', ')} WHERE userID = ?`;
-    values.push(userID);
-
-    await connection.execute(sql, values);
+    const params = [requestData.profilePicURL, requestData.userID];
+    const sql = `UPDATE Users SET profilePicURL = ? WHERE userID = ?`;
+    await connection.execute(sql, params);
 
     return {
       statusCode: 200,
@@ -78,7 +50,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
         "Access-Control-Allow-Origin": '*'
       },
       body: JSON.stringify({
-        message: 'User updated successfully',
+        message: 'User profile picture updated successfully',
         success: true
       }),
     };

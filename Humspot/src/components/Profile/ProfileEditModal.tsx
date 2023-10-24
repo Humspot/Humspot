@@ -1,15 +1,14 @@
 import {
-  IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem,
-  IonLabel,
+  IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel,
   IonList, IonLoading, IonModal, IonTextarea, IonTitle, IonToolbar, useIonLoading
 } from "@ionic/react";
 import { useContext } from "../../utils/my-context";
 import { cameraReverseOutline, chevronBackOutline } from "ionicons/icons";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 import avatar from '../../elements/avatar.svg';
 import { useToast } from "@agney/ir-toast";
-import { handleAddImages, handleUpdateUserProfile } from "../../utils/server";
+import { handleAddImages, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
 
 
 const ProfileEditModal = () => {
@@ -22,14 +21,14 @@ const ProfileEditModal = () => {
   const usernameRef = useRef<HTMLIonInputElement | null>(null);
   const bioRef = useRef<HTMLIonTextareaElement | null>(null);
 
-  const handleUpdateProfilePhoto = async () => {
+  const clickUpdateProfilePhoto = async () => {
     if (!context.humspotUser) {
       const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
       t.present();
       return;
     }
     const res = await handleAddImages('profile--photos', `profile-pictures/${context.humspotUser.userID}-profile-photo`, false, 1, present);
-    if (res.message) {
+    if (res.message || !res.photoUrls || !res.photoUrls[0]) {
       const t = Toast.create({ message: res.message, duration: 2000, color: "danger" });
       t.present();
       dismiss();
@@ -37,19 +36,22 @@ const ProfileEditModal = () => {
     }
 
     if (res.photoUrls[0]) {
-      if (res.photoUrls[0]) {
-        let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
-        let updatedImageUrl = `${res.photoUrls[0]}?${uniqueString}`;
-        let tempUser = { ...context.humspotUser, profilePicURL: updatedImageUrl };
-        context.setHumspotUser(tempUser);
-        const t = Toast.create({ message: "File uploaded successfully", duration: 2000, color: "success" });
+      const added = await handleUpdateProfilePhoto(context.humspotUser.userID, res.photoUrls[0]);
+      if (!added.success) {
+        const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
         t.present();
       }
+      let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
+      let updatedImageUrl = `${res.photoUrls[0]}?${uniqueString}`;
+      let tempUser = { ...context.humspotUser, profilePicURL: updatedImageUrl };
+      context.setHumspotUser(tempUser);
+      const t = Toast.create({ message: "File uploaded successfully", duration: 2000, color: "success" });
+      t.present();
     }
     dismiss();
   };
 
-  const updateProfile = async () => {
+  const clickUpdateProfile = async () => {
     if (!context.humspotUser || usernameRef.current == null || bioRef.current == null) {
       const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
       t.present();
@@ -62,12 +64,13 @@ const ProfileEditModal = () => {
       return;
     }
     present({ message: "Updating..." });
-    const res = await handleUpdateUserProfile(context.humspotUser.userID, (usernameRef.current.value as string), (bioRef.current.value as string), "");
+    const res = await handleUpdateUserProfile(context.humspotUser.userID, (usernameRef.current.value as string), (bioRef.current.value as string));
     if (res.success) {
       let tempUser = { ...context.humspotUser, username: usernameRef.current.value as string, bio: bioRef.current.value as string };
       context.setHumspotUser(tempUser);
       const t = Toast.create({ message: "Updated profile successfully", duration: 2000, color: "success" });
       t.present();
+      modalRef.current && modalRef.current.dismiss();
     } else {
       const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
       t.present();
@@ -105,7 +108,7 @@ const ProfileEditModal = () => {
                   alt="User Profile Picture"
                 />
                 <IonIcon size="large" icon={cameraReverseOutline}
-                  role='button' onClick={async () => await handleUpdateProfilePhoto()} />
+                  role='button' onClick={async () => await clickUpdateProfilePhoto()} />
               </IonAvatar>
             </section>
 
@@ -125,10 +128,9 @@ const ProfileEditModal = () => {
               </IonList>
             </section>
 
-
             <br />
 
-            <IonButton className="login-button" onClick={async () => { await updateProfile() }} fill="clear" expand="block" id="submit-profile-edit-changes">Update</IonButton>
+            <IonButton className="login-button" onClick={async () => { await clickUpdateProfile() }} fill="clear" expand="block" id="submit-profile-edit-changes">Update</IonButton>
 
           </IonContent>
 

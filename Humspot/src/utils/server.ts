@@ -636,14 +636,13 @@ export const handleGetEvent = async (eventID: string) => {
 
 /**
  * @function handleUpdateUserProfile
- * @description updates the user information in the Users table.
+ * @description updates the user information in the Users table (username and bio).
  * 
- * @param userID 
- * @param username 
- * @param bio 
- * @param profilePicUrl 
+ * @param {string} userID 
+ * @param {string} username 
+ * @param {string} bio 
  */
-export const handleUpdateUserProfile = async (userID: string, username: string, bio: string, profilePicUrl: string) => {
+export const handleUpdateUserProfile = async (userID: string, username: string, bio: string) => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -656,7 +655,6 @@ export const handleUpdateUserProfile = async (userID: string, username: string, 
       userID: userID,
       username: username,
       bio: bio,
-      profilePicUrl: profilePicUrl
     }
 
     const response = await fetch(
@@ -668,6 +666,50 @@ export const handleUpdateUserProfile = async (userID: string, username: string, 
           Authorization: `Bearer ${jwtToken}`,
         },
         body: JSON.stringify(attemptedUpdateFields),
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
+};
+
+
+/**
+ * @function handleUpdateProfilePhoto 
+ * @description Update profile photo of the user. 
+ * 
+ * @param {string} userID 
+ * @param {string} profilePicURL 
+ */
+export const handleUpdateProfilePhoto = async (userID: string, profilePicURL: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const updateFields: Record<string, string> = {
+      userID: userID,
+      profilePicURL: profilePicURL
+    }
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_UPDATE_PROFILE_PHOTO_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(updateFields),
       }
     );
 
