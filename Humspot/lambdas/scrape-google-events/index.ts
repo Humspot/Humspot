@@ -1,5 +1,5 @@
 /**
- * AWS lambda function that runs daily. It uses SerpApi to retrieve local Humboldt events from Google. 
+ * AWS lambda function that runs daily. It uses SerpApi to retrieve the top 50 local Humboldt events from Google. 
  * This information is then parsed and put into a format that the mySQL Events table expects so that it can be entered into it.
  */
 
@@ -160,7 +160,7 @@ async function createEvents(eventsArr: SerpEventResponse[]): Promise<Event[]> {
       const { latitude, longitude } = await getLatLong(e.address);
       const eventToBeSubmitted: Event = {
         name: e.title,
-        description: e.description,
+        description: e.date.when + '; ' + e.description,
         location: e.address && e.address[0] ? e.address[0] : '',
         addedByUserID: 'GoogleEventsScraper',
         date: formatDateForMySQL(e.date.start_date),
@@ -186,21 +186,35 @@ async function createEvents(eventsArr: SerpEventResponse[]): Promise<Event[]> {
 
 export const handler = async (event: any, context: Context, callback: Callback) => {
 
-  const params = {
+  const baseParams = {
     engine: "google_events",
     q: "Events in Humboldt County",
     hl: "en",
     gl: "us",
-    start: "0",
     location_requested: "Arcata, California, United States",
     api_key: "9e002587c4c43e1a6b96ef962e7e5b932dbad6f2d105d1d912a5512547ec3748"
   };
 
-  const serpEventsJson = await getJson(params);
-  const serpEventsArr: SerpEventResponse[] = serpEventsJson["events_results"];
-  console.log(serpEventsArr);
+  let allSerpEvents: SerpEventResponse[] = [];
 
-  const eventsToBeAdded: Event[] = await createEvents(serpEventsArr);
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  for (let start of [0, 10, 20, 30, 40]) {
+    try {
+      const params = { ...baseParams, start: start.toString() };
+      const serpEventsJson = await getJson(params);
+      const serpEventsArr: SerpEventResponse[] = serpEventsJson["events_results"] || [];
+      allSerpEvents = allSerpEvents.concat(serpEventsArr);
+
+      if (start !== 40) {
+        await delay(1000); 
+      }
+    } catch (error) {
+      console.error(`Error fetching events for start ${start}: `, error);
+    }
+  }
+
+  const eventsToBeAdded: Event[] = await createEvents(allSerpEvents);
 
   for (let i = 0; i < eventsToBeAdded.length; i++) {
     const e: Event = eventsToBeAdded[i];

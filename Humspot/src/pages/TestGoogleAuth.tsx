@@ -22,6 +22,7 @@ import {
 } from "../utils/server";
 import { useContext } from "../utils/my-context";
 import { HumspotAttraction, HumspotCommentSubmit, HumspotEvent } from "../utils/types";
+import { EngineParameters, getJson } from "serpapi";
 
 const event10: HumspotEvent = {
   name: "",
