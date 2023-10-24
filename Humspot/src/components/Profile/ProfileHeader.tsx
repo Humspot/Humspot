@@ -14,21 +14,21 @@ const ProfileHeader: React.FC = () => {
           padding: "10px",
           fontSize: "1.5rem",
           width: "60vw",
-          whiteSpace: "nowrap",  
-          overflow: "hidden", 
+          whiteSpace: "nowrap",
+          overflow: "hidden",
           textOverflow: "ellipsis"
         }}>
           {context.humspotUser
-            ? context.humspotUser.username 
+            ? context.humspotUser.username
             : <IonSkeletonText animated style={{ width: "50vw", height: "1.5rem" }} />
           }
         </IonCardTitle>
         <IonButtons slot='end'>
-          <IonButton disabled={!context.humspotUser} id='open-add-activity-modal' slot='end'>
-            <IonIcon size='large' style={{ padding: "1%" }} icon={addCircleOutline} />
-          </IonButton>
           <IonButton disabled={!context.humspotUser} id='open-edit-profile-modal' slot='end'>
             <IonIcon size='large' style={{ padding: "1%" }} icon={pencilOutline} />
+          </IonButton>
+          <IonButton disabled={!context.humspotUser} id='open-add-activity-modal' slot='end'>
+            <IonIcon size='large' style={{ padding: "1%" }} icon={addCircleOutline} />
           </IonButton>
           <IonButton id='open-profile-page-modal' slot='end'>
             <IonIcon size='large' style={{ padding: "2.5%" }} icon={settingsOutline} />

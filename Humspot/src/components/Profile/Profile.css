@@ -19,6 +19,24 @@
   align-items: center;
 }
 
+@media (max-width: 389px) { 
+  .segment-button {
+    font-size: 0.6rem; 
+  }
+
+  .segment-button ion-icon {
+    margin: 2%;
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (max-width: 389px) {
+  .segment-button ion-label {
+    display: none; 
+  }
+}
+
 .profile-header-button {
   position: absolute;
   z-index: 5;

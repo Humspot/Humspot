@@ -188,7 +188,7 @@ const TestGoogleAuth: React.FC = () => {
                 <IonButton
                   color="dark"
                   onClick={async () =>
-                    await handleTestFavorite("6d1c8b3f39db835db689200e4")
+                    await handleTestFavorite("08d4f2112bb9d001127b76614")
                   }
                 >
                   Test Favorite ActivityID

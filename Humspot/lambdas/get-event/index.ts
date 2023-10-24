@@ -39,24 +39,24 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     // Main event details query
     const queryEventDetails: string = `
       SELECT 
-        Events.*, 
-        Activities.*, 
-        GROUP_CONCAT(Tags.tagName) as tags, 
-        MIN(ActivityPhotos.photoUrl) as photoUrl
+      Events.*, 
+      Activities.*, 
+      GROUP_CONCAT(DISTINCT Tags.tagName) as tags,
+      GROUP_CONCAT(DISTINCT ActivityPhotos.photoURL) as photos
       FROM 
         Events
       INNER JOIN 
         Activities ON Events.activityID = Activities.activityID
-      INNER JOIN 
+      LEFT JOIN 
         ActivityTags ON Activities.activityID = ActivityTags.activityID
-      INNER JOIN 
+      LEFT JOIN 
         Tags ON ActivityTags.tagID = Tags.tagID
       LEFT JOIN 
         ActivityPhotos ON Activities.activityID = ActivityPhotos.activityID
       WHERE 
         Events.eventID = ?
       GROUP BY 
-        Events.eventID;
+        Events.eventID;  
     `;
 
     const [eventRows]: any = await conn.execute(queryEventDetails, [eventId]);
@@ -71,13 +71,6 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     const event = eventRows[0];
     const activityId = event.activityID;
 
-    // Photos query
-    const queryPhotos: string = `
-      SELECT * FROM ActivityPhotos WHERE activityID = ?;
-    `;
-
-    const [photoRows]: any = await conn.execute(queryPhotos, [activityId]);
-
     // Comments query with User data for each comment
     const queryComments: string = `
       SELECT Comments.*, Users.username, Users.profilePicURL 
@@ -89,14 +82,12 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     const [commentRows]: any = await conn.execute(queryComments, [activityId]);
 
-
     return {
       statusCode: 200,
       body: JSON.stringify({
         message: 'Event retrieved successfully',
         event: {
           ...event,
-          photos: photoRows,
           comments: commentRows
         }
       }),
