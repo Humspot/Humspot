@@ -126,7 +126,7 @@ function ExplorePage() {
           title={data.title}
           description={data.description}
           imgsrc={data.imgsrc}
-          id="08d4f2112bb9d001127b76614"
+          id="0090d9b278350143bd66198cb"
         />
       </div>
     </SwiperSlide>
