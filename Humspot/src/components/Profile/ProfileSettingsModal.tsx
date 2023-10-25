@@ -1,5 +1,5 @@
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, IonToggle, IonAlert, IonContent, IonTitle, useIonRouter } from "@ionic/react";
-import { notificationsOutline, moonOutline, logOutOutline, mailOutline, shieldOutline, readerOutline } from "ionicons/icons";
+import { notificationsOutline, moonOutline, logOutOutline, mailOutline, shieldOutline, readerOutline, logInOutline } from "ionicons/icons";
 import { useContext } from "../../utils/my-context";
 import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../../utils/server";
 import { Dialog } from "@capacitor/dialog";
@@ -26,7 +26,7 @@ const ProfileSettingsModal = () => {
 
 
   return (
-    <IonModal ref={modalRef} trigger="open-profile-page-modal" handle breakpoints={[0, 0.75, 0.99]} initialBreakpoint={0.75}>
+    <IonModal ref={modalRef} trigger="open-profile-page-modal" handle breakpoints={[0, 0.8, 0.99]} initialBreakpoint={0.8}>
       <IonContent style={{ '--background': 'var(--ion-item-background' }}>
         <br />
         <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Settings</IonTitle>
@@ -57,10 +57,17 @@ const ProfileSettingsModal = () => {
           </IonItem>
           <br />
           {context.humspotUser === undefined ?
-            <IonItem role='button' onClick={async () => { await handleGoogleLoginAndVerifyAWSUser() }}>
-              <IonIcon aria-hidden="true" icon={logOutOutline} slot="start"></IonIcon>
-              <IonLabel color='primary'>Google Log In</IonLabel>
-            </IonItem>
+            <>
+              <IonItem role='button' onClick={() => { modalRef?.current?.dismiss(); router.push("/sign-up") }}>
+                <IonIcon aria-hidden="true" icon={logInOutline} slot="start"></IonIcon>
+                <IonLabel color='primary'>Sign Up / Sign In</IonLabel>
+              </IonItem>
+              <br />
+              <IonItem role='button' onClick={async () => { modalRef?.current?.dismiss(); await handleGoogleLoginAndVerifyAWSUser() }}>
+                <IonIcon aria-hidden="true" icon={logOutOutline} slot="start"></IonIcon>
+                <IonLabel color='primary'>Google Sign In</IonLabel>
+              </IonItem>
+            </>
             :
             <IonItem role='button' id="modal-logout-button">
               <IonIcon aria-hidden="true" icon={logOutOutline} slot="start"></IonIcon>

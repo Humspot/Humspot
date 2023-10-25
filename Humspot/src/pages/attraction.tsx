@@ -77,6 +77,7 @@ function AttractionPage() {
     opacity: "0.85"
   };
   const [activity, setActivity] = useState<any>(null);
+  
   const handleGetEventCallback = useCallback(async (id: string) => {
     const res = await handleGetEvent(id);
     if ("event" in res && res.event) setActivity(res.event);

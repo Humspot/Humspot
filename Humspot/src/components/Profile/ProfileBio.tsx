@@ -50,7 +50,7 @@ const ProfileBio: React.FC = () => {
         </IonRow>
 
 
-        {context.humspotUser &&
+        {context.humspotUser && context.humspotUser.accountType !== 'user' &&
           <IonChip outline color='primary' style={{ position: 'absolute', bottom: '10px', right: '10px' }}>{context.humspotUser.accountType}</IonChip>
         }
 

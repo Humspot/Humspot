@@ -7,6 +7,7 @@ import {
   IonTabButton,
   IonTabs,
   setupIonicReact,
+  useIonRouter,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import {
@@ -37,7 +38,7 @@ import "./theme/custom.css";
 import ExplorePage from "./pages/explore";
 import CalendarPage from "./pages/calendar";
 import MapPage from "./pages/map";
-import ProfilePage from "./pages/ProfilePage";
+import ProfilePage from "./pages/Profile";
 import { useState } from "react";
 
 import TestGoogleAuth from "./pages/TestGoogleAuth";
@@ -47,11 +48,15 @@ import { AWSLoginResponse } from "./utils/types";
 import AttractionPage from "./pages/attraction";
 import { ToastProvider } from "@agney/ir-toast";
 import SubmitEventPage from "./pages/SubmitEvent";
+import SignUp from "./pages/SignUp";
+import VerifyEmail from "./pages/VerifyEmail";
+import SignIn from "./pages/SignIn";
 
 setupIonicReact({ mode: "md" });
 
 const App: React.FC = () => {
   const context = useContext();
+  const tabBarStyle = context.showTabs;
 
   useEffect(() => {
     const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
@@ -65,6 +70,8 @@ const App: React.FC = () => {
         case "signOut":
           console.log("signed out!");
           context.setHumspotUser(null);
+          window.location.href = "/";
+          window.location.reload();
           break;
         case "customOAuthState":
           console.log("customOAuthState");
@@ -117,6 +124,9 @@ const App: React.FC = () => {
               <Route exact path="/calendar" component={CalendarPage} />
               <Route exact path="/map" component={MapPage} />
               <Route exact path="/profile" component={ProfilePage} />
+              <Route exact path="/sign-up" component={SignUp} />
+              <Route exact path="/sign-in" component={SignIn} />
+              <Route exact path="/verify-email/:email" component={VerifyEmail} />
               <Route exact path="/google-auth" component={TestGoogleAuth} />
               <Route exact path="/submit-event" component={SubmitEventPage} />
               <Route exact path="/attraction/:id" component={AttractionPage} />
@@ -126,6 +136,7 @@ const App: React.FC = () => {
               slot="bottom"
               color="primary"
               onIonTabsWillChange={handleTabChange}
+              style={tabBarStyle ? {} : { display: "none" }}
             >
               <IonTabButton tab="tab1" href="/explore">
                 <IonIcon
