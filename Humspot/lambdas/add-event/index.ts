@@ -32,6 +32,7 @@ export type Event = {
   organizer: string;
   tags: string[];
   photoUrls: string[];
+  websiteURL: string | null;
 };
 
 export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
@@ -52,7 +53,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: 'Missing or incorrect fields in event data.', event: event,
+          message: 'Missing or incorrect fields in event data.', success: false
         }),
       };
     }
@@ -76,7 +77,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
             "Access-Control-Allow-Origin": '*'
           },
           body: JSON.stringify({
-            message: `User with ID ${userID} is not approved to add an event!`,
+            message: `User with ID ${userID} is not approved to add an event!`, success: false
           }),
         };
       }
@@ -89,15 +90,34 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: `No user found with ID: ${userID}`,
+          message: `No user found with ID: ${userID}`, success: false
+        }),
+      };
+    }
+
+    // Check if an event with the same name already exists
+    query = 'SELECT * FROM Activities WHERE name = ?';
+    params = [event.name];
+    const [existingEvent]: any[] = await conn.query(query, params);
+
+    if (existingEvent.length > 0) {
+      return {
+        statusCode: 400,
+        headers: {
+          "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+          "Access-Control-Allow-Methods": '*',
+          "Access-Control-Allow-Origin": '*'
+        },
+        body: JSON.stringify({
+          message: `An event with the name "${event.name}" already exists.`, success: false
         }),
       };
     }
 
     // Add to Activities table
     const activityID: string = crypto.randomBytes(16).toString('hex');
-    query = 'INSERT INTO Activities (activityID, name, description, location, addedByUserID, activityType) VALUES (?, ?, ?, ?, ?, ?)';
-    params = [activityID, event.name, event.description, event.location, event.addedByUserID, 'event'];
+    query = 'INSERT INTO Activities (activityID, name, description, location, addedByUserID, activityType, websiteURL) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    params = [activityID, event.name, event.description, event.location, event.addedByUserID, 'event', event.websiteURL];
     await conn.query(query, params);
 
     // Add to Events table
@@ -108,6 +128,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     // Add to Tags and ActivityTags tables
     for (const tag of event.tags) {
+      if (tag.length <= 0) continue;
       const tagID: string = crypto.randomBytes(16).toString('hex');
       await conn.query('INSERT IGNORE INTO Tags (tagID, tagName) VALUES (?, ?)', [tagID, tag]);
       await conn.query('INSERT INTO ActivityTags (activityID, tagID) VALUES (?, ?)', [activityID, tagID]);
@@ -133,6 +154,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
       body: JSON.stringify({
         message: 'Event added successfully.',
         eventID: eventID,
+        success: true
       }),
     };
 
@@ -149,7 +171,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
         "Access-Control-Allow-Origin": '*'
       },
       body: JSON.stringify({
-        message: 'Internal Server/mySQL Error',
+        message: 'Internal Server/mySQL Error', success: false
       }),
     };
   } finally {
@@ -158,3 +180,4 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     }
   }
 };
+

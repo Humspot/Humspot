@@ -27,7 +27,7 @@ const pool = mysql.createPool({
 type HumspotUser = {
   userID: string;
   email: string | null;
-  imageUrl: string;
+  profilePicURL: string | null;
   username: string | null;
   accountType: 'user' | 'admin' | 'organizer' | 'guest';
   accountStatus: 'active' | 'restricted';
@@ -102,7 +102,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       authProvider: requestData.authProvider,
       accountType: requestData.accountType,
       accountStatus: 'active',
-      imageUrl: requestData.profilePicURL || null,
+      profilePicURL: requestData.profilePicURL || null,
       dateCreated: currentDate,
     }
 

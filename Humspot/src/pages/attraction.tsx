@@ -1,28 +1,57 @@
 import {
   IonAvatar,
+  IonBackButton,
+  IonButton,
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonCardTitle,
   IonChip,
   IonContent,
   IonHeader,
   IonIcon,
+  IonImg,
+  IonLabel,
+  IonNote,
   IonPage,
+  IonText,
 } from "@ionic/react";
 import { RouteComponentProps } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import "./attraction.css";
 import { Map, Marker } from "pigeon-maps";
+import {
+  compass,
+  mapOutline,
+  pin,
+  pinOutline,
+  star,
+  starOutline,
+  time,
+  trailSign,
+  trailSignOutline,
+  walkOutline,
+} from "ionicons/icons";
+import { useCallback, useEffect, useState } from "react";
+import { handleGetEvent } from "../utils/server";
+import { useContext } from "../utils/my-context";
+import avatar from "../elements/avatar.svg";
+import placeholder from '../elements/placeholder.png';
+import { formatDate } from "../utils/formatDate";
+import { useToast } from "@agney/ir-toast";
+import { timeout } from "../utils/timeout";
 
-export function LocationMap() {
+
+export function LocationMap(props: any) {
+  console.log(props);
   return (
     <Map
-      defaultCenter={[40.87649434150835, -124.07918370203882]}
-      defaultZoom={15}
-      minZoom={15}
-      maxZoom={15}
-      height={150}
-      width={150}
+      defaultCenter={[parseFloat(props.latitude), parseFloat(props.longitude)]}
+      defaultZoom={12}
+      minZoom={12}
+      maxZoom={12}
+      height={120}
+      width={120}
       attribution={false}
       mouseEvents={false}
       touchEvents={false}
@@ -30,7 +59,7 @@ export function LocationMap() {
       <Marker
         width={30}
         height={30}
-        anchor={[40.87649434150835, -124.07918370203882]}
+        anchor={[parseFloat(props.latitude), parseFloat(props.longitude)]}
       />
     </Map>
   );
@@ -38,85 +67,141 @@ export function LocationMap() {
 
 function AttractionPage() {
   const { id, imgsrc }: any = useParams();
+  const context = useContext();
+  const Toast = useToast();
   const imgStyle = {
     width: "100%", // Ensure the image takes up the full width of the container
     height: "30vh", // Ensure the image takes up the full height of the container
     objectFit: "cover", // Crop and fit the image within the container
     position: "absolute",
+    opacity: "0.85"
   };
+  const [activity, setActivity] = useState<any>(null);
+  const handleGetEventCallback = useCallback(async (id: string) => {
+    const res = await handleGetEvent(id);
+    if ("event" in res && res.event) setActivity(res.event);
+  }, []);
+  useEffect(() => {
+    if (id) handleGetEventCallback(id);
+  }, [id]);
+
+  const testFavorite = () => {
+    timeout(500).then(() => {
+      const t = Toast.create({ message: "Favorite added!", duration: 2000, color: "dark" });
+      t.present();
+    });
+  }
+
+  const testVisited = () => {
+    timeout(500).then(() => {
+      const t = Toast.create({ message: "You've added this to Visited!", duration: 2000, color: "dark" });
+      t.present();
+    });
+  }
+
   return (
     <>
       <IonPage>
         <IonContent>
-          <img
-            alt="Attraction Image"
-            src="https://source.unsplash.com/random/?forest,day"
-            className="MainCarouselEntryHeaderImage"
-            style={imgStyle as any} // Apply the custom styles to the image
-          />
-          <IonCard color={"primary"} className="headercard">
-            <IonCardHeader>
-              <h1>Name</h1>
-            </IonCardHeader>
-          </IonCard>
-          <IonChip color={"secondary"}>Campus</IonChip>
-          <IonChip color={"secondary"}>Hike</IonChip>
-          <IonChip color={"secondary"}>Forest</IonChip>
-          <IonCard>
-            <IonCardContent className="locationcard">
-              <p>Location</p>
-              <div className="locationmap">
-                <LocationMap />
+          {/* Favorites Button */}
+          <IonButton
+            className="FavoritesButton"
+            fill="clear"
+            color={"secondary"}
+            size="large"
+            id="FavoritesButton"
+            onClick={() => testFavorite()}
+          >
+          <IonIcon slot="icon-only" icon={starOutline}></IonIcon>
+        </IonButton>
+        {/* Visited Button for Locations */}
+        <IonButton
+          className="VisitedButton"
+          fill="clear"
+          color={"secondary"}
+          size="large"
+          id="VisitedButton"
+          onClick={() => testVisited()}
+        >
+          <IonIcon slot="icon-only" icon={walkOutline}></IonIcon>
+        </IonButton>
+        <IonImg
+          alt="Attraction Image"
+          src={activity?.photoUrl || placeholder}
+          className="MainCarouselEntryHeaderImage"
+          style={imgStyle as any}
+        ></IonImg>
+        <IonCard color={"primary"} className="headercard">
+          <IonCardHeader>
+            <IonCardTitle>
+              {activity && <h1>{activity.name}</h1>}
+            </IonCardTitle>
+          </IonCardHeader>
+        </IonCard>
+        <div>
+          {activity && "tags" in activity && activity.tags.split(',').map((tag: string, index: number) => {
+            return (
+              <IonChip key={tag + index} color={"secondary"}>{tag}</IonChip>
+            )
+          })}
+        </div>
+        <IonCard>
+          <IonCardContent className="locationcard">
+            <IonText color={"dark"}>
+              <div className="locationlabel">
+                <IonIcon icon={compass} size="small"></IonIcon>
+                <h2>{activity?.location ?? ""}</h2>
               </div>
-            </IonCardContent>
-          </IonCard>
-          <IonCard>
-            <IonCardContent>
-              <p>IF EVENT: Date & Time</p>
-            </IonCardContent>
-          </IonCard>
-          <IonCard>
-            <IonCardContent>
-              <p>Description</p>
-            </IonCardContent>
-          </IonCard>
-          {/* Comments Section */}
-          <IonCard>
-            <IonCardHeader>
-              <h3>Comments</h3>
-            </IonCardHeader>
-            <IonCard className="commentbox">
-              <IonAvatar>
-                <img
-                  alt="Silhouette of a person's head"
-                  src="https://ionicframework.com/docs/img/demos/avatar.svg"
+              <div className="locationlabel">
+                <IonIcon icon={time} size="small"></IonIcon>
+                <h2>
+                  {formatDate(activity?.date ?? "")}
+                </h2>
+              </div>
+            </IonText>
+
+            <div className="locationmap">
+              {activity && (
+                <LocationMap
+                  latitude={activity.latitude}
+                  longitude={activity.longitude}
                 />
-              </IonAvatar>
-              <IonCardContent>This place is SO FUN!!!</IonCardContent>
-            </IonCard>
-            <IonCard className="commentbox">
-              <IonAvatar>
-                <img
+              )}
+            </div>
+          </IonCardContent>
+        </IonCard>
+        <IonCard>
+          <IonCardContent>
+            <IonText color={"dark"}>
+              <p>{activity?.description ?? ""}</p>
+            </IonText>
+          </IonCardContent>
+        </IonCard>
+        {/* Comments Section */}
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Comments</IonCardTitle>
+          </IonCardHeader>
+          {activity?.comments?.map((comment: any, index: any) => (
+            <IonCard className="commentbox" key={index}>
+              <IonAvatar className="commentavatar">
+                <IonImg
                   alt="Silhouette of a person's head"
-                  src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                />
+                  src={avatar}
+                ></IonImg>
               </IonAvatar>
-              <IonCardContent>This place SUCKS!!!</IonCardContent>
-            </IonCard>
-            <IonCard className="commentbox">
-              <IonAvatar>
-                <img
-                  alt="Silhouette of a person's head"
-                  src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                />
-              </IonAvatar>
-              <IonCardContent>
-                I have no strong feelings one way or the other.
+              <IonCardContent className="commentcontents">
+                <h2>{comment.userID}</h2>
+                {comment.commentText}
+                <IonNote>
+                  {formatDate(comment.commentDate ?? "")}
+                </IonNote>
               </IonCardContent>
             </IonCard>
-          </IonCard>
-        </IonContent>
-      </IonPage>
+          ))}
+        </IonCard>
+      </IonContent>
+    </IonPage >
     </>
   );
 }

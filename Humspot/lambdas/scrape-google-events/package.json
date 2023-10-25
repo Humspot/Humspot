@@ -1,5 +1,5 @@
 {
-  "name": "add-comment",
+  "name": "scrape-google-events",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,11 +12,10 @@
   "license": "ISC",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.124",
-    "@types/mysql2": "github:types/mysql2",
     "@types/node": "^20.8.3",
     "esbuild": "^0.19.4"
   },
   "dependencies": {
-    "mysql2": "^3.6.1"
+    "serpapi": "^2.0.0"
   }
 }

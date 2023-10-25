@@ -43,7 +43,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: 'Missing or incorrect fields in event data.', event: comment,
+          message: 'Missing or incorrect fields in event data.', event: comment, success: false
         }),
       };
     }
@@ -67,7 +67,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
             "Access-Control-Allow-Origin": '*'
           },
           body: JSON.stringify({
-            message: `User with ID ${userID} is not approved to comment! (restricted user)`,
+            message: `User with ID ${userID} is not approved to comment! (restricted user)`, success: false
           }),
         };
       }
@@ -80,15 +80,15 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: `No user found with ID: ${userID}`,
+          message: `No user found with ID: ${userID}`, success: false
         }),
       };
     }
 
     // Add to Comments table
     const commentID: string = crypto.randomBytes(16).toString('hex');
-    query = 'INSERT INTO Comments (commentID, userID, activityID, commentText, commentDate) VALUES (?, ?, ?, ?, ?)';
-    params = [commentID, comment.userID, comment.activityID, comment.commentText, comment.commentDate];
+    query = 'INSERT INTO Comments (commentID, userID, activityID, commentText, commentDate) VALUES (?, ?, ?, ?, NOW())';
+    params = [commentID, comment.userID, comment.activityID, comment.commentText];
     await conn.query(query, params);
 
     await conn.commit();
@@ -103,6 +103,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
       body: JSON.stringify({
         message: 'Comment added successfully.',
         commentID: commentID,
+        success: true
       }),
     };
 
@@ -119,7 +120,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
         "Access-Control-Allow-Origin": '*'
       },
       body: JSON.stringify({
-        message: 'Internal Server/mySQL Error',
+        message: 'Internal Server/mySQL Error', success: false
       }),
     };
   } finally {
@@ -128,3 +129,4 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     }
   }
 };
+

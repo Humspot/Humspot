@@ -36,34 +36,65 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
       };
     }
 
-    const query: string = `
-      SELECT Events.*, Activities.*, GROUP_CONCAT(Tags.tagName) as tags FROM Events
-      INNER JOIN Activities ON Events.activityID = Activities.activityID
-      INNER JOIN ActivityTags ON Activities.activityID = ActivityTags.activityID
-      INNER JOIN Tags ON ActivityTags.tagID = Tags.tagID
-      WHERE Events.eventID = ?
-      GROUP BY Events.eventID;
+    // Main event details query
+    const queryEventDetails: string = `
+      SELECT 
+      Events.*, 
+      Activities.*, 
+      GROUP_CONCAT(DISTINCT Tags.tagName) as tags,
+      GROUP_CONCAT(DISTINCT ActivityPhotos.photoURL) as photos
+      FROM 
+        Events
+      INNER JOIN 
+        Activities ON Events.activityID = Activities.activityID
+      LEFT JOIN 
+        ActivityTags ON Activities.activityID = ActivityTags.activityID
+      LEFT JOIN 
+        Tags ON ActivityTags.tagID = Tags.tagID
+      LEFT JOIN 
+        ActivityPhotos ON Activities.activityID = ActivityPhotos.activityID
+      WHERE 
+        Events.eventID = ?
+      GROUP BY 
+        Events.eventID;  
     `;
 
-    const [rows]: any = await conn.execute(query, [eventId]);
+    const [eventRows]: any = await conn.execute(queryEventDetails, [eventId]);
 
-    if (!rows || rows.length === 0) {
+    if (!eventRows || eventRows.length === 0) {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: `Event with ID: ${eventId} not found` }),
       };
     }
 
+    const event = eventRows[0];
+    const activityId = event.activityID;
+
+    // Comments query with User data for each comment
+    const queryComments: string = `
+      SELECT Comments.*, Users.username, Users.profilePicURL 
+      FROM Comments 
+      JOIN Users ON Comments.userID = Users.userID 
+      WHERE Comments.activityID = ? 
+      ORDER BY Comments.commentDate DESC;
+    `;
+
+    const [commentRows]: any = await conn.execute(queryComments, [activityId]);
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Event retrieved successfully', event: rows[0] }),
+      body: JSON.stringify({
+        message: 'Event retrieved successfully',
+        event: {
+          ...event,
+          comments: commentRows
+        }
+      }),
     };
 
-  } catch (err) {
-    if (conn) {
-      await conn.rollback();
-    }
 
+  } catch (err) {
     return {
       statusCode: 500,
       headers: {
