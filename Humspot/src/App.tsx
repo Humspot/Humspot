@@ -49,6 +49,7 @@ import { handleUserLogin } from './server';
 import { AWSLoginResponse } from './types';
 
 import AttractionPage from "./pages/attraction";
+import EventForm from "./pages/EventForm";
 
 
 setupIonicReact({ mode: "md" });
@@ -124,6 +125,9 @@ const App: React.FC = () => {
             </Route>
             <Route exact path="/google-auth">
               <TestGoogleAuth></TestGoogleAuth>
+            </Route>
+            <Route exact path="/EventForm">
+              <EventForm></EventForm>
             </Route>
             <Route
               exact
