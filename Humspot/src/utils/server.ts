@@ -150,7 +150,8 @@ export const handleLogout = async (): Promise<boolean> => {
  */
 export const handleUserLogin = async (
   email: string | null,
-  username: string | null
+  username: string | null,
+  isGoogleAccount: boolean
 ): Promise<AWSLoginResponse> => {
   try {
     if (!email || !username) throw new Error("Invalid email or username");
@@ -164,7 +165,7 @@ export const handleUserLogin = async (
     const requestBody: Record<string, string> = {
       username: username,
       email: email,
-      authProvider: "google",
+      authProvider: isGoogleAccount ? "google" : "custom",
       accountType: "user",
       accountStatus: "active",
     };

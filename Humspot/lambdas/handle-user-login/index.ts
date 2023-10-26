@@ -115,7 +115,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       },
       body: JSON.stringify({
         message: 'User created successfully',
-        user: JSON.stringify(humspotUser)
+        user: humspotUser
       }),
     };
   } catch (error) {

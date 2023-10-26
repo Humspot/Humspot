@@ -1,4 +1,4 @@
-import { IonButton, IonCardTitle, IonContent, IonInput, IonItem, IonLabel, IonPage, useIonRouter, useIonViewWillEnter } from "@ionic/react";
+import { IonButton, IonCardTitle, IonContent, IonInput, IonItem, IonLabel, IonPage, useIonLoading, useIonRouter, useIonViewWillEnter } from "@ionic/react";
 import { useRef } from "react";
 import { useParams } from "react-router-dom";
 import { confirmSignUp } from "../utils/server";
@@ -20,6 +20,7 @@ const VerifyEmail = () => {
   const Toast = useToast();
   const context = useContext();
   const router = useIonRouter();
+  const [present, dismiss] = useIonLoading();
 
   const decodedEmail: string = decodeURIComponent(email);
 
@@ -29,6 +30,7 @@ const VerifyEmail = () => {
 
   const clickOnVerify = async () => {
     if (!codeRef || !codeRef.current) return;
+    present({ message: "Verifying..." });
     const res: boolean = await confirmSignUp(decodedEmail, codeRef.current?.value as string ?? '');
     if (!res) {
       const t = Toast.create({ message: "Incorrect code!", duration: 2000, color: "danger" });
@@ -38,6 +40,7 @@ const VerifyEmail = () => {
       t.present();
       router.push("/sign-in");
     }
+    dismiss();
   };
 
   return (

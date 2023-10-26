@@ -89,7 +89,8 @@ const App: React.FC = () => {
       const email: string | null =
         currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
       const awsUsername: string | null = currentUser?.username ?? null;
-      handleUserLogin(email, awsUsername)
+      console.log(currentUser);
+      handleUserLogin(email, awsUsername, "identities" in currentUser?.attributes)
         .then((res: AWSLoginResponse) => {
           console.log(res.message);
           if (!res.user) throw new Error(res.message);
@@ -104,7 +105,7 @@ const App: React.FC = () => {
       context.setHumspotUser(undefined);
     }
   };
-
+  
   const [currentTab, setCurrentTab] = useState("tab1");
   function handleTabChange(event: CustomEvent<{ tab: string }>): void {
     setCurrentTab(event.detail.tab);
