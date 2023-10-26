@@ -1,11 +1,24 @@
-import { IonButton, IonCardTitle, IonContent, IonInput, IonItem, IonLabel, IonPage, useIonLoading, useIonRouter, useIonViewWillEnter } from "@ionic/react";
+/**
+ * @file VerifyEmail.tsx 
+ * @fileoverview Page where users can enter the verification code sent to them via email. 
+ * Upon success, the user is re-routed to the login page.
+ */
+
 import { useRef } from "react";
 import { useParams } from "react-router-dom";
-import { confirmSignUp } from "../utils/server";
+import {
+  IonButton, IonCardTitle, IonContent, IonInput, IonItem,
+  IonLabel, IonPage, useIonLoading, useIonRouter, useIonViewWillEnter
+} from "@ionic/react";
+
+
 import { useToast } from "@agney/ir-toast";
 
-import './SignUp.css';
+import { confirmSignUp } from "../utils/server";
 import { useContext } from "../utils/my-context";
+
+import './SignUp.css';
+
 
 type VerifyEmailParams = {
   email: string;
@@ -14,6 +27,7 @@ type VerifyEmailParams = {
 const VerifyEmail = () => {
 
   const { email } = useParams<VerifyEmailParams>();
+  const decodedEmail: string = decodeURIComponent(email);
 
   const codeRef = useRef<HTMLIonInputElement | null>(null);
 
@@ -21,8 +35,6 @@ const VerifyEmail = () => {
   const context = useContext();
   const router = useIonRouter();
   const [present, dismiss] = useIonLoading();
-
-  const decodedEmail: string = decodeURIComponent(email);
 
   useIonViewWillEnter(() => {
     context.setShowTabs(false);

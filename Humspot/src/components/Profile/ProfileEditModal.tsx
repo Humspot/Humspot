@@ -1,17 +1,18 @@
+import { useRef } from "react";
 import {
   IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel,
   IonList, IonLoading, IonModal, IonTextarea, IonTitle, IonToolbar, useIonLoading
 } from "@ionic/react";
-import { useContext } from "../../utils/my-context";
 import { cameraReverseOutline, chevronBackOutline } from "ionicons/icons";
-import { useRef } from "react";
+
+import { useToast } from "@agney/ir-toast";
 
 import avatar from '../../elements/avatar.svg';
-import { useToast } from "@agney/ir-toast";
+import { useContext } from "../../utils/my-context";
 import { handleAddImages, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
 
 
-const ProfileEditModal = () => {
+const ProfileEditModal: React.FC = () => {
 
   const context = useContext();
   const Toast = useToast();

@@ -1,4 +1,7 @@
-import { IonAvatar, IonCard, IonCardHeader, IonCardSubtitle, IonChip, IonRow, IonSkeletonText } from "@ionic/react";
+import {
+  IonAvatar, IonCard, IonCardHeader, IonCardSubtitle,
+  IonChip, IonRow, IonSkeletonText
+} from "@ionic/react";
 
 import { useContext } from "../../utils/my-context";
 import { formatDate } from "../../utils/formatDate";

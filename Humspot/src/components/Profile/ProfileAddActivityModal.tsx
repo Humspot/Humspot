@@ -3,7 +3,7 @@
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle } from "@ionic/react";
 import { calendarOutline, compassOutline, listCircleSharp, clipboardOutline } from "ionicons/icons";
 
-const ProfileAddActivityModal = () => {
+const ProfileAddActivityModal: React.FC = () => {
 
   const router = useIonRouter();
 

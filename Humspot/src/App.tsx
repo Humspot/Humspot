@@ -1,3 +1,9 @@
+/**
+ * @file App.tsx
+ * @fileoverview Define routes and main application components here.
+ */
+
+import { useState, useEffect } from "react";
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
@@ -7,7 +13,6 @@ import {
   IonTabButton,
   IonTabs,
   setupIonicReact,
-  useIonRouter,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import {
@@ -17,9 +22,7 @@ import {
   person,
 } from "ionicons/icons";
 
-import { useEffect } from "react";
-import { useContext } from "./utils/my-context";
-import { Auth, Hub } from "aws-amplify";
+
 
 import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
@@ -31,30 +34,34 @@ import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
-
 import "./theme/variables.css";
-import "./theme/custom.css";
 
 import ExplorePage from "./pages/explore";
 import CalendarPage from "./pages/calendar";
 import MapPage from "./pages/map";
 import ProfilePage from "./pages/Profile";
-import { useState } from "react";
-
 import TestGoogleAuth from "./pages/TestGoogleAuth";
-import { handleUserLogin } from "./utils/server";
-import { AWSLoginResponse } from "./utils/types";
-
 import AttractionPage from "./pages/attraction";
-import { ToastProvider } from "@agney/ir-toast";
 import SubmitEventPage from "./pages/SubmitEvent";
 import SignUp from "./pages/SignUp";
 import VerifyEmail from "./pages/VerifyEmail";
 import SignIn from "./pages/SignIn";
+import ForgotPassword from "./pages/ForgotPassword";
+
+import { Auth, Hub } from "aws-amplify";
+import { ToastProvider } from "@agney/ir-toast";
+
+import { useContext } from "./utils/my-context";
+import { handleUserLogin } from "./utils/server";
+import { AWSLoginResponse } from "./utils/types";
+
 
 setupIonicReact({ mode: "md" });
 
+
+
 const App: React.FC = () => {
+
   const context = useContext();
   const tabBarStyle = context.showTabs;
 
@@ -62,9 +69,6 @@ const App: React.FC = () => {
     const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
       switch (event) {
         case "signIn":
-          const email: string | null =
-            data?.signInUserSession?.idToken?.payload?.email ?? null;
-          const awsUsername: string | null = data?.username ?? null;
           getUser();
           break;
         case "signOut":
@@ -94,7 +98,6 @@ const App: React.FC = () => {
         .then((res: AWSLoginResponse) => {
           console.log(res.message);
           if (!res.user) throw new Error(res.message);
-          console.log(res.user);
           context.setHumspotUser(res.user);
         })
         .catch((err) => {
@@ -105,7 +108,7 @@ const App: React.FC = () => {
       context.setHumspotUser(undefined);
     }
   };
-  
+
   const [currentTab, setCurrentTab] = useState("tab1");
   function handleTabChange(event: CustomEvent<{ tab: string }>): void {
     setCurrentTab(event.detail.tab);
@@ -127,6 +130,7 @@ const App: React.FC = () => {
               <Route exact path="/profile" component={ProfilePage} />
               <Route exact path="/sign-up" component={SignUp} />
               <Route exact path="/sign-in" component={SignIn} />
+              <Route exact path="/forgot-password" component={ForgotPassword} />
               <Route exact path="/verify-email/:email" component={VerifyEmail} />
               <Route exact path="/google-auth" component={TestGoogleAuth} />
               <Route exact path="/submit-event" component={SubmitEventPage} />
@@ -172,6 +176,7 @@ const App: React.FC = () => {
                 />
               </IonTabButton>
             </IonTabBar>
+            
           </IonTabs>
         </IonReactRouter>
 

@@ -139,6 +139,25 @@ export const handleLogout = async (): Promise<boolean> => {
 
 
 /**
+ * @function handleForgotPassword 
+ * @description runs when user clicks on the forgot password button. It sends a password reset email.
+ * 
+ * @param {string} email the user's email to send the password reset to.
+ * @returns {Promise<boolean>} true if successfully sent, false otherwise.
+ */
+export const handleForgotPassword = async (email: string): Promise<boolean> => {
+  try {
+    await Auth.forgotPassword(email);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+
+
+/**
  * @function handleUserLogin
  * @description Calls the AWS API gateway /create-user. This will create a new user in the database if first time logging in.
  *
