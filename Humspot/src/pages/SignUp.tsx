@@ -48,12 +48,14 @@ const SignUp: React.FC = () => {
   const clickOnSignUp = async () => {
     if (!passwordRef || !emailRef) return;
     present({ message: "Please Wait..." });
-    const success = await handleSignUp(
+    const success: boolean = await handleSignUp(
       emailRef.current?.value as string ?? '',
       passwordRef.current?.value as string ?? '',
     );
     if (success) { // route to verify page, on success email is sent with code
-      router.push("/verify-email/" + encodeURIComponent(emailRef.current?.value as string));
+      const t = Toast.create({ message: "Success! Check your email for a verification code.", duration: 2000, color: "success" });
+      t.present();
+      router.push("/verify-email/" + encodeURIComponent(emailRef.current?.value as string) + "/sign-up-verify");
     } else {
       const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: "danger" });
       t.present();

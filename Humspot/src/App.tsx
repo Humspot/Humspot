@@ -131,7 +131,7 @@ const App: React.FC = () => {
               <Route exact path="/sign-up" component={SignUp} />
               <Route exact path="/sign-in" component={SignIn} />
               <Route exact path="/forgot-password" component={ForgotPassword} />
-              <Route exact path="/verify-email/:email" component={VerifyEmail} />
+              <Route exact path="/verify-email/:email/:toVerify" component={VerifyEmail} />
               <Route exact path="/google-auth" component={TestGoogleAuth} />
               <Route exact path="/submit-event" component={SubmitEventPage} />
               <Route exact path="/attraction/:id" component={AttractionPage} />

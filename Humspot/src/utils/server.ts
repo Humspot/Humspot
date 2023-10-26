@@ -4,14 +4,11 @@
  */
 
 import AWS from "aws-sdk";
-
 import awsconfig from "../aws-exports";
 import { Amplify, Auth } from "aws-amplify";
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 
 import { nanoid } from "nanoid";
-
-import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
 
 import {
   AWSAddAttractionResponse,
@@ -28,6 +25,10 @@ import {
   HumspotEvent,
 } from "./types";
 
+import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
+
+
+/* Allows for AWS Authentication */
 Amplify.configure(awsconfig);
 
 /**
@@ -122,7 +123,7 @@ export const handleSignIn = async (email: string, password: string): Promise<boo
 
 /**
  * @function handleLogout
- * @description :ogs the user out of the application
+ * @description logs the user out of the application
  *
  * @returns {Promise<boolean>} true if the user successfully logged out, false otherwise
  */
@@ -660,7 +661,7 @@ export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: str
 
 /**
  * @function handleGetVisitedGivenUserID
- * @description gets an array of places visited from a specified user.
+ * @description Gets an array of places visited from a specified user.
  * It returns 10 places the user has visited at a time, and more can be loaded by incrementing the pageNum param.
  *
  * @param {number} pageNum
@@ -707,7 +708,7 @@ export const handleGetVisitedGivenUserID = async (pageNum: number, userID: strin
  * @function handleGetEvent 
  * @description Calls the API gateway /get-event to retrieve the information about a certain event.
  * 
- * @param {stirng} eventID 
+ * @param {string} eventID 
  * @returns 
  */
 export const handleGetEvent = async (eventID: string) => {
