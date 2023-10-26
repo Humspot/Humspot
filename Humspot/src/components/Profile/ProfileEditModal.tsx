@@ -7,7 +7,7 @@ import { cameraReverseOutline, chevronBackOutline } from "ionicons/icons";
 
 import { useToast } from "@agney/ir-toast";
 
-import avatar from '../../elements/avatar.svg';
+import avatar from '../../assets/images/avatar.svg';
 import { useContext } from "../../utils/my-context";
 import { handleAddImages, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
 

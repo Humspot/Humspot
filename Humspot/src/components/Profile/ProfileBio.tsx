@@ -5,7 +5,7 @@ import {
 
 import { useContext } from "../../utils/my-context";
 import { formatDate } from "../../utils/formatDate";
-import avatar from '../../elements/avatar.svg';
+import avatar from '../../assets/images/avatar.svg';
 
 import './Profile.css';
 
