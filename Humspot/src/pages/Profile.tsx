@@ -1,14 +1,31 @@
-import { IonPage } from "@ionic/react";
+import { IonPage, useIonRouter, useIonViewWillEnter } from "@ionic/react";
 
 import ProfileBio from "../components/Profile/ProfileBio";
 import ProfileSegments from "../components/Profile/ProfileSegments";
 import ProfileHeader from "../components/Profile/ProfileHeader";
 import ProfileSettingsModal from "../components/Profile/ProfileSettingsModal";
-import ProfileLoginModal from "../components/Profile/ProfileLoginModal";
 import ProfileAddActivityModal from "../components/Profile/ProfileAddActivityModal";
 import ProfileEditModal from "../components/Profile/ProfileEditModal";
+import { useEffect } from "react";
+import { useContext } from "../utils/my-context";
+import { timeout } from "../utils/timeout";
 
-function ProfilePage() {
+function Profile() {
+
+  const context = useContext();
+  const router = useIonRouter();
+
+  useEffect(() => {
+    if (context.humspotUser === undefined) { // not logged in
+      timeout(750).then(() => {
+        router.push("/sign-up");
+      })
+    }
+  }, [context.humspotUser]);
+
+  useIonViewWillEnter(() => {
+    context.setShowTabs(true);
+  })
 
   return (
     <>
@@ -32,12 +49,9 @@ function ProfilePage() {
         {/* Modal that pops in at the bottom of the page where users can tinker with app settings */}
         <ProfileSettingsModal />
 
-        {/* Modal that prompts the user to login (if not already logged in) */}
-        <ProfileLoginModal />
-
       </IonPage>
     </>
   );
 }
 
-export default ProfilePage;
+export default Profile;

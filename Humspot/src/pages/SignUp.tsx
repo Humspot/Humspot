@@ -1,49 +1,63 @@
-import { IonBackButton, IonButton, IonButtons, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonModal, IonText, IonTitle, IonToolbar } from "@ionic/react";
-import { useContext } from "../../utils/my-context";
-import { useEffect, useRef, useState } from "react";
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonText, IonTitle, IonToolbar, useIonLoading, useIonRouter, useIonViewWillEnter } from "@ionic/react";
+import { useContext } from "../utils/my-context";
+import { useRef, useState } from "react";
 
-import './Profile.css'
 import { chevronBackOutline, eyeOffOutline, eyeOutline } from "ionicons/icons";
-import { timeout } from "../../utils/timeout";
-import { handleGoogleLoginAndVerifyAWSUser } from "../../utils/server";
+import { handleGoogleLoginAndVerifyAWSUser, handleSignUp } from "../utils/server";
 
+import './SignUp.css';
+import { useToast } from "@agney/ir-toast";
 
-const inputNote: React.CSSProperties = {
-  fontSize: "0.85em",
-  textAlign: "right",
-  color: "gray",
-  fontFamily: "Arial",
-  marginTop: "-1.5vh",
-  marginRight: "7.5vw"
-}
-
-const ProfileLoginModal = () => {
+const SignUp = () => {
 
   const context = useContext();
+  const router = useIonRouter();
+  const Toast = useToast();
+  const [present, dismiss] = useIonLoading();
 
-  const emailRef = useRef<HTMLIonInputElement>(null);
-  const passwordRef = useRef<HTMLIonInputElement>(null);
+  const emailRef = useRef<HTMLIonInputElement | null>(null);
+  const passwordRef = useRef<HTMLIonInputElement | null>(null);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (context.humspotUser === undefined) {
-      timeout(500).then(() => { setShowLoginModal(true); })
+  useIonViewWillEnter(() => {
+    if (context.humspotUser) {
+      router.push("/explore");
     }
   }, [context.humspotUser]);
+
+  useIonViewWillEnter(() => {
+    context.setShowTabs(false);
+  });
+
+  const clickOnSignUp = async () => {
+    if (!passwordRef || !emailRef) return;
+    present({ message: "Please Wait..." });
+    const success = await handleSignUp(
+      emailRef.current?.value as string ?? '',
+      passwordRef.current?.value as string ?? '',
+    );
+    if (success) { // route to verify page, on success email is sent with code
+      router.push("/verify-email/" + encodeURIComponent(emailRef.current?.value as string));
+    } else {
+      const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: "danger" });
+      t.present();
+    }
+    dismiss();
+  };
 
   return (
     <>
 
-      <IonModal isOpen={showLoginModal}>
+      <IonPage>
 
         <IonHeader className='ion-no-border'>
           <IonToolbar style={{ '--background': '--ion-background-color' }}>
             <IonButtons >
-              <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { setShowLoginModal(false) }}>
+              <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { router.goBack(); }}>
                 <IonIcon icon={chevronBackOutline} />
               </IonButton>
+              <IonTitle>Sign Up</IonTitle>
             </IonButtons>
           </IonToolbar>
         </IonHeader>
@@ -51,26 +65,25 @@ const ProfileLoginModal = () => {
         <IonContent>
           <div className="center-content">
             <section className="center-container">
-              <IonCardTitle style={{ paddingBottom: "25%", fontSize: "2em" }}>Login to Humspots</IonCardTitle>
 
               <IonLabel id="email-label" className="login-label">Email</IonLabel>
               <IonItem className='login-input'>
-                <IonInput aria-labelledby="email-input" type="email" ref={emailRef} placeholder="email@email.com" />
+                <IonInput aria-labelledby="email-label" type="email" ref={emailRef} placeholder="email@email.com" />
               </IonItem>
 
               <IonLabel id="password-label" className="login-label">Password</IonLabel>
               <IonItem className='login-input'>
-                <IonInput aria-labelledby='password-label' clearInput clearOnEdit={false} type={showPassword ? "text" : "password"} ref={passwordRef} placeholder="••••••••" />
+                <IonInput aria-labelledby='password-label' clearOnEdit={false} type={showPassword ? "text" : "password"} ref={passwordRef} placeholder="••••••••" />
                 <IonButton slot="end" fill="clear" onClick={() => { setShowPassword(!showPassword) }}>
                   <IonIcon color="medium" icon={showPassword ? eyeOutline : eyeOffOutline} />
                 </IonButton>
               </IonItem>
               <br />
-              <p style={inputNote}><IonText onClick={() => { }}>forgot your password?</IonText></p>
 
               <div style={{ height: "5%" }} />
 
-              <IonButton className="login-button" onClick={() => { }} fill="clear" expand="block" id="signInButton" >Sign In</IonButton>
+              <IonButton className="login-button" onClick={() => { clickOnSignUp() }} fill="clear" expand="block" id="signInButton" >Sign Up</IonButton>
+              <p style={{ fontSize: "0.9rem" }}><IonText color='primary'><span onClick={() => { router.push("/sign-in") }}>Sign In to an Existing Account</span></IonText></p>
 
               <p>OR</p>
 
@@ -94,10 +107,10 @@ const ProfileLoginModal = () => {
             </section>
           </div>
         </IonContent>
-      </IonModal >
+      </IonPage>
     </>
   );
 
 };
 
-export default ProfileLoginModal;
+export default SignUp;

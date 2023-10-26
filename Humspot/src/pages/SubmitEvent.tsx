@@ -75,8 +75,6 @@ export const SubmitEventPage: React.FC = () => {
             <IonLabel>Tags (comma separated):</IonLabel>
             <IonInput value={event.tags.join(',')} onIonChange={handleChange('tags')} placeholder="fun, adventure, nature" />
 
-
-
             <br />
 
             <IonButton onClick={handleSubmit}>Submit</IonButton>

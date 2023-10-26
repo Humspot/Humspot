@@ -51,6 +51,76 @@ export const handleGoogleLoginAndVerifyAWSUser = async (): Promise<boolean> => {
   }
 };
 
+
+/**
+ * @function handleSignUp
+ * @description uses AWS auth with provided username, password, and email to sign up for Humspot.
+ * An email is sent with a verification code upon successful sign up.
+ * 
+ * @param {string} username 
+ * @param {string} password 
+ * @param {string} email 
+ * @returns {Promise<boolean>} true if sign up successful, false otherwise
+ */
+export const handleSignUp = async (email: string, password: string): Promise<boolean> => {
+  try {
+    const result = await Auth.signUp({
+      username: email,
+      password,
+      attributes: {
+        email,
+      }
+    });
+    return true; // email verification sent!
+
+  } catch (error) {
+    console.log('error signing up:', error);
+    return false;
+  }
+};
+
+
+/**
+ * @function confirmSignUp 
+ * @description Checks to see if the sent verification code is valid, and, if so, 
+ * confirms the user in the User Pool.
+ * 
+ * @param {string} email 
+ * @param {stirng} code the verification code sent to the email
+ * @returns {Promise<boolean>} true if verification was successful, false otherwise.
+ */
+export const confirmSignUp = async (email: string, code: string): Promise<boolean> => {
+  try {
+    const result = await Auth.confirmSignUp(email, code);
+    console.log(result);
+    return true;
+  } catch (error) {
+    console.log('error confirming sign up:', error);
+    return false;
+  }
+};
+
+
+/**
+ * @function handleSignIn
+ * @description sign in thorugh email and password.
+ * 
+ * @param {string} email 
+ * @param {string} password 
+ * @returns {Promise<boolean>} whether login was successful or not.
+ */
+export const handleSignIn = async (email: string, password: string): Promise<boolean> => {
+  try {
+    const user = await Auth.signIn(email, password);
+    console.log(user);
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  };
+};
+
+
 /**
  * @function handleLogout
  * @description logs the user out of the application
@@ -67,6 +137,7 @@ export const handleLogout = async (): Promise<boolean> => {
   }
 };
 
+
 /**
  * @function handleUserLogin
  * @description Calls the AWS API gateway /create-user. This will create a new user in the database if first time logging in.
@@ -79,7 +150,8 @@ export const handleLogout = async (): Promise<boolean> => {
  */
 export const handleUserLogin = async (
   email: string | null,
-  username: string | null
+  username: string | null,
+  isGoogleAccount: boolean
 ): Promise<AWSLoginResponse> => {
   try {
     if (!email || !username) throw new Error("Invalid email or username");
@@ -93,7 +165,7 @@ export const handleUserLogin = async (
     const requestBody: Record<string, string> = {
       username: username,
       email: email,
-      authProvider: "google",
+      authProvider: isGoogleAccount ? "google" : "custom",
       accountType: "user",
       accountStatus: "active",
     };
@@ -117,6 +189,7 @@ export const handleUserLogin = async (
     return { message: "Error calling API Gateway" + error };
   }
 };
+
 
 /**
  * @function handleAddEvent
@@ -160,6 +233,7 @@ export const handleAddEvent = async (
   }
 };
 
+
 /**
  * @function handleAddEvent
  * @description Calls the AWS API gateway /add-attraction. This will add a new attraction to the database
@@ -202,6 +276,7 @@ export const handleAddAttraction = async (
   }
 };
 
+
 /**
  * @function handleGetEventGivenTag
  * @description gets an array of events that have a certain tag associated with it.
@@ -240,6 +315,7 @@ export const handleGetEventGivenTag = async (
     return { message: "Error calling API Gateway" + error, events: [] };
   }
 };
+
 
 /**
  * @function handleAddImages
@@ -341,6 +417,7 @@ export const handleAddImages = async (
   };
 };
 
+
 /**
  * @function handleAddToFavorites
  * @description adds the activity (event or attraction) to the User's favorites list.
@@ -390,6 +467,7 @@ export const handleAddToFavorites = async (
   }
 };
 
+
 /**
  * @function handleAddToVisited
  * @description adds an activity to a User's visited list
@@ -438,6 +516,7 @@ export const handleAddToVisited = async (
   }
 };
 
+
 /**
  * @function handleAddComment
  * @description calls the AWS API gateway /add-comment. This will add a row to the Comments table.
@@ -477,6 +556,7 @@ export const handleAddComment = async (comment: HumspotCommentSubmit) => {
   }
 };
 
+
 /**
  * @function handleGetCommentsGivenUserID
  * @description gets an array of comments from a specified user.
@@ -515,6 +595,7 @@ export const handleGetCommentsGivenUserID = async (
     return { message: "Error calling API Gateway" + error, success: false, comments: [] };
   }
 };
+
 
 /**
  * @function handleGetFavoritesGivenUserID
@@ -563,6 +644,7 @@ export const handleGetFavoritesGivenUserID = async (
   }
 };
 
+
 /**
  * @function handleGetVisitedGivenUserID
  * @description gets an array of places visited from a specified user.
@@ -610,6 +692,12 @@ export const handleGetVisitedGivenUserID = async (
   }
 };
 
+
+/**
+ * 
+ * @param eventID 
+ * @returns 
+ */
 export const handleGetEvent = async (eventID: string) => {
   try {
 

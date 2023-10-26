@@ -7,6 +7,7 @@ import {
   IonItemDivider,
   IonPage,
   useIonRouter,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -18,6 +19,7 @@ import CarouselEntry from "../elements/CarouselEntry";
 import SecondaryCarouselEntry from "../elements/CarouselEntrySecondary";
 import { add, fileTrayStackedSharp, filter, filterSharp } from "ionicons/icons";
 import FilterButton from "../elements/FilterButton";
+import { useContext } from "../utils/my-context";
 
 <link
   href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
@@ -25,6 +27,11 @@ import FilterButton from "../elements/FilterButton";
 ></link>;
 function ExplorePage() {
   const router = useIonRouter();
+  const context = useContext();
+
+  useIonViewWillEnter(() => {
+    context.setShowTabs(true);
+  });
 
   const mainCarouselData = [
     {

@@ -28,7 +28,7 @@ const ProfileAddActivityModal = () => {
             <IonLabel>See Submitted Activities</IonLabel>
           </IonItem>
           <br />
-          <IonItem role='button' id="modal-logout-button">
+          <IonItem role='button' id="become-a-coordinator">
             <IonIcon aria-hidden="true" icon={clipboardOutline} slot="start"></IonIcon>
             <IonLabel>Become a Coordinator</IonLabel>
           </IonItem>
