@@ -1,7 +1,7 @@
 
 
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle } from "@ionic/react";
-import { calendarOutline, compassOutline, listCircleSharp, clipboardOutline } from "ionicons/icons";
+import { calendarOutline, compassOutline, clipboardOutline, listCircleOutline } from "ionicons/icons";
 
 const ProfileAddActivityModal: React.FC = () => {
 
@@ -24,13 +24,13 @@ const ProfileAddActivityModal: React.FC = () => {
           </IonItem>
           <br />
           <IonItem>
-            <IonIcon aria-hidden="true" icon={listCircleSharp} slot="start"></IonIcon>
+            <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
             <IonLabel>See Submitted Activities</IonLabel>
           </IonItem>
           <br />
           <IonItem role='button' id="become-a-coordinator">
             <IonIcon aria-hidden="true" icon={clipboardOutline} slot="start"></IonIcon>
-            <IonLabel>Become a Coordinator</IonLabel>
+            <IonLabel>Become an Organizer</IonLabel>
           </IonItem>
           <br />
         </IonList>

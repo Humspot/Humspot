@@ -1,6 +1,7 @@
 /**
  * @file VerifyEmail.tsx 
  * @fileoverview Page where users can enter the verification code sent to them via email. 
+ * This page is used for initial sign up verification as well as password reset requests.
  * Upon success, the user is re-routed to the login page.
  */
 

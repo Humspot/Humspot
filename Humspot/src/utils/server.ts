@@ -754,7 +754,7 @@ export const handleUpdateUserProfile = async (userID: string, username: string, 
 
     const attemptedUpdateFields: Record<string, string> = {
       userID: userID,
-      username: username,
+      username: username.replace(/\s/g, ""),
       bio: bio,
     }
 

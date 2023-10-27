@@ -70,7 +70,7 @@ const ProfileBio: React.FC = () => {
           </p>
         </IonCardSubtitle>
         <IonCardSubtitle style={{ marginLeft: '1%' }}>
-          <p>
+          <p style={{ fontSize: "0.75rem" }}>
             {!context.humspotUser ?
               <IonSkeletonText animated style={{ width: "70%" }} />
               :

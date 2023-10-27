@@ -53,8 +53,13 @@ const ProfileEditModal: React.FC = () => {
   };
 
   const clickUpdateProfile = async () => {
-    if (!context.humspotUser || usernameRef.current == null || bioRef.current == null) {
+    if (!context.humspotUser || !usernameRef.current || !bioRef.current) {
       const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
+      t.present();
+      return;
+    }
+    if (!usernameRef.current.value || usernameRef.current.value.toString().trim().length <= 0) {
+      const t = Toast.create({ message: "Username cannot be empty!", duration: 2000, color: "danger" });
       t.present();
       return;
     }
@@ -65,9 +70,9 @@ const ProfileEditModal: React.FC = () => {
       return;
     }
     present({ message: "Updating..." });
-    const res = await handleUpdateUserProfile(context.humspotUser.userID, (usernameRef.current.value as string), (bioRef.current.value as string));
+    const res = await handleUpdateUserProfile(context.humspotUser.userID, (usernameRef.current.value as string).replace(/\s/g, ""), (bioRef.current.value as string));
     if (res.success) {
-      let tempUser = { ...context.humspotUser, username: usernameRef.current.value as string, bio: bioRef.current.value as string };
+      let tempUser = { ...context.humspotUser, username: (usernameRef.current.value as string).replace(/\s/g, ""), bio: bioRef.current.value as string };
       context.setHumspotUser(tempUser);
       const t = Toast.create({ message: "Updated profile successfully", duration: 2000, color: "success" });
       t.present();
