@@ -5,7 +5,7 @@ const ContactUsPage = () => {
   return (
     <IonPage>
       <IonContent>
-
+        
       </IonContent>
     </IonPage>
   )

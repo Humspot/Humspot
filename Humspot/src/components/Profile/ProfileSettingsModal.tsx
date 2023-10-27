@@ -46,12 +46,12 @@ const ProfileSettingsModal = () => {
             <IonLabel color='primary'>Contact Us</IonLabel>
           </IonItem>
           <br />
-          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/privacy-policy") }}>
+          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/PrivacyPolicy") }}>
             <IonIcon aria-hidden="true" icon={shieldOutline} slot="start"></IonIcon>
             <IonLabel color='primary'>Privacy Policy</IonLabel>
           </IonItem>
           <br />
-          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/terms-and-conditions") }}>
+          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/TermsAndConditions") }}>
             <IonIcon aria-hidden="true" icon={readerOutline} slot="start"></IonIcon>
             <IonLabel color='primary'>Terms and Conditions</IonLabel>
           </IonItem>
