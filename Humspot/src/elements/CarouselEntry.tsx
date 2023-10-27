@@ -34,7 +34,7 @@ function CarouselEntry({ title, description, imgsrc, id }: any) {
   return (
     <IonCard
       onClick={() => {
-        router.push("/attraction/" + id);
+        router.push("/activity/" + id);
       }}
     >
       <div style={containerStyle}>
