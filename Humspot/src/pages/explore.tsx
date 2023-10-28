@@ -45,21 +45,14 @@ function ExplorePage() {
       description: "This is the first slide",
       imgsrc:
         "https://activityphotos.s3.us-west-1.amazonaws.com/event-photos/715d07c9d97dde03808d03bb-R7CeCVUf-1697853939858-jpeg",
+      id: "0090d9b278350143bd66198cb",
     },
     {
-      title: "Attraction 2",
-      description: "This is the second slide",
-      imgsrc: "https://source.unsplash.com/random/?forest,trail",
-    },
-    {
-      title: "Attraction 3",
-      description: "This is the third slide",
-      imgsrc: "https://source.unsplash.com/random/?beach",
-    },
-    {
-      title: "Attraction 4",
-      description: "This is the fourth slide",
-      imgsrc: "https://source.unsplash.com/random/?beach,trail",
+      title: "Redwood Fest",
+      description: "This is the first slide",
+      imgsrc:
+        "https://activityphotos.s3.us-west-1.amazonaws.com/event-photos/715d07c9d97dde03808d03bb-R7CeCVUf-1697853939858-jpeg",
+      id: "0090d9b278350143bd66198cb",
     },
   ];
 
@@ -127,7 +120,7 @@ function ExplorePage() {
           title={data.title}
           description={data.description}
           imgsrc={data.imgsrc}
-          id="0090d9b278350143bd66198cb"
+          id={data.id}
         />
       </div>
     </SwiperSlide>
