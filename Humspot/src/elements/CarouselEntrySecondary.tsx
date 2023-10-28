@@ -34,7 +34,7 @@ function CarouselEntrySecondary({ title, imgsrc, id }: any) {
   return (
     <IonCard
       onClick={() => {
-        router.push(`/attraction/${id}`);
+        router.push(`/activity/${id}`);
       }}
     >
       <div style={secondarycontainerStyle}>

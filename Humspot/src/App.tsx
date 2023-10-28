@@ -45,7 +45,7 @@ import TestGoogleAuth from "./pages/TestGoogleAuth";
 import { handleUserLogin } from "./utils/server";
 import { AWSLoginResponse } from "./utils/types";
 
-import AttractionPage from "./pages/attraction";
+import ActivityPage from "./pages/ActivityPage";
 import { ToastProvider } from "@agney/ir-toast";
 import SubmitEventPage from "./pages/SubmitEvent";
 import SignUp from "./pages/SignUp";
@@ -130,7 +130,7 @@ const App: React.FC = () => {
               <Route exact path="/verify-email/:email" component={VerifyEmail} />
               <Route exact path="/google-auth" component={TestGoogleAuth} />
               <Route exact path="/submit-event" component={SubmitEventPage} />
-              <Route exact path="/attraction/:id" component={AttractionPage} />
+              <Route exact path="/activity/:id" component={ActivityPage} />
             </IonRouterOutlet>
 
             <IonTabBar

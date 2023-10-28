@@ -1,5 +1,4 @@
-.locationmap {
-}
+
 
 .locationcard {
   display: flex;
@@ -22,9 +21,14 @@
   gap: 5px;
 }
 
-.commentbox {
-  display: flex;
-  align-items: start;
+.commentusername {
+  font-size: medium;
+  margin-top: 5px;
+}
+
+.commentlist {
+  overflow: scroll;
+  max-height: 35vh;
 }
 
 .commentavatar {
@@ -32,6 +36,12 @@
   height: 50px; /* Adjust the height to your desired size */
   flex-shrink: 0; /* Prevents the avatar from shrinking */
   margin-right: 10px; /* Adds spacing between the avatar and content */
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+.commentdate {
+  font-style: italic;
 }
 
 .FavoritesButton {
