@@ -43,7 +43,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: 'Missing or incorrect fields in event data.', event: comment, success: false
+          message: 'Missing or incorrect fields in event data.', success: false
         }),
       };
     }
