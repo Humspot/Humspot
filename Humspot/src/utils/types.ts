@@ -159,3 +159,7 @@ export type AWSGetFavoritesResponse = {
   success: boolean;
   favorites: HumspotFavoriteResponse[];
 }
+
+export type AWSAddCommentResponse = {
+  
+}

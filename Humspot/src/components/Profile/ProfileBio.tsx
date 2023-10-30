@@ -1,8 +1,11 @@
-import { IonAvatar, IonCard, IonCardHeader, IonCardSubtitle, IonChip, IonRow, IonSkeletonText } from "@ionic/react";
+import {
+  IonAvatar, IonCard, IonCardHeader, IonCardSubtitle,
+  IonChip, IonRow, IonSkeletonText
+} from "@ionic/react";
 
 import { useContext } from "../../utils/my-context";
 import { formatDate } from "../../utils/formatDate";
-import avatar from '../../elements/avatar.svg';
+import avatar from '../../assets/images/avatar.svg';
 
 import './Profile.css';
 
@@ -67,7 +70,7 @@ const ProfileBio: React.FC = () => {
           </p>
         </IonCardSubtitle>
         <IonCardSubtitle style={{ marginLeft: '1%' }}>
-          <p>
+          <p style={{ fontSize: "0.75rem" }}>
             {!context.humspotUser ?
               <IonSkeletonText animated style={{ width: "70%" }} />
               :

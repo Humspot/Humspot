@@ -1,9 +1,29 @@
-import { IonModal, IonList, IonItem, IonIcon, IonLabel, IonToggle, IonAlert, IonContent, IonTitle, useIonRouter } from "@ionic/react";
-import { notificationsOutline, moonOutline, logOutOutline, mailOutline, shieldOutline, readerOutline, logInOutline } from "ionicons/icons";
+import { useRef } from "react";
+import {
+  IonModal,
+  IonList,
+  IonItem,
+  IonIcon,
+  IonLabel,
+  IonToggle,
+  IonContent,
+  IonTitle,
+  useIonRouter
+} from "@ionic/react";
+import {
+  notificationsOutline,
+  moonOutline,
+  logOutOutline,
+  mailOutline,
+  shieldOutline,
+  readerOutline,
+  logInOutline
+} from "ionicons/icons";
+import { Dialog } from "@capacitor/dialog";
+
 import { useContext } from "../../utils/my-context";
 import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../../utils/server";
-import { Dialog } from "@capacitor/dialog";
-import { useRef } from "react";
+
 
 const ProfileSettingsModal = () => {
 
@@ -12,16 +32,14 @@ const ProfileSettingsModal = () => {
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
 
-  const logout = async () => {
-    // USE DIALOG WHEN PORTING TO iOS and MD
-    // const { value } = await Dialog.confirm({
-    //   title: 'Logout',
-    //   message: `Are you sure you want to logout?`,
-    //   okButtonTitle: 'Logout'
-    // });
-    // if (!value) { return; }
-    // await handleLogout();
-
+  const clickOnLogout = async () => {
+    const { value } = await Dialog.confirm({
+      title: 'Logout',
+      message: `Are you sure you want to logout?`,
+      okButtonTitle: 'Logout'
+    });
+    if (!value) { return; }
+    await handleLogout();
   };
 
 
@@ -68,42 +86,20 @@ const ProfileSettingsModal = () => {
                 <IonLabel color='primary'>Google Sign In</IonLabel>
               </IonItem>
             </>
-            :
-            <IonItem role='button' id="modal-logout-button">
-              <IonIcon aria-hidden="true" icon={logOutOutline} slot="start"></IonIcon>
-              <IonLabel color='danger'>Log Out</IonLabel>
-            </IonItem>
+            : context.humspotUser ?
+              <IonItem role='button' onClick={async () => { await clickOnLogout() }}>
+                <IonIcon aria-hidden="true" icon={logOutOutline} slot="start"></IonIcon>
+                <IonLabel color='danger'>Log Out</IonLabel>
+              </IonItem>
+              :
+              <></>
           }
 
           <br />
-
-          <IonAlert
-            header="Are you sure you want to log out?"
-            trigger="modal-logout-button"
-            buttons={[
-              {
-                text: "Cancel",
-                role: "cancel",
-                handler: () => {
-                  console.log("Alert canceled");
-                },
-              },
-              {
-                text: "Log Out",
-                role: "confirm",
-                handler: async () => {
-                  await handleLogout();
-                },
-              },
-            ]}
-            onDidDismiss={({ detail }) =>
-              console.log(`Dismissed with role: ${detail.role}`)
-            }
-          />
         </IonList>
         <p className='ion-text-center'>v.1.0.0 - Humspot</p>
       </IonContent>
-    </IonModal>
+    </IonModal >
   )
 };
 

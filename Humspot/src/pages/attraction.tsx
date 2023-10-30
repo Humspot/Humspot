@@ -35,8 +35,8 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { handleGetEvent } from "../utils/server";
 import { useContext } from "../utils/my-context";
-import avatar from "../elements/avatar.svg";
-import placeholder from '../elements/placeholder.png';
+import avatar from "../assets/images/avatar.svg";
+import placeholder from '../assets/images/avatar.svg';
 import { formatDate } from "../utils/formatDate";
 import { useToast } from "@agney/ir-toast";
 import { timeout } from "../utils/timeout";

@@ -1,14 +1,29 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonText, IonTitle, IonToolbar, useIonLoading, useIonRouter, useIonViewWillEnter } from "@ionic/react";
-import { useContext } from "../utils/my-context";
+/**
+ * @file SignUp.tsx
+ * @fileoverview Page where users can sign up using an email address and password.
+ * They are sent a verification email after entering their information.
+ */
+
 import { useRef, useState } from "react";
+import {
+  IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonText,
+  useIonLoading, useIonRouter, useIonViewWillEnter
+} from "@ionic/react";
+import { eyeOffOutline, eyeOutline } from "ionicons/icons";
 
-import { chevronBackOutline, eyeOffOutline, eyeOutline } from "ionicons/icons";
-import { handleGoogleLoginAndVerifyAWSUser, handleSignUp } from "../utils/server";
-
-import './SignUp.css';
 import { useToast } from "@agney/ir-toast";
 
-const SignUp = () => {
+import { useContext } from "../utils/my-context";
+import { handleSignUp } from "../utils/server";
+import GoBackHeader from "../components/Login/GoBackHeader";
+import GoogleLoginButton from "../components/Login/GoogleLoginButton";
+
+
+import './SignUp.css';
+
+
+
+const SignUp: React.FC = () => {
 
   const context = useContext();
   const router = useIonRouter();
@@ -33,12 +48,14 @@ const SignUp = () => {
   const clickOnSignUp = async () => {
     if (!passwordRef || !emailRef) return;
     present({ message: "Please Wait..." });
-    const success = await handleSignUp(
+    const success: boolean = await handleSignUp(
       emailRef.current?.value as string ?? '',
       passwordRef.current?.value as string ?? '',
     );
     if (success) { // route to verify page, on success email is sent with code
-      router.push("/verify-email/" + encodeURIComponent(emailRef.current?.value as string));
+      const t = Toast.create({ message: "Success! Check your email for a verification code.", duration: 2000, color: "success" });
+      t.present();
+      router.push("/verify-email/" + encodeURIComponent(emailRef.current?.value as string) + "/sign-up-verify");
     } else {
       const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: "danger" });
       t.present();
@@ -51,16 +68,7 @@ const SignUp = () => {
 
       <IonPage>
 
-        <IonHeader className='ion-no-border'>
-          <IonToolbar style={{ '--background': '--ion-background-color' }}>
-            <IonButtons >
-              <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { router.goBack(); }}>
-                <IonIcon icon={chevronBackOutline} />
-              </IonButton>
-              <IonTitle>Sign Up</IonTitle>
-            </IonButtons>
-          </IonToolbar>
-        </IonHeader>
+        <GoBackHeader title="Sign Up" />
 
         <IonContent>
           <div className="center-content">
@@ -82,27 +90,12 @@ const SignUp = () => {
 
               <div style={{ height: "5%" }} />
 
-              <IonButton className="login-button" onClick={() => { clickOnSignUp() }} fill="clear" expand="block" id="signInButton" >Sign Up</IonButton>
+              <IonButton className="login-button" onClick={async () => { await clickOnSignUp() }} fill="clear" expand="block" id="signUpButton" >Sign Up</IonButton>
               <p style={{ fontSize: "0.9rem" }}><IonText color='primary'><span onClick={() => { router.push("/sign-in") }}>Sign In to an Existing Account</span></IonText></p>
 
               <p>OR</p>
 
-              <button className="gsi-material-button" style={{ width: "250px" }} onClick={async () => { handleGoogleLoginAndVerifyAWSUser() }}>
-                <div className="gsi-material-button-state"></div>
-                <div className="gsi-material-button-content-wrapper">
-                  <div className="gsi-material-button-icon">
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" xmlnsXlink="http://www.w3.org/1999/xlink" style={{ display: "block" }}>
-                      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-                      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-                      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-                      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-                      <path fill="none" d="M0 0h48v48H0z"></path>
-                    </svg>
-                  </div>
-                  <span className="gsi-material-button-contents">Continue with Google</span>
-                  <span style={{ display: "none" }}>Continue with Google</span>
-                </div>
-              </button>
+              <GoogleLoginButton />
 
             </section>
           </div>

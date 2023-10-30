@@ -10,7 +10,7 @@ import './Profile.css';
 import { formatDate } from "../../utils/formatDate";
 
 
-const ProfileSegments = memo(() => {
+const ProfileSegments: React.FC = memo(() => {
 
   const context = useContext();
   const Toast = useToast();
