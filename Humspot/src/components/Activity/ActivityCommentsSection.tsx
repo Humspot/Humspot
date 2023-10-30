@@ -10,7 +10,7 @@ import {
   IonText,
 } from "@ionic/react";
 import { formatDate } from "../../utils/formatDate";
-import avatar from "../../elements/avatar.svg";
+import avatar from "../../assets/images/avatar.svg";
 
 const ActivityCommentsSection = (props: { activity: any }) => {
   const { activity } = props;

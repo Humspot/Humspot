@@ -40,11 +40,8 @@ import CalendarPage from "./pages/calendar";
 import MapPage from "./pages/map";
 import ProfilePage from "./pages/Profile";
 import TestGoogleAuth from "./pages/TestGoogleAuth";
-import { handleUserLogin } from "./utils/server";
-import { AWSLoginResponse } from "./utils/types";
 
 import ActivityPage from "./pages/ActivityPage";
-import { ToastProvider } from "@agney/ir-toast";
 import SubmitEventPage from "./pages/SubmitEvent";
 import SignUp from "./pages/SignUp";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -113,6 +110,7 @@ const App: React.FC = () => {
   };
 
   const [currentTab, setCurrentTab] = useState("tab1");
+
   function handleTabChange(event: CustomEvent<{ tab: string }>): void {
     setCurrentTab(event.detail.tab);
   }
