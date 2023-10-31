@@ -11,15 +11,15 @@ import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
 import { nanoid } from "nanoid";
 
 import {
-  AWSAddAttractionResponse,
-  AWSAddEventResponse,
-  AWSAddImageResponse,
-  AWSAddToFavoritesResponse,
-  AWSAddToVisitedResponse,
-  AWSGetCommentsResponse,
-  AWSGetEventsGivenTagResponse,
-  AWSGetFavoritesResponse,
-  AWSLoginResponse,
+  AddAttractionResponse,
+  AddEventResponse,
+  AddImageResponse,
+  AddToFavoritesResponse,
+  AddToVisitedResponse,
+  GetCommentsResponse,
+  GetEventsGivenTagResponse,
+  GetFavoritesResponse,
+  LoginResponse,
   HumspotAttraction,
   HumspotCommentSubmit,
   HumspotEvent,
@@ -183,10 +183,10 @@ export const handleResetPassword = async (email: string, code: string, newPasswo
  * @param {string | null} email
  * @param {string | null} username
  *
- * @returns {Promise<AWSLoginResponse>} response containing a message of success or error.
+ * @returns {Promise<LoginResponse>} response containing a message of success or error.
  * If success, the user object is returned of type HumspotUser.
  */
-export const handleUserLogin = async (email: string | null, username: string | null, isGoogleAccount: boolean): Promise<AWSLoginResponse> => {
+export const handleUserLogin = async (email: string | null, username: string | null, isGoogleAccount: boolean): Promise<LoginResponse> => {
   try {
     if (!email || !username) throw new Error("Invalid email or username");
     const currentUserSession = await Auth.currentSession();
@@ -216,7 +216,7 @@ export const handleUserLogin = async (email: string | null, username: string | n
       }
     );
 
-    const responseData: AWSLoginResponse = await response.json();
+    const responseData: LoginResponse = await response.json();
     return responseData;
   } catch (error) {
     console.error("Error calling API Gateway", error);
@@ -231,10 +231,10 @@ export const handleUserLogin = async (email: string | null, username: string | n
  *
  * @param {HumspotEvent} newEvent the event to be added.
  *
- * @returns {Promise<AWSAddEventResponse>} response containing a message of success or error.
+ * @returns {Promise<AddEventResponse>} response containing a message of success or error.
  * If success, the newly added eventID is returned.
  */
-export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AWSAddEventResponse> => {
+export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AddEventResponse> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -255,7 +255,7 @@ export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AWSAddEven
       }
     );
 
-    const responseData: AWSAddEventResponse = await response.json();
+    const responseData: AddEventResponse = await response.json();
 
     console.log(responseData);
     return responseData;
@@ -272,10 +272,10 @@ export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AWSAddEven
  *
  * @param {HumspotAttraction} newAttraction the attraction to be added.
  *
- * @returns {Promise<AWSAddAttractionResponse>} response containing a message of success or error.
+ * @returns {Promise<AddAttractionResponse>} response containing a message of success or error.
  * If success, the newly added attractionID is returned.
  */
-export const handleAddAttraction = async (newAttraction: HumspotAttraction): Promise<AWSAddAttractionResponse> => {
+export const handleAddAttraction = async (newAttraction: HumspotAttraction): Promise<AddAttractionResponse> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -296,7 +296,7 @@ export const handleAddAttraction = async (newAttraction: HumspotAttraction): Pro
       }
     );
 
-    const responseData: AWSAddAttractionResponse = await response.json();
+    const responseData: AddAttractionResponse = await response.json();
 
     console.log(responseData);
     return responseData;
@@ -315,9 +315,9 @@ export const handleAddAttraction = async (newAttraction: HumspotAttraction): Pro
  * @param {number} pageNum the page number which corresponds to the offset when selecting rows in the table
  * @param {string} tag the event tag
  *
- * @returns {Promise<AWSGetEventsGivenTagResponse>} a status message along with an array of events that have a certain tag associated with it.
+ * @returns {Promise<GetEventsGivenTagResponse>} a status message along with an array of events that have a certain tag associated with it.
  */
-export const handleGetEventGivenTag = async (pageNum: number, tag: string): Promise<AWSGetEventsGivenTagResponse> => {
+export const handleGetEventGivenTag = async (pageNum: number, tag: string): Promise<GetEventsGivenTagResponse> => {
   try {
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENT_GIVEN_TAG_URL +
@@ -333,7 +333,7 @@ export const handleGetEventGivenTag = async (pageNum: number, tag: string): Prom
       }
     );
 
-    const responseData: AWSGetEventsGivenTagResponse = await response.json();
+    const responseData: GetEventsGivenTagResponse = await response.json();
 
     console.log(responseData);
     return responseData;
@@ -358,9 +358,9 @@ export const handleGetEventGivenTag = async (pageNum: number, tag: string): Prom
  * @param {number} limit the maximum number of images to be uploaded. Defaults to 1.
  * @param {any} present A function that displays a toast message indicating upload status to the user.
  *
- * @returns {Promise<AWSAddImageResponse>} the success status as well as an array of photoUrls returned from S3
+ * @returns {Promise<AddImageResponse>} the success status as well as an array of photoUrls returned from S3
  */
-export const handleAddImages = async (bucketName: string, fileName: string, isUnique: boolean = true, limit: number = 1, present: any): Promise<AWSAddImageResponse> => {
+export const handleAddImages = async (bucketName: string, fileName: string, isUnique: boolean = true, limit: number = 1, present: any): Promise<AddImageResponse> => {
 
   AWS.config.update({
     accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
@@ -450,9 +450,9 @@ export const handleAddImages = async (bucketName: string, fileName: string, isUn
  * @param {string} userID the ID of the currently logged in user
  * @param {string} activityID the ID of the activity (primary key of Activities table)
  *
- * @returns {Promise<AWSAddToFavoritesResponse>} a status message along with the newly created favoriteID.
+ * @returns {Promise<AddToFavoritesResponse>} a status message along with the newly created favoriteID.
  */
-export const handleAddToFavorites = async (userID: string, activityID: string): Promise<AWSAddToFavoritesResponse> => {
+export const handleAddToFavorites = async (userID: string, activityID: string): Promise<AddToFavoritesResponse> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -484,7 +484,7 @@ export const handleAddToFavorites = async (userID: string, activityID: string): 
     return responseData;
   } catch (error) {
     console.error("Error calling API Gateway", error);
-    return { message: "Error calling API Gateway" + error };
+    return { message: "Error calling API Gateway" + error, success: false };
   }
 };
 
@@ -499,7 +499,7 @@ export const handleAddToFavorites = async (userID: string, activityID: string): 
  * @param {string} activityID the If of the actvity (primary key of the Activities table).
  * @param {string} visitedDate the date the user visited the Activity (Event / Attraction)
  */
-export const handleAddToVisited = async (userID: string, activityID: string, visitDate: string): Promise<AWSAddToVisitedResponse> => {
+export const handleAddToVisited = async (userID: string, activityID: string, visitDate: string): Promise<AddToVisitedResponse> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -526,7 +526,7 @@ export const handleAddToVisited = async (userID: string, activityID: string, vis
       }
     );
 
-    const responseData: AWSAddToVisitedResponse = await response.json();
+    const responseData: AddToVisitedResponse = await response.json();
 
     console.log(responseData);
     return responseData;
@@ -585,9 +585,9 @@ export const handleAddComment = async (comment: HumspotCommentSubmit) => {
  * @param {number} pageNum
  * @param {string} userID
  *
- * @returns {Promise<AWSGetCommentsResponse>} a status message, and, if successful, an array of 10 comments of type GetCommentsResponse
+ * @returns {Promise<GetCommentsResponse>} a status message, and, if successful, an array of 10 comments of type GetCommentsResponse
  */
-export const handleGetCommentsGivenUserID = async (pageNum: number, userID: string): Promise<AWSGetCommentsResponse> => {
+export const handleGetCommentsGivenUserID = async (pageNum: number, userID: string): Promise<GetCommentsResponse> => {
   try {
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_COMMENTS_GIVEN_USERID_URL +
@@ -603,7 +603,7 @@ export const handleGetCommentsGivenUserID = async (pageNum: number, userID: stri
       }
     );
 
-    const responseData: AWSGetCommentsResponse = await response.json();
+    const responseData: GetCommentsResponse = await response.json();
 
     console.log(responseData);
     return responseData;
@@ -622,9 +622,9 @@ export const handleGetCommentsGivenUserID = async (pageNum: number, userID: stri
  * @param {number} pageNum
  * @param {string} userID
  *
- * @returns {Promise<AWSGetFavoritesResponse>} a status message, and if successful, an array of 10 favorites
+ * @returns {Promise<GetFavoritesResponse>} a status message, and if successful, an array of 10 favorites
  */
-export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: string): Promise<AWSGetFavoritesResponse> => {
+export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: string): Promise<GetFavoritesResponse> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -648,7 +648,7 @@ export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: str
       }
     );
 
-    const responseData: AWSGetFavoritesResponse = await response.json();
+    const responseData: GetFavoritesResponse = await response.json();
 
     console.log(responseData);
     return responseData;

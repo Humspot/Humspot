@@ -44,27 +44,11 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
 
     const query: string = `
-      SELECT 
-        a.*,
-        e.*,
-        attr.*,
-        ap.photoUrl
-      FROM 
-        Visited v
-      JOIN 
-        Activities a ON v.activityID = a.activityID
-      LEFT JOIN 
-        Events e ON a.activityID = e.activityID
-      LEFT JOIN 
-        Attractions attr ON a.activityID = attr.activityID
-      LEFT JOIN 
-        (SELECT activityID, MIN(photoUrl) as photoUrl 
-         FROM ActivityPhotos 
-         GROUP BY activityID) ap ON a.activityID = ap.activityID
-      WHERE 
-        v.userID = ?
-      ORDER BY 
-        v.visitDate DESC
+      SELECT a.activityID, a.name, a.description, a.location,
+        (SELECT p.photoUrl FROM ActivityPhotos p WHERE p.activityID = a.activityID LIMIT 1) as photoUrl
+      FROM Visited v
+      JOIN Activities a ON v.activityID = a.activityID
+      WHERE v.userID = ?
       LIMIT 10 OFFSET ?;
     `;
 

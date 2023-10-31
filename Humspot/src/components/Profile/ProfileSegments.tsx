@@ -26,13 +26,6 @@ const ProfileSegments: React.FC = memo(() => {
   const [visitedLoading, setVisitedLoading] = useState<boolean>(true);
   const [commentsLoading, setCommentsLoading] = useState<boolean>(true);
 
-  const handleRoute = (item: HumspotFavoriteResponse) => {
-    if (item.activityType === "event")
-      router.push("/attraction/" + item.eventID);
-    else if (item.activityType === "attraction")
-      router.push("/attraction/" + item.attractionID);
-  };
-
   const fetchFavorites = useCallback(async () => {
     if (!context.humspotUser) return;
     const response = await handleGetFavoritesGivenUserID(1, context.humspotUser.userID);
@@ -126,12 +119,12 @@ const ProfileSegments: React.FC = memo(() => {
                 {!favoritesLoading ?
                   favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
                     return (
-                      <IonItem className='ion-no-padding' key={favorite.name + index} role='button' onClick={() => { handleRoute(favorite) }}>
+                      <IonItem className='ion-no-padding' key={favorite.name + index} role='button' onClick={() => {  }}>
                         <IonThumbnail><img src={favorite.photoUrl || ''} /></IonThumbnail>
                         <IonLabel style={{ paddingLeft: "10px" }}>
                           <h2>{favorite.name}</h2>
                           <p style={{ fontSize: "0.9rem" }}>{favorite.description}</p>
-                          <p style={{ fontSize: "0.8rem" }}>{formatDate(favorite.date as string)}</p>
+                          <p style={{ fontSize: "0.8rem" }}>{favorite.location}</p>
                         </IonLabel>
                       </IonItem>
                     )
@@ -154,12 +147,12 @@ const ProfileSegments: React.FC = memo(() => {
                 {!visitedLoading ?
                   visited.map((visitedPlace: HumspotVisitedResponse, index: number) => {
                     return (
-                      <IonItem className='ion-no-padding' key={visitedPlace.name + index} role='button' onClick={() => { handleRoute(visitedPlace) }}>
+                      <IonItem className='ion-no-padding' key={visitedPlace.name + index} role='button' onClick={() => {  }}>
                         <IonThumbnail><img src={visitedPlace.photoUrl || ''} /></IonThumbnail>
                         <IonLabel style={{ paddingLeft: "10px" }}>
                           <h2>{visitedPlace.name}</h2>
                           <p style={{ fontSize: "0.9rem" }}>{visitedPlace.description}</p>
-                          <p style={{ fontSize: "0.8rem" }}>{formatDate(visitedPlace.date as string)}</p>
+                          <p style={{ fontSize: "0.8rem" }}>{visitedPlace.location}</p>
                         </IonLabel>
                       </IonItem>
                     )

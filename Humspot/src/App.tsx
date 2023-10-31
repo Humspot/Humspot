@@ -53,7 +53,7 @@ import { ToastProvider } from "@agney/ir-toast";
 
 import { useContext } from "./utils/my-context";
 import { handleUserLogin } from "./utils/server";
-import { AWSLoginResponse } from "./utils/types";
+import { LoginResponse } from "./utils/types";
 
 
 setupIonicReact({ mode: "md" });
@@ -95,7 +95,7 @@ const App: React.FC = () => {
       const awsUsername: string | null = currentUser?.username ?? null;
       console.log(currentUser);
       handleUserLogin(email, awsUsername, "identities" in currentUser?.attributes)
-        .then((res: AWSLoginResponse) => {
+        .then((res: LoginResponse) => {
           console.log(res.message);
           if (!res.user) throw new Error(res.message);
           context.setHumspotUser(res.user);
