@@ -1,5 +1,5 @@
 /**
- * AWS lambda function to retrieve the event from the database given the eventID
+ * AWS Lambda function which returns the information about an Activity (Event or Attraction)
  */
 
 import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";
@@ -21,8 +21,8 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
   context.callbackWaitsForEmptyEventLoop = false;
   const conn = await pool.getConnection();
   try {
-    const eventId: string | null = gatewayEvent.pathParameters?.eventId ?? null;
-    if (!eventId) {
+    const activityId: string | null = gatewayEvent.pathParameters?.activityId ?? null;
+    if (!activityId) {
       return {
         statusCode: 400,
         headers: {
@@ -31,45 +31,52 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: 'Missing eventID!',
+          message: 'Missing activityID!',
+          success: false
         }),
       };
     }
 
-    // Main event details query
-    const queryEventDetails: string = `
+    // Main activity details query (conditional CASE WHEN handles both Events and Attractions)
+    const query: string = `
       SELECT 
-      Events.*, 
-      Activities.*, 
-      GROUP_CONCAT(DISTINCT Tags.tagName) as tags,
-      GROUP_CONCAT(DISTINCT ActivityPhotos.photoURL) as photos
-      FROM 
-        Events
-      INNER JOIN 
-        Activities ON Events.activityID = Activities.activityID
-      LEFT JOIN 
-        ActivityTags ON Activities.activityID = ActivityTags.activityID
-      LEFT JOIN 
-        Tags ON ActivityTags.tagID = Tags.tagID
-      LEFT JOIN 
-        ActivityPhotos ON Activities.activityID = ActivityPhotos.activityID
-      WHERE 
-        Events.eventID = ?
-      GROUP BY 
-        Events.eventID;  
+      a.name, 
+      a.description, 
+      a.location, 
+      a.activityType, 
+      a.websiteURL,
+      
+      CASE WHEN a.activityType = 'Event' THEN e.date ELSE NULL END as date,
+      CASE WHEN a.activityType = 'Event' THEN e.time ELSE NULL END as time,
+      CASE WHEN a.activityType = 'Event' THEN e.latitude ELSE at.latitude END as latitude,
+      CASE WHEN a.activityType = 'Event' THEN e.longitude ELSE at.longitude END as longitude,
+      CASE WHEN a.activityType = 'Event' THEN e.organizer ELSE NULL END as organizer,
+      CASE WHEN a.activityType = 'Attraction' THEN at.openTimes ELSE NULL END as openTimes,
+      GROUP_CONCAT(t.tagName) as tags,
+      GROUP_CONCAT(ap.photoUrl) as photoUrls
+
+      FROM Activities a
+
+      LEFT JOIN Events e ON a.activityId = e.activityID AND a.activityType = 'Event'
+      LEFT JOIN Attractions at ON a.activityId = at.activityID AND a.activityType = 'Attraction'
+      LEFT JOIN ActivityTags atg ON a.activityId = atg.activityID
+      LEFT JOIN Tags t ON atg.tagID = t.tagID
+      LEFT JOIN ActivityPhotos ap ON a.activityId = ap.activityID
+
+      WHERE a.activityId = ?
+      GROUP BY a.activityId;
     `;
 
-    const [eventRows]: any = await conn.execute(queryEventDetails, [eventId]);
+    const [activityRows]: any = await conn.execute(query, [activityId]);
 
-    if (!eventRows || eventRows.length === 0) {
+    if (!activityRows || activityRows.length === 0) {
       return {
         statusCode: 404,
-        body: JSON.stringify({ message: `Event with ID: ${eventId} not found` }),
+        body: JSON.stringify({ message: `Activity with ID: ${activityId} not found`, success: false }),
       };
     }
 
-    const event = eventRows[0];
-    const activityId = event.activityID;
+    const activity = activityRows[0];
 
     // Comments query with User data for each comment
     const queryComments: string = `
@@ -86,11 +93,12 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: 'Event retrieved successfully',
-        event: {
-          ...event,
+        message: 'Activity retrieved successfully',
+        activity: {
+          ...activity,
           comments: commentRows
-        }
+        },
+        success: true
       }),
     };
 
@@ -105,6 +113,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
       },
       body: JSON.stringify({
         message: 'Internal Server/mySQL Error',
+        success: false
       }),
     };
   } finally {
@@ -113,3 +122,5 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     }
   }
 };
+
+

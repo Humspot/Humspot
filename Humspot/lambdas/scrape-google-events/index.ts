@@ -95,12 +95,10 @@ function formatDateForMySQL(dateString: string): string {
   // we assume the event is happening next year.
   const eventYear = (eventMonth < currentMonth) ? currentYear + 1 : currentYear;
 
-  // Create Date object
   const date = new Date(eventYear, eventMonth, parseInt(day));
 
-  // Formatting the date as "YYYY-MM-DD"
   const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed in JavaScript
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const dateOfMonth = date.getDate().toString().padStart(2, '0');
 
   return `${year}-${month}-${dateOfMonth}`;

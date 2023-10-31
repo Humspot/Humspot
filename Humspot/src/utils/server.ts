@@ -23,6 +23,7 @@ import {
   HumspotAttraction,
   HumspotCommentSubmit,
   HumspotEvent,
+  GetActivityResponse,
 } from "./types";
 
 import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
@@ -86,7 +87,7 @@ export const handleSignUp = async (email: string, password: string): Promise<boo
  * confirms the user in the User Pool.
  * 
  * @param {string} email the provided user email address
- * @param {stirng} code the verification code sent to the email
+ * @param {string} code the verification code sent to the email
  * @returns {Promise<boolean>} true if verification was successful, false otherwise.
  */
 export const confirmSignUp = async (email: string, code: string): Promise<boolean> => {
@@ -496,7 +497,7 @@ export const handleAddToFavorites = async (userID: string, activityID: string): 
  * NOTE: List in this context refers to a row entry in the Visited table.
  *
  * @param {string} userID the ID of the logged in user.
- * @param {string} activityID the If of the actvity (primary key of the Activities table).
+ * @param {string} activityID the If of the activity (primary key of the Activities table).
  * @param {string} visitedDate the date the user visited the Activity (Event / Attraction)
  */
 export const handleAddToVisited = async (userID: string, activityID: string, visitDate: string): Promise<AddToVisitedResponse> => {
@@ -532,7 +533,7 @@ export const handleAddToVisited = async (userID: string, activityID: string, vis
     return responseData;
   } catch (error) {
     console.error("Error calling API Gateway", error);
-    return { message: "Error calling API Gateway" + error };
+    return { message: "Error calling API Gateway" + error, success: false };
   }
 };
 
@@ -822,4 +823,48 @@ export const handleUpdateProfilePhoto = async (userID: string, profilePicURL: st
     console.error("Error calling API Gateway", error);
     return { message: "Error calling API Gateway" + error, success: false };
   }
+};
+
+
+/**
+ * @function handleGetActivity
+ * @description Retrieves the activity (event / attraction) information from the backend.
+ * 
+ * @param {string} activityID the ID of the activity
+ * @returns {Promise<GetActivityResponse>} the activity information
+ */
+export const handleGetActivity = async (activityID: string): Promise<GetActivityResponse> => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_ACTIVITY_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify({ activityID: activityID }),
+      }
+    );
+
+    const responseData: GetActivityResponse = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (err) {
+    console.error(err);
+    return {
+      message: "Error fetching activity",
+      success: false
+    }
+  }
+
 };
