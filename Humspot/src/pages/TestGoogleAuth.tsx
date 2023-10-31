@@ -82,14 +82,14 @@ const TestGoogleAuth: React.FC = () => {
 
   const handleTestImages = async () => {
     if (!context.humspotUser) return;
-    const addImageRes = await handleAddImages("activityphotos", `event-photos/${context.humspotUser.userID}`);
-    if (addImageRes.photoUrls?.length < 0) {
-      console.log("Something went wrong when uploading photos!");
-    }
+    // const addImageRes = await handleAddImages("activityphotos", `event-photos/${context.humspotUser.userID}`);
+    // if (addImageRes.photoUrls?.length < 0) {
+    //   console.log("Something went wrong when uploading photos!");
+    // }
 
-    event10.photoUrls = addImageRes.photoUrls ?? [];
-    const res = await handleAddEvent(event10);
-    console.log(res);
+    // event10.photoUrls = addImageRes.photoUrls ?? [];
+    // const res = await handleAddEvent(event10);
+    // console.log(res);
   };
 
   const handleTestFavorite = async (activityID: string) => {
@@ -191,13 +191,13 @@ const TestGoogleAuth: React.FC = () => {
                     await handleTestFavorite("08d4f2112bb9d001127b76614")
                   }
                 >
-                  Test Favorite ActivityID
+                  Test Favorite ActivityID 08d4f2112bb9d001127b76614
                 </IonButton>
 
                 <IonButton
                   color="dark"
                   onClick={async () =>
-                    await handleTestVisited("9c56626256bc5904ced67fa1e")
+                    await handleTestVisited("08d4f2112bb9d001127b76614")
                   }
                 >
                   Test Visited
