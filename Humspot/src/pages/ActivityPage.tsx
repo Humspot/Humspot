@@ -19,7 +19,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { handleGetEvent } from "../utils/server";
 import { useContext } from "../utils/my-context";
 
-import placeholder from "../assets/images/placeholder.png";
+import placeholder from "../elements/placeholder.png";
 import { useToast } from "@agney/ir-toast";
 import ActivityFavoriteButton from "../components/Activity/ActivityFavoriteButton";
 import ActivityVisitedButton from "../components/Activity/ActivityVisitedButton";
