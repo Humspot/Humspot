@@ -1,6 +1,6 @@
 /**
  * @file types.ts
- * @filedescription contains the types used throughout the application
+ * @fileoverview contains the types used throughout the application
  */
 
 export type HumspotUser = {
@@ -14,16 +14,6 @@ export type HumspotUser = {
   dateCreated: string;
   username?: string;
   bio: string;
-};
-
-export type AWSLoginResponse = {
-  message: string;
-  user?: HumspotUser;
-};
-
-export type AWSAddEventResponse = {
-  message: string;
-  eventID?: string;
 };
 
 export type HumspotEvent = {
@@ -40,11 +30,6 @@ export type HumspotEvent = {
   photoUrls: string[];
 };
 
-export type AWSAddAttractionResponse = {
-  message: string;
-  attractionID?: string;
-};
-
 export type HumspotAttraction = {
   name: string;
   description: string;
@@ -56,6 +41,21 @@ export type HumspotAttraction = {
   openTimes: string;
   tags: string[];
   photoUrls: string[];
+};
+
+export type LoginResponse = {
+  message: string;
+  user?: HumspotUser;
+};
+
+export type AddEventResponse = {
+  message: string;
+  eventID?: string;
+};
+
+export type AddAttractionResponse = {
+  message: string;
+  attractionID?: string;
 };
 
 type ExtendedHumspotEvent = HumspotEvent & {
@@ -74,25 +74,29 @@ type ExtendedHumspotAttraction = HumspotAttraction & {
   tagName: string;
 };
 
-export type AWSGetEventsGivenTagResponse = {
+export type GetEventsGivenTagResponse = {
   message: string;
   events: ExtendedHumspotEvent[];
 };
 
-export type AWSAddImageResponse = {
+export type AddImageResponse = {
   success: boolean;
   message?: string;
   photoUrls: string[];
 };
 
-export type AWSAddToFavoritesResponse = {
+export type AddToFavoritesResponse = {
   message: string;
+  success: boolean;
   favoriteID?: string;
+  removed?: boolean;
 };
 
-export type AWSAddToVisitedResponse = {
+export type AddToVisitedResponse = {
   message: string;
+  success: boolean;
   visitedID?: string;
+  removed?: boolean;
 };
 
 export type HumspotCommentSubmit = {
@@ -110,7 +114,7 @@ export type HumspotCommentResponse = {
   photoUrl: string | null;
 };
 
-export type AWSGetCommentsResponse = {
+export type GetCommentsResponse = {
   message: string;
   success: boolean;
   comments: HumspotCommentResponse[];
@@ -118,44 +122,49 @@ export type AWSGetCommentsResponse = {
 
 export type HumspotFavoriteResponse = {
   activityID: string | null;
-  activityType: string;
-  addedByUserID: string;
-  attractionID: string | null;
-  date: string | Date;
-  description: string;
-  eventID: string | null;
-  latitude: string | number | null;
-  location: string;
-  longitude: string | number | null;
+  activityType: 'event' | 'attraction' | 'custom';
   name: string;
-  openTimes: string | null;
-  organizer: string;
-  time: string;
-  websiteUrl: string | null;
+  description: string;
+  location: string;
   photoUrl: string | null;
 };
 
 export type HumspotVisitedResponse = {
   activityID: string | null;
   activityType: 'event' | 'attraction' | 'custom';
-  addedByUserID: string;
-  attractionID: string | null;
-  date: string;
-  description: string;
-  eventID: string;
-  latitude: string | number | null;
-  location: string;
-  longitude: string | number | null;
   name: string;
-  openTimes: string | null;
-  organizer: string;
+  description: string;
+  location: string;
   photoUrl: string | null;
-  time: string;
-  websiteUrl: string | null;
-}
+};
 
-export type AWSGetFavoritesResponse = {
+export type GetFavoritesResponse = {
   message: string;
   success: boolean;
   favorites: HumspotFavoriteResponse[];
 }
+
+export type AddCommentResponse = {
+  
+};
+
+export type GetActivityResponse = {
+  message: string;
+  success: boolean;
+  activity?: {
+    name: string;
+    description: string;
+    location: string;
+    activityType: string;
+    websiteUrl: string;
+    date: string;
+    time: string;
+    latitude: string;
+    longitude: string;
+    tags: string; // comma delimited list
+    photoUrls: string; // comma delimited list
+    organizer: string;
+    openTimes: string | null;
+    comments: any[];
+  }
+};

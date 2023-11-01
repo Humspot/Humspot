@@ -48,6 +48,26 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     await conn.beginTransaction();
 
+    // Check if the user has already visited this activity
+    let checkQuery = 'SELECT visitedID FROM Visited WHERE userID = ? AND activityID = ?';
+    const [rows]: any = await conn.query(checkQuery, [event.userID, event.activityID]);
+
+    if (rows.length > 0) {
+      // Remove from Visited table
+      let deleteQuery = 'DELETE FROM Visited WHERE userID = ? AND activityID = ?';
+      await conn.query(deleteQuery, [event.userID, event.activityID]);
+      await conn.commit();
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'Removed from Visited list',
+          success: true,
+          removed: true
+        }),
+      };
+    }
+
     // Add activity to Visited table
     const visitedID: string = crypto.randomBytes(16).toString('hex');
     let query: string = 'INSERT INTO Visited (visitedID, userID, activityID, visitDate) VALUES (?, ?, ?, ?)';

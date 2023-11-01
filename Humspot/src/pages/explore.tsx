@@ -7,6 +7,7 @@ import {
   IonItemDivider,
   IonPage,
   useIonRouter,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -18,19 +19,32 @@ import CarouselEntry from "../elements/CarouselEntry";
 import SecondaryCarouselEntry from "../elements/CarouselEntrySecondary";
 import { add, fileTrayStackedSharp, filter, filterSharp } from "ionicons/icons";
 import FilterButton from "../elements/FilterButton";
+import { useState, useCallback, useEffect } from "react";
+import { handleGetEvent } from "../utils/server";
+import { useParams } from "react-router-dom";
 
 <link
   href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
   rel="stylesheet"
 ></link>;
+
 function ExplorePage() {
   const router = useIonRouter();
-
+  const { id }: any = useParams();
+  const [activity, setActivity] = useState<any>(null);
+  const handleGetEventCallback = useCallback(async (id: string) => {
+    const res = await handleGetEvent(id);
+    if ("event" in res && res.event) setActivity(res.event);
+  }, []);
+  useEffect(() => {
+    if (id) handleGetEventCallback(id);
+  }, [id]);
   const mainCarouselData = [
     {
       title: "Redwood Fest",
       description: "This is the first slide",
-      imgsrc: "https://activityphotos.s3.us-west-1.amazonaws.com/event-photos/715d07c9d97dde03808d03bb-R7CeCVUf-1697853939858-jpeg",
+      imgsrc:
+        "https://activityphotos.s3.us-west-1.amazonaws.com/event-photos/715d07c9d97dde03808d03bb-R7CeCVUf-1697853939858-jpeg",
     },
     {
       title: "Attraction 2",
@@ -113,7 +127,7 @@ function ExplorePage() {
           title={data.title}
           description={data.description}
           imgsrc={data.imgsrc}
-          id={index}
+          id="0090d9b278350143bd66198cb"
         />
       </div>
     </SwiperSlide>

@@ -71,7 +71,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
 
     if (!userResult || userResult.length > 0) {
       return {
-        statusCode: 400,
+        statusCode: 200,
         headers: {
           "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
           "Access-Control-Allow-Methods": '*',
@@ -115,7 +115,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       },
       body: JSON.stringify({
         message: 'User created successfully',
-        user: JSON.stringify(humspotUser)
+        user: humspotUser
       }),
     };
   } catch (error) {

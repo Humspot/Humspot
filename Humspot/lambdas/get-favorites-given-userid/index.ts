@@ -18,28 +18,19 @@ const pool: mysql.Pool = mysql.createPool({
   debug: true
 });
 
-type HumspotFavoriteResponse = {
+type FavoriteResponse = {
   activityID: string | null;
-  activityType: string;
-  addedByUserID: string;
-  attractionID: string | null;
-  date: string | Date;
-  description: string;
-  eventID: string;
-  latitude: string | number;
-  location: string;
-  longitude: string | number;
+  activityType: 'event' | 'attraction' | 'custom';
   name: string;
-  openTimes: string | null;
-  organizer: string;
-  time: string;
-  websiteUrl: string | null;
+  description: string;
+  location: string;
+  photoUrl: string | null;
 }
 
 type AWSGetFavoritesResponse = {
   message: string;
   success: boolean;
-  favorites: HumspotFavoriteResponse[];
+  favorites: FavoriteResponse[];
 };
 
 
@@ -71,25 +62,11 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
 
     const query: string = `
-      SELECT 
-        a.*,
-        e.*,
-        attr.*,
-        ph.photoUrl
-      FROM 
-        Favorites f
-      JOIN 
-        Activities a ON f.activityID = a.activityID
-      LEFT JOIN 
-        Events e ON a.activityID = e.activityID
-      LEFT JOIN 
-        Attractions attr ON a.activityID = attr.activityID
-      LEFT JOIN 
-        (SELECT activityID, photoUrl FROM ActivityPhotos GROUP BY activityID) ph ON a.activityID = ph.activityID
-      WHERE 
-        f.userID = ?
-      ORDER BY 
-        f.dateAdded DESC
+      SELECT a.activityID, a.name, a.description, a.location,
+        (SELECT p.photoUrl FROM ActivityPhotos p WHERE p.activityID = a.activityID LIMIT 1) as photoUrl
+      FROM Favorites f
+      JOIN Activities a ON f.activityID = a.activityID
+      WHERE f.userID = ?
       LIMIT 10 OFFSET ?;
     `;
 

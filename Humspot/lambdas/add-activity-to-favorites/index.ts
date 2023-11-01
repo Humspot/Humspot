@@ -47,6 +47,26 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     await conn.beginTransaction();
 
+    // Check if the favorite already exists
+    let checkQuery = 'SELECT favoriteID FROM Favorites WHERE userID = ? AND activityID = ?';
+    const [rows]: any = await conn.query(checkQuery, [event.userID, event.activityID]);
+
+    if (rows.length > 0) {
+      // If the favorite exists, delete it
+      let deleteQuery = 'DELETE FROM Favorites WHERE userID = ? AND activityID = ?';
+      await conn.query(deleteQuery, [event.userID, event.activityID]);
+      await conn.commit();
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'Favorite removed',
+          success: true,
+          removed: true
+        }),
+      };
+    }
+
     // Add activity to Favorites table
     const favoriteID: string = crypto.randomBytes(16).toString('hex');
     let query: string = 'INSERT INTO Favorites (favoriteID, userID, activityID) VALUES (?, ?, ?)';
@@ -63,7 +83,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
         "Access-Control-Allow-Origin": '*'
       },
       body: JSON.stringify({
-        message: 'Favorite added successfully.',
+        message: 'Favorite added',
         favoriteID: favoriteID,
         success: true
       }),

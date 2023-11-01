@@ -30,12 +30,6 @@ export const SubmitEventPage: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!context.humspotUser || !context.humspotUser.userID) return;
-
-    timeout(1000).then(() => {
-      const t = Toast.create({ message: "Event submitted!", duration: 2000, color: "dark" });
-      t.present();
-    });
-
   };
 
   return (
@@ -75,11 +69,9 @@ export const SubmitEventPage: React.FC = () => {
             <IonLabel>Tags (comma separated):</IonLabel>
             <IonInput value={event.tags.join(',')} onIonChange={handleChange('tags')} placeholder="fun, adventure, nature" />
 
-
-
             <br />
 
-            <IonButton onClick={handleSubmit}>Submit</IonButton>
+            <IonButton onClick={async () => await handleSubmit()}>Submit</IonButton>
           </form>
 
           :

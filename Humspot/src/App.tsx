@@ -1,3 +1,9 @@
+/**
+ * @file App.tsx
+ * @fileoverview Define routes and main application components here.
+ */
+
+import { useState, useEffect } from "react";
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
@@ -16,9 +22,6 @@ import {
   person,
 } from "ionicons/icons";
 
-import { useEffect } from "react";
-import { useContext } from "./utils/my-context";
-import { Auth, Hub } from "aws-amplify";
 
 import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
@@ -30,41 +33,49 @@ import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
-
 import "./theme/variables.css";
-import "./theme/custom.css";
 
 import ExplorePage from "./pages/explore";
 import CalendarPage from "./pages/calendar";
 import MapPage from "./pages/map";
-import ProfilePage from "./pages/ProfilePage";
-import { useState } from "react";
-
+import ProfilePage from "./pages/Profile";
 import TestGoogleAuth from "./pages/TestGoogleAuth";
-import { handleUserLogin } from "./utils/server";
-import { AWSLoginResponse } from "./utils/types";
 
-import AttractionPage from "./pages/attraction";
-import { ToastProvider } from "@agney/ir-toast";
+import ActivityPage from "./pages/ActivityPage";
 import SubmitEventPage from "./pages/SubmitEvent";
+import SignUp from "./pages/SignUp";
+import VerifyEmail from "./pages/VerifyEmail";
+import SignIn from "./pages/SignIn";
+import ForgotPassword from "./pages/ForgotPassword";
+
+import { Auth, Hub } from "aws-amplify";
+import { ToastProvider } from "@agney/ir-toast";
+
+import { useContext } from "./utils/my-context";
+import { handleUserLogin } from "./utils/server";
+import { LoginResponse } from "./utils/types";
+
 
 setupIonicReact({ mode: "md" });
 
+
+
 const App: React.FC = () => {
+
   const context = useContext();
+  const tabBarStyle = context.showTabs;
 
   useEffect(() => {
     const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
       switch (event) {
         case "signIn":
-          const email: string | null =
-            data?.signInUserSession?.idToken?.payload?.email ?? null;
-          const awsUsername: string | null = data?.username ?? null;
           getUser();
           break;
         case "signOut":
           console.log("signed out!");
           context.setHumspotUser(null);
+          window.location.href = "/";
+          window.location.reload();
           break;
         case "customOAuthState":
           console.log("customOAuthState");
@@ -82,11 +93,11 @@ const App: React.FC = () => {
       const email: string | null =
         currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
       const awsUsername: string | null = currentUser?.username ?? null;
-      handleUserLogin(email, awsUsername)
-        .then((res: AWSLoginResponse) => {
+      console.log(currentUser);
+      handleUserLogin(email, awsUsername, "identities" in currentUser?.attributes)
+        .then((res: LoginResponse) => {
           console.log(res.message);
           if (!res.user) throw new Error(res.message);
-          console.log(res.user);
           context.setHumspotUser(res.user);
         })
         .catch((err) => {
@@ -99,6 +110,7 @@ const App: React.FC = () => {
   };
 
   const [currentTab, setCurrentTab] = useState("tab1");
+
   function handleTabChange(event: CustomEvent<{ tab: string }>): void {
     setCurrentTab(event.detail.tab);
   }
@@ -117,15 +129,20 @@ const App: React.FC = () => {
               <Route exact path="/calendar" component={CalendarPage} />
               <Route exact path="/map" component={MapPage} />
               <Route exact path="/profile" component={ProfilePage} />
+              <Route exact path="/sign-up" component={SignUp} />
+              <Route exact path="/sign-in" component={SignIn} />
+              <Route exact path="/forgot-password" component={ForgotPassword} />
+              <Route exact path="/verify-email/:email/:toVerify" component={VerifyEmail} />
               <Route exact path="/google-auth" component={TestGoogleAuth} />
               <Route exact path="/submit-event" component={SubmitEventPage} />
-              <Route exact path="/attraction/:id" component={AttractionPage} />
+              <Route exact path="/activity/:id" component={ActivityPage} />
             </IonRouterOutlet>
 
             <IonTabBar
               slot="bottom"
               color="primary"
               onIonTabsWillChange={handleTabChange}
+              style={tabBarStyle ? {} : { display: "none" }}
             >
               <IonTabButton tab="tab1" href="/explore">
                 <IonIcon
@@ -160,6 +177,7 @@ const App: React.FC = () => {
                 />
               </IonTabButton>
             </IonTabBar>
+            
           </IonTabs>
         </IonReactRouter>
 
