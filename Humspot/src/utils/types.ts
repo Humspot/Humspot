@@ -136,7 +136,7 @@ export type HumspotVisitedResponse = {
   description: string;
   location: string;
   photoUrl: string | null;
-}
+};
 
 export type GetFavoritesResponse = {
   message: string;
@@ -146,4 +146,25 @@ export type GetFavoritesResponse = {
 
 export type AddCommentResponse = {
   
-}
+};
+
+export type GetActivityResponse = {
+  message: string;
+  success: boolean;
+  activity?: {
+    name: string;
+    description: string;
+    location: string;
+    activityType: string;
+    websiteUrl: string;
+    date: string;
+    time: string;
+    latitude: string;
+    longitude: string;
+    tags: string; // comma delimited list
+    photoUrls: string; // comma delimited list
+    organizer: string;
+    openTimes: string | null;
+    comments: any[];
+  }
+};
