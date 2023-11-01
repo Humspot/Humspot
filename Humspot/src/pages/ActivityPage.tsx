@@ -16,10 +16,10 @@ import {
 import { useParams } from "react-router-dom";
 import "./ActivityPage.css";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { handleGetEvent } from "../utils/server";
+import { handleGetActivity } from "../utils/server";
 import { useContext } from "../utils/my-context";
 
-import placeholder from "../elements/placeholder.png";
+import placeholder from "../assets/images/placeholder.png";
 import { useToast } from "@agney/ir-toast";
 import ActivityFavoriteButton from "../components/Activity/ActivityFavoriteButton";
 import ActivityVisitedButton from "../components/Activity/ActivityVisitedButton";
@@ -29,6 +29,7 @@ import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox"
 
 function ActivityPage() {
   const { id }: any = useParams();
+  console.log("DEBUG: Activity Page ID: " + id);
   const [activity, setActivity] = useState<any>(null);
   const context = useContext();
   const Toast = useToast();
@@ -42,12 +43,12 @@ function ActivityPage() {
     opacity: "0.85",
   };
 
-  const handleGetEventCallback = useCallback(async (id: string) => {
-    const res = await handleGetEvent(id);
-    if ("event" in res && res.event) setActivity(res.event);
+  const handleGetActivityCallback = useCallback(async (id: string) => {
+    const res = await handleGetActivity(id);
+    if ("activity" in res && res.activity) setActivity(res.activity);
   }, []);
   useEffect(() => {
-    if (id) handleGetEventCallback(id);
+    if (id) handleGetActivityCallback(id);
   }, [id]);
 
   function clickOnVisited(): void {
@@ -59,7 +60,10 @@ function ActivityPage() {
       <IonPage>
         <IonContent>
           {/* Favorites Button */}
-          <ActivityFavoriteButton activity={activity}></ActivityFavoriteButton>
+          <ActivityFavoriteButton
+            activity={activity}
+            id={id}
+          ></ActivityFavoriteButton>
           {/* Visited Button, does not display for Events */}
           {activity?.eventID ? null : <ActivityVisitedButton />}
           {/* Header Image */}

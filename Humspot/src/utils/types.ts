@@ -168,3 +168,21 @@ export type GetActivityResponse = {
     comments: any[];
   }
 };
+
+export type HumspotActivity = {
+    name: string;
+    description: string;
+    location: string;
+    activityType: string;
+    websiteUrl: string;
+    date: string;
+    time: string;
+    latitude: string;
+    longitude: string;
+    tags: string; // comma delimited list
+    photoUrls: string; // comma delimited list
+    organizer: string;
+    openTimes: string | null;
+    comments: any[];
+    activityID : string;
+}

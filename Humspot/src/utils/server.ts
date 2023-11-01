@@ -843,14 +843,13 @@ export const handleGetActivity = async (activityID: string): Promise<GetActivity
     const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
-      import.meta.env.VITE_AWS_API_GATEWAY_GET_ACTIVITY_URL,
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_ACTIVITY_URL + `/${activityID}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jwtToken}`,
-        },
-        body: JSON.stringify({ activityID: activityID }),
+        }
       }
     );
 
@@ -867,4 +866,38 @@ export const handleGetActivity = async (activityID: string): Promise<GetActivity
     }
   }
 
+};
+
+export const handleGetFavoritesAndVisitedStatus = async (userID: string, activityID: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_FAVORITES_VISITED_STATUS_URL + "/" + userID + "/" + activityID,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (err) {
+    console.error(err);
+    return {
+      message: "Error fetching status",
+      success: false
+    }
+  }
 };
