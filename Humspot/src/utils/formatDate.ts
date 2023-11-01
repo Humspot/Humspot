@@ -25,12 +25,6 @@ export const formatDate = (dateString: string): string => {
   const day = date.getDate();
   const monthIndex = date.getMonth();
   const year = date.getFullYear();
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  const amOrPm = hours >= 12 ? "PM" : "AM";
-  const formattedHours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
-  const formattedMinutes = minutes.toString().padStart(2, "0");
-  const seconds = date.getSeconds();
 
-  return `${monthNames[monthIndex]} ${day}, ${year} ${formattedHours}:${formattedMinutes} ${amOrPm}`;
+  return `${monthNames[monthIndex]} ${day}, ${year}`;
 };
