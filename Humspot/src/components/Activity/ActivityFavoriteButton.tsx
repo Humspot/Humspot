@@ -1,15 +1,12 @@
-import { IonButton, IonContent, IonIcon, IonPage } from "@ionic/react";
+import { IonButton, IonIcon } from "@ionic/react";
 import { star, starOutline } from "ionicons/icons";
-import clickOnFavorite from "../../pages/ActivityPage";
 import { useCallback, useEffect, useState } from "react";
 import {
   handleAddToFavorites,
   handleGetFavoritesAndVisitedStatus,
-  handleGetFavoritesGivenUserID,
 } from "../../utils/server";
 import { useContext } from "../../utils/my-context";
 import { useToast } from "@agney/ir-toast";
-import { HumspotFavoriteResponse } from "../../utils/types";
 
 const ActivityFavoriteButton = (props: { activity: any; id: string }) => {
   const context = useContext();

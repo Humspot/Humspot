@@ -65,7 +65,9 @@ function ActivityPage() {
             id={id}
           ></ActivityFavoriteButton>
           {/* Visited Button, does not display for Events */}
-          {activity?.eventID ? null : <ActivityVisitedButton />}
+          {activity?.eventID ? null : (
+            <ActivityVisitedButton activity={activity} id={id} />
+          )}
           {/* Header Image */}
           <IonImg
             alt="Attraction Image"
