@@ -12,6 +12,7 @@ import {
   handleAddEvent,
   handleAddImages,
   handleAddToFavorites,
+  handleAddToRSVP,
   handleAddToVisited,
   handleGetCommentsGivenUserID,
   handleGetEventGivenTag,
@@ -133,6 +134,12 @@ const TestGoogleAuth: React.FC = () => {
     const res = await handleAddAttraction(dummyAttraction);
   }
 
+  const handleTestRSVP = async () => {
+    if (!context.humspotUser) return;
+    const userID: string = context.humspotUser.userID;
+    const res = await handleAddToRSVP(userID, '08d4f2112bb9d001127b76614', '2023-11-01');
+  }
+
   return (
     <>
       <IonPage>
@@ -229,6 +236,13 @@ const TestGoogleAuth: React.FC = () => {
                   onClick={async () => await handleTestGetVisited()}
                 >
                   Get current users places visited as a list
+                </IonButton>
+
+                <IonButton
+                  color="dark"
+                  onClick={async () => await handleTestRSVP()}
+                >
+                  Add to RSVP
                 </IonButton>
 
                 <IonButton
