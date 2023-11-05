@@ -26,7 +26,9 @@ import ActivityVisitedButton from "../components/Activity/ActivityVisitedButton"
 import ActivityDateTimeLocation from "../components/Activity/ActivityDateTimeLocation";
 import ActivityCommentsSection from "../components/Activity/ActivityCommentsSection";
 import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox";
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css/autoplay";
 function ActivityPage() {
   const { id }: any = useParams();
   console.log("DEBUG: Activity Page ID: " + id);
@@ -36,10 +38,6 @@ function ActivityPage() {
   const commentRef = useRef<HTMLIonTextareaElement | null>(null);
 
   const imgStyle = {
-    width: "100%", // Ensure the image takes up the full width of the container
-    height: "30vh", // Ensure the image takes up the full height of the container
-    objectFit: "cover", // Crop and fit the image within the container
-    position: "absolute",
     opacity: "0.85",
   };
 
@@ -51,10 +49,6 @@ function ActivityPage() {
     if (id) handleGetActivityCallback(id);
   }, [id]);
 
-  function clickOnVisited(): void {
-    throw new Error("Function not implemented.");
-  }
-
   return (
     <>
       <IonPage>
@@ -65,16 +59,26 @@ function ActivityPage() {
             id={id}
           ></ActivityFavoriteButton>
           {/* Visited Button, does not display for Events */}
-          {activity?.eventID ? null : (
+          {activity?.activityType == "event" ? null : (
             <ActivityVisitedButton activity={activity} id={id} />
           )}
           {/* Header Image */}
-          <IonImg
-            alt="Attraction Image"
-            src={activity?.photoUrl || placeholder}
-            className="MainCarouselEntryHeaderImage"
-            style={imgStyle as any}
-          ></IonImg>
+          <div className="headerImage">
+            <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }}>
+              {activity?.photoUrls[0] &&
+                activity?.photoUrls?.split(",").map((url: any, index: any) => (
+                  <SwiperSlide key={index}>
+                    <img
+                      alt="Attraction Image"
+                      src={url || placeholder}
+                      className="MainCarouselEntryHeaderImage"
+                      loading="lazy"
+                    ></img>
+                  </SwiperSlide>
+                ))}
+            </Swiper>
+          </div>
+
           {/* Header Title */}
           <IonCard color={"primary"} className="headercard">
             <IonCardHeader>
