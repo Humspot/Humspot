@@ -1,20 +1,20 @@
 import { IonButton, IonIcon } from "@ionic/react";
-import { star, starOutline, walk, walkOutline } from "ionicons/icons";
+import { calendar, calendarOutline } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
 import {
+  handleAddToRSVP,
   handleGetFavoritesAndVisitedStatus,
-  handleAddToVisited,
 } from "../../utils/server";
 import { useContext } from "../../utils/my-context";
 import { useToast } from "@agney/ir-toast";
 
-const ActivityVisitedButton = (props: { activity: any; id: string }) => {
+const ActivityRSVPButton = (props: { activity: any; id: string }) => {
   const context = useContext();
   const Toast = useToast();
   const { activity, id } = props;
-  const [isVisited, setIsVisited] = useState(false);
-  // fetchVisiteds grabs the Visiteds list
-  const fetchVisited = useCallback(async () => {
+  const [isRSVP, setIsRSVP] = useState(false);
+  // fetchRSVP
+  const fetchRSVP = useCallback(async () => {
     if (!context.humspotUser) return;
     const response = await handleGetFavoritesAndVisitedStatus(
       context.humspotUser.userID,
@@ -28,33 +28,33 @@ const ActivityVisitedButton = (props: { activity: any; id: string }) => {
       });
       toast.present();
     }
-    if (response.visited) {
-      setIsVisited(true);
+    if (response.rsvp) {
+      setIsRSVP(true);
     }
   }, [context.humspotUser]);
-  //buttonAddToVisited handles when the user clicks on the visited icon
-  async function buttonAddToVisited(activity: any) {
+  //buttonAddToRSVP
+  async function buttonAddToRSVP(activity: any) {
     const date = new Date();
-    const res = await handleAddToVisited(
+    const res = await handleAddToRSVP(
       context.humspotUser?.userID as string,
       id,
       date.toISOString()
     );
     if (res && !res.removed) {
-      setIsVisited(true);
+      setIsRSVP(true);
     }
     if (res && res.removed) {
-      setIsVisited(false);
+      setIsRSVP(false);
     }
   }
 
-  // fetchVisited runs on load, check if this activity is already visited
+  // fetchRSVP runs on load, check if this activity is already RSVP'd
   useEffect(() => {
-    fetchVisited();
-  }, [fetchVisited]);
-  // clickOnVisited grabs the input and hands it to buttonAddToVisited
-  function clickOnVisited(): void {
-    buttonAddToVisited(activity);
+    fetchRSVP();
+  }, [fetchRSVP]);
+  // clickOnRSVP grabs the input a
+  function clickOnRSVP(): void {
+    buttonAddToRSVP(activity);
   }
   return (
     <IonButton
@@ -62,12 +62,15 @@ const ActivityVisitedButton = (props: { activity: any; id: string }) => {
       fill="clear"
       color={"secondary"}
       size="large"
-      id="VisitedButton"
-      onClick={() => clickOnVisited()}
+      id="RSVPButton"
+      onClick={() => clickOnRSVP()}
     >
-      <IonIcon slot="icon-only" icon={isVisited ? walk : walkOutline}></IonIcon>
+      <IonIcon
+        slot="icon-only"
+        icon={isRSVP ? calendar : calendarOutline}
+      ></IonIcon>
     </IonButton>
   );
 };
 
-export default ActivityVisitedButton;
+export default ActivityRSVPButton;

@@ -16,17 +16,20 @@ import {
 import { useParams } from "react-router-dom";
 import "./ActivityPage.css";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { handleGetEvent } from "../utils/server";
+import { handleGetActivity } from "../utils/server";
 import { useContext } from "../utils/my-context";
 
-import placeholder from "../elements/placeholder.png";
+import placeholder from "../assets/images/placeholder.png";
 import { useToast } from "@agney/ir-toast";
 import ActivityFavoriteButton from "../components/Activity/ActivityFavoriteButton";
 import ActivityVisitedButton from "../components/Activity/ActivityVisitedButton";
 import ActivityDateTimeLocation from "../components/Activity/ActivityDateTimeLocation";
 import ActivityCommentsSection from "../components/Activity/ActivityCommentsSection";
 import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox";
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css/autoplay";
+import ActivityRSVPButton from "../components/Activity/ActivityRSVPButton";
 function ActivityPage() {
   const { id }: any = useParams();
   const [activity, setActivity] = useState<any>(null);
@@ -35,40 +38,55 @@ function ActivityPage() {
   const commentRef = useRef<HTMLIonTextareaElement | null>(null);
 
   const imgStyle = {
-    width: "100%", // Ensure the image takes up the full width of the container
-    height: "30vh", // Ensure the image takes up the full height of the container
-    objectFit: "cover", // Crop and fit the image within the container
-    position: "absolute",
     opacity: "0.85",
   };
 
-  const handleGetEventCallback = useCallback(async (id: string) => {
-    const res = await handleGetEvent(id);
-    if ("event" in res && res.event) setActivity(res.event);
+  const handleGetActivityCallback = useCallback(async (id: string) => {
+    const res = await handleGetActivity(id);
+    if ("activity" in res && res.activity) setActivity(res.activity);
   }, []);
   useEffect(() => {
-    if (id) handleGetEventCallback(id);
+    if (id) handleGetActivityCallback(id);
   }, [id]);
-
-  function clickOnVisited(): void {
-    throw new Error("Function not implemented.");
-  }
 
   return (
     <>
       <IonPage>
         <IonContent>
           {/* Favorites Button */}
-          <ActivityFavoriteButton activity={activity}></ActivityFavoriteButton>
+          <ActivityFavoriteButton
+            activity={activity}
+            id={id}
+          ></ActivityFavoriteButton>
           {/* Visited Button, does not display for Events */}
-          {activity?.eventID ? null : <ActivityVisitedButton />}
+          {activity?.activityType == "event" ? null : (
+            <ActivityVisitedButton activity={activity} id={id} />
+          )}
+          {/* RSVP Button, does not display for locations */}
+          {activity?.activityType == "attraction" ? null : (
+            <ActivityRSVPButton activity={activity} id={id} />
+          )}
           {/* Header Image */}
-          <IonImg
-            alt="Attraction Image"
-            src={activity?.photoUrl || placeholder}
-            className="MainCarouselEntryHeaderImage"
-            style={imgStyle as any}
-          ></IonImg>
+          <div className="headerImage">
+            <Swiper
+              modules={[Autoplay]}
+              autoplay={{ delay: 4000 }}
+              direction="vertical"
+            >
+              {activity?.photoUrls[0] &&
+                activity?.photoUrls?.split(",").map((url: any, index: any) => (
+                  <SwiperSlide key={index}>
+                    <img
+                      alt="Attraction Image"
+                      src={url || placeholder}
+                      className="MainCarouselEntryHeaderImage"
+                      loading="lazy"
+                    ></img>
+                  </SwiperSlide>
+                ))}
+            </Swiper>
+          </div>
+
           {/* Header Title */}
           <IonCard color={"primary"} className="headercard">
             <IonCardHeader>

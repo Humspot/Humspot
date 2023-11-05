@@ -24,6 +24,7 @@ import {
   HumspotCommentSubmit,
   HumspotEvent,
   GetActivityResponse,
+  AddToRSVPResponse
 } from "./types";
 
 import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
@@ -537,6 +538,53 @@ export const handleAddToVisited = async (userID: string, activityID: string, vis
   }
 };
 
+/**
+ * @function handleAddToRSVP
+ * @description Adds an activity to a User's RSVP list.
+ * 
+ * NOTE: List in this context refers to a row entry in the RSVP table.
+ *
+ * @param {string} userID the ID of the logged in user.
+ * @param {string} activityID the If of the activity (primary key of the Activities table).
+ * @param {string} rsvpDate the date the user visited the Activity (Event / Attraction)
+ */
+export const handleAddToRSVP = async (userID: string, activityID: string, rsvpDate: string): Promise<AddToRSVPResponse> => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const params: Record<string, string> = {
+      userID: userID,
+      activityID: activityID,
+      rsvpDate: rsvpDate,
+    };
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_ADD_ACTIVITY_TO_RSVP_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(params),
+      }
+    );
+
+    const responseData: AddToRSVPResponse = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
+};
+
 
 /**
  * @function handleAddComment
@@ -843,14 +891,13 @@ export const handleGetActivity = async (activityID: string): Promise<GetActivity
     const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
-      import.meta.env.VITE_AWS_API_GATEWAY_GET_ACTIVITY_URL,
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_ACTIVITY_URL + `/${activityID}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jwtToken}`,
-        },
-        body: JSON.stringify({ activityID: activityID }),
+        }
       }
     );
 
@@ -867,4 +914,38 @@ export const handleGetActivity = async (activityID: string): Promise<GetActivity
     }
   }
 
+};
+
+export const handleGetFavoritesAndVisitedStatus = async (userID: string, activityID: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_FAVORITES_VISITED_STATUS_URL + "/" + userID + "/" + activityID,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (err) {
+    console.error(err);
+    return {
+      message: "Error fetching status",
+      success: false
+    }
+  }
 };

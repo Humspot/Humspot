@@ -99,6 +99,13 @@ export type AddToVisitedResponse = {
   removed?: boolean;
 };
 
+export type AddToRSVPResponse = {
+  message: string;
+  success: boolean;
+  RSVPID?: string;
+  removed?: boolean;
+};
+
 export type HumspotCommentSubmit = {
   commentText: string;
   commentDate: string;
@@ -145,7 +152,7 @@ export type GetFavoritesResponse = {
 }
 
 export type AddCommentResponse = {
-  
+
 };
 
 export type GetActivityResponse = {
@@ -168,3 +175,21 @@ export type GetActivityResponse = {
     comments: any[];
   }
 };
+
+export type HumspotActivity = {
+  name: string;
+  description: string;
+  location: string;
+  activityType: string;
+  websiteUrl: string;
+  date: string;
+  time: string;
+  latitude: string;
+  longitude: string;
+  tags: string; // comma delimited list
+  photoUrls: string; // comma delimited list
+  organizer: string;
+  openTimes: string | null;
+  comments: any[];
+  activityID: string;
+}

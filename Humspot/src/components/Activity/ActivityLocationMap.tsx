@@ -1,6 +1,5 @@
 import { Map, Marker } from "pigeon-maps";
 
-
 export function LocationMap(props: any) {
   console.log(props);
   return (
@@ -18,7 +17,8 @@ export function LocationMap(props: any) {
       <Marker
         width={30}
         height={30}
-        anchor={[parseFloat(props.latitude), parseFloat(props.longitude)]} />
+        anchor={[parseFloat(props.latitude), parseFloat(props.longitude)]}
+      />
     </Map>
   );
 }

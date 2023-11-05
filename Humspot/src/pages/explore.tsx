@@ -20,7 +20,7 @@ import SecondaryCarouselEntry from "../elements/CarouselEntrySecondary";
 import { add, fileTrayStackedSharp, filter, filterSharp } from "ionicons/icons";
 import FilterButton from "../elements/FilterButton";
 import { useState, useCallback, useEffect } from "react";
-import { handleGetEvent } from "../utils/server";
+import { handleGetActivity, handleGetEvent } from "../utils/server";
 import { useParams } from "react-router-dom";
 
 <link
@@ -32,12 +32,12 @@ function ExplorePage() {
   const router = useIonRouter();
   const { id }: any = useParams();
   const [activity, setActivity] = useState<any>(null);
-  const handleGetEventCallback = useCallback(async (id: string) => {
-    const res = await handleGetEvent(id);
+  const handleGetActivityCallback = useCallback(async (id: string) => {
+    const res = await handleGetActivity(id);
     if ("event" in res && res.event) setActivity(res.event);
   }, []);
   useEffect(() => {
-    if (id) handleGetEventCallback(id);
+    if (id) handleGetActivityCallback(id);
   }, [id]);
   const mainCarouselData = [
     {
@@ -45,14 +45,14 @@ function ExplorePage() {
       description: "This is the first slide",
       imgsrc:
         "https://activityphotos.s3.us-west-1.amazonaws.com/event-photos/715d07c9d97dde03808d03bb-R7CeCVUf-1697853939858-jpeg",
-      id: "0090d9b278350143bd66198cb",
+      id: "14599af9152000ad4da9dea9e",
     },
     {
       title: "Redwood Fest",
       description: "This is the first slide",
       imgsrc:
         "https://activityphotos.s3.us-west-1.amazonaws.com/event-photos/715d07c9d97dde03808d03bb-R7CeCVUf-1697853939858-jpeg",
-      id: "0090d9b278350143bd66198cb",
+      id: "14599af9152000ad4da9dea9e",
     },
   ];
 
