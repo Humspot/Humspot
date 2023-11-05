@@ -1,14 +1,4 @@
-import {
-  IonContent,
-  IonFab,
-  IonFabButton,
-  IonHeader,
-  IonIcon,
-  IonItemDivider,
-  IonPage,
-  useIonRouter,
-  useIonViewWillEnter,
-} from "@ionic/react";
+import { IonContent, IonItemDivider, IonPage } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
@@ -17,11 +7,9 @@ import "../elements/CarouselEntry.css";
 import "@ionic/react/css/ionic-swiper.css";
 import CarouselEntry from "../elements/CarouselEntry";
 import SecondaryCarouselEntry from "../elements/CarouselEntrySecondary";
-import { add, fileTrayStackedSharp, filter, filterSharp } from "ionicons/icons";
 import FilterButton from "../elements/FilterButton";
-import { useState, useCallback, useEffect } from "react";
-import { handleGetActivity, handleGetEvent } from "../utils/server";
-import { useParams } from "react-router-dom";
+import { useCallback, useEffect } from "react";
+import { handleGetActivity } from "../utils/server";
 
 <link
   href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
@@ -29,30 +17,34 @@ import { useParams } from "react-router-dom";
 ></link>;
 
 function ExplorePage() {
-  const router = useIonRouter();
-  const { id }: any = useParams();
-  const [activity, setActivity] = useState<any>(null);
   const handleGetActivityCallback = useCallback(async (id: string) => {
     const res = await handleGetActivity(id);
-    if ("event" in res && res.event) setActivity(res.event);
   }, []);
-  useEffect(() => {
-    if (id) handleGetActivityCallback(id);
-  }, [id]);
+  useEffect(() => {});
+
+  const highlightArray = [
+    "14599af9152000ad4da9dea9e",
+    "08d4f2112bb9d001127b76614",
+    "0ab3c60b786604c49f9b063e5",
+    "0d8517d295844cf801ee35a38",
+    "0e4abb4d64b352c7cc883688e",
+    "0ffd5280201e65b0f3fc1d309",
+  ];
+
   const mainCarouselData = [
     {
-      title: "Redwood Fest",
+      title: "title 1",
       description: "This is the first slide",
       imgsrc:
         "https://activityphotos.s3.us-west-1.amazonaws.com/event-photos/715d07c9d97dde03808d03bb-R7CeCVUf-1697853939858-jpeg",
-      id: "14599af9152000ad4da9dea9e",
+      id: highlightArray[0],
     },
     {
       title: "Redwood Fest",
       description: "This is the first slide",
       imgsrc:
         "https://activityphotos.s3.us-west-1.amazonaws.com/event-photos/715d07c9d97dde03808d03bb-R7CeCVUf-1697853939858-jpeg",
-      id: "14599af9152000ad4da9dea9e",
+      id: highlightArray[1],
     },
   ];
 
