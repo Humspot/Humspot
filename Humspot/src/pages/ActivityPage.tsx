@@ -29,9 +29,9 @@ import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox"
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css/autoplay";
+import ActivityRSVPButton from "../components/Activity/ActivityRSVPButton";
 function ActivityPage() {
   const { id }: any = useParams();
-  console.log("DEBUG: Activity Page ID: " + id);
   const [activity, setActivity] = useState<any>(null);
   const context = useContext();
   const Toast = useToast();
@@ -62,9 +62,17 @@ function ActivityPage() {
           {activity?.activityType == "event" ? null : (
             <ActivityVisitedButton activity={activity} id={id} />
           )}
+          {/* RSVP Button, does not display for locations */}
+          {activity?.activityType == "attraction" ? null : (
+            <ActivityRSVPButton activity={activity} id={id} />
+          )}
           {/* Header Image */}
           <div className="headerImage">
-            <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }}>
+            <Swiper
+              modules={[Autoplay]}
+              autoplay={{ delay: 4000 }}
+              direction="vertical"
+            >
               {activity?.photoUrls[0] &&
                 activity?.photoUrls?.split(",").map((url: any, index: any) => (
                   <SwiperSlide key={index}>
