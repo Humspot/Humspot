@@ -1,5 +1,5 @@
 /**
- * AWS lambda function to retrieve whether a user has visited or favorited an activity.
+ * AWS lambda function to retrieve whether a user has visited or favorited or RSVP'd for an activity.
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
@@ -22,10 +22,11 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   const conn = await pool.getConnection();
   try {
 
-    const data = JSON.parse(event.body || '{}');
+    const userID = event.pathParameters && event.pathParameters["userId"];
+    const activityID = event.pathParameters && event.pathParameters["activityId"];
 
     // Ensure all data has bene passed through the gateway event
-    if (!data || typeof data.userID !== 'string' || !data.userID || typeof data.activityID !== 'string' || !data.activityID) {
+    if (!userID || !activityID) {
       return {
         statusCode: 400,
         headers: {
@@ -34,13 +35,11 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: 'Missing or incorrect fields in event data.', success: false, visited: null, favorited: null
+          message: 'Missing or invalid path params.', success: false, visited: null, favorited: null, rsvp: null
         }),
       };
     }
 
-    const userID: string = data.userID;
-    const activityID: string = data.activityID;
 
     // Query to check if the user has favorited the activity
     const queryFavorited: string = `
@@ -56,13 +55,21 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
 
     const [visitedRows]: any = await conn.execute(queryVisited, [userID, activityID]);
 
+    // Query to check the user's RSVP status
+    const queryRSVP: string = `
+      SELECT EXISTS(SELECT * FROM RSVP WHERE userID = ? AND activityID = ?) as RSVP;
+    `
+
+    const [rsvpRows]: any = await conn.execute(queryRSVP, [userID, activityID]);
+
     const favorited: boolean = favoritedRows[0]?.favorited === 1;
     const visited: boolean = visitedRows[0]?.visited === 1;
+    const rsvp: boolean = rsvpRows[0]?.favorited === 1;
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'Successfully got favorited and visited status', success: true, visited: visited, favorited: favorited }),
+      body: JSON.stringify({ message: 'Successfully got favorited and visited status', success: true, visited: visited, favorited: favorited, rsvp: rsvp }),
     }
 
   } catch (error) {
@@ -70,7 +77,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'Internal Server Error, query execution error', success: false, visited: null, favorited: null }),
+      body: JSON.stringify({ message: 'Internal Server Error, query execution error', success: false, visited: null, favorited: null, rsvp: null }),
     };
   } finally {
     if (conn) {
@@ -78,3 +85,6 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
   }
 };
+
+
+
