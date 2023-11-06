@@ -119,7 +119,7 @@ const ProfileSegments: React.FC = memo(() => {
                 {!favoritesLoading ?
                   favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
                     return (
-                      <IonItem className='ion-no-padding' key={favorite.name + index} role='button' onClick={() => {  }}>
+                      <IonItem className='ion-no-padding' key={favorite.name + index} role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
                         <IonThumbnail><img src={favorite.photoUrl || ''} /></IonThumbnail>
                         <IonLabel style={{ paddingLeft: "10px" }}>
                           <h2>{favorite.name}</h2>
@@ -147,7 +147,7 @@ const ProfileSegments: React.FC = memo(() => {
                 {!visitedLoading ?
                   visited.map((visitedPlace: HumspotVisitedResponse, index: number) => {
                     return (
-                      <IonItem className='ion-no-padding' key={visitedPlace.name + index} role='button' onClick={() => {  }}>
+                      <IonItem className='ion-no-padding' key={visitedPlace.name + index} role='button' onClick={() => { if (visitedPlace.activityID) router.push("/activity/" + visitedPlace.activityID) }}>
                         <IonThumbnail><img src={visitedPlace.photoUrl || ''} /></IonThumbnail>
                         <IonLabel style={{ paddingLeft: "10px" }}>
                           <h2>{visitedPlace.name}</h2>
@@ -175,7 +175,7 @@ const ProfileSegments: React.FC = memo(() => {
                 {!commentsLoading ?
                   comments.map((comment: HumspotCommentResponse, index: number) => {
                     return (
-                      <IonItem className='ion-no-padding' key={comment.name + index} role='button' onClick={() => { }}>
+                      <IonItem className='ion-no-padding' key={comment.name + index} role='button' onClick={() => { if (comment.activityID) router.push("/activity/" + comment.activityID) }}>
                         <IonThumbnail><img src={comment.photoUrl || ''} /></IonThumbnail>
                         <IonLabel style={{ paddingLeft: "10px" }}>
                           <h2>{comment.name}</h2>

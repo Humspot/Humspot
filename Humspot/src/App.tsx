@@ -177,7 +177,7 @@ const App: React.FC = () => {
                 />
               </IonTabButton>
             </IonTabBar>
-            
+
           </IonTabs>
         </IonReactRouter>
 
