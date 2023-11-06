@@ -49,8 +49,8 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     const query: string = `
       SELECT 
       a.*,
-      e.eventID, e.date, e.time, e.latitude AS eventLatitude, e.longitude AS eventLongitude, e.organizer,
-      at.attractionID, at.latitude AS attractionLatitude, at.longitude AS attractionLongitude, at.openTimes,
+      e.eventID,
+      at.attractionID, at.openTimes,
       ap.photoID, ap.photoUrl
       FROM Activities a
       LEFT JOIN ActivityTags atg ON a.activityID = atg.activityID
