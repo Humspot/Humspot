@@ -5,6 +5,9 @@ import { IonContent, IonButtons, IonButton, IonPage, useIonRouter, useIonViewWil
 
 import {useContext} from "../utils/my-context";
 
+import ProfileHeader from "../components/Profile/ProfileHeader";
+import AdminBio from "../components/Admin/AdminBio";
+
 
 const adminMain: React.FC = () => {
     const context = useContext();
@@ -12,9 +15,11 @@ const adminMain: React.FC = () => {
     
     return(
         <IonPage>
+            <ProfileHeader />
+            <AdminBio />
             <IonContent>
-            <h1> Testing Admin Page </h1>
-             </IonContent>
+                <h1> Admin Page </h1>
+            </IonContent>
         </IonPage>
     )
 } 
