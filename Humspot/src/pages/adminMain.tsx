@@ -7,6 +7,7 @@ import {useContext} from "../utils/my-context";
 
 import ProfileHeader from "../components/Profile/ProfileHeader";
 import AdminBio from "../components/Admin/AdminBio";
+import SubmissionApproval from "../components/Admin/submissionApproval";
 
 
 const adminMain: React.FC = () => {
@@ -16,10 +17,12 @@ const adminMain: React.FC = () => {
     return(
         <IonPage>
             <ProfileHeader />
-            <AdminBio />
+            <AdminBio /> 
             <IonContent>
-                <h1> Admin Page </h1>
+                <SubmissionApproval />
             </IonContent>
+
+
         </IonPage>
     )
 } 
