@@ -377,7 +377,7 @@ export const handleAddImages = async (bucketName: string, fileName: string, isUn
     limit: limit,
   });
 
-  present({ message: "Uploading..." });
+  await present({ message: "Uploading..." });
   const s3 = new AWS.S3();
   const photoUrls: string[] = [];
 

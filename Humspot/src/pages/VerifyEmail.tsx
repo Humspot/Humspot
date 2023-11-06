@@ -48,7 +48,7 @@ const VerifyEmail = () => {
 
   const clickOnVerifyResetPassword = async () => {
     if (!codeRef || !codeRef.current || !passwordRef || !passwordRef.current) return;
-    present({ message: "Updating password..." });
+    await present({ message: "Updating password..." });
     const res: boolean = await handleResetPassword(decodedEmail, codeRef.current?.value as string ?? '', passwordRef.current?.value as string ?? '');
     if (!res) {
       const t = Toast.create({ message: "Incorrect code!", duration: 2000, color: "danger" });
@@ -58,12 +58,12 @@ const VerifyEmail = () => {
       t.present();
       router.push("/sign-in");
     }
-    dismiss();
+    await dismiss();
   };
 
   const clickOnVerifySignUp = async () => {
     if (!codeRef || !codeRef.current) return;
-    present({ message: "Verifying..." });
+    await present({ message: "Verifying..." });
     const res: boolean = await confirmSignUp(decodedEmail, codeRef.current?.value as string ?? '');
     if (!res) {
       const t = Toast.create({ message: "Incorrect code!", duration: 2000, color: "danger" });
@@ -73,7 +73,7 @@ const VerifyEmail = () => {
       t.present();
       router.push("/sign-in");
     }
-    dismiss();
+    await dismiss();
   };
 
   return (

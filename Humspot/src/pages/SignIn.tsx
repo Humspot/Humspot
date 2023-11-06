@@ -46,7 +46,7 @@ const SignIn = () => {
 
   const clickOnSignIn = async () => {
     if (!passwordRef || !emailRef) return;
-    present({ message: "Signing In..." })
+    await present({ message: "Signing In..." })
     const success = await handleSignIn(
       emailRef.current?.value as string ?? '',
       passwordRef.current?.value as string ?? '',
@@ -57,7 +57,7 @@ const SignIn = () => {
     } else {
       router.push("/profile");
     }
-    dismiss();
+    await dismiss();
   };
 
   return (
