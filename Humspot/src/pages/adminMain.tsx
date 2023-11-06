@@ -1,7 +1,7 @@
 // Admin Main Page
 // Should be an easy way for Admins to navigate different admin functions
 
-import { IonContent, IonPage, useIonRouter, useIonViewWillEnter } from "@ionic/react";
+import { IonContent, IonButtons, IonButton, IonPage, useIonRouter, useIonViewWillEnter } from "@ionic/react";
 
 import {useContext} from "../utils/my-context";
 
