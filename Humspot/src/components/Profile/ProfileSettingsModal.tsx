@@ -17,7 +17,8 @@ import {
   mailOutline,
   shieldOutline,
   readerOutline,
-  logInOutline
+  logInOutline,
+  analyticsOutline
 } from "ionicons/icons";
 import { Dialog } from "@capacitor/dialog";
 
@@ -74,6 +75,17 @@ const ProfileSettingsModal = () => {
             <IonLabel color='primary'>Terms and Conditions</IonLabel>
           </IonItem>
           <br />
+
+          {context.humspotUser?.accountType == 'admin'? 
+          <>
+            <IonItem role='button' onClick={() => { modalRef?.current?.dismiss(); router.push("/admin-dashboard") }}>
+                <IonIcon aria-hidden="true" icon={analyticsOutline} slot="start"></IonIcon>
+              <IonLabel color='primary'>Admin Dashboard </IonLabel>
+              </IonItem>
+              <br/>
+          </>
+          :<>
+          </>} 
           {context.humspotUser === undefined ?
             <>
               <IonItem role='button' onClick={() => { modalRef?.current?.dismiss(); router.push("/sign-up") }}>

@@ -54,6 +54,7 @@ import { ToastProvider } from "@agney/ir-toast";
 import { useContext } from "./utils/my-context";
 import { handleUserLogin } from "./utils/server";
 import { LoginResponse } from "./utils/types";
+import adminMain from "./pages/adminMain";
 
 
 setupIonicReact({ mode: "md" });
@@ -136,6 +137,7 @@ const App: React.FC = () => {
               <Route exact path="/google-auth" component={TestGoogleAuth} />
               <Route exact path="/submit-event" component={SubmitEventPage} />
               <Route exact path="/activity/:id" component={ActivityPage} />
+              <Route exact path="/admin-dashboard" component={adminMain}/>
             </IonRouterOutlet>
 
             <IonTabBar
