@@ -14,7 +14,7 @@ const ForgotPassword = () => {
 
   const clickOnForgotPassword = async () => {
     if (!emailRef || !emailRef.current) return;
-    present({ message: "Loading..." });
+    await present({ message: "Loading..." });
     const success: boolean = await handleForgotPassword(emailRef.current.value as string);
     if (success) { // route to verify page, on success email is sent with code
       const t = Toast.create({ message: "Success! Check your email for a verification code.", duration: 2000, color: "success" });
@@ -24,7 +24,7 @@ const ForgotPassword = () => {
       const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: "danger" });
       t.present();
     }
-    dismiss();
+    await dismiss();
   };
 
   return (

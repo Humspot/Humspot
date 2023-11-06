@@ -5,6 +5,8 @@
  * 
  * If the user had logged in before, this function will return an object containing the user's 
  * information from the mySQL Users table.
+ * 
+ * NOTE: The name of this function in AWS is create-user, so use this when updating the function!
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from 'aws-lambda';

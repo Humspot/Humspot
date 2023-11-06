@@ -22,6 +22,7 @@ import FilterButton from "../elements/FilterButton";
 import { useState, useCallback, useEffect } from "react";
 import { handleGetActivity, handleGetEvent } from "../utils/server";
 import { useParams } from "react-router-dom";
+import { useContext } from "../utils/my-context";
 
 <link
   href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
@@ -30,12 +31,16 @@ import { useParams } from "react-router-dom";
 
 function ExplorePage() {
   const router = useIonRouter();
+  const context = useContext();
   const { id }: any = useParams();
   const [activity, setActivity] = useState<any>(null);
   const handleGetActivityCallback = useCallback(async (id: string) => {
     const res = await handleGetActivity(id);
     if ("event" in res && res.event) setActivity(res.event);
   }, []);
+  useIonViewWillEnter(() => {
+    context.setShowTabs(true);
+  })
   useEffect(() => {
     if (id) handleGetActivityCallback(id);
   }, [id]);

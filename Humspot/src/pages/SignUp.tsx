@@ -47,7 +47,7 @@ const SignUp: React.FC = () => {
 
   const clickOnSignUp = async () => {
     if (!passwordRef || !emailRef) return;
-    present({ message: "Please Wait..." });
+    await present({ message: "Please Wait..." });
     const success: boolean = await handleSignUp(
       emailRef.current?.value as string ?? '',
       passwordRef.current?.value as string ?? '',
@@ -60,7 +60,7 @@ const SignUp: React.FC = () => {
       const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: "danger" });
       t.present();
     }
-    dismiss();
+    await dismiss();
   };
 
   return (
