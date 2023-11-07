@@ -10,6 +10,7 @@ import {
   IonPage,
   useIonRouter,
 } from "@ionic/react";
+import placeholder from "../assets/images/placeholder.png";
 
 import "./CarouselEntry.css";
 
@@ -40,14 +41,14 @@ function CarouselEntry({ title, description, imgsrc, id }: any) {
       <div style={containerStyle}>
         <IonImg
           alt="Attraction Image"
-          src={imgsrc}
+          src={imgsrc || placeholder}
           className="MainCarouselEntryHeaderImage"
           style={imgStyle as any}
         ></IonImg>
       </div>
       <IonCardHeader style={headerStyle}>
         <IonCardTitle>{title}</IonCardTitle>
-        <IonCardSubtitle>{description}</IonCardSubtitle>
+        <IonCardSubtitle className="wrap-text">{description}</IonCardSubtitle>
       </IonCardHeader>
     </IonCard>
   );

@@ -1,4 +1,9 @@
-import { IonContent, IonItemDivider, IonPage } from "@ionic/react";
+import {
+  IonContent,
+  IonItemDivider,
+  IonPage,
+  IonSkeletonText,
+} from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
@@ -8,8 +13,12 @@ import "@ionic/react/css/ionic-swiper.css";
 import CarouselEntry from "../elements/CarouselEntry";
 import SecondaryCarouselEntry from "../elements/CarouselEntrySecondary";
 import FilterButton from "../elements/FilterButton";
-import { useCallback, useEffect } from "react";
-import { handleGetActivity } from "../utils/server";
+import { useCallback, useEffect, useState } from "react";
+import {
+  handleGetActivitiesGivenTag,
+  handleGetActivity,
+} from "../utils/server";
+import { useToast } from "@agney/ir-toast";
 
 <link
   href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
@@ -17,10 +26,27 @@ import { handleGetActivity } from "../utils/server";
 ></link>;
 
 function ExplorePage() {
-  const handleGetActivityCallback = useCallback(async (id: string) => {
-    const res = await handleGetActivity(id);
+  const [activitiesHighlight, setActivitiesHighlight] = useState<any>([]);
+  const [activitiesHighlightLoading, setActivitiesHighlightLoading] =
+    useState<boolean>(true);
+  const Toast = useToast();
+  const fetchActivitiesHighlight = useCallback(async () => {
+    const response = await handleGetActivitiesGivenTag(1, "fun");
+    if (!response.success) {
+      const toast = Toast.create({
+        message: response.message,
+        duration: 2000,
+        color: "danger",
+      });
+      toast.present();
+    }
+    setActivitiesHighlight(response.activities);
+    setActivitiesHighlightLoading(false);
   }, []);
-  useEffect(() => {});
+
+  useEffect(() => {
+    fetchActivitiesHighlight();
+  }, [fetchActivitiesHighlight]);
 
   const highlightArray = [
     "14599af9152000ad4da9dea9e",
@@ -105,19 +131,6 @@ function ExplorePage() {
     },
   ];
 
-  const mainCarouselEntries = mainCarouselData.map((data, index) => (
-    <SwiperSlide key={index}>
-      <div className="MainCarouselSlide">
-        <CarouselEntry
-          title={data.title}
-          description={data.description}
-          imgsrc={data.imgsrc}
-          id={data.id}
-        />
-      </div>
-    </SwiperSlide>
-  ));
-
   const secondCarouselEntries = secondCarouselData.map((data, index) => (
     <SwiperSlide key={index}>
       <div className="SecondaryCarouselSlide">
@@ -163,7 +176,26 @@ function ExplorePage() {
             Highlights
           </IonItemDivider>
           <div className="MainCarousel">
-            <Swiper slidesPerView={1.2}>{mainCarouselEntries}</Swiper>
+            <Swiper slidesPerView={1.2}>
+              {!activitiesHighlightLoading ? (
+                activitiesHighlight.map((activity: any, index: any) => (
+                  <SwiperSlide key={index}>
+                    <div className="MainCarouselSlide">
+                      <CarouselEntry
+                        title={activity?.title}
+                        description={activity?.description}
+                        imgsrc={activity?.photoUrl}
+                        id={activity?.activityID}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))
+              ) : (
+                <>
+                  <IonSkeletonText style={{ height: "2rem" }} animated />
+                </>
+              )}
+            </Swiper>
           </div>
           <IonItemDivider className="Header" color={"primary"}>
             Chill Places

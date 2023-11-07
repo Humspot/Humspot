@@ -68,11 +68,7 @@ function ActivityPage() {
           )}
           {/* Header Image */}
           <div className="headerImage">
-            <Swiper
-              modules={[Autoplay]}
-              autoplay={{ delay: 4000 }}
-              direction="vertical"
-            >
+            <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }}>
               {activity?.photoUrls[0] &&
                 activity?.photoUrls?.split(",").map((url: any, index: any) => (
                   <SwiperSlide key={index}>
