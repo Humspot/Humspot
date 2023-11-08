@@ -33,13 +33,6 @@ import ActivityRSVPButton from "../components/Activity/ActivityRSVPButton";
 function ActivityPage() {
   const { id }: any = useParams();
   const [activity, setActivity] = useState<any>(null);
-  const context = useContext();
-  const Toast = useToast();
-  const commentRef = useRef<HTMLIonTextareaElement | null>(null);
-
-  const imgStyle = {
-    opacity: "0.85",
-  };
 
   const handleGetActivityCallback = useCallback(async (id: string) => {
     const res = await handleGetActivity(id);
@@ -67,16 +60,16 @@ function ActivityPage() {
             <ActivityRSVPButton activity={activity} id={id} />
           )}
           {/* Header Image */}
-          <div className="headerImage">
+          <div className="headerDiv">
             <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }}>
-              {activity?.photoUrls[0] &&
+              {activity?.photoUrls &&
                 activity?.photoUrls?.split(",").map((url: any, index: any) => (
-                  <SwiperSlide key={index}>
+                  <SwiperSlide key={index} className="fill-frame-image">
                     <img
                       alt="Attraction Image"
                       src={url || placeholder}
-                      className="MainCarouselEntryHeaderImage"
                       loading="lazy"
+                      className="headerImage"
                     ></img>
                   </SwiperSlide>
                 ))}
