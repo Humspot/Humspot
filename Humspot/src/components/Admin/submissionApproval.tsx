@@ -4,6 +4,7 @@
 import { 
     IonSegment, 
     IonSegmentButton,
+    IonButton,
     IonLabel,
     IonIcon,
     IonContent,
@@ -12,7 +13,12 @@ import {
     IonCard,
     IonCardContent,
     IonItem,
-    IonThumbnail 
+    IonThumbnail, 
+    IonImg,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+    useIonRouter
 } from "@ionic/react";
 
 import {
@@ -22,11 +28,29 @@ import { useContext, useState } from "react";
 import {memo} from "react"
 import { HumspotFavoriteResponse } from "../../utils/types";
 
-const SubmissionApproval: React.FC = memo(() => { 
-
+function SubmissionApproval({title, description, imgsrc, id}: any) { 
+  const router = useIonRouter();
   return(
-      <h1> Submission Approval</h1>
+    <IonCard
+      onClick={()=>{
+        router.push("/activities/" + id);
+      }}
+    >
+      <div>
+        <IonImg
+        alt="Attraction Image"
+        src={imgsrc}
+        className="Pending"
+        ></IonImg>
+      </div>
+      
+      <IonCardHeader>
+        <IonCardTitle>{title}</IonCardTitle>
+        <IonCardSubtitle> {description}</IonCardSubtitle>
+      </IonCardHeader>
+
+    </IonCard>
   );
-});
+}
 
 export default SubmissionApproval
