@@ -100,7 +100,7 @@ function MapPage() {
                 placeholderAttractions[overlayIndex].location[0],
                 placeholderAttractions[overlayIndex].location[1],
               ]}
-              offset={[110, 25]}
+              offset={[125, 19.5]}
             >
               <IonCard
                 style={!context.darkMode ? { width: "55vw", opacity: "90%" } : { width: "55vw", opacity: "95%" }}

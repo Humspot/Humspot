@@ -23,8 +23,9 @@ export type HumspotEvent = {
   addedByUserID: string;
   date: string;
   time: string;
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
+  websiteURL: string;
   organizer: string;
   tags: string[];
   photoUrls: string[];
@@ -36,8 +37,8 @@ export type HumspotAttraction = {
   location: string;
   addedByUserID: string;
   websiteUrl: string;
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
   openTimes: string;
   tags: string[];
   photoUrls: string[];
@@ -166,8 +167,8 @@ export type GetActivityResponse = {
     websiteUrl: string;
     date: string;
     time: string;
-    latitude: string;
-    longitude: string;
+    latitude: string | null;
+    longitude: string | null;
     tags: string; // comma delimited list
     photoUrls: string; // comma delimited list
     organizer: string;
@@ -184,8 +185,8 @@ export type HumspotActivity = {
   websiteUrl: string;
   date: string;
   time: string;
-  latitude: string;
-  longitude: string;
+  latitude: string | null;
+  longitude: string | null;
   tags: string; // comma delimited list
   photoUrls: string; // comma delimited list
   organizer: string;
