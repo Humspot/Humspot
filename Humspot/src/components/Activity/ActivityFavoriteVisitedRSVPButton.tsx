@@ -6,7 +6,7 @@ import { IonButton, IonIcon } from "@ionic/react";
 import { calendar, calendarOutline, star, starOutline, walk, walkOutline } from "ionicons/icons";
 
 
-const ActivityFavoriteVisitedButton = (props: { id: string, activityType: 'event' | 'attraction' | 'custom' | undefined }) => {
+const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'event' | 'attraction' | 'custom' | undefined }) => {
 
   const { id, activityType } = props;
 
@@ -27,8 +27,15 @@ const ActivityFavoriteVisitedButton = (props: { id: string, activityType: 'event
     );
     if (res && !res.removed) {
       setFavorited(true);
+      const t = Toast.create({ message: "Added to favorites!", duration: 2000, color: "light" });
+      t.present();
     } else if (res && res.removed) {
       setFavorited(false);
+      const t = Toast.create({ message: "Removed from favorites", duration: 2000, color: "light" });
+      t.present();
+    } else {
+      const t = Toast.create({ message: "Something went wrong...", duration: 2000, color: "danger" });
+      t.present();
     }
   }
 
@@ -42,8 +49,15 @@ const ActivityFavoriteVisitedButton = (props: { id: string, activityType: 'event
     );
     if (res && !res.removed) {
       setVisited(true);
+      const t = Toast.create({ message: "Added to visited!", duration: 2000, color: "light" });
+      t.present();
     } else if (res && res.removed) {
       setVisited(false);
+      const t = Toast.create({ message: "Removed from visited", duration: 2000, color: "light" });
+      t.present();
+    } else {
+      const t = Toast.create({ message: "Something went wrong...", duration: 2000, color: "danger" });
+      t.present();
     }
   }
 
@@ -57,33 +71,24 @@ const ActivityFavoriteVisitedButton = (props: { id: string, activityType: 'event
     );
     if (res && !res.removed) {
       setRsvp(true);
+      const t = Toast.create({ message: "RSVP'd for event!", duration: 2000, color: "light" });
+      t.present();
     } else if (res && res.removed) {
       setRsvp(false);
+      const t = Toast.create({ message: "Removed RSVP from event.", duration: 2000, color: "light" });
+      t.present();
+    } else {
+      const t = Toast.create({ message: "Something went wrong...", duration: 2000, color: "danger" });
+      t.present();
     }
   }
 
   const getButtonStatus = useCallback(async () => {
     if (!context.humspotUser || !id) return;
-    const response = await handleGetFavoritesAndVisitedAndRSVPStatus(
-      context.humspotUser.userID,
-      id
-    );
-    if (response.favorited) {
-      setFavorited(true);
-    } else {
-      setFavorited(false);
-    }
-
-    if (response.visited) {
-      setVisited(true);
-    } else {
-      setVisited(false);
-    }
-    if (response.rsvp) {
-      setRsvp(true);
-    } else {
-      setRsvp(false);
-    }
+    const response = await handleGetFavoritesAndVisitedAndRSVPStatus(context.humspotUser.userID, id);
+    setFavorited(response.favorited);
+    setVisited(response.visited);
+    setRsvp(response.rsvp);
   }, [context.humspotUser]);
 
   useEffect(() => {
@@ -124,21 +129,24 @@ const ActivityFavoriteVisitedButton = (props: { id: string, activityType: 'event
           ></IonIcon>
         </IonButton>
         :
-        <IonButton
-          className="VisitedButton"
-          fill="clear"
-          color={"secondary"}
-          size="large"
-          id="VisitedButton"
-          disabled={visited === null}
-          onClick={clickOnVisited}
-        >
-          <IonIcon slot="icon-only" icon={visited === true ? walk : walkOutline}></IonIcon>
-        </IonButton>
+        activityType == "attraction" ?
+          <IonButton
+            className="VisitedButton"
+            fill="clear"
+            color={"secondary"}
+            size="large"
+            id="VisitedButton"
+            disabled={visited === null}
+            onClick={clickOnVisited}
+          >
+            <IonIcon slot="icon-only" icon={visited === true ? walk : walkOutline}></IonIcon>
+          </IonButton>
+          :
+          <></>
       }
     </>
   );
 
 };
 
-export default memo(ActivityFavoriteVisitedButton);
+export default memo(ActivityFavoriteVisitedButtons);

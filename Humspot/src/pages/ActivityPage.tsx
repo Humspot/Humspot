@@ -21,11 +21,9 @@ import placeholder from "../assets/images/placeholder.png";
 import ActivityDateTimeLocation from "../components/Activity/ActivityDateTimeLocation";
 import ActivityCommentsSection from "../components/Activity/ActivityCommentsSection";
 import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
 import "swiper/css/autoplay";
 import { HumspotActivity } from "../utils/types";
-import ActivityFavoriteVisitedRSVPButton from "../components/Activity/ActivityFavoriteVisitedRSVPButton";
+import ActivityFavoriteVisitedRSVPButtons from "../components/Activity/ActivityFavoriteVisitedRSVPButton";
 
 type ActivityPageParams = {
   id: string;
@@ -49,27 +47,23 @@ function ActivityPage() {
     <IonPage>
       <IonContent>
 
-        <ActivityFavoriteVisitedRSVPButton id={id} activityType={activity?.activityType} />
+        <ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />
 
         {/* Header Image */}
         <div className="headerImage">
-          <Swiper
-            modules={[Autoplay]}
-            autoplay={{ delay: 4000 }}
-            direction="vertical"
-          >
-            {activity?.photoUrls &&
-              activity?.photoUrls?.split(",").map((url: any, index: any) => (
-                <SwiperSlide key={index}>
-                  <img
-                    alt="Attraction Image"
-                    src={url || placeholder}
-                    className="MainCarouselEntryHeaderImage"
-                    loading="lazy"
-                  ></img>
-                </SwiperSlide>
-              ))}
-          </Swiper>
+          {activity?.photoUrls &&
+            activity?.photoUrls?.split(",").map((url: string, index: number) => {
+              if (index > 0) return;
+              return (
+                <img
+                  key={index}
+                  alt="Activity Image"
+                  src={url || placeholder}
+                  className="MainCarouselEntryHeaderImage"
+                  loading="lazy"
+                />
+              )
+            })}
         </div>
 
         {/* Header Title */}

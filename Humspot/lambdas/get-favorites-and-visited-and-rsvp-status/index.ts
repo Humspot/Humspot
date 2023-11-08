@@ -1,5 +1,7 @@
 /**
  * AWS lambda function to retrieve whether a user has visited or favorited or RSVP'd for an activity.
+ * 
+ * NOTE: The name of the function in AWS is get-visited-and-favorites-status, so use this as opposed to the folder name!
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
@@ -45,26 +47,23 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     const queryFavorited: string = `
       SELECT EXISTS(SELECT * FROM Favorites WHERE userID = ? AND activityID = ?) as favorited;
     `;
-
     const [favoritedRows]: any = await conn.execute(queryFavorited, [userID, activityID]);
 
     // Query to check if the user has visited the activity
     const queryVisited: string = `
       SELECT EXISTS(SELECT * FROM Visited WHERE userID = ? AND activityID = ?) as visited;
     `;
-
     const [visitedRows]: any = await conn.execute(queryVisited, [userID, activityID]);
 
     // Query to check the user's RSVP status
     const queryRSVP: string = `
       SELECT EXISTS(SELECT * FROM RSVP WHERE userID = ? AND activityID = ?) as RSVP;
     `
-
     const [rsvpRows]: any = await conn.execute(queryRSVP, [userID, activityID]);
 
     const favorited: boolean = favoritedRows[0]?.favorited === 1;
     const visited: boolean = visitedRows[0]?.visited === 1;
-    const rsvp: boolean = rsvpRows[0]?.favorited === 1;
+    const rsvp: boolean = rsvpRows[0]?.RSVP === 1;
 
     return {
       statusCode: 200,
@@ -85,6 +84,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
   }
 };
+
 
 
 

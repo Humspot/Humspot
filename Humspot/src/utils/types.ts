@@ -178,3 +178,11 @@ export type HumspotActivity = {
   openTimes: string | null;
   comments: any[];
 }
+
+export type GetFavoritesAndVisitedAndRSVPStatusResponse = {
+  success: boolean;
+  message: string;
+  favorited: boolean | null;
+  visited: boolean | null;
+  rsvp: boolean | null;
+}
