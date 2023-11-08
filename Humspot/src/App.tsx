@@ -37,7 +37,7 @@ import "./theme/variables.css";
 
 import ExplorePage from "./pages/explore";
 import CalendarPage from "./pages/calendar";
-import MapPage from "./pages/map";
+import MapPage from "./pages/Map";
 import ProfilePage from "./pages/Profile";
 import TestGoogleAuth from "./pages/TestGoogleAuth";
 

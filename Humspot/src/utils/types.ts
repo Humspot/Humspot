@@ -159,29 +159,14 @@ export type AddCommentResponse = {
 export type GetActivityResponse = {
   message: string;
   success: boolean;
-  activity?: {
-    name: string;
-    description: string;
-    location: string;
-    activityType: string;
-    websiteUrl: string;
-    date: string;
-    time: string;
-    latitude: string | null;
-    longitude: string | null;
-    tags: string; // comma delimited list
-    photoUrls: string; // comma delimited list
-    organizer: string;
-    openTimes: string | null;
-    comments: any[];
-  }
+  activity?: HumspotActivity;
 };
 
 export type HumspotActivity = {
   name: string;
   description: string;
   location: string;
-  activityType: string;
+  activityType: "event" | "attraction" | "custom";
   websiteUrl: string;
   date: string;
   time: string;
@@ -192,5 +177,4 @@ export type HumspotActivity = {
   organizer: string;
   openTimes: string | null;
   comments: any[];
-  activityID: string;
 }

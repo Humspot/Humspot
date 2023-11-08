@@ -916,7 +916,7 @@ export const handleGetActivity = async (activityID: string): Promise<GetActivity
 
 };
 
-export const handleGetFavoritesAndVisitedStatus = async (userID: string, activityID: string) => {
+export const handleGetFavoritesAndVisitedAndRSVPStatus = async (userID: string, activityID: string) => {
   try {
     const currentUserSession = await Auth.currentSession();
 

@@ -13,7 +13,7 @@ import { useToast } from "@agney/ir-toast";
 import GoBackHeader from "../components/Login/GoBackHeader";
 import GoogleLoginButton from "../components/Login/GoogleLoginButton";
 
-import './SignUp.css';
+import '../components/Login/AuthPages.css';
 
 const inputNote: React.CSSProperties = {
   fontSize: "0.85em",

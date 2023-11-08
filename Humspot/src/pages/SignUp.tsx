@@ -19,8 +19,7 @@ import GoBackHeader from "../components/Login/GoBackHeader";
 import GoogleLoginButton from "../components/Login/GoogleLoginButton";
 
 
-import './SignUp.css';
-
+import '../components/Login/AuthPages.css';
 
 
 const SignUp: React.FC = () => {

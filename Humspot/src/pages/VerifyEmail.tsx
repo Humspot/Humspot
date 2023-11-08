@@ -18,7 +18,7 @@ import { useToast } from "@agney/ir-toast";
 import { confirmSignUp, handleResetPassword } from "../utils/server";
 import { useContext } from "../utils/my-context";
 
-import './SignUp.css';
+import '../components/Login/AuthPages.css';
 import { eyeOutline, eyeOffOutline } from "ionicons/icons";
 
 
