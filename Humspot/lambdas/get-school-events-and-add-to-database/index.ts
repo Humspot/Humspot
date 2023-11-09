@@ -99,7 +99,7 @@ exports.handler = async (event: any): Promise<LambdaResponse> => {
     const itemsList = result.rss.channel[0].item; // based on the structure of the XML document
 
     let eventsToBeAdded: HumspotEvent[] = [];
-    for (let i = 0; i < 1 /* itemsList.length*/; ++i) {
+    for (let i = 0; i < itemsList.length; ++i) {
       const item = itemsList[i];
       const infoFromDescription = parseDescription(item.description[0] || '');
       const photoUrls = infoFromDescription.imageUrl ? [infoFromDescription.imageUrl] : [];

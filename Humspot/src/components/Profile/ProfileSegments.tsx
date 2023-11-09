@@ -1,4 +1,4 @@
-import { IonSegment, IonSegmentButton, IonIcon, IonLabel, IonCard, IonCardContent, IonList, IonItem, IonThumbnail, useIonRouter, IonSkeletonText, IonContent } from "@ionic/react";
+import { IonSegment, IonSegmentButton, IonIcon, IonLabel, IonCard, IonCardContent, IonList, IonItem, IonThumbnail, useIonRouter, IonSkeletonText, IonContent, IonTitle } from "@ionic/react";
 import { people, star, walk } from "ionicons/icons";
 import { memo, useCallback, useEffect, useState } from "react";
 import { handleGetCommentsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
@@ -8,7 +8,6 @@ import { useToast } from "@agney/ir-toast";
 
 import './Profile.css';
 import { formatDate } from "../../utils/formatDate";
-
 
 const ProfileSegments: React.FC = memo(() => {
 
@@ -113,89 +112,107 @@ const ProfileSegments: React.FC = memo(() => {
       <IonContent>
 
         {selectedSegment === "favorites" ? (
-          <IonCard>
-            <IonCardContent>
-              <IonList>
-                {!favoritesLoading ?
-                  favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
-                    return (
-                      <IonItem className='ion-no-padding' key={favorite.name + index} role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
-                        <IonThumbnail><img src={favorite.photoUrl || ''} /></IonThumbnail>
-                        <IonLabel style={{ paddingLeft: "10px" }}>
-                          <h2>{favorite.name}</h2>
-                          <p style={{ fontSize: "0.9rem" }}>{favorite.description}</p>
-                          <p style={{ fontSize: "0.8rem" }}>{favorite.location}</p>
-                        </IonLabel>
-                      </IonItem>
-                    )
-                  })
-                  :
-                  <>
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                  </>
-                }
-              </IonList>
-            </IonCardContent>
-          </IonCard>
+          <>
+            {!favoritesLoading && favorites.length === 0 ?
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Favorites</IonTitle>
+              :
+              <IonCard>
+                <IonCardContent>
+                  <IonList>
+                    {!favoritesLoading ?
+                      favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
+                        return (
+                          <IonItem className='ion-no-padding' key={favorite.name + index} role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
+                            <IonThumbnail><img src={favorite.photoUrl || ''} /></IonThumbnail>
+                            <IonLabel style={{ paddingLeft: "10px" }}>
+                              <h2>{favorite.name}</h2>
+                              <p style={{ fontSize: "0.9rem" }}>{favorite.description}</p>
+                              <p style={{ fontSize: "0.8rem" }}>{favorite.location}</p>
+                            </IonLabel>
+                          </IonItem>
+                        )
+                      })
+                      :
+                      <>
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                      </>
+                    }
+                  </IonList>
+                </IonCardContent>
+              </IonCard>
+            }
+          </>
         ) : selectedSegment === "visited" ? (
-          <IonCard>
-            <IonCardContent>
-              <IonList>
-                {!visitedLoading ?
-                  visited.map((visitedPlace: HumspotVisitedResponse, index: number) => {
-                    return (
-                      <IonItem className='ion-no-padding' key={visitedPlace.name + index} role='button' onClick={() => { if (visitedPlace.activityID) router.push("/activity/" + visitedPlace.activityID) }}>
-                        <IonThumbnail><img src={visitedPlace.photoUrl || ''} /></IonThumbnail>
-                        <IonLabel style={{ paddingLeft: "10px" }}>
-                          <h2>{visitedPlace.name}</h2>
-                          <p style={{ fontSize: "0.9rem" }}>{visitedPlace.description}</p>
-                          <p style={{ fontSize: "0.8rem" }}>{visitedPlace.location}</p>
-                        </IonLabel>
-                      </IonItem>
-                    )
-                  })
-                  :
-                  <>
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                  </>
-                }
-              </IonList>
-            </IonCardContent>
-          </IonCard>
+          <>
+            {!visitedLoading && visited.length === 0 ?
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Places Visited</IonTitle>
+              :
+              <IonCard>
+                <IonCardContent>
+                  <IonList>
+                    {!visitedLoading ?
+                      visited.map((visitedPlace: HumspotVisitedResponse, index: number) => {
+                        return (
+                          <IonItem className='ion-no-padding' key={visitedPlace.name + index} role='button' onClick={() => { if (visitedPlace.activityID) router.push("/activity/" + visitedPlace.activityID) }}>
+                            <IonThumbnail><img src={visitedPlace.photoUrl || ''} /></IonThumbnail>
+                            <IonLabel style={{ paddingLeft: "10px" }}>
+                              <h2>{visitedPlace.name}</h2>
+                              <p style={{ fontSize: "0.9rem" }}>{visitedPlace.description}</p>
+                              <p style={{ fontSize: "0.8rem" }}>{visitedPlace.location}</p>
+                            </IonLabel>
+                          </IonItem>
+                        )
+                      })
+                      :
+                      <>
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                      </>
+                    }
+                  </IonList>
+                </IonCardContent>
+              </IonCard>
+            }
+          </>
         ) : (
-          <IonCard>
-            <IonCardContent>
-              <IonList>
-                {!commentsLoading ?
-                  comments.map((comment: HumspotCommentResponse, index: number) => {
-                    return (
-                      <IonItem className='ion-no-padding' key={comment.name + index} role='button' onClick={() => { if (comment.activityID) router.push("/activity/" + comment.activityID) }}>
-                        <IonThumbnail><img src={comment.photoUrl || ''} /></IonThumbnail>
-                        <IonLabel style={{ paddingLeft: "10px" }}>
-                          <h2>{comment.name}</h2>
-                          <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {comment.commentText}</p>
-                          <p style={{ fontSize: "0.8rem" }}>{formatDate(comment.commentDate as string)}</p>
-                        </IonLabel>
-                      </IonItem>
-                    )
-                  })
-                  :
-                  <>
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                    <IonSkeletonText style={{ height: "2rem" }} animated />
-                  </>
-                }
-              </IonList>
-            </IonCardContent>
-          </IonCard>
+          <>
+            {!commentsLoading && comments.length === 0 ?
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Comments or Interactions</IonTitle>
+              :
+              <IonCard>
+                <IonCardContent>
+                  <IonList>
+                    {!commentsLoading ?
+                      comments.map((comment: HumspotCommentResponse, index: number) => {
+                        return (
+                          <IonItem className='ion-no-padding' key={comment.name + index} role='button' onClick={() => { if (comment.activityID) router.push("/activity/" + comment.activityID) }}>
+                            <IonThumbnail><img src={comment.photoUrl || ''} /></IonThumbnail>
+                            <IonLabel style={{ paddingLeft: "10px" }}>
+                              <h2>{comment.name}</h2>
+                              <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {comment.commentText}</p>
+                              <p style={{ fontSize: "0.8rem" }}>{formatDate(comment.commentDate as string)}</p>
+                            </IonLabel>
+                          </IonItem>
+                        )
+                      })
+                      :
+                      <>
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                        <IonSkeletonText style={{ height: "2rem" }} animated />
+                      </>
+                    }
+                  </IonList>
+                </IonCardContent>
+              </IonCard>
+            }
+          </>
         )
         }
       </IonContent>
