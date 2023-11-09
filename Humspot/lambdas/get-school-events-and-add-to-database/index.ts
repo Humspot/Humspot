@@ -47,7 +47,44 @@ function convertToMySQLDate(formattedDate: string): string {
 
   const mySQLDate = `${year}-${month}-${day}`;
   return mySQLDate;
-}
+};
+
+function parseDescription(description: string) {
+  if (!description) return null;
+  const parser = new DOMParser();
+  const htmlDoc = parser.parseFromString(description, 'text/html');
+
+  // Extracting the fields from the description
+  const location = htmlDoc.querySelector('br')?.previousSibling?.textContent.trim();
+  const dateText = htmlDoc.querySelectorAll('br')[1]?.nextSibling?.textContent.trim();
+  const imageUrl = htmlDoc.querySelector('img')?.src;
+  const descriptionText = htmlDoc.querySelector('p')?.textContent.trim();
+  const eventTitleMatch = description.match(/<b>Event Title<\/b>:&nbsp;(.+?)<br\/>/);
+  const organizationMatch = description.match(/<b>Organization<\/b>:&nbsp;(.+?)<br\/>/);
+  const categoriesMatch = description.match(/<b>Categories<\/b>:&nbsp;(.+?)<br\/>/);
+  const isOpenToPublicMatch = description.match(/<b>Is this event open to public\?<\/b>:&nbsp;(TRUE|FALSE)/);
+  const responsiblePersonMatch = description.match(/<b>Responsible Person at Event Name<\/b>:&nbsp;(.+?)<\/description>/);
+
+  // Extracting values or providing defaults
+  const eventTitle = eventTitleMatch ? eventTitleMatch[1] : 'N/A';
+  const organization = organizationMatch ? organizationMatch[1] : 'N/A';
+  const categories = categoriesMatch ? categoriesMatch[1] : 'N/A';
+  const isOpenToPublic = isOpenToPublicMatch ? isOpenToPublicMatch[1] === 'TRUE' : false;
+  const responsiblePerson = responsiblePersonMatch ? responsiblePersonMatch[1] : 'N/A';
+
+  return {
+    location,
+    date: dateText,
+    imageUrl,
+    description: descriptionText,
+    eventTitle,
+    organization,
+    categories,
+    isOpenToPublic,
+    responsiblePerson
+  };
+};
+
 
 exports.handler = async (event: any): Promise<LambdaResponse> => {
   try {
@@ -63,9 +100,11 @@ exports.handler = async (event: any): Promise<LambdaResponse> => {
     let eventsToBeAdded: HumspotEvent[] = [];
     for (let i = 0; i < itemsList.length; ++i) {
       const item = itemsList[i];
+      const infoFromDescription = parseDescription(item.description[0] || '');
+      if (!infoFromDescription) continue;
       const event: HumspotEvent = {
         name: item.title[0],
-        description: sanitizeHtml(item.description[0], {
+        description: sanitizeHtml(infoFromDescription.date + ' ' + infoFromDescription.description, {
           allowedTags: [],
           allowedAttributes: {},
         }),
@@ -73,12 +112,18 @@ exports.handler = async (event: any): Promise<LambdaResponse> => {
         websiteURL: item.link[0],
         date: convertToMySQLDate(item.category[0]),
         tags: ['HSU', 'School', 'Cal Poly Humboldt'],
-        location: 'Cal Poly Humboldt',
+        location: sanitizeHtml(infoFromDescription.location, {
+          allowedTags: [],
+          allowedAttributes: {},
+        }),
         time: '',
         latitude: null,
         longitude: null,
-        organizer: '',
-        photoUrls: []
+        organizer: sanitizeHtml(infoFromDescription.organization, {
+          allowedTags: [],
+          allowedAttributes: {},
+        }),
+        photoUrls: [infoFromDescription.imageUrl]
       };
       eventsToBeAdded.push(event);
     }
