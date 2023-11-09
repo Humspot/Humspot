@@ -6,6 +6,7 @@
 
 import { parseStringPromise } from 'xml2js';
 import sanitizeHtml from 'sanitize-html';
+import { parse } from 'node-html-parser';
 
 interface LambdaResponse {
   statusCode: number;
@@ -51,14 +52,14 @@ function convertToMySQLDate(formattedDate: string): string {
 
 function parseDescription(description: string) {
   if (!description) return null;
-  const parser = new DOMParser();
-  const htmlDoc = parser.parseFromString(description, 'text/html');
+
+  const root = parse(description);
 
   // Extracting the fields from the description
-  const location = htmlDoc.querySelector('br')?.previousSibling?.textContent.trim();
-  const dateText = htmlDoc.querySelectorAll('br')[1]?.nextSibling?.textContent.trim();
-  const imageUrl = htmlDoc.querySelector('img')?.src;
-  const descriptionText = htmlDoc.querySelector('p')?.textContent.trim();
+  const location = root.querySelector('br')?.previousSibling?.text.trim();
+  const dateText = root.querySelectorAll('br')[1]?.nextSibling?.text.trim();
+  const imageUrl = root.querySelector('img')?.getAttribute('src');
+  const descriptionText = root.querySelector('p')?.text.trim();
   const eventTitleMatch = description.match(/<b>Event Title<\/b>:&nbsp;(.+?)<br\/>/);
   const organizationMatch = description.match(/<b>Organization<\/b>:&nbsp;(.+?)<br\/>/);
   const categoriesMatch = description.match(/<b>Categories<\/b>:&nbsp;(.+?)<br\/>/);
@@ -73,15 +74,15 @@ function parseDescription(description: string) {
   const responsiblePerson = responsiblePersonMatch ? responsiblePersonMatch[1] : 'N/A';
 
   return {
-    location,
-    date: dateText,
-    imageUrl,
-    description: descriptionText,
-    eventTitle,
-    organization,
-    categories,
-    isOpenToPublic,
-    responsiblePerson
+    location: location || '',
+    date: dateText || '',
+    imageUrl: imageUrl || null,
+    description: descriptionText || '',
+    eventTitle: eventTitle || '',
+    organization: organization || '',
+    categories: categories || '',
+    isOpenToPublic: isOpenToPublic || '',
+    responsiblePerson: responsiblePerson || ''
   };
 };
 
@@ -98,9 +99,10 @@ exports.handler = async (event: any): Promise<LambdaResponse> => {
     const itemsList = result.rss.channel[0].item; // based on the structure of the XML document
 
     let eventsToBeAdded: HumspotEvent[] = [];
-    for (let i = 0; i < itemsList.length; ++i) {
+    for (let i = 0; i < 1 /* itemsList.length*/; ++i) {
       const item = itemsList[i];
       const infoFromDescription = parseDescription(item.description[0] || '');
+      const photoUrls = infoFromDescription.imageUrl ? [infoFromDescription.imageUrl] : [];
       if (!infoFromDescription) continue;
       const event: HumspotEvent = {
         name: item.title[0],
@@ -123,7 +125,7 @@ exports.handler = async (event: any): Promise<LambdaResponse> => {
           allowedTags: [],
           allowedAttributes: {},
         }),
-        photoUrls: [infoFromDescription.imageUrl]
+        photoUrls: photoUrls
       };
       eventsToBeAdded.push(event);
     }

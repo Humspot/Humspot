@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "mysql2": "^3.6.1",
+    "node-html-parser": "^6.1.11",
     "sanitize-html": "^2.11.0",
     "xml2js": "^0.6.2"
   }
