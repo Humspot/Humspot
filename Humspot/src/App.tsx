@@ -124,7 +124,7 @@ const App: React.FC = () => {
               <Route exact path="/map" component={MapPage} />
               <Route exact path="/profile" component={ProfilePage} />
               <Route exact path="/google-auth" component={TestGoogleAuth} />
-              <Route exact path="/submit-event" component={SubmitEventPage} />
+              <Route exact path="/event-form" component={EventForm} />
               <Route exact path="/attraction/:id" component={AttractionPage} />
               <Route exact path="/TermsAndConditions" component={TermsAndConditions} />
               <Route exact path="/PrivacyPolicy" component={PrivacyPolicy} /> 

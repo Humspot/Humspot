@@ -24,6 +24,7 @@ export type AWSLoginResponse = {
 export type AWSAddEventResponse = {
   message: string;
   eventID?: string;
+  success: boolean;
 };
 
 export type HumspotEvent = {
@@ -38,6 +39,7 @@ export type HumspotEvent = {
   organizer: string;
   tags: string[];
   photoUrls: string[];
+  websiteURL: string | null;
 };
 
 export type AWSAddAttractionResponse = {

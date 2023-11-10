@@ -1,82 +1,95 @@
 import React, { useState } from 'react';
+import { IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle } from '@ionic/react';
+import { HumspotEvent } from '../utils/types';
+import { useContext } from '../utils/my-context';
+import { timeout } from '../utils/timeout';
+import { useToast } from '@agney/ir-toast';
+import { handleAddEvent, handleSubmitEventForApproval } from '../utils/server';
 
-const EventForm = (props) => {
-    const [formData, setFormData] = useState({
+
+export const EventForm = () => {
+    
+    const context = useContext();
+    const Toast = useToast();
+  
+    const [event, setEvent] = useState<HumspotEvent>({
         name: '',
         description: '',
         location: '',
-        addedByUserID: '', // This will likely come from the logged-in user
+        addedByUserID: '', // This should probably come from context or user session
         date: '',
         time: '',
-        latitude: '',
-        longitude: '',
+        latitude: 0,
+        longitude: 0,
         organizer: '',
-        tags: '',
-        photoUrls: ''
-    });
+        tags: [],
+        photoUrls: [],
+        websiteURL: '',
+      });
+      
+      const handleChange = (field: keyof HumspotEvent) => (e: CustomEvent) => {
+        setEvent({ ...event, [field]: e.detail.value });
+      };
+    
+      const handleSubmit = async () => {
+        if (!context.humspotUser || !context.humspotUser.userID) return;
+        let eventCopy = event; 
+        eventCopy.addedByUserID = context.humspotUser.userID;
+        setEvent(eventCopy); 
+        const response = await handleSubmitEventForApproval(event);
+        console.log(response);
+    }
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
+  return (
+    <IonPage>
+      <IonContent>
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // TODO: Send the data to the server or admin for review
-        console.log(formData);
-    };
+        <IonTitle className='ion-text-center' style={{ paddingTop: "10%" }}>Submit an Event</IonTitle>
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Name:</label>
-                <input type="text" name="name" value={formData.name} onChange={handleChange} />
-            </div>
-            <div>
-                <label>Description:</label>
-                <textarea name="description" value={formData.description} onChange={handleChange}></textarea>
-            </div>
-            <div>
-                <label>Location:</label>
-                <input type="text" name="location" value={formData.location} onChange={handleChange} />
-            </div>
-            <div>
-                <label>Date:</label>
-                <input type="date" name="date" value={formData.date} onChange={handleChange} />
-            </div>
-            <div>
-                <label>Time:</label>
-                <input type="time" name="time" value={formData.time} onChange={handleChange} />
-            </div>
-            <div>
-                <label>Latitude:</label>
-                <input type="number" name="latitude" step="any" value={formData.latitude} onChange={handleChange} />
-            </div>
-            <div>
-                <label>Longitude:</label>
-                <input type="number" name="longitude" step="any" value={formData.longitude} onChange={handleChange} />
-            </div>
-            <div>
-                <label>Organizer:</label>
-                <input type="text" name="organizer" value={formData.organizer} onChange={handleChange} />
-            </div>
-            <div>
-                <label>Tags (comma-separated):</label>
-                <input type="text" name="tags" value={formData.tags} onChange={handleChange} />
-            </div>
-            <div>
-                {/* This is a simple input. In reality, you might want to have a file upload for photos */}
-                <label>Photo URLs (comma-separated):</label>
-                <input type="text" name="photoUrls" value={formData.photoUrls} onChange={handleChange} />
-            </div>
-            <div>
-                <button type="submit">Submit</button>
-            </div>
-        </form>
-    );
+        {context.humspotUser?.accountType !== 'user' ?
+
+          <form style={{ padding: "10px" }}>
+            <IonLabel>Name:</IonLabel>
+            <IonInput value={event.name} onIonChange={handleChange('name')} placeholder="Enter Name" />
+
+            <br />
+
+            <IonLabel>Description:</IonLabel>
+            <IonTextarea value={event.description} onIonChange={handleChange('description')} placeholder="Enter Description" />
+
+            <br />
+
+            <IonLabel>Location:</IonLabel>
+            <IonInput value={event.location} onIonChange={handleChange('location')} placeholder="Enter Location" />
+
+            <br />
+
+            <IonLabel>Date & Time:</IonLabel>
+            <IonDatetime value={event.date} onIonChange={handleChange('date')} placeholder="Select Date" />
+
+            <br />
+
+            <IonLabel>Organizer:</IonLabel>
+            <IonInput value={context.humspotUser?.username ?? ''} disabled placeholder="Enter Organizer" />
+
+            <br />
+
+
+
+            <br />
+
+            <IonButton onClick={async() => await handleSubmit()}>Submit</IonButton>
+          </form>
+
+          :
+          <>
+            <br />
+            <h2 className='ion-text-center'>You must be an admin or organizer to submit an event or attraction!</h2>
+          </>
+        }
+      </IonContent>
+    </IonPage>
+  );
 };
 
 export default EventForm;
