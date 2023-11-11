@@ -30,10 +30,12 @@ type ActivityPageParams = {
 }
 
 function ActivityPage() {
+
   const params = useParams<ActivityPageParams>();
   const id: string = params.id;
 
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
+
 
   const handleGetActivityCallback = useCallback(async (id: string) => {
     const res = await handleGetActivity(id);
@@ -50,21 +52,21 @@ function ActivityPage() {
         <ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />
 
         {/* Header Image */}
-        <div className="headerImage">
-          {activity?.photoUrls &&
-            activity?.photoUrls?.split(",").map((url: string, index: number) => {
-              if (index > 0) return;
-              return (
-                <img
-                  key={index}
-                  alt="Activity Image"
-                  src={url || placeholder}
-                  className="MainCarouselEntryHeaderImage"
-                  loading="lazy"
-                />
-              )
-            })}
-        </div>
+          <div className="headerDiv">
+            <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }}>
+              {activity?.photoUrls &&
+                activity?.photoUrls?.split(",").map((url: any, index: any) => (
+                  <SwiperSlide key={index} className="fill-frame-image">
+                    <img
+                      alt="Attraction Image"
+                      src={url || placeholder}
+                      loading="lazy"
+                      className="headerImage"
+                    ></img>
+                  </SwiperSlide>
+                ))}
+            </Swiper>
+          </div>
 
         {/* Header Title */}
         <IonCard color={"primary"} className="headercard" >

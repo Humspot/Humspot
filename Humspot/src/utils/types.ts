@@ -75,7 +75,7 @@ type ExtendedHumspotAttraction = HumspotAttraction & {
   tagName: string;
 };
 
-export type GetEventsGivenTagResponse = {
+export type GetActivitiesGivenTagResponse = {
   message: string;
   events: ExtendedHumspotEvent[];
 };

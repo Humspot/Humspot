@@ -15,29 +15,19 @@ import {
   handleAddToRSVP,
   handleAddToVisited,
   handleGetCommentsGivenUserID,
-  handleGetEventGivenTag,
+  handleGetActivitiesGivenTag,
   handleGetFavoritesGivenUserID,
   handleGetVisitedGivenUserID,
   handleGoogleLoginAndVerifyAWSUser,
   handleLogout,
 } from "../utils/server";
 import { useContext } from "../utils/my-context";
-import { HumspotAttraction, HumspotCommentSubmit, HumspotEvent } from "../utils/types";
+import {
+  HumspotAttraction,
+  HumspotCommentSubmit,
+  HumspotEvent,
+} from "../utils/types";
 import { EngineParameters, getJson } from "serpapi";
-
-// const event10: HumspotEvent = {
-//   name: "",
-//   description: "Ring in the New Year with a spectacular fireworks display, live music, and a midnight toast!",
-//   location: "Waterfront Dr, Eureka, CA 95501",
-//   addedByUserID: "715d07c9d97dde03808d03bb",
-//   latitude: 40.807520,
-//   longitude: -124.163489,
-//   date: "2023-12-31",
-//   time: "21:00",
-//   organizer: "dy45",
-//   tags: ["new year", "party", "fireworks"],
-//   photoUrls: [],
-// };
 
 const dummyAttraction: HumspotAttraction = {
   name: "NEW ATTRACTION AT HUMBOLDT",
@@ -92,7 +82,7 @@ const TestGoogleAuth: React.FC = () => {
   };
 
   const handleTestGetEventGivenTag = async () => {
-    const res = await handleGetEventGivenTag(1, "fun");
+    const res = await handleGetActivitiesGivenTag(1, "fun");
   };
 
   const handleTestImages = async () => {
@@ -151,8 +141,12 @@ const TestGoogleAuth: React.FC = () => {
   const handleTestRSVP = async () => {
     if (!context.humspotUser) return;
     const userID: string = context.humspotUser.userID;
-    const res = await handleAddToRSVP(userID, '08d4f2112bb9d001127b76614', '2023-11-01');
-  }
+    const res = await handleAddToRSVP(
+      userID,
+      "08d4f2112bb9d001127b76614",
+      "2023-11-01"
+    );
+  };
 
   return (
     <>
@@ -161,9 +155,7 @@ const TestGoogleAuth: React.FC = () => {
           <IonCard>
             <IonCardContent>
               <>
-                <p>
-                  Currently logged in as:{" "}
-                </p>
+                <p>Currently logged in as: </p>
 
                 <IonButton
                   color="dark"
@@ -172,7 +164,7 @@ const TestGoogleAuth: React.FC = () => {
                   Login
                 </IonButton>
 
-                <IonButton color='primary'>
+                <IonButton color="primary">
                   Test notification: 715d07c9d97dde03808d03bb
                 </IonButton>
 

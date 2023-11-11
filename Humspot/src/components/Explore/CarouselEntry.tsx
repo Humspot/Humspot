@@ -8,8 +8,10 @@ import {
   IonHeader,
   IonImg,
   IonPage,
+  IonRippleEffect,
   useIonRouter,
 } from "@ionic/react";
+import placeholder from "../../assets/images/placeholder.png";
 
 import "./CarouselEntry.css";
 
@@ -17,7 +19,7 @@ function CarouselEntry({ title, description, imgsrc, id }: any) {
   const router = useIonRouter();
 
   const containerStyle = {
-    height: "30vh", // Set the desired height for the container
+    height: "28vh", // Set the desired height for the container
     overflow: "hidden", // Hide any overflow outside the container
   };
 
@@ -29,6 +31,7 @@ function CarouselEntry({ title, description, imgsrc, id }: any) {
 
   const headerStyle = {
     padding: "2%",
+    height: "10vh",
   };
 
   return (
@@ -40,14 +43,14 @@ function CarouselEntry({ title, description, imgsrc, id }: any) {
       <div style={containerStyle}>
         <IonImg
           alt="Attraction Image"
-          src={imgsrc}
+          src={imgsrc || placeholder}
           className="MainCarouselEntryHeaderImage"
           style={imgStyle as any}
         ></IonImg>
       </div>
       <IonCardHeader style={headerStyle}>
         <IonCardTitle>{title}</IonCardTitle>
-        <IonCardSubtitle>{description}</IonCardSubtitle>
+        <IonCardSubtitle className="wrap-text">{description}</IonCardSubtitle>
       </IonCardHeader>
     </IonCard>
   );

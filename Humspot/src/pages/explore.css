@@ -35,3 +35,8 @@ swiper-slide {
   font-weight: bolder;
   text-transform: capitalize;
 }
+
+.wrap-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

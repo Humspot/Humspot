@@ -1,28 +1,29 @@
 import {
   IonContent,
-  IonFab,
-  IonFabButton,
-  IonHeader,
-  IonIcon,
   IonItemDivider,
+  IonLoading,
   IonPage,
-  useIonRouter,
-  useIonViewWillEnter,
+  IonSkeletonText,
 } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 import "./explore.css";
-import "../elements/CarouselEntry.css";
+import "../components/Explore/CarouselEntry.css";
 import "@ionic/react/css/ionic-swiper.css";
-import CarouselEntry from "../elements/CarouselEntry";
-import SecondaryCarouselEntry from "../elements/CarouselEntrySecondary";
-import { add, fileTrayStackedSharp, filter, filterSharp } from "ionicons/icons";
+import CarouselEntry from "../components/Explore/CarouselEntry";
+import SecondaryCarouselEntry from "../components/Explore/CarouselEntrySecondary";
 import FilterButton from "../elements/FilterButton";
-import { useState, useCallback, useEffect } from "react";
-import { handleGetActivity, handleGetEvent } from "../utils/server";
-import { useParams } from "react-router-dom";
+
+import { useCallback, useEffect, useState } from "react";
+import {
+  handleGetActivitiesGivenTag,
+  handleGetActivity,
+} from "../utils/server";
+import { useToast } from "@agney/ir-toast";
+import CarouselEntrySecondary from "../components/Explore/CarouselEntrySecondary";
 import { useContext } from "../utils/my-context";
+
 
 <link
   href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
@@ -30,171 +31,207 @@ import { useContext } from "../utils/my-context";
 ></link>;
 
 function ExplorePage() {
-  const router = useIonRouter();
-  const context = useContext();
-  const { id }: any = useParams();
-  const [activity, setActivity] = useState<any>(null);
-  const handleGetActivityCallback = useCallback(async (id: string) => {
-    const res = await handleGetActivity(id);
-    if ("event" in res && res.event) setActivity(res.event);
+
+  const [activitiesHighlight, setActivitiesHighlight] = useState<any>([]);
+  const [activitiesHighlightLoading, setActivitiesHighlightLoading] =
+    useState<boolean>(true);
+  const Toast = useToast();
+  const fetchActivitiesHighlight = useCallback(async () => {
+    const response = await handleGetActivitiesGivenTag(1, "fun");
+    if (!response.success) {
+      const toast = Toast.create({
+        message: response.message,
+        duration: 2000,
+        color: "danger",
+      });
+      toast.present();
+    }
+    setActivitiesHighlight(response.activities);
+    setActivitiesHighlightLoading(false);
   }, []);
+
+  const context = useContext();
   useIonViewWillEnter(() => {
     context.setShowTabs(true);
   })
+
   useEffect(() => {
-    if (id) handleGetActivityCallback(id);
-  }, [id]);
-  const mainCarouselData = [
-    {
-      title: "Redwood Fest",
-      description: "This is the first slide",
-      imgsrc:
-        "https://activityphotos.s3.us-west-1.amazonaws.com/event-photos/715d07c9d97dde03808d03bb-R7CeCVUf-1697853939858-jpeg",
-      id: "14599af9152000ad4da9dea9e",
-    },
-    {
-      title: "Redwood Fest",
-      description: "This is the first slide",
-      imgsrc:
-        "https://activityphotos.s3.us-west-1.amazonaws.com/event-photos/715d07c9d97dde03808d03bb-R7CeCVUf-1697853939858-jpeg",
-      id: "14599af9152000ad4da9dea9e",
-    },
-  ];
+    fetchActivitiesHighlight();
+  }, [fetchActivitiesHighlight]);
 
-  const secondCarouselData = [
-    {
-      title: "Attraction 1",
-      imgsrc: "https://source.unsplash.com/random/?forest,cloud",
-    },
-    {
-      title: "Attraction 2",
-      imgsrc: "https://source.unsplash.com/random/?forest,cloud,trail",
-    },
-    {
-      title: "Attraction 3",
-      imgsrc: "https://source.unsplash.com/random/?beach,cloud",
-    },
-    {
-      title: "Attraction 4",
-      imgsrc: "https://source.unsplash.com/random/?beach,cloud,trail",
-    },
-  ];
+  const [activitiesSecond, setActivitiesSecond] = useState<any>([]);
+  const [activitiesSecondLoading, setActivitiesSecondLoading] =
+    useState<boolean>(true);
+  const fetchActivitiesSecond = useCallback(async () => {
+    const response = await handleGetActivitiesGivenTag(1, "School");
+    if (!response.success) {
+      const toast = Toast.create({
+        message: response.message,
+        duration: 2000,
+        color: "danger",
+      });
+      toast.present();
+    }
+    setActivitiesSecond(response.activities);
+    setActivitiesSecondLoading(false);
+  }, []);
 
-  const thirdCarouselData = [
-    {
-      title: "Attraction 1",
-      imgsrc: "https://source.unsplash.com/random/?forest,day",
-    },
-    {
-      title: "Attraction 2",
-      imgsrc: "https://source.unsplash.com/random/?forest,day,trail",
-    },
-    {
-      title: "Attraction 3",
-      imgsrc: "https://source.unsplash.com/random/?beach,day",
-    },
-    {
-      title: "Attraction 4",
-      imgsrc: "https://source.unsplash.com/random/?beach,day,trail",
-    },
-  ];
+  useEffect(() => {
+    fetchActivitiesSecond();
+  }, [fetchActivitiesSecond]);
 
-  const fourthCarouselData = [
-    {
-      title: "Attraction 1",
-      imgsrc: "https://source.unsplash.com/random/?forest,woods",
-    },
-    {
-      title: "Attraction 2",
-      imgsrc: "https://source.unsplash.com/random/?forest,woods,trail",
-    },
-    {
-      title: "Attraction 3",
-      imgsrc: "https://source.unsplash.com/random/?beach,night",
-    },
-    {
-      title: "Attraction 4",
-      imgsrc: "https://source.unsplash.com/random/?beach,trail,night",
-    },
-  ];
+  const [activitiesThird, setActivitiesThird] = useState<any>([]);
+  const [activitiesThirdLoading, setActivitiesThirdLoading] =
+    useState<boolean>(true);
+  const fetchActivitiesThird = useCallback(async () => {
+    const response = await handleGetActivitiesGivenTag(1, "hsu");
+    if (!response.success) {
+      const toast = Toast.create({
+        message: response.message,
+        duration: 2000,
+        color: "danger",
+      });
+      toast.present();
+    }
+    setActivitiesThird(response.activities);
+    setActivitiesThirdLoading(false);
+  }, []);
 
-  const mainCarouselEntries = mainCarouselData.map((data, index) => (
-    <SwiperSlide key={index}>
-      <div className="MainCarouselSlide">
-        <CarouselEntry
-          title={data.title}
-          description={data.description}
-          imgsrc={data.imgsrc}
-          id={data.id}
-        />
-      </div>
-    </SwiperSlide>
-  ));
+  useEffect(() => {
+    fetchActivitiesThird();
+  }, [fetchActivitiesThird]);
 
-  const secondCarouselEntries = secondCarouselData.map((data, index) => (
-    <SwiperSlide key={index}>
-      <div className="SecondaryCarouselSlide">
-        <SecondaryCarouselEntry
-          title={data.title}
-          imgsrc={data.imgsrc}
-          id={index}
-        />
-      </div>
-    </SwiperSlide>
-  ));
+  const [activitiesFourth, setActivitiesFourth] = useState<any>([]);
+  const [activitiesFourthLoading, setActivitiesFourthLoading] =
+    useState<boolean>(true);
+  const fetchActivitiesFourth = useCallback(async () => {
+    const response = await handleGetActivitiesGivenTag(1, "School");
+    if (!response.success) {
+      const toast = Toast.create({
+        message: response.message,
+        duration: 2000,
+        color: "danger",
+      });
+      toast.present();
+    }
+    setActivitiesFourth(response.activities);
+    setActivitiesFourthLoading(false);
+  }, []);
 
-  const thirdCarouselEntries = thirdCarouselData.map((data, index) => (
-    <SwiperSlide key={index}>
-      <div className="SecondaryCarouselSlide">
-        <SecondaryCarouselEntry
-          title={data.title}
-          imgsrc={data.imgsrc}
-          id={index}
-        />
-      </div>
-    </SwiperSlide>
-  ));
-
-  const fourthCarouselEntries = fourthCarouselData.map((data, index) => (
-    <SwiperSlide key={index}>
-      <div className="SecondaryCarouselSlide">
-        <SecondaryCarouselEntry
-          title={data.title}
-          imgsrc={data.imgsrc}
-          id={index}
-        />
-      </div>
-    </SwiperSlide>
-  ));
+  useEffect(() => {
+    fetchActivitiesFourth();
+  }, [fetchActivitiesFourth]);
 
   return (
     <>
       <IonPage>
         <FilterButton></FilterButton>
+        <IonLoading
+          isOpen={
+            activitiesHighlightLoading &&
+            activitiesSecondLoading &&
+            activitiesThirdLoading &&
+            activitiesFourthLoading
+          }
+          message={"Loading..."}
+        />
         <IonContent>
           <IonItemDivider className="Header" color={"primary"}>
             Highlights
           </IonItemDivider>
           <div className="MainCarousel">
-            <Swiper slidesPerView={1.2}>{mainCarouselEntries}</Swiper>
+            <Swiper slidesPerView={1.2}>
+              {!activitiesHighlightLoading ? (
+                activitiesHighlight.map((activity: any, index: any) => (
+                  <SwiperSlide key={index}>
+                    <div className="MainCarouselSlide">
+                      <CarouselEntry
+                        title={activity?.name}
+                        description={activity?.description}
+                        imgsrc={activity?.photoUrl}
+                        id={activity?.activityID}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))
+              ) : (
+                <>
+                  <IonSkeletonText style={{ height: "2rem" }} animated />
+                </>
+              )}
+            </Swiper>
           </div>
           <IonItemDivider className="Header" color={"primary"}>
-            Chill Places
+            Upcoming Events
           </IonItemDivider>
           <div className="SecondaryCarousel">
-            <Swiper slidesPerView={1.2}>{secondCarouselEntries}</Swiper>
+            <Swiper slidesPerView={1.2}>
+              {!activitiesSecondLoading ? (
+                activitiesSecond.map((activity: any, index: any) => (
+                  <SwiperSlide key={index}>
+                    <div className="SecondaryCarouselSlide">
+                      <CarouselEntrySecondary
+                        title={activity?.name}
+                        imgsrc={activity?.photoUrl}
+                        id={activity?.activityID}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))
+              ) : (
+                <>
+                  <IonSkeletonText style={{ height: "2rem" }} animated />
+                </>
+              )}
+            </Swiper>
           </div>
           <IonItemDivider className="Header" color={"primary"}>
-            Short Notice
+            Popular Spots
           </IonItemDivider>
           <div className="SecondaryCarousel">
-            <Swiper slidesPerView={1.2}>{thirdCarouselEntries}</Swiper>
+            <Swiper slidesPerView={1.2}>
+              {!activitiesThirdLoading ? (
+                activitiesThird.map((activity: any, index: any) => (
+                  <SwiperSlide key={index}>
+                    <div className="SecondaryCarouselSlide">
+                      <CarouselEntrySecondary
+                        title={activity?.name}
+                        imgsrc={activity?.photoUrl}
+                        id={activity?.activityID}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))
+              ) : (
+                <>
+                  <IonSkeletonText style={{ height: "2rem" }} animated />
+                </>
+              )}
+            </Swiper>
           </div>
           <IonItemDivider className="Header" color={"primary"}>
-            Adventure
+            Local Adventures
           </IonItemDivider>
           <div className="SecondaryCarousel">
-            <Swiper slidesPerView={1.2}>{fourthCarouselEntries}</Swiper>
+            <Swiper slidesPerView={1.2}>
+              {!activitiesFourthLoading ? (
+                activitiesFourth.map((activity: any, index: any) => (
+                  <SwiperSlide key={index}>
+                    <div className="SecondaryCarouselSlide">
+                      <CarouselEntrySecondary
+                        title={activity?.name}
+                        imgsrc={activity?.photoUrl}
+                        id={activity?.activityID}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))
+              ) : (
+                <>
+                  <IonSkeletonText style={{ height: "2rem" }} animated />
+                </>
+              )}
+            </Swiper>
           </div>
         </IonContent>
       </IonPage>

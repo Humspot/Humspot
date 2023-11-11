@@ -10,6 +10,7 @@ import {
   IonPage,
   useIonRouter,
 } from "@ionic/react";
+import placeholder from "../../assets/images/placeholder.png";
 
 // import "./CarouselEntry.css";
 
@@ -17,7 +18,7 @@ function CarouselEntrySecondary({ title, imgsrc, id }: any) {
   const router = useIonRouter();
 
   const secondarycontainerStyle = {
-    height: "13vh", // Set the desired height for the container
+    height: "12vh", // Set the desired height for the container
     overflow: "hidden", // Hide any overflow outside the container
   };
 
@@ -29,6 +30,7 @@ function CarouselEntrySecondary({ title, imgsrc, id }: any) {
 
   const labelStyle = {
     padding: "2%",
+    height: "7vh",
   };
 
   return (
@@ -40,7 +42,7 @@ function CarouselEntrySecondary({ title, imgsrc, id }: any) {
       <div style={secondarycontainerStyle}>
         <IonImg
           alt="Attraction Image"
-          src={imgsrc}
+          src={imgsrc || placeholder}
           className="SecondaryCarouselEntryHeaderImage"
           style={imgStyle as any}
         ></IonImg>
