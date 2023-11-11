@@ -185,7 +185,7 @@ function ExplorePage() {
             </Swiper>
           </div>
           <IonItemDivider className="Header" color={"primary"}>
-            Popular Spots
+            Chill Spots
           </IonItemDivider>
           <div className="SecondaryCarousel">
             <Swiper slidesPerView={1.2}>
