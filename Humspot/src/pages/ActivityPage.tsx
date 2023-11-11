@@ -102,6 +102,7 @@ function ActivityPage() {
           <IonCardContent>
             <IonText color={"dark"}>
               <p>{activity?.description ?? ""}</p>
+              <p><a href={activity?.websiteURL ?? '#'} target='_blank' rel='noopener noreferrer'>Visit Site</a></p>
             </IonText>
           </IonCardContent>
         </IonCard>
@@ -110,7 +111,7 @@ function ActivityPage() {
           activity={activity}
         ></ActivityCommentsSection>
         {/* Add a Comment Box */}
-        <ActivityAddCommentBox activity={activity}></ActivityAddCommentBox>
+        <ActivityAddCommentBox id={id}></ActivityAddCommentBox>
       </IonContent>
     </IonPage >
   );

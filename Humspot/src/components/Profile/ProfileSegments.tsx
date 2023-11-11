@@ -6,8 +6,11 @@ import { HumspotCommentResponse, HumspotFavoriteResponse, HumspotVisitedResponse
 import { useContext } from "../../utils/my-context";
 import { useToast } from "@agney/ir-toast";
 
+import placeholder from '../../assets/images/placeholder.png';
+
 import './Profile.css';
 import { formatDate } from "../../utils/formatDate";
+import SkeletonLoading from "../Shared/SkeletonLoading";
 
 const ProfileSegments: React.FC = memo(() => {
 
@@ -123,7 +126,7 @@ const ProfileSegments: React.FC = memo(() => {
                       favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
                         return (
                           <IonItem className='ion-no-padding' key={favorite.name + index} role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
-                            <IonThumbnail><img src={favorite.photoUrl || ''} /></IonThumbnail>
+                            <IonThumbnail><img src={favorite.photoUrl || placeholder} /></IonThumbnail>
                             <IonLabel style={{ paddingLeft: "10px" }}>
                               <h2>{favorite.name}</h2>
                               <p style={{ fontSize: "0.9rem" }}>{favorite.description}</p>
@@ -133,12 +136,7 @@ const ProfileSegments: React.FC = memo(() => {
                         )
                       })
                       :
-                      <>
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                      </>
+                      <SkeletonLoading count={4} animated={true} height={"5rem"} />
                     }
                   </IonList>
                 </IonCardContent>
@@ -157,7 +155,7 @@ const ProfileSegments: React.FC = memo(() => {
                       visited.map((visitedPlace: HumspotVisitedResponse, index: number) => {
                         return (
                           <IonItem className='ion-no-padding' key={visitedPlace.name + index} role='button' onClick={() => { if (visitedPlace.activityID) router.push("/activity/" + visitedPlace.activityID) }}>
-                            <IonThumbnail><img src={visitedPlace.photoUrl || ''} /></IonThumbnail>
+                            <IonThumbnail><img src={visitedPlace.photoUrl || placeholder} /></IonThumbnail>
                             <IonLabel style={{ paddingLeft: "10px" }}>
                               <h2>{visitedPlace.name}</h2>
                               <p style={{ fontSize: "0.9rem" }}>{visitedPlace.description}</p>
@@ -167,12 +165,7 @@ const ProfileSegments: React.FC = memo(() => {
                         )
                       })
                       :
-                      <>
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                      </>
+                      <SkeletonLoading count={4} animated={true} height={"5rem"} />
                     }
                   </IonList>
                 </IonCardContent>
@@ -191,7 +184,7 @@ const ProfileSegments: React.FC = memo(() => {
                       comments.map((comment: HumspotCommentResponse, index: number) => {
                         return (
                           <IonItem className='ion-no-padding' key={comment.name + index} role='button' onClick={() => { if (comment.activityID) router.push("/activity/" + comment.activityID) }}>
-                            <IonThumbnail><img src={comment.photoUrl || ''} /></IonThumbnail>
+                            <IonThumbnail><img src={comment.photoUrl || placeholder} /></IonThumbnail>
                             <IonLabel style={{ paddingLeft: "10px" }}>
                               <h2>{comment.name}</h2>
                               <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {comment.commentText}</p>
@@ -201,12 +194,7 @@ const ProfileSegments: React.FC = memo(() => {
                         )
                       })
                       :
-                      <>
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                        <IonSkeletonText style={{ height: "2rem" }} animated />
-                      </>
+                      <SkeletonLoading count={4} animated={true} height={"5rem"} />
                     }
                   </IonList>
                 </IonCardContent>

@@ -36,7 +36,7 @@ export type HumspotAttraction = {
   description: string;
   location: string;
   addedByUserID: string;
-  websiteUrl: string;
+  websiteURL: string;
   latitude: number | null;
   longitude: number | null;
   openTimes: string;
@@ -109,7 +109,7 @@ export type AddToRSVPResponse = {
 
 export type HumspotCommentSubmit = {
   commentText: string;
-  commentDate: string;
+  // commentDate: string;
   userID: string;
   activityID: string;
 };
@@ -167,7 +167,7 @@ export type HumspotActivity = {
   description: string;
   location: string;
   activityType: "event" | "attraction" | "custom";
-  websiteUrl: string;
+  websiteURL: string;
   date: string;
   time: string;
   latitude: string | null;
