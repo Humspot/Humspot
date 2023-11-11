@@ -43,8 +43,8 @@ export type Event = {
   addedByUserID: string;
   date: string;
   time: string;
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
   organizer: string;
   tags: string[];
   photoUrls: string[];
@@ -141,7 +141,10 @@ async function getLatLong(address: string[]): Promise<{ latitude: number; longit
 
   const data = await response.json();
   if (data.length === 0) {
-    throw new Error("No result found");
+    return {
+      latitude: null,
+      longitude: null
+    };
   }
 
   return {
@@ -205,7 +208,7 @@ export const handler = async (event: any, context: Context, callback: Callback) 
       allSerpEvents = allSerpEvents.concat(serpEventsArr);
 
       if (start !== 40) {
-        await delay(1000); 
+        await delay(1000);
       }
     } catch (error) {
       console.error(`Error fetching events for start ${start}: `, error);

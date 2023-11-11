@@ -15,12 +15,11 @@ import { useToast } from "@agney/ir-toast";
 
 import { useContext } from "../utils/my-context";
 import { handleSignUp } from "../utils/server";
-import GoBackHeader from "../components/Login/GoBackHeader";
+import GoBackHeader from "../components/Shared/GoBackHeader";
 import GoogleLoginButton from "../components/Login/GoogleLoginButton";
 
 
-import './SignUp.css';
-
+import '../components/Login/AuthPages.css';
 
 
 const SignUp: React.FC = () => {
