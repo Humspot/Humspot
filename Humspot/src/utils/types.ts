@@ -23,8 +23,9 @@ export type HumspotEvent = {
   addedByUserID: string;
   date: string;
   time: string;
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
+  websiteURL: string;
   organizer: string;
   tags: string[];
   photoUrls: string[];
@@ -35,9 +36,9 @@ export type HumspotAttraction = {
   description: string;
   location: string;
   addedByUserID: string;
-  websiteUrl: string;
-  latitude: number;
-  longitude: number;
+  websiteURL: string;
+  latitude: number | null;
+  longitude: number | null;
   openTimes: string;
   tags: string[];
   photoUrls: string[];
@@ -108,7 +109,7 @@ export type AddToRSVPResponse = {
 
 export type HumspotCommentSubmit = {
   commentText: string;
-  commentDate: string;
+  // commentDate: string;
   userID: string;
   activityID: string;
 };
@@ -158,38 +159,30 @@ export type AddCommentResponse = {
 export type GetActivityResponse = {
   message: string;
   success: boolean;
-  activity?: {
-    name: string;
-    description: string;
-    location: string;
-    activityType: string;
-    websiteUrl: string;
-    date: string;
-    time: string;
-    latitude: string;
-    longitude: string;
-    tags: string; // comma delimited list
-    photoUrls: string; // comma delimited list
-    organizer: string;
-    openTimes: string | null;
-    comments: any[];
-  }
+  activity?: HumspotActivity;
 };
 
 export type HumspotActivity = {
   name: string;
   description: string;
   location: string;
-  activityType: string;
-  websiteUrl: string;
+  activityType: "event" | "attraction" | "custom";
+  websiteURL: string;
   date: string;
   time: string;
-  latitude: string;
-  longitude: string;
+  latitude: string | null;
+  longitude: string | null;
   tags: string; // comma delimited list
   photoUrls: string; // comma delimited list
   organizer: string;
   openTimes: string | null;
   comments: any[];
-  activityID: string;
+}
+
+export type GetFavoritesAndVisitedAndRSVPStatusResponse = {
+  success: boolean;
+  message: string;
+  favorited: boolean | null;
+  visited: boolean | null;
+  rsvp: boolean | null;
 }

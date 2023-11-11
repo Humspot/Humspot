@@ -2,8 +2,10 @@ import { IonButton, IonCard, IonCardContent, IonTextarea } from "@ionic/react";
 import { useRef } from "react";
 import { handleAddComment } from "../../utils/server";
 import { useContext } from "../../utils/my-context";
+import { HumspotCommentSubmit } from "../../utils/types";
 
-const ActivityAddCommentBox = (props: { activity: any }) => {
+const ActivityAddCommentBox = (props: { id: string }) => {
+  const id: string = props.id;
   const context = useContext();
   const commentRef = useRef<HTMLIonTextareaElement | null>(null);
   // handSubmitComment Function
@@ -11,21 +13,20 @@ const ActivityAddCommentBox = (props: { activity: any }) => {
     if (!context.humspotUser) return;
     if (!commentRef || !commentRef.current || !commentRef.current.value) return;
     const date = new Date();
-    const humspotcomment = {
+    const humspotComment: HumspotCommentSubmit = {
       commentText: commentRef.current.value as string,
-      commentDate: date.toISOString(),
+      // commentDate: date.toISOString(), // removing because datetime should be from server
       userID: context.humspotUser.userID,
-      activityID: activity.activityID,
-      profilePicURL: context.humspotUser.profilePicURL,
-      username: context.humspotUser.username,
+      activityID: id,
+      // profilePicURL: context.humspotUser.profilePicURL,
+      // username: context.humspotUser.username,
     };
-    const res = await handleAddComment(humspotcomment);
+    const res = await handleAddComment(humspotComment);
     if (res.success) {
       window.location.reload();
     }
   };
 
-  const { activity } = props;
   return (
     <>
       <IonCard>

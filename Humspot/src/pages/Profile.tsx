@@ -6,7 +6,7 @@
 
 import { IonPage, useIonRouter, useIonViewWillEnter } from "@ionic/react";
 
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useContext } from "../utils/my-context";
 import { timeout } from "../utils/timeout";
 
@@ -18,7 +18,7 @@ import ProfileAddActivityModal from "../components/Profile/ProfileAddActivityMod
 import ProfileEditModal from "../components/Profile/ProfileEditModal";
 
 const Profile: React.FC = () => {
-
+  
   const context = useContext();
   const router = useIonRouter();
 
@@ -61,4 +61,4 @@ const Profile: React.FC = () => {
   );
 }
 
-export default Profile;
+export default memo(Profile);

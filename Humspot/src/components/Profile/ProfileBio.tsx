@@ -10,6 +10,7 @@ import avatar from '../../assets/images/avatar.svg';
 import './Profile.css';
 
 const ProfileBio: React.FC = () => {
+  
   const context = useContext();
 
   return (

@@ -24,7 +24,8 @@ import {
   HumspotCommentSubmit,
   HumspotEvent,
   GetActivityResponse,
-  AddToRSVPResponse
+  AddToRSVPResponse,
+  GetFavoritesAndVisitedAndRSVPStatusResponse
 } from "./types";
 
 import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
@@ -377,7 +378,7 @@ export const handleAddImages = async (bucketName: string, fileName: string, isUn
     limit: limit,
   });
 
-  present({ message: "Uploading..." });
+  await present({ message: "Uploading..." });
   const s3 = new AWS.S3();
   const photoUrls: string[] = [];
 
@@ -913,10 +914,18 @@ export const handleGetActivity = async (activityID: string): Promise<GetActivity
       success: false
     }
   }
-
 };
 
-export const handleGetFavoritesAndVisitedStatus = async (userID: string, activityID: string) => {
+
+/**
+ * @function handleGetFavoritesAndVisitedAndRSVPStatus
+ * @description gets whether the user has favorited, visited, and/or RSVP'd for the activity.
+ * 
+ * @param {string} userID 
+ * @param {string} activityID 
+ * @returns {GetFavoritesAndVisitedAndRSVPStatusResponse} an object containing the statuses along with a message
+ */
+export const handleGetFavoritesAndVisitedAndRSVPStatus = async (userID: string, activityID: string): Promise<GetFavoritesAndVisitedAndRSVPStatusResponse> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -945,7 +954,10 @@ export const handleGetFavoritesAndVisitedStatus = async (userID: string, activit
     console.error(err);
     return {
       message: "Error fetching status",
-      success: false
+      success: false,
+      favorited: null,
+      visited: null,
+      rsvp: null
     }
   }
 };

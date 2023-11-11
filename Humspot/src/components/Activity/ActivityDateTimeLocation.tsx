@@ -7,10 +7,10 @@ import {
 } from "@ionic/react";
 import { compass, time } from "ionicons/icons";
 import { formatDate } from "../../utils/formatDate";
-import { LocationMap } from "./ActivityLocationMap";
-import { useState } from "react";
+import { ActivityLocationMap } from "./ActivityLocationMap";
+import { HumspotActivity } from "../../utils/types";
 
-const ActivityDateTimeLocation = (props: { activity: any }) => {
+const ActivityDateTimeLocation = (props: { activity: HumspotActivity | null }) => {
   const { activity } = props;
   return (
     <IonCard>
@@ -29,7 +29,7 @@ const ActivityDateTimeLocation = (props: { activity: any }) => {
 
           <div className="locationmap">
             {activity && (
-              <LocationMap
+              <ActivityLocationMap
                 latitude={activity.latitude}
                 longitude={activity.longitude}
               />

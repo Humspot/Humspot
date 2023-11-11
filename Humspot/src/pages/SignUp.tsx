@@ -15,12 +15,11 @@ import { useToast } from "@agney/ir-toast";
 
 import { useContext } from "../utils/my-context";
 import { handleSignUp } from "../utils/server";
-import GoBackHeader from "../components/Login/GoBackHeader";
+import GoBackHeader from "../components/Shared/GoBackHeader";
 import GoogleLoginButton from "../components/Login/GoogleLoginButton";
 
 
-import './SignUp.css';
-
+import '../components/Login/AuthPages.css';
 
 
 const SignUp: React.FC = () => {
@@ -47,7 +46,7 @@ const SignUp: React.FC = () => {
 
   const clickOnSignUp = async () => {
     if (!passwordRef || !emailRef) return;
-    present({ message: "Please Wait..." });
+    await present({ message: "Please Wait..." });
     const success: boolean = await handleSignUp(
       emailRef.current?.value as string ?? '',
       passwordRef.current?.value as string ?? '',
@@ -60,7 +59,7 @@ const SignUp: React.FC = () => {
       const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: "danger" });
       t.present();
     }
-    dismiss();
+    await dismiss();
   };
 
   return (

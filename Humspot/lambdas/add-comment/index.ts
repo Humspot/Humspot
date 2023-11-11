@@ -22,7 +22,6 @@ const pool = mysql.createPool({
 
 export type Comment = {
   commentText: string;
-  commentDate: string;
   userID: string;
   activityID: string;
 };
@@ -33,8 +32,8 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     const comment: Comment = JSON.parse(gatewayEvent.body || '{}');
 
     // Ensure all data has bene passed through the gateway event
-    if (!comment || typeof comment.commentText !== 'string' || typeof comment.commentDate !== 'string' 
-    || typeof comment.userID !== 'string' || typeof comment.activityID !== 'string') {
+    if (!comment || typeof comment.commentText !== 'string'
+      || typeof comment.userID !== 'string' || typeof comment.activityID !== 'string') {
       return {
         statusCode: 400,
         headers: {

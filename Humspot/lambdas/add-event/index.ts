@@ -43,8 +43,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     // Ensure all data has bene passed through the event
     if (!event || typeof event.name !== 'string' || typeof event.description !== 'string' ||
       typeof event.location !== 'string' || typeof event.addedByUserID !== 'string' ||
-      !Array.isArray(event.tags) || typeof event.latitude !== 'number' || typeof event.longitude !== 'number'
-      || !Array.isArray(event.photoUrls)) {
+      !Array.isArray(event.tags) || !Array.isArray(event.photoUrls)) {
       return {
         statusCode: 400,
         headers: {

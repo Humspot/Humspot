@@ -1,7 +1,7 @@
 import { handleGoogleLoginAndVerifyAWSUser } from "../../utils/server"
 
 const GoogleLoginButton: React.FC = () => (
-  <button className="gsi-material-button" style={{ width: "250px" }} onClick={async () => { handleGoogleLoginAndVerifyAWSUser() }}>
+  <button className="gsi-material-button" style={{ width: "250px" }} onClick={async () => { await handleGoogleLoginAndVerifyAWSUser() }}>
     <div className="gsi-material-button-state"></div>
     <div className="gsi-material-button-content-wrapper">
       <div className="gsi-material-button-icon">

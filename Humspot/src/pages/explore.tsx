@@ -14,6 +14,7 @@ import "@ionic/react/css/ionic-swiper.css";
 import CarouselEntry from "../components/Explore/CarouselEntry";
 import SecondaryCarouselEntry from "../components/Explore/CarouselEntrySecondary";
 import FilterButton from "../elements/FilterButton";
+
 import { useCallback, useEffect, useState } from "react";
 import {
   handleGetActivitiesGivenTag,
@@ -21,6 +22,8 @@ import {
 } from "../utils/server";
 import { useToast } from "@agney/ir-toast";
 import CarouselEntrySecondary from "../components/Explore/CarouselEntrySecondary";
+import { useContext } from "../utils/my-context";
+
 
 <link
   href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
@@ -28,6 +31,7 @@ import CarouselEntrySecondary from "../components/Explore/CarouselEntrySecondary
 ></link>;
 
 function ExplorePage() {
+
   const [activitiesHighlight, setActivitiesHighlight] = useState<any>([]);
   const [activitiesHighlightLoading, setActivitiesHighlightLoading] =
     useState<boolean>(true);
@@ -45,6 +49,11 @@ function ExplorePage() {
     setActivitiesHighlight(response.activities);
     setActivitiesHighlightLoading(false);
   }, []);
+
+  const context = useContext();
+  useIonViewWillEnter(() => {
+    context.setShowTabs(true);
+  })
 
   useEffect(() => {
     fetchActivitiesHighlight();

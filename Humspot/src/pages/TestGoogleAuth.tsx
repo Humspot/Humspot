@@ -29,21 +29,6 @@ import {
 } from "../utils/types";
 import { EngineParameters, getJson } from "serpapi";
 
-const event10: HumspotEvent = {
-  name: "",
-  description:
-    "Ring in the New Year with a spectacular fireworks display, live music, and a midnight toast!",
-  location: "Waterfront Dr, Eureka, CA 95501",
-  addedByUserID: "715d07c9d97dde03808d03bb",
-  latitude: 40.80752,
-  longitude: -124.163489,
-  date: "2023-12-31",
-  time: "21:00",
-  organizer: "dy45",
-  tags: ["new year", "party", "fireworks"],
-  photoUrls: [],
-};
-
 const dummyAttraction: HumspotAttraction = {
   name: "NEW ATTRACTION AT HUMBOLDT",
   description: "This is a test attraction, go there now!",
@@ -79,7 +64,21 @@ const TestGoogleAuth: React.FC = () => {
   };
 
   const handleTestAddEvent = async () => {
-    handleAddEvent(event10);
+    const test: HumspotEvent = {
+      name: 'First Gen. College Celebration 2023',
+      description: 'Library 209 - Library Fishbowl Tuesday, November 7, 2023, 10 – 11:30am Conducting research is part of the training required to become a STEM professional or successfully be accepted to a graduate degree program. Research Experiences for Undergraduates (REU) provide summer-long intensive research experiences for STEM majors. If funded by the National Science Foundation (NSF) they often come with a stipend, housing, sometimes food and travel to the site. Find out how to search for an REU, how to decipher what they are looking for in an applicant, and discover what pieces you will need to apply. Event Title: 1st GEN workshop: Why an REU is right for you! Organization: UPWARD BOUND TRIO PROGRAM, MCNAIR SCHOLARS TRIO PROGRAM Categories: Featured Event Is this event open to public?: FALSE Responsible Person at Event Name: Gema Quiroz Torres',
+      addedByUserID: 'HSUSchoolEventsScraper',
+      websiteURL: 'https://humboldt.edu/events/featured?trumbaEmbed=view%3devent%26eventid%3d1024770554',
+      date: '2023-11-07',
+      tags: ['HSU', 'School', 'Cal Poly Humboldt'],
+      location: '',
+      time: '',
+      latitude: null,
+      longitude: null,
+      organizer: '',
+      photoUrls: []
+    };
+    handleAddEvent(test);
   };
 
   const handleTestGetEventGivenTag = async () => {
