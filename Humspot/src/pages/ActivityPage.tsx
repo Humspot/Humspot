@@ -8,6 +8,7 @@ import {
   IonCardTitle,
   IonChip,
   IonContent,
+  IonLoading,
   IonPage,
   IonSkeletonText,
   IonText,
@@ -36,10 +37,12 @@ function ActivityPage() {
   const id: string = params.id;
 
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
+  const [activityLoading, setActivityLoading] = useState<boolean>(true);
 
   const handleGetActivityCallback = useCallback(async (id: string) => {
     const res = await handleGetActivity(id);
     if ("activity" in res && res.activity) setActivity(res.activity);
+    setActivityLoading(false);
   }, []);
   useEffect(() => {
     if (id) handleGetActivityCallback(id);
@@ -47,6 +50,7 @@ function ActivityPage() {
 
   return (
     <IonPage>
+      <IonLoading isOpen={activityLoading} message={"Loading..."} />
       <IonContent>
         <ActivityFavoriteVisitedRSVPButtons
           id={id}

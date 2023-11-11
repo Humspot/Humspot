@@ -15,13 +15,7 @@ import {
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import {
-  calendar,
-  compass,
-  map,
-  person,
-} from "ionicons/icons";
-
+import { calendar, compass, map, person } from "ionicons/icons";
 
 import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
@@ -37,7 +31,7 @@ import "./theme/variables.css";
 
 import ExplorePage from "./pages/explore";
 import CalendarPage from "./pages/calendar";
-import MapPage from "./pages/Map";
+import MapPage from "./pages/map";
 import ProfilePage from "./pages/Profile";
 import TestGoogleAuth from "./pages/TestGoogleAuth";
 
@@ -55,13 +49,9 @@ import { useContext } from "./utils/my-context";
 import { handleUserLogin } from "./utils/server";
 import { LoginResponse } from "./utils/types";
 
-
 setupIonicReact({ mode: "md" });
 
-
-
 const App: React.FC = () => {
-
   const context = useContext();
   const tabBarStyle = context.showTabs;
 
@@ -94,7 +84,11 @@ const App: React.FC = () => {
         currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
       const awsUsername: string | null = currentUser?.username ?? null;
       console.log(currentUser);
-      handleUserLogin(email, awsUsername, "identities" in currentUser?.attributes)
+      handleUserLogin(
+        email,
+        awsUsername,
+        "identities" in currentUser?.attributes
+      )
         .then((res: LoginResponse) => {
           console.log(res.message);
           if (!res.user) throw new Error(res.message);
@@ -117,12 +111,9 @@ const App: React.FC = () => {
 
   return (
     <IonApp>
-
       <ToastProvider>
-
         <IonReactRouter>
           <IonTabs>
-
             <IonRouterOutlet>
               <Route exact path="/" render={() => <Redirect to="/explore" />} />
               <Route exact path="/explore" component={ExplorePage} />
@@ -132,7 +123,11 @@ const App: React.FC = () => {
               <Route exact path="/sign-up" component={SignUp} />
               <Route exact path="/sign-in" component={SignIn} />
               <Route exact path="/forgot-password" component={ForgotPassword} />
-              <Route exact path="/verify-email/:email/:toVerify" component={VerifyEmail} />
+              <Route
+                exact
+                path="/verify-email/:email/:toVerify"
+                component={VerifyEmail}
+              />
               <Route exact path="/google-auth" component={TestGoogleAuth} />
               <Route exact path="/submit-event" component={SubmitEventPage} />
               <Route exact path="/activity/:id" component={ActivityPage} />
@@ -177,12 +172,9 @@ const App: React.FC = () => {
                 />
               </IonTabButton>
             </IonTabBar>
-
           </IonTabs>
         </IonReactRouter>
-
       </ToastProvider>
-
     </IonApp>
   );
 };

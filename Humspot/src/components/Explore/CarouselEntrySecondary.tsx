@@ -38,6 +38,7 @@ function CarouselEntrySecondary({ title, imgsrc, id }: any) {
       onClick={() => {
         router.push(`/activity/${id}`);
       }}
+      button
     >
       <div style={secondarycontainerStyle}>
         <IonImg

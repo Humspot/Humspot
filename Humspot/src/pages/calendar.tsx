@@ -1,5 +1,17 @@
-import { IonContent, IonPage, IonThumbnail } from "@ionic/react";
-import React, { useState, useEffect } from "react";
+import {
+  IonContent,
+  IonLoading,
+  IonNote,
+  IonPage,
+  IonProgressBar,
+  IonRippleEffect,
+  IonSkeletonText,
+  IonThumbnail,
+  IonToolbar,
+  useIonRouter,
+  useIonViewWillEnter,
+} from "@ionic/react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
@@ -9,33 +21,60 @@ import {
   IonAvatar,
   IonLabel,
 } from "@ionic/react";
-import FilterButton from "../elements/FilterButton";
+import FilterButton from "../components/Shared/FilterButton";
+import { useContext } from "../utils/my-context";
+import { useToast } from "@agney/ir-toast";
+import { handleGetActivitiesGivenTag } from "../utils/server";
+import placeholder from "../assets/images/placeholder.png";
+import { formatDate } from "../utils/formatDate";
+import EventsListEntry from "../components/Calendar/EventsListEntry";
 
 function CalendarPage() {
-  const [weekitems, setWeekItems] = useState<string[]>([]);
-  const [monthitems, setMonthItems] = useState<string[]>([]);
-
-  const generateThisWeek = () => {
-    const newItems = [];
-    for (let i = 0; i < 5; i++) {
-      newItems.push(`Event ${1 + weekitems.length + i}`);
+  const context = useContext();
+  useIonViewWillEnter(() => {
+    context.setShowTabs(true);
+  });
+  const [eventsToday, seteventsToday] = useState<any>([]);
+  const [eventsTodayLoading, setEventsTodayLoading] = useState<boolean>(true);
+  const Toast = useToast();
+  const fetchEventsToday = useCallback(async () => {
+    const response = await handleGetActivitiesGivenTag(1, "School");
+    if (!response.success) {
+      const toast = Toast.create({
+        message: response.message,
+        duration: 2000,
+        color: "danger",
+      });
+      toast.present();
     }
-    setWeekItems([...weekitems, ...newItems]);
-  };
-
-  const generateThisMonth = () => {
-    const newItems = [];
-    for (let i = 0; i < 25; i++) {
-      newItems.push(`Event ${1 + monthitems.length + i}`);
-    }
-    setMonthItems([...monthitems, ...newItems]);
-  };
+    seteventsToday(response.activities);
+    setEventsTodayLoading(false);
+  }, []);
 
   useEffect(() => {
-    generateThisWeek();
-    generateThisMonth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchEventsToday();
+  }, [fetchEventsToday]);
+  const [eventsWeek, seteventsWeek] = useState<any>([]);
+  const [eventsWeekLoading, setEventsWeekLoading] = useState<boolean>(true);
+  const fetchEventsWeek = useCallback(async () => {
+    const response = await handleGetActivitiesGivenTag(1, "School");
+    if (!response.success) {
+      const toast = Toast.create({
+        message: response.message,
+        duration: 2000,
+        color: "danger",
+      });
+      toast.present();
+    }
+    seteventsWeek(response.activities);
+    setEventsWeekLoading(false);
   }, []);
+
+  useEffect(() => {
+    fetchEventsWeek();
+  }, [fetchEventsWeek]);
+
+  const router = useIonRouter();
 
   return (
     <>
@@ -44,44 +83,42 @@ function CalendarPage() {
         <IonContent>
           <IonList>
             <IonItemDivider>
-              <IonLabel>This Week</IonLabel>
+              <IonLabel>
+                <h1>Today</h1>
+              </IonLabel>
             </IonItemDivider>
-            {weekitems.map((item, index) => (
-              <IonItem key={item}>
-                <IonThumbnail slot="start">
-                  <img
-                    src={"https://picsum.photos/80/80?random=" + index}
-                    alt="avatar"
-                  />
-                </IonThumbnail>
-                <IonLabel>{item}</IonLabel>
-              </IonItem>
-            ))}
+            {/* Events Today */}
+            {!eventsTodayLoading ? (
+              <EventsListEntry events={eventsToday}></EventsListEntry>
+            ) : (
+              <>
+                <IonSkeletonText style={{ height: "5rem" }} animated />
+                <IonSkeletonText style={{ height: "5rem" }} animated />
+                <IonSkeletonText style={{ height: "5rem" }} animated />
+              </>
+            )}
+            {/* Events This Week */}
             <IonItemDivider>
-              <IonLabel>This Month</IonLabel>
+              <IonLabel>
+                <h1>This Week</h1>
+              </IonLabel>
             </IonItemDivider>
-            {monthitems.map((item, index) => (
-              <IonItem key={item}>
-                <IonThumbnail slot="start">
-                  <img
-                    src={"https://picsum.photos/80/80?random=" + index}
-                    alt="avatar"
-                  />
-                </IonThumbnail>
-                <IonLabel>{item}</IonLabel>
-              </IonItem>
-            ))}
+            {/* Events This Month */}
+            <IonItemDivider>
+              <IonLabel>
+                <h1>This Month</h1>
+              </IonLabel>
+            </IonItemDivider>
           </IonList>
-
-          <IonInfiniteScroll
-            onIonInfinite={(ev) => {
-              generateThisMonth();
-              setTimeout(() => ev.target.complete(), 500);
-            }}
-          >
-            <IonInfiniteScrollContent></IonInfiniteScrollContent>
-          </IonInfiniteScroll>
         </IonContent>
+        {eventsTodayLoading || eventsWeekLoading ? (
+          <IonProgressBar
+            type="indeterminate"
+            color={"secondary"}
+          ></IonProgressBar>
+        ) : (
+          <></>
+        )}
       </IonPage>
     </>
   );
