@@ -4,6 +4,7 @@ import {
   IonLoading,
   IonPage,
   IonSkeletonText,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -24,14 +25,12 @@ import { useToast } from "@agney/ir-toast";
 import CarouselEntrySecondary from "../components/Explore/CarouselEntrySecondary";
 import { useContext } from "../utils/my-context";
 
-
 <link
   href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
   rel="stylesheet"
 ></link>;
 
 function ExplorePage() {
-
   const [activitiesHighlight, setActivitiesHighlight] = useState<any>([]);
   const [activitiesHighlightLoading, setActivitiesHighlightLoading] =
     useState<boolean>(true);
@@ -53,7 +52,7 @@ function ExplorePage() {
   const context = useContext();
   useIonViewWillEnter(() => {
     context.setShowTabs(true);
-  })
+  });
 
   useEffect(() => {
     fetchActivitiesHighlight();

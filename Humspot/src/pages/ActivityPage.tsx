@@ -24,18 +24,18 @@ import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox"
 import "swiper/css/autoplay";
 import { HumspotActivity } from "../utils/types";
 import ActivityFavoriteVisitedRSVPButtons from "../components/Activity/ActivityFavoriteVisitedRSVPButton";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 
 type ActivityPageParams = {
   id: string;
-}
+};
 
 function ActivityPage() {
-
   const params = useParams<ActivityPageParams>();
   const id: string = params.id;
 
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
-
 
   const handleGetActivityCallback = useCallback(async (id: string) => {
     const res = await handleGetActivity(id);
@@ -48,28 +48,30 @@ function ActivityPage() {
   return (
     <IonPage>
       <IonContent>
-
-        <ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />
+        <ActivityFavoriteVisitedRSVPButtons
+          id={id}
+          activityType={activity?.activityType}
+        />
 
         {/* Header Image */}
-          <div className="headerDiv">
-            <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }}>
-              {activity?.photoUrls &&
-                activity?.photoUrls?.split(",").map((url: any, index: any) => (
-                  <SwiperSlide key={index} className="fill-frame-image">
-                    <img
-                      alt="Attraction Image"
-                      src={url || placeholder}
-                      loading="lazy"
-                      className="headerImage"
-                    ></img>
-                  </SwiperSlide>
-                ))}
-            </Swiper>
-          </div>
+        <div className="headerDiv">
+          <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }}>
+            {activity?.photoUrls &&
+              activity?.photoUrls?.split(",").map((url: any, index: any) => (
+                <SwiperSlide key={index} className="fill-frame-image">
+                  <img
+                    alt="Attraction Image"
+                    src={url || placeholder}
+                    loading="lazy"
+                    className="headerImage"
+                  ></img>
+                </SwiperSlide>
+              ))}
+          </Swiper>
+        </div>
 
         {/* Header Title */}
-        <IonCard color={"primary"} className="headercard" >
+        <IonCard color={"primary"} className="headercard">
           <IonCardHeader>
             {activity ? (
               <IonCardTitle>
@@ -104,18 +106,24 @@ function ActivityPage() {
           <IonCardContent>
             <IonText color={"dark"}>
               <p>{activity?.description ?? ""}</p>
-              <p><a href={activity?.websiteURL ?? '#'} target='_blank' rel='noopener noreferrer'>Visit Site</a></p>
+              <p>
+                <a
+                  href={activity?.websiteURL ?? "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Visit Site
+                </a>
+              </p>
             </IonText>
           </IonCardContent>
         </IonCard>
         {/* Comments Section */}
-        <ActivityCommentsSection
-          activity={activity}
-        ></ActivityCommentsSection>
+        <ActivityCommentsSection activity={activity}></ActivityCommentsSection>
         {/* Add a Comment Box */}
         <ActivityAddCommentBox id={id}></ActivityAddCommentBox>
       </IonContent>
-    </IonPage >
+    </IonPage>
   );
 }
 
