@@ -24,31 +24,42 @@ import {
 import {
   checkmarkCircleOutline,
 } from "ionicons/icons";
-import { useContext, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useContext } from "../../utils/my-context";
 import {memo} from "react"
 import { HumspotFavoriteResponse } from "../../utils/types";
+import { handleGetPendingActivitySubmissions } from "../../utils/server";
 
 function SubmissionApproval({title, description, imgsrc, id}: any) { 
   const router = useIonRouter();
-  return(
-    <IonCard
-      onClick={()=>{
-        router.push("/activities/" + id);
-      }}
-    >
-      <div>
-        <IonImg
-        alt="Attraction Image"
-        src={imgsrc}
-        className="Pending"
-        ></IonImg>
-      </div>
-      
-      <IonCardHeader>
-        <IonCardTitle>{title}</IonCardTitle>
-        <IonCardSubtitle> {description}</IonCardSubtitle>
-      </IonCardHeader>
+  const context = useContext();
+  const fetchSubmissions = useCallback(async () => {
+    if (!context.humspotUser) return;
+    const response = await handleGetPendingActivitySubmissions (1, context.humspotUser.userID);
+    setSubmissions(response.pendingSubmissions);
+  }, [context.humspotUser]); 
+  const[submissions, setSubmissions] = useState<any[]>([]); 
 
+
+  useEffect(() => {
+    fetchSubmissions();
+  }, [fetchSubmissions]);
+
+  return(
+    <IonCard> 
+      <IonList>
+        {
+        submissions.map((submission: any, index:number) => {
+          return (
+              <IonItem 
+              key={index}
+              onClick={()=> {router.push("/submissions/"+ submission.id)}}>
+                <h1>{submission.name}</h1> 
+              </IonItem>
+          )
+        })
+        }
+      </IonList>
     </IonCard>
   );
 }

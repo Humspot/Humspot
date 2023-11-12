@@ -16,21 +16,28 @@ import {
 } from "@ionic/react";
 
 import {
-  checkmarkCircleOutline,
-  checkmarkCircle,
   addCircleOutline,
-  addCircle
+  addCircle,
+  personOutline,
+  personAddOutline
 } from "ionicons/icons";
 import { useContext, useState } from "react";
 import {memo} from "react"
 import { HumspotFavoriteResponse } from "../../utils/types";
 import SubmissionApproval from "./submissionApproval";
+import { Organizations } from "aws-sdk";
+import OrganizersApproval from "./organizerApproval";
+import approvedOrganizer from "./approvedOrganizer";
 
 const AdminSegment: React.FC = memo(() => { 
 
+  const [selectedSegment, setSelectedSegment] = useState<string>("pendingActivities");
+  
     return(
         <>  
-        <IonSegment style={{paddingLeft: "2.5%", paddingRight:"2.5%"}}>
+        <IonSegment scrollable style={{paddingLeft: "2.5%", paddingRight:"2.5%"}} 
+          value={selectedSegment}
+          onIonChange={(e) => setSelectedSegment(e.detail.value as string)}>
           <IonSegmentButton value="pendingActivities">  
             <div className="segment-button" style={{ fontSize: "0.8rem"}}>
               <IonIcon 
@@ -41,22 +48,11 @@ const AdminSegment: React.FC = memo(() => {
               <IonLabel> Pending Activities</IonLabel>
             </div>
           </IonSegmentButton>
-  
-          <IonSegmentButton value="approvedActivities">  
-            <div className="segment-button" style={{ fontSize: "0.8rem"}}>
-              <IonIcon 
-                icon={addCircle}
-                style={{ margin: "5%"}} 
-                size="large">
-              </IonIcon> 
-              <IonLabel> Approved Activities</IonLabel>
-            </div>
-          </IonSegmentButton>
 
           <IonSegmentButton value="pendingOrganizer">  
             <div className="segment-button" style={{ fontSize: "0.8rem"}}>
               <IonIcon 
-                icon={checkmarkCircleOutline}
+                icon={personAddOutline}
                 style={{ margin: "5%"}} 
                 size="large">
               </IonIcon> 
@@ -67,7 +63,7 @@ const AdminSegment: React.FC = memo(() => {
           <IonSegmentButton value="approvedOrganizer">  
             <div className="segment-button" style={{ fontSize: "0.8rem"}}>
               <IonIcon 
-                icon={checkmarkCircle}
+                icon={personOutline}
                 style={{ margin: "5%"}} 
                 size="large">
               </IonIcon> 
@@ -76,6 +72,29 @@ const AdminSegment: React.FC = memo(() => {
           </IonSegmentButton>
 
         </IonSegment>
+
+        <IonContent>
+          {selectedSegment === "pendingActivities" ? (
+            <IonCard>
+              <SubmissionApproval />
+            </IonCard>
+
+          ) : selectedSegment === "pendingOrganizer" ?(
+            <IonCard>
+              <OrganizersApproval />
+            </IonCard>
+
+          ) : selectedSegment ==="approvedOrganizer" ?(
+            <IonCard>
+              <approvedOrganizer />
+            </IonCard>
+          ) : (
+            <h1> Nothing Selected</h1>
+          )
+          };
+
+
+        </IonContent>
       </>
     )
 });
