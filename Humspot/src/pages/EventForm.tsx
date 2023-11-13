@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
-import { IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle } from '@ionic/react';
+import { IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, IonList, IonToast } from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/my-context';
 import { timeout } from '../utils/timeout';
 import { useToast } from '@agney/ir-toast';
 import { handleAddEvent, handleSubmitEventForApproval } from '../utils/server';
-
+import './EventForm.css'; // Importing the custom CSS
 
 export const EventForm = () => {
     
     const context = useContext();
     const Toast = useToast();
+
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+
   
     const [event, setEvent] = useState<HumspotEvent>({
         name: '',
@@ -31,66 +35,76 @@ export const EventForm = () => {
         setEvent({ ...event, [field]: e.detail.value });
       };
     
+
+      // 
       const handleSubmit = async () => {
+        // should add in more robust error notification to the user, possibly a toast message or something  
         if (!context.humspotUser || !context.humspotUser.userID) return;
         let eventCopy = event; 
         eventCopy.addedByUserID = context.humspotUser.userID;
         setEvent(eventCopy); 
         const response = await handleSubmitEventForApproval(event);
         console.log(response);
+
+        // Display toast on successful submission
+        if (response.success) {
+        setToastMessage("Event added successfully!");
+        setShowToast(true);
+        }
     }
 
   return (
     <IonPage>
-      <IonContent>
-
-        <IonTitle className='ion-text-center' style={{ paddingTop: "10%" }}>Submit an Event</IonTitle>
+      <IonContent className="event-form-content">
+        <IonTitle className="ion-text-center event-form-title">Submit an Event</IonTitle>
 
         {context.humspotUser?.accountType !== 'user' ?
+        <form className="event-form">
+            <IonList lines="full">
+                <IonItem>
+                    <IonLabel position="floating">Name</IonLabel>
+                    <IonInput value={event.name} onIonChange={handleChange('name')} placeholder="Enter Name" />
+                </IonItem>
 
-          <form style={{ padding: "10px" }}>
-            <IonLabel>Name:</IonLabel>
-            <IonInput value={event.name} onIonChange={handleChange('name')} placeholder="Enter Name" />
+                <IonItem>
+                    <IonLabel position="floating">Description</IonLabel>
+                    <IonTextarea value={event.description} onIonChange={handleChange('description')} placeholder="Enter Description" />
+                </IonItem>
 
-            <br />
+                <IonItem>
+                    <IonLabel position="floating">Location</IonLabel>
+                    <IonInput value={event.location} onIonChange={handleChange('location')} placeholder="Enter Location" />
+                </IonItem>
 
-            <IonLabel>Description:</IonLabel>
-            <IonTextarea value={event.description} onIonChange={handleChange('description')} placeholder="Enter Description" />
+                <IonItem>
+                    <IonLabel>Date & Time</IonLabel>
+                    <IonDatetime value={event.date} onIonChange={handleChange('date')} placeholder="Select Date" />
+                </IonItem>
 
-            <br />
+                <IonItem>
+                    <IonLabel>Organizer</IonLabel>
+                    <IonInput value={context.humspotUser?.username ?? ''} disabled placeholder="Organizer Name" />
+                </IonItem>
+            </IonList>
 
-            <IonLabel>Location:</IonLabel>
-            <IonInput value={event.location} onIonChange={handleChange('location')} placeholder="Enter Location" />
+            <IonButton expand="block" onClick={async () => await handleSubmit()}>Submit</IonButton>
 
-            <br />
-
-            <IonLabel>Date & Time:</IonLabel>
-            <IonDatetime value={event.date} onIonChange={handleChange('date')} placeholder="Select Date" />
-
-            <br />
-
-            <IonLabel>Organizer:</IonLabel>
-            <IonInput value={context.humspotUser?.username ?? ''} disabled placeholder="Enter Organizer" />
-
-            <br />
-
-
-
-            <br />
-
-            <IonButton onClick={async() => await handleSubmit()}>Submit</IonButton>
-          </form>
-
-          :
-          <>
-            <br />
-            <h2 className='ion-text-center'>You must be an admin or organizer to submit an event or attraction!</h2>
-          </>
+            <IonToast
+            isOpen={showToast}
+            onDidDismiss={() => setShowToast(false)}
+            message={toastMessage}
+            duration={2000}
+            />
+        </form>
+        :
+        <div className="ion-text-center access-denied-message">
+            You must be an admin or organizer to submit an event or attraction!
+        </div>
         }
       </IonContent>
-    </IonPage>
+  </IonPage>
   );
 };
 
-export default EventForm;
 
+export default EventForm;

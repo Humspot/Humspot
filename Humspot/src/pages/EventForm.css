@@ -1,0 +1,20 @@
+.event-form-content {
+    padding: 20px;
+}
+
+.event-form-title {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.access-denied-message {
+    margin-top: 50px;
+    color: var(--ion-color-danger);
+    font-size: 1.2rem;
+}

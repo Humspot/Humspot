@@ -20,7 +20,7 @@ const ProfileAddActivityModal = () => {
             <IonLabel>Submit an Event</IonLabel>
           </IonItem>
           <br />
-          <IonItem>
+          <IonItem role="button" onClick={() => {modalRef.current?.dismiss(); router.push('/Attraction-form')}}>
             <IonIcon aria-hidden="true" icon={compassOutline} slot="start"></IonIcon>
             <IonLabel>Submit an Attraction</IonLabel>
           </IonItem>

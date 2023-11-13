@@ -48,12 +48,14 @@ import AttractionPage from "./pages/attraction";
 
 import EventForm from "./pages/EventForm";
 
+import SubmitAttraction from "./pages/attraction";
+
 import { ToastProvider } from "@agney/ir-toast";
-import SubmitEventPage from "./pages/SubmitEvent";
 
 import TermsAndConditions from "./pages/TermsAndConditions";
 
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import AttractionForm from "./pages/Attractionform";
 
 setupIonicReact({ mode: "md" });
 
@@ -125,7 +127,7 @@ const App: React.FC = () => {
               <Route exact path="/profile" component={ProfilePage} />
               <Route exact path="/google-auth" component={TestGoogleAuth} />
               <Route exact path="/event-form" component={EventForm} />
-              <Route exact path="/attraction/:id" component={AttractionPage} />
+              <Route exact path="/Attraction-form" component={AttractionForm} />
               <Route exact path="/TermsAndConditions" component={TermsAndConditions} />
               <Route exact path="/PrivacyPolicy" component={PrivacyPolicy} /> 
             </IonRouterOutlet>
