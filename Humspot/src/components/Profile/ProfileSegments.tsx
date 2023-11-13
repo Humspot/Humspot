@@ -113,6 +113,8 @@ const ProfileSegments: React.FC = memo(() => {
 
       </IonSegment>
 
+      <div style={{height : "0.75vh"}} />
+
       <IonContent>
 
         {selectedSegment === "favorites" ? (
