@@ -56,6 +56,7 @@ export type HumspotAttraction = {
   latitude: number;
   longitude: number;
   openTimes: string;
+  closeTimes: string;
   tags: string[];
   photoUrls: string[];
 };
