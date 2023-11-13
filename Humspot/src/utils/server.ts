@@ -961,3 +961,45 @@ export const handleGetFavoritesAndVisitedAndRSVPStatus = async (userID: string, 
     }
   }
 };
+
+
+
+/**
+ * 
+ * @param {number} pageNum 
+ * @param {string} userID 
+ * @returns 
+ */
+export const handleGetPendingActivitySubmissions = async (pageNum: number, userID: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_PENDING_ACTIVITY_SUBMISSIONS_URL +
+      "/" +
+      pageNum +
+      "/" +
+      userID,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false, pendingSubmissions: [] };
+  }
+};

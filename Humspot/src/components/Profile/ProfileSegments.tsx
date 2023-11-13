@@ -5,6 +5,7 @@ import { handleGetCommentsGivenUserID, handleGetFavoritesGivenUserID, handleGetV
 import { HumspotCommentResponse, HumspotFavoriteResponse, HumspotVisitedResponse } from "../../utils/types";
 import { useContext } from "../../utils/my-context";
 import { useToast } from "@agney/ir-toast";
+import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 
 import placeholder from '../../assets/images/placeholder.png';
 
@@ -125,14 +126,16 @@ const ProfileSegments: React.FC = memo(() => {
                     {!favoritesLoading ?
                       favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
                         return (
-                          <IonItem className='ion-no-padding' key={favorite.name + index} role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
-                            <IonThumbnail><img src={favorite.photoUrl || placeholder} /></IonThumbnail>
-                            <IonLabel style={{ paddingLeft: "10px" }}>
-                              <h2>{favorite.name}</h2>
-                              <p style={{ fontSize: "0.9rem" }}>{favorite.description}</p>
-                              <p style={{ fontSize: "0.8rem" }}>{favorite.location}</p>
-                            </IonLabel>
-                          </IonItem>
+                          <FadeIn key={favorite.name + index} delay={index * 50}>
+                            <IonItem className='ion-no-padding' role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
+                              <IonThumbnail><img src={favorite.photoUrl || placeholder} /></IonThumbnail>
+                              <IonLabel style={{ paddingLeft: "10px" }}>
+                                <h2>{favorite.name}</h2>
+                                <p style={{ fontSize: "0.9rem" }}>{favorite.description}</p>
+                                <p style={{ fontSize: "0.8rem" }}>{favorite.location}</p>
+                              </IonLabel>
+                            </IonItem>
+                          </FadeIn>
                         )
                       })
                       :
@@ -154,14 +157,16 @@ const ProfileSegments: React.FC = memo(() => {
                     {!visitedLoading ?
                       visited.map((visitedPlace: HumspotVisitedResponse, index: number) => {
                         return (
-                          <IonItem className='ion-no-padding' key={visitedPlace.name + index} role='button' onClick={() => { if (visitedPlace.activityID) router.push("/activity/" + visitedPlace.activityID) }}>
-                            <IonThumbnail><img src={visitedPlace.photoUrl || placeholder} /></IonThumbnail>
-                            <IonLabel style={{ paddingLeft: "10px" }}>
-                              <h2>{visitedPlace.name}</h2>
-                              <p style={{ fontSize: "0.9rem" }}>{visitedPlace.description}</p>
-                              <p style={{ fontSize: "0.8rem" }}>{visitedPlace.location}</p>
-                            </IonLabel>
-                          </IonItem>
+                          <FadeIn key={visitedPlace.name + index} delay={index * 50}>
+                            <IonItem className='ion-no-padding' role='button' onClick={() => { if (visitedPlace.activityID) router.push("/activity/" + visitedPlace.activityID) }}>
+                              <IonThumbnail><img src={visitedPlace.photoUrl || placeholder} /></IonThumbnail>
+                              <IonLabel style={{ paddingLeft: "10px" }}>
+                                <h2>{visitedPlace.name}</h2>
+                                <p style={{ fontSize: "0.9rem" }}>{visitedPlace.description}</p>
+                                <p style={{ fontSize: "0.8rem" }}>{visitedPlace.location}</p>
+                              </IonLabel>
+                            </IonItem>
+                          </FadeIn>
                         )
                       })
                       :
@@ -183,14 +188,16 @@ const ProfileSegments: React.FC = memo(() => {
                     {!commentsLoading ?
                       comments.map((comment: HumspotCommentResponse, index: number) => {
                         return (
-                          <IonItem className='ion-no-padding' key={comment.name + index} role='button' onClick={() => { if (comment.activityID) router.push("/activity/" + comment.activityID) }}>
-                            <IonThumbnail><img src={comment.photoUrl || placeholder} /></IonThumbnail>
-                            <IonLabel style={{ paddingLeft: "10px" }}>
-                              <h2>{comment.name}</h2>
-                              <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {comment.commentText}</p>
-                              <p style={{ fontSize: "0.8rem" }}>{formatDate(comment.commentDate as string)}</p>
-                            </IonLabel>
-                          </IonItem>
+                          <FadeIn key={comment.name + index} delay={index * 50}>
+                            <IonItem className='ion-no-padding' role='button' onClick={() => { if (comment.activityID) router.push("/activity/" + comment.activityID) }}>
+                              <IonThumbnail><img src={comment.photoUrl || placeholder} /></IonThumbnail>
+                              <IonLabel style={{ paddingLeft: "10px" }}>
+                                <h2>{comment.name}</h2>
+                                <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {comment.commentText}</p>
+                                <p style={{ fontSize: "0.8rem" }}>{formatDate(comment.commentDate as string)}</p>
+                              </IonLabel>
+                            </IonItem>
+                          </FadeIn>
                         )
                       })
                       :
