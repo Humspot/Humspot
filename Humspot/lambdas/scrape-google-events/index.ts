@@ -1,6 +1,8 @@
 /**
  * AWS lambda function that runs every 2 days. It uses SerpApi to retrieve the top 50 local Humboldt events from Google. 
  * This information is then parsed and put into a format that the mySQL Events table expects so that it can be entered into it.
+ * 
+ * TO-DO: Get more tailored events! Add more keywords to Google search.
  */
 
 import { Context, Callback } from 'aws-lambda';
@@ -19,7 +21,7 @@ interface SerpEventResponse {
     link: string;
     serpapi_link: string;
   };
-  description?: string;
+  description?: string | undefined;
   ticket_info?: TicketInfo[];
   venue?: {
     name: string;
@@ -161,7 +163,7 @@ async function createEvents(eventsArr: SerpEventResponse[]): Promise<Event[]> {
       const { latitude, longitude } = await getLatLong(e.address);
       const eventToBeSubmitted: Event = {
         name: e.title,
-        description: e.date.when + '; ' + e.description,
+        description: e.date.when + '; ' + (e.description ?? "No description available"),
         location: e.address && e.address[0] ? e.address[0] : '',
         addedByUserID: 'GoogleEventsScraper',
         date: formatDateForMySQL(e.date.start_date),
