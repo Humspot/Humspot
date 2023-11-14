@@ -18,12 +18,10 @@ function MapPage() {
   const fetchThisWeeksEvents = useCallback(async () => {
     const res = await handleGetThisWeeksEvents();
     setThisWeeksEvents(res.events);
-  }, [])
-
-
+  }, []);
   useEffect(() => {
     fetchThisWeeksEvents();
-  }, [fetchThisWeeksEvents])
+  }, [fetchThisWeeksEvents]);
 
   return (
     <IonPage>
