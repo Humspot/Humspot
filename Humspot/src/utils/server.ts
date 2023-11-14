@@ -25,7 +25,8 @@ import {
   HumspotEvent,
   GetActivityResponse,
   AddToRSVPResponse,
-  GetFavoritesAndVisitedAndRSVPStatusResponse
+  GetFavoritesAndVisitedAndRSVPStatusResponse,
+  GetHumspotEventResponse
 } from "./types";
 
 import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
@@ -1003,3 +1004,40 @@ export const handleGetPendingActivitySubmissions = async (pageNum: number, userI
     return { message: "Error calling API Gateway" + error, success: false, pendingSubmissions: [] };
   }
 };
+
+
+/**
+ * @function handleGetEventsBetweenTwoDates
+ * @description gets the events that are happening this week (within the next 7 days, inclusive).
+ * 
+ * @returns {message: string; success: boolean; events: GetHumspotEventResponse[]}
+ */
+export const handleGetThisWeeksEvents = async (): Promise<{ message: string; success: boolean; events: GetHumspotEventResponse[]}> => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_THIS_WEEKS_EVENTS,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false, events: [] };
+  }
+}

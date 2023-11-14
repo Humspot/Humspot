@@ -1,5 +1,5 @@
 /**
- * AWS lambda function to retrieve events that are happening between the specified dates (inclusive). 
+ * AWS lambda function to retrieve events that are happening this week (within the next 7 days, inclusive).
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
@@ -17,20 +17,30 @@ const pool: mysql.Pool = mysql.createPool({
   debug: true
 });
 
-function isValidDate(dateString: string) {
-  const regex = /^\d{4}-\d{2}-\d{2}$/;
-  if (dateString.match(regex) === null) {
-    return false;
-  }
-  const date = new Date(dateString);
-  return date instanceof Date;
+function getCurrentDate(): string {
+  const today = new Date();
+  const year = today.getFullYear();
+  let month = (today.getMonth() + 1).toString();
+  let day = today.getDate().toString();
+
+  month = month.length < 2 ? '0' + month : month;
+  day = day.length < 2 ? '0' + day : day;
+
+  return `${year}-${month}-${day}`;
 }
 
-function areValidDates(date1: string, date2: string) {
-  if (!isValidDate(date1) || !isValidDate(date2)) {
-    return false;
-  }
-  return new Date(date1) <= new Date(date2);
+function getDateDaysFromNow(days: number) {
+  const date = new Date(); // Current date
+  date.setDate(date.getDate() + days); // Adding the specified number of days
+
+  const year = date.getFullYear();
+  let month = (date.getMonth() + 1).toString(); // Months are 0-indexed
+  let day = date.getDate().toString();
+
+  month = month.length < 2 ? '0' + month : month;
+  day = day.length < 2 ? '0' + day : day;
+
+  return `${year}-${month}-${day}`;
 }
 
 export const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
@@ -38,36 +48,8 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   const conn = await pool.getConnection();
   try {
 
-    const date1: string = event.pathParameters && event.pathParameters["date1"];
-    const date2: string = event.pathParameters && event.pathParameters["date2"];
-
-    // Validate passed dates
-    if (!areValidDates(date1, date2)) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-          "Access-Control-Allow-Methods": '*',
-          "Access-Control-Allow-Origin": '*'
-        },
-        body: JSON.stringify({ message: 'Invalid date format or logical error in dates', success: false, events: [] }),
-      };
-    }
-
-    // Ensure all data has bene passed through the gateway event
-    if (!date1 || !date2) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-          "Access-Control-Allow-Methods": '*',
-          "Access-Control-Allow-Origin": '*'
-        },
-        body: JSON.stringify({
-          message: 'Missing or invalid path params.', success: false, events: []
-        }),
-      };
-    }
+    const date1: string = getCurrentDate();
+    const date2: string = getDateDaysFromNow(7);
 
     // Query events that are happening between the two dates 
     const query = `
@@ -82,7 +64,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       LEFT JOIN ActivityPhotos ap ON a.activityID = ap.activityID
       LEFT JOIN ActivityTags at ON a.activityID = at.activityID
       LEFT JOIN Tags t ON at.tagID = t.tagID
-      WHERE e.date BETWEEN ? AND ?
+      WHERE e.date BETWEEN ? AND ? AND e.latitude IS NOT NULL AND e.longitude IS NOT NULL
       GROUP BY e.eventID, a.name, a.description, a.location, a.websiteURL
       ORDER BY e.date;
     `;
@@ -91,7 +73,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'Successfully got events between ' + date1 + ' and ' + date2, success: true, events: rows }),
+      body: JSON.stringify({ message: 'Successfully got this week\'s events', success: true, events: rows }),
     }
 
   } catch (error) {
@@ -107,4 +89,3 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
   }
 };
-

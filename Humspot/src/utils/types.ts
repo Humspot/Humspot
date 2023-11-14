@@ -31,6 +31,23 @@ export type HumspotEvent = {
   photoUrls: string[];
 };
 
+export type GetHumspotEventResponse = {
+  eventID: string;
+  activityID: string;
+  name: string;
+  description: string;
+  location: string;
+  addedByUserID: string;
+  date: string;
+  time: string;
+  latitude: string | null;
+  longitude: string | null;
+  websiteURL: string;
+  organizer: string;
+  tags: string | null;
+  photoUrl: string | null;
+}
+
 export type HumspotAttraction = {
   name: string;
   description: string;
@@ -59,25 +76,16 @@ export type AddAttractionResponse = {
   attractionID?: string;
 };
 
-type ExtendedHumspotEvent = HumspotEvent & {
-  eventID: string;
-  activityID: string;
-  activityType: string;
-  tagID: string;
-  tagName: string;
-};
-
-type ExtendedHumspotAttraction = HumspotAttraction & {
-  eventID: string;
-  activityID: string;
-  activityType: string;
-  tagID: string;
-  tagName: string;
-};
-
 export type GetEventsGivenTagResponse = {
   message: string;
-  events: ExtendedHumspotEvent[];
+  events:
+  (HumspotEvent & {
+    eventID: string;
+    activityID: string;
+    activityType: string;
+    tagID: string;
+    tagName: string;
+  })[];
 };
 
 export type AddImageResponse = {
