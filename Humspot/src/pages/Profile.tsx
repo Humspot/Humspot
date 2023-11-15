@@ -6,7 +6,7 @@
 
 import { IonPage, useIonRouter, useIonViewWillEnter } from "@ionic/react";
 
-import { memo, useEffect } from "react";
+import { memo, useEffect, useRef } from "react";
 import { useContext } from "../utils/my-context";
 import { timeout } from "../utils/timeout";
 
@@ -14,13 +14,15 @@ import ProfileBio from "../components/Profile/ProfileBio";
 import ProfileSegments from "../components/Profile/ProfileSegments";
 import ProfileHeader from "../components/Profile/ProfileHeader";
 import ProfileSettingsModal from "../components/Profile/ProfileSettingsModal";
-import ProfileAddActivityModal from "../components/Profile/ProfileAddActivityModal";
+import ProfileAddActivityModal from "../components/Profile/ProfileActivitiesModal";
 import ProfileEditModal from "../components/Profile/ProfileEditModal";
 
 const Profile: React.FC = () => {
-  
+
   const context = useContext();
   const router = useIonRouter();
+
+  const page = useRef();
 
   useEffect(() => {
     if (context.humspotUser === undefined) { // not logged in
@@ -36,7 +38,7 @@ const Profile: React.FC = () => {
 
   return (
     <>
-      <IonPage>
+      <IonPage ref={page}>
 
         {/* Add, Edit, and Settings button */}
         <ProfileHeader />
@@ -48,13 +50,13 @@ const Profile: React.FC = () => {
         <ProfileSegments />
 
         {/* Modal that pops in at the bottom of the page where a user can request to submit events/attractions */}
-        <ProfileAddActivityModal />
+        <ProfileAddActivityModal page={page.current} />
 
         {/* Modal that pops in at the bottom of the page where a user can edit their profile */}
-        <ProfileEditModal />
+        < ProfileEditModal page={page.current} />
 
         {/* Modal that pops in at the bottom of the page where users can tinker with app settings */}
-        <ProfileSettingsModal />
+        < ProfileSettingsModal page={page.current} />
 
       </IonPage>
     </>

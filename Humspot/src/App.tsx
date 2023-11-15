@@ -56,7 +56,7 @@ import { handleUserLogin } from "./utils/server";
 import { LoginResponse } from "./utils/types";
 
 
-setupIonicReact({ mode: "md" });
+setupIonicReact({ mode: "ios" });
 
 
 

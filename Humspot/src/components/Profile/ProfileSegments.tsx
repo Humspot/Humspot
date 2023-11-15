@@ -120,8 +120,8 @@ const ProfileSegments: React.FC = memo(() => {
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Favorites</IonTitle>
               :
               <IonCard>
-                <IonCardContent>
-                  <IonList>
+                <IonCardContent className='ion-no-padding'>
+                  <IonList inset={false}>
                     {!favoritesLoading ?
                       favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
                         return (
@@ -129,6 +129,7 @@ const ProfileSegments: React.FC = memo(() => {
                             <IonThumbnail><img src={favorite.photoUrl || placeholder} /></IonThumbnail>
                             <IonLabel style={{ paddingLeft: "10px" }}>
                               <h2>{favorite.name}</h2>
+                              <div style={{height: "5px"}} />
                               <p style={{ fontSize: "0.9rem" }}>{favorite.description}</p>
                               <p style={{ fontSize: "0.8rem" }}>{favorite.location}</p>
                             </IonLabel>
@@ -158,6 +159,7 @@ const ProfileSegments: React.FC = memo(() => {
                             <IonThumbnail><img src={visitedPlace.photoUrl || placeholder} /></IonThumbnail>
                             <IonLabel style={{ paddingLeft: "10px" }}>
                               <h2>{visitedPlace.name}</h2>
+                              <div style={{height: "5px"}} />
                               <p style={{ fontSize: "0.9rem" }}>{visitedPlace.description}</p>
                               <p style={{ fontSize: "0.8rem" }}>{visitedPlace.location}</p>
                             </IonLabel>
@@ -178,7 +180,7 @@ const ProfileSegments: React.FC = memo(() => {
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Comments or Interactions</IonTitle>
               :
               <IonCard>
-                <IonCardContent>
+                <IonCardContent className='ion-no-padding'>
                   <IonList>
                     {!commentsLoading ?
                       comments.map((comment: HumspotCommentResponse, index: number) => {
@@ -187,6 +189,7 @@ const ProfileSegments: React.FC = memo(() => {
                             <IonThumbnail><img src={comment.photoUrl || placeholder} /></IonThumbnail>
                             <IonLabel style={{ paddingLeft: "10px" }}>
                               <h2>{comment.name}</h2>
+                              <div style={{height: "5px"}} />
                               <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {comment.commentText}</p>
                               <p style={{ fontSize: "0.8rem" }}>{formatDate(comment.commentDate as string)}</p>
                             </IonLabel>

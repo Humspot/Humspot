@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel,
   IonList, IonLoading, IonModal, IonTextarea, IonTitle, IonToolbar, useIonLoading
@@ -11,8 +11,15 @@ import avatar from '../../assets/images/avatar.svg';
 import { useContext } from "../../utils/my-context";
 import { handleAddImages, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
 
+type ProfileEditModalProps = {
+  page: HTMLElement | undefined;
+};
 
-const ProfileEditModal: React.FC = () => {
+async function canDismiss(data?: any, role?: string) {
+  return role !== 'gesture';
+};
+
+const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
 
   const context = useContext();
   const Toast = useToast();
@@ -21,6 +28,8 @@ const ProfileEditModal: React.FC = () => {
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const usernameRef = useRef<HTMLIonInputElement | null>(null);
   const bioRef = useRef<HTMLIonTextareaElement | null>(null);
+
+  const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
   const clickUpdateProfilePhoto = async () => {
     if (!context.humspotUser) {
@@ -82,10 +91,14 @@ const ProfileEditModal: React.FC = () => {
       t.present();
     }
     dismiss();
-  }
+  };
+
+  useEffect(() => {
+    setPresentingElement(props.page);
+  }, [props.page]);
 
   return (
-    <IonModal ref={modalRef} trigger="open-edit-profile-modal">
+    <IonModal ref={modalRef} trigger="open-edit-profile-modal" presentingElement={presentingElement} canDismiss={canDismiss}>
       {!context.humspotUser ? // loading
         <>
           <IonLoading message={"Loading Profile..."} />
@@ -94,11 +107,11 @@ const ProfileEditModal: React.FC = () => {
         <>
           <IonHeader className='ion-no-border'>
             <IonToolbar>
-              <IonButtons>
-                <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
-                  <IonIcon icon={chevronBackOutline} />
+              <IonTitle style={{ fontSize: "1.25rem" }}>Edit Profile</IonTitle>
+              <IonButtons style={{ height: "5vh" }}>
+                <IonButton style={{ fontSize: '1.15em', marginLeft: "-2.5%" }} onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
+                  <IonIcon icon={chevronBackOutline} /> <p>Back</p>
                 </IonButton>
-                <IonTitle>Edit Profile</IonTitle>
               </IonButtons>
             </IonToolbar>
           </IonHeader>

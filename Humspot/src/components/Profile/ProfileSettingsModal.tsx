@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   IonModal,
   IonList,
@@ -8,7 +8,11 @@ import {
   IonToggle,
   IonContent,
   IonTitle,
-  useIonRouter
+  useIonRouter,
+  IonHeader,
+  IonToolbar,
+  IonButton,
+  IonButtons
 } from "@ionic/react";
 import {
   notificationsOutline,
@@ -24,8 +28,15 @@ import { Dialog } from "@capacitor/dialog";
 import { useContext } from "../../utils/my-context";
 import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../../utils/server";
 
+type ProfileSettingsModalProps = {
+  page: HTMLElement | undefined;
+};
 
-const ProfileSettingsModal = () => {
+async function canDismiss(data?: any, role?: string) {
+  return role !== 'gesture';
+};
+
+const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
 
   const context = useContext();
   const router = useIonRouter();
@@ -42,10 +53,26 @@ const ProfileSettingsModal = () => {
     await handleLogout();
   };
 
+  const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
+
+  useEffect(() => {
+    setPresentingElement(props.page);
+  }, [props.page]);
+
 
   return (
-    <IonModal ref={modalRef} trigger="open-profile-page-modal" handle breakpoints={[0, 0.8, 0.99]} initialBreakpoint={0.8}>
+    <IonModal ref={modalRef} trigger="open-profile-page-modal" presentingElement={presentingElement} canDismiss={canDismiss}>
       <IonContent style={{ '--background': 'var(--ion-item-background' }}>
+        <IonHeader className='ion-no-border'>
+          <IonToolbar>
+            <IonTitle style={{ fontSize: "1.25rem" }}>Settings</IonTitle>
+            <IonButtons style={{ height: "5vh" }}>
+              <IonButton style={{ fontSize: '1.15em', }} onClick={() => { modalRef.current?.dismiss(); }}>
+                <p>Close</p>
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>
+        </IonHeader>
         <br />
         <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Settings</IonTitle>
         <IonList lines='full'>
@@ -53,7 +80,6 @@ const ProfileSettingsModal = () => {
             <IonIcon aria-hidden="true" icon={notificationsOutline} slot="start"></IonIcon>
             <IonLabel><IonToggle disabled={!context.humspotUser}>Notifications </IonToggle></IonLabel>
           </IonItem>
-          <br />
           <IonItem>
             <IonIcon aria-hidden="true" icon={moonOutline} slot="start"></IonIcon>
             <IonLabel><IonToggle checked={context.darkMode} onIonChange={(e) => { }}>Dark Mode</IonToggle></IonLabel>
