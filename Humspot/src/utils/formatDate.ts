@@ -22,9 +22,9 @@ const monthNames = [
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
 
-  const day = date.getDate();
-  const monthIndex = date.getMonth();
-  const year = date.getFullYear();
+  const day = date.getUTCDate();
+  const monthIndex = date.getUTCMonth();
+  const year = date.getUTCFullYear();
 
   return `${monthNames[monthIndex]} ${day}, ${year}`;
 };

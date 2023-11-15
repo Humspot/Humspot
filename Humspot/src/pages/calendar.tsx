@@ -24,10 +24,14 @@ import {
 import FilterButton from "../components/Shared/FilterButton";
 import { useContext } from "../utils/my-context";
 import { useToast } from "@agney/ir-toast";
-import { handleGetActivitiesGivenTag } from "../utils/server";
+import {
+  handleGetActivitiesGivenTag,
+  handleGetEventsBetweenTwoDates,
+} from "../utils/server";
 import placeholder from "../assets/images/placeholder.png";
 import { formatDate } from "../utils/formatDate";
 import EventsListEntry from "../components/Calendar/EventsListEntry";
+import { getDateStrings } from "../utils/calcDates";
 
 function CalendarPage() {
   const context = useContext();
@@ -37,8 +41,12 @@ function CalendarPage() {
   const [eventsToday, seteventsToday] = useState<any>([]);
   const [eventsTodayLoading, setEventsTodayLoading] = useState<boolean>(true);
   const Toast = useToast();
+  // FetchEventsToday
   const fetchEventsToday = useCallback(async () => {
-    const response = await handleGetActivitiesGivenTag(1, "School");
+    const response = await handleGetEventsBetweenTwoDates(
+      getDateStrings().today,
+      getDateStrings().today
+    );
     if (!response.success) {
       const toast = Toast.create({
         message: response.message,
@@ -47,17 +55,22 @@ function CalendarPage() {
       });
       toast.present();
     }
-    seteventsToday(response.activities);
+    console.log(response.events);
+    seteventsToday(response.events);
     setEventsTodayLoading(false);
   }, []);
 
   useEffect(() => {
     fetchEventsToday();
   }, [fetchEventsToday]);
+  // FetchEventsWeek
   const [eventsWeek, seteventsWeek] = useState<any>([]);
   const [eventsWeekLoading, setEventsWeekLoading] = useState<boolean>(true);
   const fetchEventsWeek = useCallback(async () => {
-    const response = await handleGetActivitiesGivenTag(1, "School");
+    const response = await handleGetEventsBetweenTwoDates(
+      getDateStrings().tomorrow,
+      getDateStrings().sevenDaysFromNow
+    );
     if (!response.success) {
       const toast = Toast.create({
         message: response.message,
@@ -66,13 +79,36 @@ function CalendarPage() {
       });
       toast.present();
     }
-    seteventsWeek(response.activities);
+    seteventsWeek(response.events);
     setEventsWeekLoading(false);
   }, []);
 
   useEffect(() => {
     fetchEventsWeek();
   }, [fetchEventsWeek]);
+  // FetchEventsMonth
+  const [eventsMonth, seteventsMonth] = useState<any>([]);
+  const [eventsMonthLoading, setEventsMonthLoading] = useState<boolean>(true);
+  const fetchEventsMonth = useCallback(async () => {
+    const response = await handleGetEventsBetweenTwoDates(
+      getDateStrings().eightDaysFromNow,
+      getDateStrings().thirtyDaysFromNow
+    );
+    if (!response.success) {
+      const toast = Toast.create({
+        message: response.message,
+        duration: 2000,
+        color: "danger",
+      });
+      toast.present();
+    }
+    seteventsMonth(response.events);
+    setEventsMonthLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchEventsMonth();
+  }, [fetchEventsMonth]);
 
   const router = useIonRouter();
 
@@ -100,15 +136,33 @@ function CalendarPage() {
             {/* Events This Week */}
             <IonItemDivider>
               <IonLabel>
-                <h1>This Week</h1>
+                <h1>Next 7 Days</h1>
               </IonLabel>
             </IonItemDivider>
+            {!eventsWeekLoading ? (
+              <EventsListEntry events={eventsWeek}></EventsListEntry>
+            ) : (
+              <>
+                <IonSkeletonText style={{ height: "5rem" }} animated />
+                <IonSkeletonText style={{ height: "5rem" }} animated />
+                <IonSkeletonText style={{ height: "5rem" }} animated />
+              </>
+            )}
             {/* Events This Month */}
             <IonItemDivider>
               <IonLabel>
-                <h1>This Month</h1>
+                <h1>Next 30 Days</h1>
               </IonLabel>
             </IonItemDivider>
+            {!eventsMonthLoading ? (
+              <EventsListEntry events={eventsMonth}></EventsListEntry>
+            ) : (
+              <>
+                <IonSkeletonText style={{ height: "5rem" }} animated />
+                <IonSkeletonText style={{ height: "5rem" }} animated />
+                <IonSkeletonText style={{ height: "5rem" }} animated />
+              </>
+            )}
           </IonList>
         </IonContent>
         {eventsTodayLoading || eventsWeekLoading ? (

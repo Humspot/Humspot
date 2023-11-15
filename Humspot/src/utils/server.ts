@@ -25,7 +25,8 @@ import {
   HumspotEvent,
   GetActivityResponse,
   AddToRSVPResponse,
-  GetFavoritesAndVisitedAndRSVPStatusResponse
+  GetFavoritesAndVisitedAndRSVPStatusResponse,
+  GetEventsBetweenTwoDatesStatusResponse
 } from "./types";
 
 import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
@@ -959,5 +960,36 @@ export const handleGetFavoritesAndVisitedAndRSVPStatus = async (userID: string, 
       visited: null,
       rsvp: null
     }
+  }
+};
+
+export const handleGetEventsBetweenTwoDates = async (date1: string, date2: string): Promise<GetEventsBetweenTwoDatesStatusResponse> => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENTS_BETWEEN_TWO_DATES + "/" + date1 + "/" + date2,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (err) {
+    console.error(err);
+    return { message: "Error calling API Gateway" + err, events: [], success:false };
   }
 };
