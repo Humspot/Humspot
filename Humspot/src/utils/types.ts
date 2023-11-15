@@ -78,6 +78,7 @@ type ExtendedHumspotAttraction = HumspotAttraction & {
 export type GetActivitiesGivenTagResponse = {
   message: string;
   events: ExtendedHumspotEvent[];
+  success: boolean
 };
 
 export type AddImageResponse = {
@@ -186,3 +187,9 @@ export type GetFavoritesAndVisitedAndRSVPStatusResponse = {
   visited: boolean | null;
   rsvp: boolean | null;
 }
+
+export type GetEventsBetweenTwoDatesStatusResponse = {
+  message: string;
+  events: ExtendedHumspotEvent[];
+  success: boolean;
+};
