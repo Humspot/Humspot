@@ -3,6 +3,7 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonIte
 import { chevronBackOutline } from "ionicons/icons";
 import { useRef } from "react";
 import { handleForgotPassword } from "../utils/server";
+import GoBackHeader from "../components/Shared/GoBackHeader";
 
 const ForgotPassword = () => {
 
@@ -30,16 +31,7 @@ const ForgotPassword = () => {
   return (
     <IonPage>
 
-      <IonHeader className='ion-no-border'>
-        <IonToolbar style={{ '--background': '--ion-background-color' }}>
-          <IonButtons >
-            <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { router.goBack(); }}>
-              <IonIcon icon={chevronBackOutline} />
-            </IonButton>
-            <IonTitle>Forgot Password</IonTitle>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
+      <GoBackHeader title="Forgot Password" />
 
       <IonContent>
 
