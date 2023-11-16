@@ -32,6 +32,7 @@ const ActivityDateTimeLocation = (props: { activity: HumspotActivity | null }) =
               <ActivityLocationMap
                 latitude={activity.latitude}
                 longitude={activity.longitude}
+                activityName={activity.name}
               />
             )}
           </div>

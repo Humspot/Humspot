@@ -93,7 +93,7 @@ const ProfileEditModal: React.FC = () => {
         :
         <>
           <IonHeader className='ion-no-border'>
-            <IonToolbar>
+            <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
               <IonButtons>
                 <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
                   <IonIcon icon={chevronBackOutline} />

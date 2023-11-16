@@ -24,6 +24,7 @@ import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox"
 import "swiper/css/autoplay";
 import { HumspotActivity } from "../utils/types";
 import ActivityFavoriteVisitedRSVPButtons from "../components/Activity/ActivityFavoriteVisitedRSVPButton";
+import GoBackHeader from "../components/Shared/GoBackHeader";
 
 type ActivityPageParams = {
   id: string;
@@ -45,9 +46,10 @@ function ActivityPage() {
 
   return (
     <IonPage>
+
       <IonContent>
 
-        <ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />
+        <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
 
         {/* Header Image */}
         <div className="headerImage">
