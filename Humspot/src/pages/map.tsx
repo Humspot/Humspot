@@ -1,19 +1,25 @@
-import { IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonPage, IonText } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, useIonRouter } from "@ionic/react";
 import { Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/my-context";
 import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/map-config";
 import { useCallback, useEffect, useState } from "react";
 import { handleGetThisWeeksEvents } from "../utils/server";
 import { GetHumspotEventResponse } from "../utils/types";
+import { settingsOutline } from "ionicons/icons";
+import MapSettingsModal from "../components/Map/MapSettingsModal";
 
 function MapPage() {
 
   const context = useContext();
+  const router = useIonRouter();
 
   const [mapZoom, setZoom] = useState<number>(15);
   const [center, setCenter] = useState<[number, number]>([40.87649434150835, -124.07918370203882]);
   const [overlayIndex, setOverlayIndex] = useState<number>(-1);
+
+  const [showThisWeeksEvents, setShowThisWeeksEvents] = useState<boolean>(true);
   const [thisWeeksEvents, setThisWeeksEvents] = useState<GetHumspotEventResponse[]>([]);
+
 
   const fetchThisWeeksEvents = useCallback(async () => {
     const res = await handleGetThisWeeksEvents();
@@ -49,7 +55,7 @@ function MapPage() {
           <ZoomControl style={{ left: "85%", top: "50%", opacity: "95%", zIndex: '100' }} buttonStyle={!context.darkMode ? zoomControlButtonsStyle : zoomControlButtonsStyleDark} />
 
           {/* Render the map markers */}
-          {thisWeeksEvents && thisWeeksEvents.map((marker: GetHumspotEventResponse, index: number) => {
+          {showThisWeeksEvents && thisWeeksEvents && thisWeeksEvents.map((marker: GetHumspotEventResponse, index: number) => {
             if (!marker.latitude || !marker.longitude) return;
             return (
               <Marker
@@ -81,7 +87,7 @@ function MapPage() {
           })}
 
           {/* If map marker is clicked, show card overlay */}
-          {overlayIndex != -1 && thisWeeksEvents[overlayIndex] && thisWeeksEvents[overlayIndex].latitude && thisWeeksEvents[overlayIndex].longitude ? (
+          {showThisWeeksEvents && overlayIndex != -1 && thisWeeksEvents[overlayIndex] && thisWeeksEvents[overlayIndex].latitude && thisWeeksEvents[overlayIndex].longitude ? (
             <Overlay
               anchor={[
                 parseFloat(thisWeeksEvents[overlayIndex].latitude!),
@@ -92,6 +98,7 @@ function MapPage() {
               <IonCard
                 style={!context.darkMode ? { width: "55vw", opacity: "90%" } : { width: "55vw", opacity: "95%" }}
                 mode="ios"
+                onClick={() => router.push("/activity/" + thisWeeksEvents[overlayIndex].activityID)}
               >
                 <IonCardContent>
                   <div style={{ height: "0.5vh" }} />
@@ -131,8 +138,15 @@ function MapPage() {
             </Overlay>
           ) : null}
 
+          <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateX(15%) translateY(-15%)' }}>
+            <IonButton id="map-settings-modal" mode='ios' style={{ borderRadius: '7.5px' }}>
+              <IonIcon icon={settingsOutline} />
+            </IonButton>
+          </IonFab>
 
         </Map>
+
+        <MapSettingsModal showThisWeeksEvents={showThisWeeksEvents} setShowThisWeeksEvents={setShowThisWeeksEvents} />
 
       </IonContent>
     </IonPage>

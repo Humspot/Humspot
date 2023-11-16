@@ -14,7 +14,7 @@ import ProfileBio from "../components/Profile/ProfileBio";
 import ProfileSegments from "../components/Profile/ProfileSegments";
 import ProfileHeader from "../components/Profile/ProfileHeader";
 import ProfileSettingsModal from "../components/Profile/ProfileSettingsModal";
-import ProfileAddActivityModal from "../components/Profile/ProfileAddActivityModal";
+import ProfileAddActivityModal from "../components/Profile/ProfileActivitiesModal";
 import ProfileEditModal from "../components/Profile/ProfileEditModal";
 
 const Profile: React.FC = () => {
