@@ -160,7 +160,7 @@ export const handleAddEvent = async (
   }
 };
 
-export const handleSubmitEventForApproval = async (event : HumspotEvent) => {
+export const  handleSubmitEventForApproval = async (event : HumspotEvent) => {
   try {
     const currentUserSession = await Auth.currentSession();
 

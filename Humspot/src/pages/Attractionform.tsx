@@ -3,7 +3,8 @@ import { IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTex
 import { HumspotAttraction } from '../utils/types';
 import { useContext } from '../utils/my-context';
 import { useToast } from '@agney/ir-toast';
-import { handleAddEvent, handleSubmitEventForApproval } from '../utils/server';
+import { handleAddAttraction, handleAddEvent, handleSubmitEventForApproval } from '../utils/server';
+
 
 
 export const AttractionForm = () => {
@@ -30,8 +31,17 @@ export const AttractionForm = () => {
 
 
       const handleChange = (field: keyof HumspotAttraction) => (e: CustomEvent) => {
-        setAttraction({ ...attraction, [field]: e.detail.value });
+        let value: any = e.detail.value;
+      
+        // Special handling for photoUrls as an array
+        if (field === 'photoUrls' && typeof value === 'string') {
+          value = value ? [value] : [];
+        }
+      
+        // Update the event state
+        setAttraction({ ...attraction, [field]: value });
       };
+
 
     
       const handleSubmit = async () => {
@@ -40,14 +50,14 @@ export const AttractionForm = () => {
         let attractionCopy = attraction; 
         attractionCopy.addedByUserID = context.humspotUser.userID;
         setAttraction(attractionCopy); 
-        const response = await handleSubmitEventForApproval();
+        const response = await handleAddAttraction(attractionCopy);
         console.log(response);
 
         // Display toast on successful submission
-        if (response.success) {
-        setToastMessage("Event added successfully!");
-        setShowToast(true);
-        }
+        // if (response.success) {
+        // setToastMessage("attraction added successfully!");
+        // setShowToast(true);
+        // }
     }
     
 

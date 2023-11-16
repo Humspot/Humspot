@@ -34,11 +34,11 @@ export type HumspotEvent = {
   addedByUserID: string;
   date: string;
   time: string;
-  latitude: number;
-  longitude: number;
+  latitude: number | null;
+  longitude: number | null;
   organizer: string;
   tags: string[];
-  photoUrls: string[];
+  photoUrls: string[] | null;
   websiteURL: string | null;
 };
 
