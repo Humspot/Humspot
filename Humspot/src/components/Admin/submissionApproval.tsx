@@ -1,62 +1,70 @@
 // View submissions
 // Should open activities page and have a button to approve or decline
 // Default is unapproved lists
-import { 
-    IonSegment, 
-    IonSegmentButton,
-    IonButton,
-    IonLabel,
-    IonIcon,
-    IonContent,
-    IonSkeletonText,
-    IonList,
-    IonCard,
-    IonCardContent,
-    IonItem,
-    IonThumbnail, 
-    IonImg,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
-    useIonRouter
+import {
+  IonSegment,
+  IonSegmentButton,
+  IonButton,
+  IonLabel,
+  IonIcon,
+  IonContent,
+  IonSkeletonText,
+  IonList,
+  IonCard,
+  IonCardContent,
+  IonItem,
+  IonThumbnail,
+  IonImg,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  useIonRouter,
 } from "@ionic/react";
 
-import {
-  checkmarkCircleOutline,
-} from "ionicons/icons";
+import { checkmarkCircleOutline } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
 import { useContext } from "../../utils/my-context";
-import {memo} from "react"
+import { memo } from "react";
 import { HumspotFavoriteResponse } from "../../utils/types";
 import { handleGetPendingActivitySubmissions } from "../../utils/server";
 
-function SubmissionApproval({title, description, imgsrc, id}: any) { 
+
+
+function SubmissionApproval({ title, description, imgsrc, id }: any) {
   const router = useIonRouter();
   const context = useContext();
   const fetchSubmissions = useCallback(async () => {
     if (!context.humspotUser) return;
-    const response = await handleGetPendingActivitySubmissions (1, context.humspotUser.userID);
+    const response = await handleGetPendingActivitySubmissions(
+      1,
+      context.humspotUser.userID
+    );
     setSubmissions(response.pendingSubmissions);
-  }, [context.humspotUser]); 
-  const[submissions, setSubmissions] = useState<any[]>([]); 
-
+  }, [context.humspotUser]);
+  const [submissions, setSubmissions] = useState<any[]>([]);
+  console.log(submissions);
 
   useEffect(() => {
     fetchSubmissions();
   }, [fetchSubmissions]);
 
-  return(
-    <IonCard> 
+  return (
+    <IonCard>
       <IonList>
-        {
-        submissions.map((submission: any, index:number) => {
+        {submissions.map((submission: any, index: number) => {
           return (
-              <IonItem 
+            <IonItem
               key={index}
-              onClick={()=> {router.push("/submissions/"+ submission.id)}}>
-                <h1>{submission.name}</h1> 
-              </IonItem>
-          )
+              onClick={() => {
+                router.push("/submissions/" + submission.submissionID);
+              }}
+            >
+              <IonLabel style={{ paddingLeft: "10px" }}>
+                <h2>Event: {submission.name}</h2>
+                <p style={{ fontSize: "0.9rem"}}> Created By: {submission.organizer || "Unknown"} </p>
+              </IonLabel>
+            </IonItem>
+          );
         })
         }
       </IonList>
@@ -64,4 +72,4 @@ function SubmissionApproval({title, description, imgsrc, id}: any) {
   );
 }
 
-export default SubmissionApproval
+export default SubmissionApproval;

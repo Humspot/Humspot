@@ -84,9 +84,9 @@ const AdminSegment: React.FC = memo(() => {
               <OrganizersApproval />
             </IonCard>
 
-          ) : selectedSegment ==="approvedOrganizer" ?(
+          ) : selectedSegment === "approvedOrganizer" ? (
             <IonCard>
-              <approvedOrganizer />
+              <h1> Orgainzer Approval</h1>
             </IonCard>
           ) : (
             <h1> Nothing Selected</h1>
