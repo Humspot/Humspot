@@ -97,7 +97,7 @@ const ProfileSettingsModal = () => {
 
           <br />
         </IonList>
-        <p className='ion-text-center'>v.1.0.0 - Humspot</p>
+        {/* <p className='ion-text-center'>v.1.0.0 - Humspot</p> */}
       </IonContent>
     </IonModal >
   )

@@ -1,10 +1,9 @@
 import { IonButton, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar, useIonRouter } from "@ionic/react"
 import { chevronBackOutline } from "ionicons/icons";
-import ActivityFavoriteVisitedRSVPButton from "../Activity/ActivityFavoriteVisitedRSVPButton";
 
 type GoBackHeaderProps = {
   title: string;
-  buttons: any;
+  buttons?: any;
 }
 
 const GoBackHeader: React.FC<GoBackHeaderProps> = (props: GoBackHeaderProps) => {

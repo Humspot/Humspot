@@ -1,6 +1,6 @@
 /**
  * AWS lambda function to retrieve a User's comments from the database given the page number and the userID.
- * Each page pulls 10 comments from the database. 
+ * Each page pulls 10 comments and 10 RSVP'd events from the database. 
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
