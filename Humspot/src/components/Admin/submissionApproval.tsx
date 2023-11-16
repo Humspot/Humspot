@@ -29,10 +29,10 @@ import { HumspotFavoriteResponse } from "../../utils/types";
 import { handleGetPendingActivitySubmissions } from "../../utils/server";
 
 
-
 function SubmissionApproval({ title, description, imgsrc, id }: any) {
   const router = useIonRouter();
   const context = useContext();
+
   const fetchSubmissions = useCallback(async () => {
     if (!context.humspotUser) return;
     const response = await handleGetPendingActivitySubmissions(
