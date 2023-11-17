@@ -24,6 +24,7 @@ export type Comment = {
   commentText: string;
   userID: string;
   activityID: string;
+  photoUrl: string | null;
 };
 
 export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
@@ -86,12 +87,10 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     // Add to Comments table
     const commentID: string = crypto.randomBytes(16).toString('hex');
-    query = 'INSERT INTO Comments (commentID, userID, activityID, commentText, commentDate) VALUES (?, ?, ?, ?, NOW())';
-    params = [commentID, comment.userID, comment.activityID, comment.commentText];
+    query = 'INSERT INTO Comments (commentID, userID, activityID, commentText, commentDate, photoUrl) VALUES (?, ?, ?, ?, NOW(), ?)';
+    params = [commentID, comment.userID, comment.activityID, comment.commentText, comment.photoUrl];
     await conn.query(query, params);
 
-    // Increment commentAmount column on Users table
-    query = ''
 
     await conn.commit();
 
@@ -105,6 +104,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
       body: JSON.stringify({
         message: 'Comment added successfully.',
         commentID: commentID,
+        commentSent: comment,
         success: true
       }),
     };

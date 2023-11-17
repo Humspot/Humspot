@@ -349,6 +349,44 @@ export const handleGetEventGivenTag = async (pageNum: number, tag: string): Prom
 
 
 /**
+ * @function handleAddCommentImage 
+ * @description uploads an image to the S3 database and returns the imageUrl. 
+ * 
+ * @param {string} photoUrl 
+ * @returns {Promise<string>} url of uploaded image or empty string if failed.
+ */
+const handleAddCommentImage = async (photoUrl: string | null, blob: Blob): Promise<string> => {
+  if (!photoUrl || !blob) return '';
+
+  AWS.config.update({
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_KEY,
+    region: "us-west-1",
+  });
+
+  const s3 = new AWS.S3();
+  const id: string = nanoid(8);
+  const uploadedFileName = `comment-photos/${photoUrl}-${id}-${Date.now()}`;
+
+  const params: AWS.S3.PutObjectRequest = {
+    Bucket: 'activityphotos',
+    Key: uploadedFileName,
+    Body: blob,
+    ContentType: blob.type,
+  };
+
+  try {
+    const data = await s3.upload(params).promise();
+    console.log(`File uploaded successfully at ${data.Location}`);
+    return data.Location;
+  } catch (error) {
+    console.log("Error uploading file:", error);
+    return '';
+  }
+};
+
+
+/**
  * @function handleAddImages
  * @description Calls the Capacitor Camera API to pick images from the gallery for upload.
  * After uploading to the provided bucker, the photoUrls are returned for later use.
@@ -596,7 +634,7 @@ export const handleAddToRSVP = async (userID: string, activityID: string, rsvpDa
  *
  * @returns
  */
-export const handleAddComment = async (comment: HumspotCommentSubmit) => {
+export const handleAddComment = async (comment: HumspotCommentSubmit, blob: Blob | null) => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -604,6 +642,18 @@ export const handleAddComment = async (comment: HumspotCommentSubmit) => {
 
     const idToken = currentUserSession.getIdToken();
     const jwtToken = idToken.getJwtToken();
+
+    let photoUrl: string | null = null;
+
+    if (comment.photoUrl && blob) {
+      photoUrl = await handleAddCommentImage(comment.photoUrl, blob);
+      if (!photoUrl) throw new Error("Error uploading photo to S3 database!");
+    }
+
+    let commentWithPhotoUrl = comment;
+    commentWithPhotoUrl.photoUrl = photoUrl;
+
+    console.log(commentWithPhotoUrl);
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_ADD_COMMENT_URL,
@@ -613,7 +663,7 @@ export const handleAddComment = async (comment: HumspotCommentSubmit) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jwtToken}`,
         },
-        body: JSON.stringify(comment),
+        body: JSON.stringify(commentWithPhotoUrl),
       }
     );
 
@@ -1012,7 +1062,7 @@ export const handleGetPendingActivitySubmissions = async (pageNum: number, userI
  * 
  * @returns {message: string; success: boolean; events: GetHumspotEventResponse[]}
  */
-export const handleGetThisWeeksEvents = async (): Promise<{ message: string; success: boolean; events: GetHumspotEventResponse[]}> => {
+export const handleGetThisWeeksEvents = async (): Promise<{ message: string; success: boolean; events: GetHumspotEventResponse[] }> => {
   try {
     const currentUserSession = await Auth.currentSession();
 

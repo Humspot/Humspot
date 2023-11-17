@@ -120,6 +120,7 @@ export type HumspotCommentSubmit = {
   // commentDate: string;
   userID: string;
   activityID: string;
+  photoUrl: string | null;
 };
 
 export type HumspotInteractionResponse = {
