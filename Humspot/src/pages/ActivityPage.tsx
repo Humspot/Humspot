@@ -55,8 +55,7 @@ function ActivityPage() {
       <IonContent>
 
         <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
-      <IonLoading isOpen={activityLoading} message={"Loading..."} />
-      <IonContent>
+        <IonLoading isOpen={activityLoading} message={"Loading..."} />
 
         {/* Header Image */}
         <div className="headerDiv">

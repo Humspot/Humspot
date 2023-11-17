@@ -18,9 +18,6 @@ import {
   AddToVisitedResponse,
   GetInteractionsResponse,
   GetEventsGivenTagResponse,
-
-  GetActivitiesGivenTagResponse,
-
   GetFavoritesResponse,
   LoginResponse,
   HumspotAttraction,
@@ -29,11 +26,8 @@ import {
   GetActivityResponse,
   AddToRSVPResponse,
   GetFavoritesAndVisitedAndRSVPStatusResponse,
-
-  GetHumspotEventResponse
-
+  GetHumspotEventResponse,
   GetEventsBetweenTwoDatesStatusResponse
-
 } from "./types";
 
 import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
