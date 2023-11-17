@@ -1057,7 +1057,7 @@ export const handleGetPendingActivitySubmissions = async (pageNum: number, userI
 
 
 /**
- * @function handleGetEventsBetweenTwoDates
+ * @function handleGetThisWeeksEvents
  * @description gets the events that are happening this week (within the next 7 days, inclusive).
  * 
  * @returns {message: string; success: boolean; events: GetHumspotEventResponse[]}
