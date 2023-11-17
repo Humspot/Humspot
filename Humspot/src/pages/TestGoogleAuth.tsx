@@ -22,7 +22,11 @@ import {
   handleLogout,
 } from "../utils/server";
 import { useContext } from "../utils/my-context";
-import { HumspotAttraction, HumspotCommentSubmit, HumspotEvent } from "../utils/types";
+import {
+  HumspotAttraction,
+  HumspotCommentSubmit,
+  HumspotEvent,
+} from "../utils/types";
 import { EngineParameters, getJson } from "serpapi";
 
 // const event10: HumspotEvent = {
@@ -51,6 +55,7 @@ import { EngineParameters, getJson } from "serpapi";
 //   tags: ["attractionTest", "anotherAttractionTest", "fun"],
 //   photoUrls: [],
 // };
+
 
 // const dummyComment: HumspotCommentSubmit = {
 //   userID: "",
@@ -92,7 +97,7 @@ const TestGoogleAuth: React.FC = () => {
   };
 
   const handleTestGetEventGivenTag = async () => {
-    const res = await handleGetEventGivenTag(1, "fun");
+    const res = await handleGetActivitiesGivenTag(1, "fun");
   };
 
   const handleTestImages = async () => {
@@ -151,8 +156,12 @@ const TestGoogleAuth: React.FC = () => {
   const handleTestRSVP = async () => {
     if (!context.humspotUser) return;
     const userID: string = context.humspotUser.userID;
-    const res = await handleAddToRSVP(userID, '08d4f2112bb9d001127b76614', '2023-11-01');
-  }
+    const res = await handleAddToRSVP(
+      userID,
+      "08d4f2112bb9d001127b76614",
+      "2023-11-01"
+    );
+  };
 
   return (
     <>
@@ -161,9 +170,7 @@ const TestGoogleAuth: React.FC = () => {
           <IonCard>
             <IonCardContent>
               <>
-                <p>
-                  Currently logged in as:{" "}
-                </p>
+                <p>Currently logged in as: </p>
 
                 <IonButton
                   color="dark"
@@ -172,7 +179,7 @@ const TestGoogleAuth: React.FC = () => {
                   Login
                 </IonButton>
 
-                <IonButton color='primary'>
+                <IonButton color="primary">
                   Test notification: 715d07c9d97dde03808d03bb
                 </IonButton>
 

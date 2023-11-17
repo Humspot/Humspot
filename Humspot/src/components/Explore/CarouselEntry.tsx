@@ -8,16 +8,18 @@ import {
   IonHeader,
   IonImg,
   IonPage,
+  IonRippleEffect,
   useIonRouter,
 } from "@ionic/react";
+import placeholder from "../../assets/images/placeholder.png";
 
-// import "./CarouselEntry.css";
+import "./CarouselEntry.css";
 
-function CarouselEntrySecondary({ title, imgsrc, id }: any) {
+function CarouselEntry({ title, description, imgsrc, id }: any) {
   const router = useIonRouter();
 
-  const secondarycontainerStyle = {
-    height: "13vh", // Set the desired height for the container
+  const containerStyle = {
+    height: "28vh", // Set the desired height for the container
     overflow: "hidden", // Hide any overflow outside the container
   };
 
@@ -27,29 +29,32 @@ function CarouselEntrySecondary({ title, imgsrc, id }: any) {
     objectFit: "cover", // Crop and fit the image within the container
   };
 
-  const labelStyle = {
+  const headerStyle = {
     padding: "2%",
+    height: "10vh",
   };
 
   return (
     <IonCard
       onClick={() => {
-        router.push(`/activity/${id}`);
+        router.push("/activity/" + id);
       }}
+      button
     >
-      <div style={secondarycontainerStyle}>
+      <div style={containerStyle}>
         <IonImg
           alt="Attraction Image"
-          src={imgsrc}
-          className="SecondaryCarouselEntryHeaderImage"
+          src={imgsrc || placeholder}
+          className="MainCarouselEntryHeaderImage"
           style={imgStyle as any}
         ></IonImg>
       </div>
-      <IonCardHeader style={labelStyle}>
+      <IonCardHeader style={headerStyle}>
         <IonCardTitle>{title}</IonCardTitle>
+        <IonCardSubtitle className="wrap-text">{description}</IonCardSubtitle>
       </IonCardHeader>
     </IonCard>
   );
 }
 
-export default CarouselEntrySecondary;
+export default CarouselEntry;

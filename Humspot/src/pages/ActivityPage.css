@@ -1,5 +1,3 @@
-
-
 .locationcard {
   display: flex;
   padding: 20px;
@@ -65,11 +63,21 @@
 h1 {
   margin: 0px;
 }
-
-.headerImage{
+.headerDiv {
   width: 100%;
   height: 30vh;
-  objectFit: cover;
   position: absolute;
+  overflow: hidden;
+  z-index: 0;
+}
+.fill-frame-image {
+  height: 30;
+  object-fit: cover;
+  position: inherit;
+  z-index: 0;
+}
+
+.headerImage {
+  height: 100%;
   z-index: 0;
 }
