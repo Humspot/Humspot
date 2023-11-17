@@ -10,7 +10,7 @@ import avatar from '../../assets/images/avatar.svg';
 import './Profile.css';
 
 const ProfileBio: React.FC = () => {
-  
+
   const context = useContext();
 
   return (
@@ -47,39 +47,25 @@ const ProfileBio: React.FC = () => {
                   <div style={{ fontSize: '1.05rem', fontWeight: 'bold' }}>
                     3
                   </div>
-                  <div style={{ fontSize: '0.85rem' }}>Stuffs</div>
+                  <div style={{ fontSize: '0.85rem' }}>Comments</div>
                 </div>
               </div>
             )}
           </IonRow>
 
-          {/* <IonCardSubtitle style={{ marginLeft: '1%' }}> */}
-            <p style={{ fontSize: "0.9rem" }}>
-              {!context.humspotUser ?
-                <>
-                  <IonSkeletonText animated style={{ height: "0.9rem" }} />
-                  <IonSkeletonText animated style={{ height: "0.9rem", width: "90%" }} />
-                </>
-                :
-                <>
-                  {context.humspotUser.bio}
-                </>
+          <p style={{ fontSize: "0.9rem" }}>
+            {!context.humspotUser ?
+              <>
+                <IonSkeletonText animated style={{ height: "0.9rem" }} />
+                <IonSkeletonText animated style={{ height: "0.9rem", width: "90%" }} />
+              </>
+              :
+              <>
+                {context.humspotUser.bio}
+              </>
 
-              }
-            </p>
-          {/* </IonCardSubtitle> */}
-{/* 
-          <IonCardSubtitle style={{ marginLeft: '1%' }}>
-            <p style={{ fontSize: "0.75rem" }}>
-              {!context.humspotUser ?
-                <IonSkeletonText animated style={{ width: "70%" }} />
-                :
-                <>
-                  Member since {formatDate(context.humspotUser.dateCreated)}
-                </>
-              }
-            </p>
-          </IonCardSubtitle> */}
+            }
+          </p>
 
         </IonCardHeader>
       </IonCard>

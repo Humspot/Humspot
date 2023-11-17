@@ -16,7 +16,7 @@ import {
   AddImageResponse,
   AddToFavoritesResponse,
   AddToVisitedResponse,
-  GetCommentsResponse,
+  GetInteractionsResponse,
   GetEventsGivenTagResponse,
   GetFavoritesResponse,
   LoginResponse,
@@ -629,16 +629,16 @@ export const handleAddComment = async (comment: HumspotCommentSubmit) => {
 
 
 /**
- * @function handleGetCommentsGivenUserID
- * @description gets an array of comments from a specified user.
- * It returns 10 comments at a time, and more can be loaded my incrementing the pageNum param.
+ * @function handleGetInteractionsGivenUserID
+ * @description gets an array of comments and/or RSVP'd events from a specified user.
+ * It returns 20  at a time, and more can be loaded my incrementing the pageNum param.
  *
  * @param {number} pageNum
  * @param {string} userID
  *
- * @returns {Promise<GetCommentsResponse>} a status message, and, if successful, an array of 10 comments of type GetCommentsResponse
+ * @returns {Promise<GetCommentsResponse>} a status message, and, if successful, an array of 20 comments and/or RSVP'd events of type GetCommentsResponse
  */
-export const handleGetCommentsGivenUserID = async (pageNum: number, userID: string): Promise<GetCommentsResponse> => {
+export const handleGetInteractionsGivenUserID = async (pageNum: number, userID: string): Promise<GetInteractionsResponse> => {
   try {
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_COMMENTS_GIVEN_USERID_URL +
@@ -654,13 +654,13 @@ export const handleGetCommentsGivenUserID = async (pageNum: number, userID: stri
       }
     );
 
-    const responseData: GetCommentsResponse = await response.json();
+    const responseData: GetInteractionsResponse = await response.json();
 
     console.log(responseData);
     return responseData;
   } catch (error) {
     console.error("Error calling API Gateway", error);
-    return { message: "Error calling API Gateway" + error, success: false, comments: [] };
+    return { message: "Error calling API Gateway" + error, success: false, interactions: [] };
   }
 };
 

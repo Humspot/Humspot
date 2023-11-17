@@ -4,7 +4,7 @@ import { chevronBackOutline } from "ionicons/icons";
 type GoBackHeaderProps = {
   title: string;
   buttons?: any;
-}
+};
 
 const GoBackHeader: React.FC<GoBackHeaderProps> = (props: GoBackHeaderProps) => {
 

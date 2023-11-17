@@ -90,6 +90,9 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     params = [commentID, comment.userID, comment.activityID, comment.commentText];
     await conn.query(query, params);
 
+    // Increment commentAmount column on Users table
+    query = ''
+
     await conn.commit();
 
     return {

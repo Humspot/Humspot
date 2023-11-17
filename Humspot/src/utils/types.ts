@@ -122,18 +122,20 @@ export type HumspotCommentSubmit = {
   activityID: string;
 };
 
-export type HumspotCommentResponse = {
-  commentText: string;
-  commentDate: string;
+export type HumspotInteractionResponse = {
   activityID: string;
+  interactionDate: string;
+  interactionID: string;
+  interactionText: string | null; // string if comment, null if RSVP
+  interactionType: "rsvp" | "comment";
   name: string;
   photoUrl: string | null;
 };
 
-export type GetCommentsResponse = {
+export type GetInteractionsResponse = {
   message: string;
   success: boolean;
-  comments: HumspotCommentResponse[];
+  interactions: HumspotInteractionResponse[];
 };
 
 export type HumspotFavoriteResponse = {
