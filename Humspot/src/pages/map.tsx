@@ -1,3 +1,4 @@
+
 import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, useIonRouter } from "@ionic/react";
 import { Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/my-context";
@@ -8,13 +9,15 @@ import { GetHumspotEventResponse } from "../utils/types";
 import { settingsOutline } from "ionicons/icons";
 import MapSettingsModal from "../components/Map/MapSettingsModal";
 
-function MapPage() {
 
+function MapPage() {
   const context = useContext();
   const router = useIonRouter();
 
   const [mapZoom, setZoom] = useState<number>(15);
-  const [center, setCenter] = useState<[number, number]>([40.87649434150835, -124.07918370203882]);
+  const [center, setCenter] = useState<[number, number]>([
+    40.87649434150835, -124.07918370203882,
+  ]);
   const [overlayIndex, setOverlayIndex] = useState<number>(-1);
 
   const [showThisWeeksEvents, setShowThisWeeksEvents] = useState<boolean>(true);
@@ -31,13 +34,13 @@ function MapPage() {
 
   return (
     <IonPage>
-
       {/* <FilterButton></FilterButton> */}
 
       <IonContent fullscreen>
-
         <Map
-          provider={(x, y, z, dpr) => mapTiler(false /* context.darkMode */, x, y, z, dpr)}
+          provider={(x, y, z, dpr) =>
+            mapTiler(false /* context.darkMode */, x, y, z, dpr)
+          }
           minZoom={10}
           zoomSnap={false}
           zoom={mapZoom}
@@ -48,11 +51,18 @@ function MapPage() {
             setZoom(zoom);
           }}
           onClick={(e) => {
-            console.log(e.latLng)
+            console.log(e.latLng);
             setOverlayIndex(-1);
           }}
         >
-          <ZoomControl style={{ left: "85%", top: "50%", opacity: "95%", zIndex: '100' }} buttonStyle={!context.darkMode ? zoomControlButtonsStyle : zoomControlButtonsStyleDark} />
+          <ZoomControl
+            style={{ left: "85%", top: "50%", opacity: "95%", zIndex: "100" }}
+            buttonStyle={
+              !context.darkMode
+                ? zoomControlButtonsStyle
+                : zoomControlButtonsStyleDark
+            }
+          />
 
           {/* Render the map markers */}
           {showThisWeeksEvents && thisWeeksEvents && thisWeeksEvents.map((marker: GetHumspotEventResponse, index: number) => {
@@ -83,7 +93,7 @@ function MapPage() {
                   setOverlayIndex(index);
                 }}
               />
-            )
+            );
           })}
 
           {/* If map marker is clicked, show card overlay */}
@@ -96,7 +106,11 @@ function MapPage() {
               offset={[125, 19.5]}
             >
               <IonCard
-                style={!context.darkMode ? { width: "55vw", opacity: "90%" } : { width: "55vw", opacity: "95%" }}
+                style={
+                  !context.darkMode
+                    ? { width: "55vw", opacity: "90%" }
+                    : { width: "55vw", opacity: "95%" }
+                }
                 mode="ios"
                 onClick={() => router.push("/activity/" + thisWeeksEvents[overlayIndex].activityID)}
               >

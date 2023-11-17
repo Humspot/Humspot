@@ -18,6 +18,9 @@ import {
   AddToVisitedResponse,
   GetInteractionsResponse,
   GetEventsGivenTagResponse,
+
+  GetActivitiesGivenTagResponse,
+
   GetFavoritesResponse,
   LoginResponse,
   HumspotAttraction,
@@ -26,7 +29,11 @@ import {
   GetActivityResponse,
   AddToRSVPResponse,
   GetFavoritesAndVisitedAndRSVPStatusResponse,
+
   GetHumspotEventResponse
+
+  GetEventsBetweenTwoDatesStatusResponse
+
 } from "./types";
 
 import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
@@ -312,19 +319,19 @@ export const handleAddAttraction = async (newAttraction: HumspotAttraction): Pro
 
 
 /**
- * @function handleGetEventGivenTag
+ * @function handleGetActivitiesGivenTag
  * @description Gets an array of events that have a certain tag associated with it.
  * It returns 10 events at a time, and more can be loaded my incrementing the pageNum param.
  *
  * @param {number} pageNum the page number which corresponds to the offset when selecting rows in the table
  * @param {string} tag the event tag
  *
- * @returns {Promise<GetEventsGivenTagResponse>} a status message along with an array of events that have a certain tag associated with it.
+ * @returns {Promise<GetActivitiesGivenTagResponse>} a status message along with an array of events that have a certain tag associated with it.
  */
-export const handleGetEventGivenTag = async (pageNum: number, tag: string): Promise<GetEventsGivenTagResponse> => {
+export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string): Promise<any> => {
   try {
     const response = await fetch(
-      import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENT_GIVEN_TAG_URL +
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_ACTIVITIES_GIVEN_TAG_URL +
       "/" +
       pageNum +
       "/" +
@@ -337,7 +344,7 @@ export const handleGetEventGivenTag = async (pageNum: number, tag: string): Prom
       }
     );
 
-    const responseData: GetEventsGivenTagResponse = await response.json();
+    const responseData: any = await response.json();
 
     console.log(responseData);
     return responseData;
@@ -1015,6 +1022,40 @@ export const handleGetFavoritesAndVisitedAndRSVPStatus = async (userID: string, 
 
 
 
+export const handleGetEventsBetweenTwoDates = async (date1: string, date2: string): Promise<GetEventsBetweenTwoDatesStatusResponse> => {
+
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENTS_BETWEEN_TWO_DATES + "/" + date1 + "/" + date2,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (err) {
+    console.error(err);
+    return { message: "Error calling API Gateway" + err, events: [], success:false };
+  }
+};
+
+
+
 /**
  * 
  * @param {number} pageNum 
@@ -1057,7 +1098,7 @@ export const handleGetPendingActivitySubmissions = async (pageNum: number, userI
 
 
 /**
- * @function handleGetEventsBetweenTwoDates
+ * @function handleGetThisWeeksEvents
  * @description gets the events that are happening this week (within the next 7 days, inclusive).
  * 
  * @returns {message: string; success: boolean; events: GetHumspotEventResponse[]}

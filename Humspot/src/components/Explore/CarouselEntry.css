@@ -5,3 +5,10 @@
     height: 5vh;
     color: red;
 } */
+
+.wrap-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 1lh;
+    white-space: nowrap;
+}

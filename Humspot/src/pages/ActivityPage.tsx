@@ -8,6 +8,7 @@ import {
   IonCardTitle,
   IonChip,
   IonContent,
+  IonLoading,
   IonPage,
   IonSkeletonText,
   IonText,
@@ -25,20 +26,24 @@ import "swiper/css/autoplay";
 import { HumspotActivity } from "../utils/types";
 import ActivityFavoriteVisitedRSVPButtons from "../components/Activity/ActivityFavoriteVisitedRSVPButton";
 import GoBackHeader from "../components/Shared/GoBackHeader";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 
 type ActivityPageParams = {
   id: string;
-}
+};
 
 function ActivityPage() {
   const params = useParams<ActivityPageParams>();
   const id: string = params.id;
 
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
+  const [activityLoading, setActivityLoading] = useState<boolean>(true);
 
   const handleGetActivityCallback = useCallback(async (id: string) => {
     const res = await handleGetActivity(id);
     if ("activity" in res && res.activity) setActivity(res.activity);
+    setActivityLoading(false);
   }, []);
   useEffect(() => {
     if (id) handleGetActivityCallback(id);
@@ -50,26 +55,28 @@ function ActivityPage() {
       <IonContent>
 
         <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
+      <IonLoading isOpen={activityLoading} message={"Loading..."} />
+      <IonContent>
 
         {/* Header Image */}
-        <div className="headerImage">
-          {activity?.photoUrls &&
-            activity?.photoUrls?.split(",").map((url: string, index: number) => {
-              if (index > 0) return;
-              return (
-                <img
-                  key={index}
-                  alt="Activity Image"
-                  src={url || placeholder}
-                  className="MainCarouselEntryHeaderImage"
-                  loading="lazy"
-                />
-              )
-            })}
+        <div className="headerDiv">
+          <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }}>
+            {activity?.photoUrls &&
+              activity?.photoUrls?.split(",").map((url: any, index: any) => (
+                <SwiperSlide key={index} className="fill-frame-image">
+                  <img
+                    alt="Attraction Image"
+                    src={url || placeholder}
+                    loading="lazy"
+                    className="headerImage"
+                  ></img>
+                </SwiperSlide>
+              ))}
+          </Swiper>
         </div>
 
         {/* Header Title */}
-        <IonCard color={"primary"} className="headercard" >
+        <IonCard color={"primary"} className="headercard">
           <IonCardHeader>
             {activity ? (
               <IonCardTitle>
@@ -104,18 +111,24 @@ function ActivityPage() {
           <IonCardContent>
             <IonText color={"dark"}>
               <p>{activity?.description ?? ""}</p>
-              <p><a href={activity?.websiteURL ?? '#'} target='_blank' rel='noopener noreferrer'>Visit Site</a></p>
+              <p>
+                <a
+                  href={activity?.websiteURL ?? "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Visit Site
+                </a>
+              </p>
             </IonText>
           </IonCardContent>
         </IonCard>
         {/* Comments Section */}
-        <ActivityCommentsSection
-          activity={activity}
-        ></ActivityCommentsSection>
+        <ActivityCommentsSection activity={activity}></ActivityCommentsSection>
         {/* Add a Comment Box */}
         <ActivityAddCommentBox id={id}></ActivityAddCommentBox>
       </IonContent>
-    </IonPage >
+    </IonPage>
   );
 }
 
