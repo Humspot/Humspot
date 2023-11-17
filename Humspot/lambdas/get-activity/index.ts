@@ -52,8 +52,8 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
       CASE WHEN a.activityType = 'Event' THEN e.longitude ELSE at.longitude END as longitude,
       CASE WHEN a.activityType = 'Event' THEN e.organizer ELSE NULL END as organizer,
       CASE WHEN a.activityType = 'Attraction' THEN at.openTimes ELSE NULL END as openTimes,
-      GROUP_CONCAT(t.tagName) as tags,
-      GROUP_CONCAT(ap.photoUrl) as photoUrls
+      GROUP_CONCAT(DISTINCT t.tagName) as tags,
+      GROUP_CONCAT(DISTINCT ap.photoUrl) as photoUrls
 
       FROM Activities a
 

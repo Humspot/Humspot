@@ -25,6 +25,7 @@ import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox"
 import "swiper/css/autoplay";
 import { HumspotActivity } from "../utils/types";
 import ActivityFavoriteVisitedRSVPButtons from "../components/Activity/ActivityFavoriteVisitedRSVPButton";
+import GoBackHeader from "../components/Shared/GoBackHeader";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 
@@ -50,12 +51,12 @@ function ActivityPage() {
 
   return (
     <IonPage>
+
+      <IonContent>
+
+        <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
       <IonLoading isOpen={activityLoading} message={"Loading..."} />
       <IonContent>
-        <ActivityFavoriteVisitedRSVPButtons
-          id={id}
-          activityType={activity?.activityType}
-        />
 
         {/* Header Image */}
         <div className="headerDiv">

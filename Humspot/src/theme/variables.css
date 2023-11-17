@@ -90,6 +90,13 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-icon-highlight-contrast-rgb: 255, 255, 255;
   --ion-color-icon-highlight-shade: #710071;
   --ion-color-icon-highlight-tint: #8d1a8d;
+
+  --ion-color-event-marker: #004C46;
+	--ion-color-event-marker-rgb: 0,76,70;
+	--ion-color-event-marker-contrast: #ffffff;
+	--ion-color-event-marker-contrast-rgb: 255,255,255;
+	--ion-color-event-marker-shade: #00433e;
+	--ion-color-event-marker-tint: #1a5e59;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -266,4 +273,13 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-contrast-rgb: var(--ion-color-icon-highlight-contrast-rgb);
   --ion-color-shade: var(--ion-color-icon-highlight-shade);
   --ion-color-tint: var(--ion-color-icon-highlight-tint);
+}
+
+.ion-color-event-marker {
+	--ion-color-base: var(--ion-color-event-marker);
+	--ion-color-base-rgb: var(--ion-color-event-marker-rgb);
+	--ion-color-contrast: var(--ion-color-event-marker-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-event-marker-contrast-rgb);
+	--ion-color-shade: var(--ion-color-event-marker-shade);
+	--ion-color-tint: var(--ion-color-event-marker-tint);
 }

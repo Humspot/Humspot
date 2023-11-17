@@ -3,12 +3,12 @@
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle } from "@ionic/react";
 import { calendarOutline, compassOutline, clipboardOutline, listCircleOutline } from "ionicons/icons";
 
-const ProfileAddActivityModal: React.FC = () => {
+const ProfileActivitiesModal: React.FC = () => {
 
   const router = useIonRouter();
 
   return (
-    <IonModal trigger="open-add-activity-modal" handle breakpoints={[0, 0.55, 0.99]} initialBreakpoint={0.55}>
+    <IonModal trigger="open-add-activity-modal" handle={false} breakpoints={[0, 0.55, 0.99]} initialBreakpoint={0.55}>
       <IonContent style={{ '--background': 'var(--ion-item-background' }}>
         <br />
         <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Activities</IonTitle>
@@ -39,4 +39,4 @@ const ProfileAddActivityModal: React.FC = () => {
   )
 };
 
-export default ProfileAddActivityModal;
+export default ProfileActivitiesModal;

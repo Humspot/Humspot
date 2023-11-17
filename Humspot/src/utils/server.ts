@@ -16,8 +16,11 @@ import {
   AddImageResponse,
   AddToFavoritesResponse,
   AddToVisitedResponse,
-  GetCommentsResponse,
+  GetInteractionsResponse,
+  GetEventsGivenTagResponse,
+
   GetActivitiesGivenTagResponse,
+
   GetFavoritesResponse,
   LoginResponse,
   HumspotAttraction,
@@ -26,7 +29,11 @@ import {
   GetActivityResponse,
   AddToRSVPResponse,
   GetFavoritesAndVisitedAndRSVPStatusResponse,
+
+  GetHumspotEventResponse
+
   GetEventsBetweenTwoDatesStatusResponse
+
 } from "./types";
 
 import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
@@ -349,6 +356,44 @@ export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string):
 
 
 /**
+ * @function handleAddCommentImage 
+ * @description uploads an image to the S3 database and returns the imageUrl. 
+ * 
+ * @param {string} photoUrl 
+ * @returns {Promise<string>} url of uploaded image or empty string if failed.
+ */
+const handleAddCommentImage = async (photoUrl: string | null, blob: Blob): Promise<string> => {
+  if (!photoUrl || !blob) return '';
+
+  AWS.config.update({
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_KEY,
+    region: "us-west-1",
+  });
+
+  const s3 = new AWS.S3();
+  const id: string = nanoid(8);
+  const uploadedFileName = `comment-photos/${photoUrl}-${id}-${Date.now()}`;
+
+  const params: AWS.S3.PutObjectRequest = {
+    Bucket: 'activityphotos',
+    Key: uploadedFileName,
+    Body: blob,
+    ContentType: blob.type,
+  };
+
+  try {
+    const data = await s3.upload(params).promise();
+    console.log(`File uploaded successfully at ${data.Location}`);
+    return data.Location;
+  } catch (error) {
+    console.log("Error uploading file:", error);
+    return '';
+  }
+};
+
+
+/**
  * @function handleAddImages
  * @description Calls the Capacitor Camera API to pick images from the gallery for upload.
  * After uploading to the provided bucker, the photoUrls are returned for later use.
@@ -596,7 +641,7 @@ export const handleAddToRSVP = async (userID: string, activityID: string, rsvpDa
  *
  * @returns
  */
-export const handleAddComment = async (comment: HumspotCommentSubmit) => {
+export const handleAddComment = async (comment: HumspotCommentSubmit, blob: Blob | null) => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -604,6 +649,18 @@ export const handleAddComment = async (comment: HumspotCommentSubmit) => {
 
     const idToken = currentUserSession.getIdToken();
     const jwtToken = idToken.getJwtToken();
+
+    let photoUrl: string | null = null;
+
+    if (comment.photoUrl && blob) {
+      photoUrl = await handleAddCommentImage(comment.photoUrl, blob);
+      if (!photoUrl) throw new Error("Error uploading photo to S3 database!");
+    }
+
+    let commentWithPhotoUrl = comment;
+    commentWithPhotoUrl.photoUrl = photoUrl;
+
+    console.log(commentWithPhotoUrl);
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_ADD_COMMENT_URL,
@@ -613,7 +670,7 @@ export const handleAddComment = async (comment: HumspotCommentSubmit) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jwtToken}`,
         },
-        body: JSON.stringify(comment),
+        body: JSON.stringify(commentWithPhotoUrl),
       }
     );
 
@@ -629,16 +686,16 @@ export const handleAddComment = async (comment: HumspotCommentSubmit) => {
 
 
 /**
- * @function handleGetCommentsGivenUserID
- * @description gets an array of comments from a specified user.
- * It returns 10 comments at a time, and more can be loaded my incrementing the pageNum param.
+ * @function handleGetInteractionsGivenUserID
+ * @description gets an array of comments and/or RSVP'd events from a specified user.
+ * It returns 20  at a time, and more can be loaded my incrementing the pageNum param.
  *
  * @param {number} pageNum
  * @param {string} userID
  *
- * @returns {Promise<GetCommentsResponse>} a status message, and, if successful, an array of 10 comments of type GetCommentsResponse
+ * @returns {Promise<GetCommentsResponse>} a status message, and, if successful, an array of 20 comments and/or RSVP'd events of type GetCommentsResponse
  */
-export const handleGetCommentsGivenUserID = async (pageNum: number, userID: string): Promise<GetCommentsResponse> => {
+export const handleGetInteractionsGivenUserID = async (pageNum: number, userID: string): Promise<GetInteractionsResponse> => {
   try {
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_COMMENTS_GIVEN_USERID_URL +
@@ -654,13 +711,13 @@ export const handleGetCommentsGivenUserID = async (pageNum: number, userID: stri
       }
     );
 
-    const responseData: GetCommentsResponse = await response.json();
+    const responseData: GetInteractionsResponse = await response.json();
 
     console.log(responseData);
     return responseData;
   } catch (error) {
     console.error("Error calling API Gateway", error);
-    return { message: "Error calling API Gateway" + error, success: false, comments: [] };
+    return { message: "Error calling API Gateway" + error, success: false, interactions: [] };
   }
 };
 
@@ -963,7 +1020,10 @@ export const handleGetFavoritesAndVisitedAndRSVPStatus = async (userID: string, 
   }
 };
 
+
+
 export const handleGetEventsBetweenTwoDates = async (date1: string, date2: string): Promise<GetEventsBetweenTwoDatesStatusResponse> => {
+
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -973,6 +1033,7 @@ export const handleGetEventsBetweenTwoDates = async (date1: string, date2: strin
     const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
+
       import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENTS_BETWEEN_TWO_DATES + "/" + date1 + "/" + date2,
       {
         method: "GET",
@@ -987,9 +1048,87 @@ export const handleGetEventsBetweenTwoDates = async (date1: string, date2: strin
 
     console.log(responseData);
     return responseData;
-
   } catch (err) {
     console.error(err);
     return { message: "Error calling API Gateway" + err, events: [], success:false };
   }
 };
+
+
+
+/**
+ * 
+ * @param {number} pageNum 
+ * @param {string} userID 
+ * @returns 
+ */
+export const handleGetPendingActivitySubmissions = async (pageNum: number, userID: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_PENDING_ACTIVITY_SUBMISSIONS_URL +
+      "/" +
+      pageNum +
+      "/" +
+      userID,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false, pendingSubmissions: [] };
+  }
+};
+
+
+/**
+ * @function handleGetThisWeeksEvents
+ * @description gets the events that are happening this week (within the next 7 days, inclusive).
+ * 
+ * @returns {message: string; success: boolean; events: GetHumspotEventResponse[]}
+ */
+export const handleGetThisWeeksEvents = async (): Promise<{ message: string; success: boolean; events: GetHumspotEventResponse[] }> => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_THIS_WEEKS_EVENTS,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false, events: [] };
+  }
+}

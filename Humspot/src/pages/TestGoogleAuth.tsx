@@ -14,8 +14,8 @@ import {
   handleAddToFavorites,
   handleAddToRSVP,
   handleAddToVisited,
-  handleGetCommentsGivenUserID,
-  handleGetActivitiesGivenTag,
+  // handleGetCommentsGivenUserID,
+  handleGetEventGivenTag,
   handleGetFavoritesGivenUserID,
   handleGetVisitedGivenUserID,
   handleGoogleLoginAndVerifyAWSUser,
@@ -29,25 +29,40 @@ import {
 } from "../utils/types";
 import { EngineParameters, getJson } from "serpapi";
 
-const dummyAttraction: HumspotAttraction = {
-  name: "NEW ATTRACTION AT HUMBOLDT",
-  description: "This is a test attraction, go there now!",
-  location: "2023 Humspot Ave, Arcata, CA 95521",
-  addedByUserID: "715d07c9d97dde03808d03bb",
-  websiteUrl: "https://www.google.com",
-  latitude: 39.879700737622106,
-  longitude: -122.28785508438247,
-  openTimes: "9am to 9pm",
-  tags: ["attractionTest", "anotherAttractionTest", "fun"],
-  photoUrls: [],
-};
+// const event10: HumspotEvent = {
+//   name: "",
+//   description: "Ring in the New Year with a spectacular fireworks display, live music, and a midnight toast!",
+//   location: "Waterfront Dr, Eureka, CA 95501",
+//   addedByUserID: "715d07c9d97dde03808d03bb",
+//   latitude: 40.807520,
+//   longitude: -124.163489,
+//   date: "2023-12-31",
+//   time: "21:00",
+//   organizer: "dy45",
+//   tags: ["new year", "party", "fireworks"],
+//   photoUrls: [],
+// };
 
-const dummyComment: HumspotCommentSubmit = {
-  userID: "",
-  activityID: "a2dd8d5d6c746ac2654a16f6c",
-  commentDate: "2023-10-20",
-  commentText: "This is gonna be my first New Year's Party, so excited",
-};
+// const dummyAttraction: HumspotAttraction = {
+//   name: "NEW ATTRACTION AT HUMBOLDT",
+//   description: "This is a test attraction, go there now!",
+//   location: "2023 Humspot Ave, Arcata, CA 95521",
+//   addedByUserID: "715d07c9d97dde03808d03bb",
+//   websiteUrl: "https://www.google.com",
+//   latitude: 39.879700737622106,
+//   longitude: -122.28785508438247,
+//   openTimes: "9am to 9pm",
+//   tags: ["attractionTest", "anotherAttractionTest", "fun"],
+//   photoUrls: [],
+// };
+
+
+// const dummyComment: HumspotCommentSubmit = {
+//   userID: "",
+//   activityID: "a2dd8d5d6c746ac2654a16f6c",
+//   commentDate: "2023-10-20",
+//   commentText: "This is gonna be my first New Year's Party, so excited",
+// };
 
 const TestGoogleAuth: React.FC = () => {
   const context = useContext();
@@ -112,14 +127,14 @@ const TestGoogleAuth: React.FC = () => {
   const handleTestComment = async () => {
     if (!context.humspotUser) return;
     const userID: string = context.humspotUser.userID;
-    dummyComment.userID = userID;
-    const res = handleAddComment(dummyComment);
+    // dummyComment.userID = userID;
+    // const res = handleAddComment(dummyComment);
   };
 
   const handleTestGetComments = async () => {
     if (!context.humspotUser) return;
     const userID: string = context.humspotUser.userID;
-    const res = await handleGetCommentsGivenUserID(1, userID);
+    // const res = await handleGetCommentsGivenUserID(1, userID);
   };
 
   const handleTestGetFavorites = async () => {
@@ -135,7 +150,7 @@ const TestGoogleAuth: React.FC = () => {
   };
 
   async function handleTestAddAttraction() {
-    const res = await handleAddAttraction(dummyAttraction);
+    // const res = await handleAddAttraction(dummyAttraction);
   }
 
   const handleTestRSVP = async () => {

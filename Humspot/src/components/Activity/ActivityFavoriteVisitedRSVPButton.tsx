@@ -96,7 +96,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   }, [getButtonStatus])
 
   return (
-    <>
+    <div style={{zIndex: "1000"}}>
 
       <IonButton
         className="FavoritesButton"
@@ -144,7 +144,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
           :
           <></>
       }
-    </>
+    </div>
   );
 
 };

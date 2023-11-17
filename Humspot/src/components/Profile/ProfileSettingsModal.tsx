@@ -44,7 +44,7 @@ const ProfileSettingsModal = () => {
 
 
   return (
-    <IonModal ref={modalRef} trigger="open-profile-page-modal" handle breakpoints={[0, 0.8, 0.99]} initialBreakpoint={0.8}>
+    <IonModal ref={modalRef} trigger="open-profile-page-modal" handle={false} breakpoints={[0, 0.8, 0.99]} initialBreakpoint={0.8}>
       <IonContent style={{ '--background': 'var(--ion-item-background' }}>
         <br />
         <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Settings</IonTitle>
@@ -97,7 +97,7 @@ const ProfileSettingsModal = () => {
 
           <br />
         </IonList>
-        <p className='ion-text-center'>v.1.0.0 - Humspot</p>
+        {/* <p className='ion-text-center'>v.1.0.0 - Humspot</p> */}
       </IonContent>
     </IonModal >
   )

@@ -36,6 +36,9 @@ const ActivityCommentsSection = (props: { activity: any }) => {
                   </IonCardTitle>
                   <IonCardContent className="commentcontents">
                     <IonText color={"dark"}>{comment.commentText}</IonText>
+                    {comment.photoUrl &&
+                      <img src={comment.photoUrl} />
+                    }
                     <IonNote className="commentdate">
                       {formatDate((comment.commentDate as string) ?? "")}
                     </IonNote>

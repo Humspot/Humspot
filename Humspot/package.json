@@ -24,6 +24,7 @@
     "@capacitor/status-bar": "5.0.6",
     "@ionic/react": "^7.5.0",
     "@ionic/react-router": "^7.5.0",
+    "@rcnoverwatcher/react-fade-in-react-18": "^2.0.5",
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
     "aws-amplify": "^5.3.11",
