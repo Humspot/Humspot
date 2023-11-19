@@ -31,6 +31,23 @@ export type HumspotEvent = {
   photoUrls: string[];
 };
 
+export type GetHumspotEventResponse = {
+  eventID: string;
+  activityID: string;
+  name: string;
+  description: string;
+  location: string;
+  addedByUserID: string;
+  date: string;
+  time: string;
+  latitude: string | null;
+  longitude: string | null;
+  websiteURL: string;
+  organizer: string;
+  tags: string | null;
+  photoUrl: string | null;
+}
+
 export type HumspotAttraction = {
   name: string;
   description: string;
@@ -59,31 +76,23 @@ export type AddAttractionResponse = {
   attractionID?: string;
 };
 
-type ExtendedHumspotEvent = HumspotEvent & {
-  eventID: string;
-  activityID: string;
-  activityType: string;
-  tagID: string;
-  tagName: string;
-};
 
-type ExtendedHumspotAttraction = HumspotAttraction & {
-  eventID: string;
-  activityID: string;
-  activityType: string;
-  tagID: string;
-  tagName: string;
-};
-
-export type GetActivitiesGivenTagResponse = {
+export type GetEventsGivenTagResponse = {
   message: string;
-  events: ExtendedHumspotEvent[];
+  events:
+  (HumspotEvent & {
+    eventID: string;
+    activityID: string;
+    activityType: string;
+    tagID: string;
+    tagName: string;
+  })[];
 };
 
 export type AddImageResponse = {
   success: boolean;
   message?: string;
-  photoUrls: string[];
+  photoUrl: string;
 };
 
 export type AddToFavoritesResponse = {
@@ -112,20 +121,23 @@ export type HumspotCommentSubmit = {
   // commentDate: string;
   userID: string;
   activityID: string;
+  photoUrl: string | null;
 };
 
-export type HumspotCommentResponse = {
-  commentText: string;
-  commentDate: string;
+export type HumspotInteractionResponse = {
   activityID: string;
+  interactionDate: string;
+  interactionID: string;
+  interactionText: string | null; // string if comment, null if RSVP
+  interactionType: "rsvp" | "comment";
   name: string;
   photoUrl: string | null;
 };
 
-export type GetCommentsResponse = {
+export type GetInteractionsResponse = {
   message: string;
   success: boolean;
-  comments: HumspotCommentResponse[];
+  interactions: HumspotInteractionResponse[];
 };
 
 export type HumspotFavoriteResponse = {
@@ -185,4 +197,25 @@ export type GetFavoritesAndVisitedAndRSVPStatusResponse = {
   favorited: boolean | null;
   visited: boolean | null;
   rsvp: boolean | null;
+}
+
+export type GetEventsBetweenTwoDatesStatusResponse = {
+  message: string;
+  events: (HumspotEvent & {
+    eventID: string;
+    activityID: string;
+    activityType: string;
+    tagID: string;
+    tagName: string;
+  })[];
+  success: boolean;
+};
+
+export type AddCommentImageResponse = {
+  message: string;
+  success: boolean;
+  uploadUrl: string;
+  bucketName: string;
+  region: string;
+  key: string;
 }

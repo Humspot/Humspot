@@ -14,7 +14,7 @@ import "../components/Explore/CarouselEntry.css";
 import "@ionic/react/css/ionic-swiper.css";
 import CarouselEntry from "../components/Explore/CarouselEntry";
 import SecondaryCarouselEntry from "../components/Explore/CarouselEntrySecondary";
-import FilterButton from "../elements/FilterButton";
+import FilterButton from "../components/Shared/FilterButton";
 
 import { useCallback, useEffect, useState } from "react";
 import {

@@ -1,0 +1,22 @@
+{
+  "name": "get-events-between-two-dates",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "esbuild index.ts --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
+    "postbuild": "cd dist && zip -r index.zip index.js*"
+  },
+  "author": "David Y",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.124",
+    "@types/mysql2": "github:types/mysql2",
+    "@types/node": "^20.8.3",
+    "esbuild": "^0.19.4"
+  },
+  "dependencies": {
+    "mysql2": "^3.6.1"
+  }
+}

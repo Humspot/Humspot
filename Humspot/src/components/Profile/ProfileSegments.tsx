@@ -1,10 +1,11 @@
-import { IonSegment, IonSegmentButton, IonIcon, IonLabel, IonCard, IonCardContent, IonList, IonItem, IonThumbnail, useIonRouter, IonSkeletonText, IonContent, IonTitle } from "@ionic/react";
+import { IonSegment, IonSegmentButton, IonIcon, IonLabel, IonCard, IonCardContent, IonList, IonItem, IonThumbnail, useIonRouter, IonContent, IonTitle, IonRefresher, RefresherEventDetail, IonRefresherContent } from "@ionic/react";
 import { people, star, walk } from "ionicons/icons";
 import { memo, useCallback, useEffect, useState } from "react";
-import { handleGetCommentsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
-import { HumspotCommentResponse, HumspotFavoriteResponse, HumspotVisitedResponse } from "../../utils/types";
+import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
+import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse } from "../../utils/types";
 import { useContext } from "../../utils/my-context";
 import { useToast } from "@agney/ir-toast";
+import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 
 import placeholder from '../../assets/images/placeholder.png';
 
@@ -22,11 +23,11 @@ const ProfileSegments: React.FC = memo(() => {
 
   const [favorites, setFavorites] = useState<HumspotFavoriteResponse[]>([]);
   const [visited, setVisited] = useState<HumspotVisitedResponse[]>([]);
-  const [comments, setComments] = useState<HumspotCommentResponse[]>([]);
+  const [interactions, setInteractions] = useState<HumspotInteractionResponse[]>([]);
 
   const [favoritesLoading, setFavoritesLoading] = useState<boolean>(true);
   const [visitedLoading, setVisitedLoading] = useState<boolean>(true);
-  const [commentsLoading, setCommentsLoading] = useState<boolean>(true);
+  const [interactionsLoading, setInteractionsLoading] = useState<boolean>(true);
 
   const fetchFavorites = useCallback(async () => {
     if (!context.humspotUser) return;
@@ -58,20 +59,27 @@ const ProfileSegments: React.FC = memo(() => {
     fetchVisited();
   }, [fetchVisited]);
 
-  const fetchComments = useCallback(async () => {
+  const fetchInteractions = useCallback(async () => {
     if (!context.humspotUser) return;
-    const response = await handleGetCommentsGivenUserID(1, context.humspotUser.userID);
+    const response = await handleGetInteractionsGivenUserID(1, context.humspotUser.userID);
     if (!response.success) {
       const toast = Toast.create({ message: response.message, duration: 2000, color: 'danger' });
       toast.present();
     }
-    setComments(response.comments);
-    setCommentsLoading(false);
+    setInteractions(response.interactions);
+    setInteractionsLoading(false);
   }, [context.humspotUser]);
 
   useEffect(() => {
-    fetchComments();
-  }, [fetchComments]);
+    fetchInteractions();
+  }, [fetchInteractions]);
+
+  const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
+    await fetchFavorites();
+    await fetchInteractions();
+    await fetchVisited();
+    event.detail.complete();
+  }
 
   return (
     <>
@@ -112,7 +120,13 @@ const ProfileSegments: React.FC = memo(() => {
 
       </IonSegment>
 
+      <div style={{ height: "0.75vh" }} />
+
       <IonContent>
+
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
 
         {selectedSegment === "favorites" ? (
           <>
@@ -176,14 +190,14 @@ const ProfileSegments: React.FC = memo(() => {
           </>
         ) : (
           <>
-            {!commentsLoading && comments.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Comments or Interactions</IonTitle>
+            {!interactionsLoading && interactions.length === 0 ?
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No interactions or Interactions</IonTitle>
               :
               <IonCard>
                 <IonCardContent className='ion-no-padding'>
                   <IonList>
-                    {!commentsLoading ?
-                      comments.map((comment: HumspotCommentResponse, index: number) => {
+                    {!interactionsLoading ?
+                      interactions.map((interaction: HumspotInteractionResponse, index: number) => {
                         return (
                           <IonItem className='ion-no-padding' key={comment.name + index} role='button' onClick={() => { if (comment.activityID) router.push("/activity/" + comment.activityID) }}>
                             <IonThumbnail><img src={comment.photoUrl || placeholder} /></IonThumbnail>

@@ -39,6 +39,7 @@ function CarouselEntry({ title, description, imgsrc, id }: any) {
       onClick={() => {
         router.push("/activity/" + id);
       }}
+      button
     >
       <div style={containerStyle}>
         <IonImg

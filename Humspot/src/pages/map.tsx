@@ -1,54 +1,46 @@
-import { IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonPage, IonText } from "@ionic/react";
+
+import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, useIonRouter } from "@ionic/react";
 import { Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
-import FilterButton from "../elements/FilterButton";
 import { useContext } from "../utils/my-context";
-import { MapMarker, mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/map-config";
-import { useEffect, useState } from "react";
+import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/map-config";
+import { useCallback, useEffect, useState } from "react";
+import { handleGetThisWeeksEvents } from "../utils/server";
+import { GetHumspotEventResponse } from "../utils/types";
+import { settingsOutline } from "ionicons/icons";
+import MapSettingsModal from "../components/Map/MapSettingsModal";
 
-const placeholderAttractions: MapMarker[] = [
-  {
-    location: [40.87395509634375, -124.07998604637758],
-    title: 'Marketplace',
-    imgSrc: ['https://activityphotos.s3.us-west-1.amazonaws.com/attraction-photos/P1013997.jpg'],
-    description: ['This is a placeholder for the College Creek Marketplace'],
-    color: 'var(--ion-color-primary)',
-    tags: ['Dining', 'Shop']
-  }
-];
-
-const getIonColor = (color: string) => {
-  let c: string = "";
-  for (let i = color.length - 2; i >= 0; --i) {
-    if (color[i] === '-') {
-      return c.split('').reverse().join('');
-    }
-    c += color[i];
-  }
-  return c.split('').reverse().join('');
-};
 
 function MapPage() {
-
   const context = useContext();
+  const router = useIonRouter();
 
   const [mapZoom, setZoom] = useState<number>(15);
-  const [center, setCenter] = useState<[number, number]>([40.87649434150835, -124.07918370203882]);
+  const [center, setCenter] = useState<[number, number]>([
+    40.87649434150835, -124.07918370203882,
+  ]);
   const [overlayIndex, setOverlayIndex] = useState<number>(-1);
 
+  const [showThisWeeksEvents, setShowThisWeeksEvents] = useState<boolean>(true);
+  const [thisWeeksEvents, setThisWeeksEvents] = useState<GetHumspotEventResponse[]>([]);
 
+
+  const fetchThisWeeksEvents = useCallback(async () => {
+    const res = await handleGetThisWeeksEvents();
+    setThisWeeksEvents(res.events);
+  }, []);
   useEffect(() => {
-
-  }, [])
+    fetchThisWeeksEvents();
+  }, [fetchThisWeeksEvents]);
 
   return (
     <IonPage>
-
       {/* <FilterButton></FilterButton> */}
 
       <IonContent fullscreen>
-
         <Map
-          provider={(x, y, z, dpr) => mapTiler(false /* context.darkMode */, x, y, z, dpr)}
+          provider={(x, y, z, dpr) =>
+            mapTiler(false /* context.darkMode */, x, y, z, dpr)
+          }
           minZoom={10}
           zoomSnap={false}
           zoom={mapZoom}
@@ -59,80 +51,98 @@ function MapPage() {
             setZoom(zoom);
           }}
           onClick={(e) => {
-            console.log(e.latLng)
+            console.log(e.latLng);
             setOverlayIndex(-1);
           }}
         >
-          <ZoomControl style={{ left: "85%", top: "50%", opacity: "95%", zIndex: '100' }} buttonStyle={!context.darkMode ? zoomControlButtonsStyle : zoomControlButtonsStyleDark} />
+          <ZoomControl
+            style={{ left: "85%", top: "50%", opacity: "95%", zIndex: "100" }}
+            buttonStyle={
+              !context.darkMode
+                ? zoomControlButtonsStyle
+                : zoomControlButtonsStyleDark
+            }
+          />
 
           {/* Render the map markers */}
-          {placeholderAttractions.map((marker: MapMarker, index: number) => {
+          {showThisWeeksEvents && thisWeeksEvents && thisWeeksEvents.map((marker: GetHumspotEventResponse, index: number) => {
+            if (!marker.latitude || !marker.longitude) return;
             return (
               <Marker
-                color={marker.color}
+                color={"var(--ion-color-event-marker)"}
                 style={{ opacity: "85%" }}
-                key={marker.title + index.toString()}
-                anchor={[marker.location[0], marker.location[1]]}
-                width={37.5}
+                key={marker.name + index.toString()}
+                anchor={[parseFloat(marker.latitude), parseFloat(marker.longitude)]}
+                width={40}
                 offset={[0, -5]}
                 onClick={() => {
+                  if (!marker.latitude || !marker.longitude) return;
+                  const lat: number = parseFloat(marker.latitude)
+                  const long: number = parseFloat(marker.longitude);
                   if (mapZoom > 17) {
                     setCenter([
-                      marker.location[0] - 0.0001,
-                      marker.location[1],
+                      lat - 0.0001,
+                      long
                     ]);
                   } else {
                     setCenter([
-                      marker.location[0] - 0.00225,
-                      marker.location[1],
+                      lat - 0.00225,
+                      long,
                     ]);
                   }
                   setOverlayIndex(index);
                 }}
               />
-            )
+            );
           })}
 
           {/* If map marker is clicked, show card overlay */}
-          {overlayIndex != -1 && placeholderAttractions[overlayIndex] ? (
+          {showThisWeeksEvents && overlayIndex != -1 && thisWeeksEvents[overlayIndex] && thisWeeksEvents[overlayIndex].latitude && thisWeeksEvents[overlayIndex].longitude ? (
             <Overlay
               anchor={[
-                placeholderAttractions[overlayIndex].location[0],
-                placeholderAttractions[overlayIndex].location[1],
+                parseFloat(thisWeeksEvents[overlayIndex].latitude!),
+                parseFloat(thisWeeksEvents[overlayIndex].longitude!),
               ]}
               offset={[125, 19.5]}
             >
               <IonCard
-                style={!context.darkMode ? { width: "55vw", opacity: "90%" } : { width: "55vw", opacity: "95%" }}
+                style={
+                  !context.darkMode
+                    ? { width: "55vw", opacity: "90%" }
+                    : { width: "55vw", opacity: "95%" }
+                }
                 mode="ios"
+                onClick={() => router.push("/activity/" + thisWeeksEvents[overlayIndex].activityID)}
               >
                 <IonCardContent>
                   <div style={{ height: "0.5vh" }} />
                   <IonCardTitle style={{ fontSize: "medium" }} mode="ios">
-                    {placeholderAttractions[overlayIndex].title}
+                    {thisWeeksEvents[overlayIndex].name}
                   </IonCardTitle>
                   <IonFab horizontal="end" vertical="top">
-                    <p style={{ fontWeight: "bold", fontSize: "2.5vw", color: placeholderAttractions[overlayIndex].color }}>
-                      {placeholderAttractions[overlayIndex].tags.join(', ')}
+                    <p style={{ fontWeight: "bold", fontSize: "2.5vw", color: 'var(--ion-color-primary)' }}>
+                      {thisWeeksEvents[overlayIndex].tags}
                     </p>
                   </IonFab>
                   <div style={{ height: "0.5vh" }} />
-                  {placeholderAttractions[overlayIndex].description[0] &&
-                    <p>
-                      {placeholderAttractions[overlayIndex].description[0].substring(0, 110) + " ... "} <IonText color={getIonColor(placeholderAttractions[overlayIndex].color)}>(more)</IonText>
-                    </p>
-                  }
-                  {placeholderAttractions[overlayIndex].imgSrc &&
-                    placeholderAttractions[overlayIndex].imgSrc.length > 0 ? (
+                  <p>
+                    {thisWeeksEvents[overlayIndex].description.substring(0, 120)}
+                    {thisWeeksEvents[overlayIndex].description.length > 120 &&
+                      " ... "
+                    }
+                  </p>
+
+                  {thisWeeksEvents[overlayIndex].photoUrl &&
+                    thisWeeksEvents[overlayIndex].photoUrl!.length > 0 ? (
                     <>
                       <div style={{ height: "1vh" }} />
                       <img
                         className="ion-img-container"
                         style={{ borderRadius: '10px', width: '100%' }}
-                        src={placeholderAttractions[overlayIndex].imgSrc[0]}
+                        src={thisWeeksEvents[overlayIndex].photoUrl!}
                         alt=""
                         onError={() => {
-                          placeholderAttractions[overlayIndex].imgSrc = [];
+                          thisWeeksEvents[overlayIndex].photoUrl! = '';
                         }}
                       />
                     </>
@@ -142,8 +152,15 @@ function MapPage() {
             </Overlay>
           ) : null}
 
+          <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateX(15%) translateY(-15%)' }}>
+            <IonButton id="map-settings-modal" mode='ios' style={{ borderRadius: '7.5px' }}>
+              <IonIcon icon={settingsOutline} />
+            </IonButton>
+          </IonFab>
 
         </Map>
+
+        <MapSettingsModal showThisWeeksEvents={showThisWeeksEvents} setShowThisWeeksEvents={setShowThisWeeksEvents} />
 
       </IonContent>
     </IonPage>

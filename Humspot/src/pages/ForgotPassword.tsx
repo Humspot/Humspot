@@ -30,9 +30,9 @@ const ForgotPassword = () => {
   return (
     <IonPage>
 
-      <GoBackHeader title="Forgot Password" />
+      <IonContent scrollY={false}>
 
-      <IonContent>
+        <GoBackHeader title="Forgot Password" />
 
         <div className="center-content">
           <section className="center-container">
