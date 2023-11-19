@@ -160,7 +160,7 @@ export const handleAddEvent = async (
   }
 };
 
-export const  handleSubmitEventForApproval = async (event : HumspotEvent) => {
+export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -753,3 +753,53 @@ export const handleUpdateProfilePhoto = async (userID: string, profilePicURL: st
     return { message: "Error calling API Gateway" + error, success: false };
   }
 };
+
+export const handleUploadEventImages = async (blobs: Blob[] | null) => {
+
+  if (!blobs) {
+    return {
+      success: false,
+      message: 'Blobs array is not available',
+      photoUrls: []
+    }
+  }
+
+  AWS.config.update({
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_KEY,
+    region: "us-west-1",
+  });
+  const s3 = new AWS.S3();
+
+  let photoUrls: string[] = [];
+
+  for (let i = 0; i < blobs.length; ++i) {
+    const id: string = nanoid(8);
+    let uploadedFileName = `/event-photos/${id}-${Date.now()}`;
+    const params: AWS.S3.PutObjectRequest = {
+      Bucket: 'activityphotos',
+      Key: uploadedFileName,
+      Body: blobs[i],
+      ContentType: blobs[i].type,
+    };
+
+    try {
+      const data = await s3.upload(params).promise();
+      console.log(`File uploaded successfully at ${data.Location}`);
+      photoUrls.push(data.Location);
+    } catch (error) {
+      console.log("Error uploading file:", error);
+      return {
+        success: false,
+        message: "Error uploading 1 or more files",
+        photoUrls: [],
+      };
+    }
+  }
+
+  return {
+    success: true,
+    message: "Successfully uploaded event photos",
+    photoUrls: photoUrls
+  };
+}

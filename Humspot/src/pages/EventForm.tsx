@@ -1,47 +1,164 @@
-import React, { useState } from 'react';
-import { IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, IonList, IonToast, InputChangeEventDetail, IonSegment, IonSegmentButton } from '@ionic/react';
+import { useRef, useState } from 'react';
+import {
+  IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, IonList,
+  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard
+} from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/my-context';
-import { timeout } from '../utils/timeout';
 import { useToast } from '@agney/ir-toast';
-import { handleAddEvent, handleSubmitEventForApproval } from '../utils/server';
-import './EventForm.css'; // Importing the custom CSS
-import { Map, Marker } from "pigeon-maps"; // Importing the map component
+import { handleSubmitEventForApproval, handleUploadEventImages } from '../utils/server';
+import './EventForm.css';
+import { Map, Marker } from "pigeon-maps";
+import { cameraOutline, chevronBackOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
+import { Camera, CameraResultType } from '@capacitor/camera';
+
+
+const eventTags: string[] = [
+  "Fun",
+  "Adventure",
+  "Relax",
+  "Chill",
+  "Music",
+  "Festival",
+  "Food",
+  "School",
+  "Hiking",
+  "Beach",
+  "Educational",
+  "Cultural",
+  "Art",
+  "Dance",
+  "Nature",
+  "Outdoor",
+  "Indoor",
+  "Fitness",
+  "Yoga",
+  "Meditation",
+  "Technology",
+  "Science",
+  "Networking",
+  "Business",
+  "Entrepreneurship",
+  "Community",
+  "Charity",
+  "Volunteering",
+  "Health",
+  "Wellness",
+  "Cooking",
+  "Baking",
+  "Crafts",
+  "DIY",
+  "Workshop",
+  "Lecture",
+  "Seminar",
+  "Conference",
+  "TradeShow",
+  "Exhibition",
+  "Theatre",
+  "Cinema",
+  "Movies",
+  "Comedy",
+  "Drama",
+  "Romance",
+  "SciFi",
+  "Fantasy",
+  "Horror",
+  "Thriller",
+  "Mystery",
+  "Family",
+  "Kids",
+  "Teens",
+  "Adults",
+  "Seniors",
+  "Pets",
+  "Animals",
+  "Gardening",
+  "Environment",
+  "Sustainability",
+  "Politics",
+  "History",
+  "Literature",
+  "Poetry",
+  "Writing",
+  "Journalism",
+  "Photography",
+  "Film",
+  "Animation",
+  "VideoGames",
+  "Esports",
+  "BoardGames",
+  "CardGames",
+  "RolePlaying",
+  "Fashion",
+  "Beauty",
+  "Makeup",
+  "Skincare",
+  "Haircare",
+  "Shopping",
+  "Auction",
+  "Sale",
+  "Fundraising",
+  "Donations",
+  "Spirituality",
+  "Religion",
+  "Philosophy",
+  "Astrology",
+  "Travel",
+  "Tourism",
+  "Sports",
+  "Snow",
+  "Automotive",
+  "Cycling",
+  "Running",
+];
+
+async function canDismiss(data?: any, role?: string) {
+  return role !== 'gesture';
+}
+
+const PHOTO_UPLOAD_LIMIT: number = 5;
 
 export const EventForm = () => {
 
   const context = useContext();
   const Toast = useToast();
-  const [addressValidated, setAddressValidated] = useState<boolean>(false);
+  const [present, dismiss] = useIonLoading();
+
+  const mapModalRef = useRef<HTMLIonModalElement | null>(null);
+
+  const nameRef = useRef<HTMLIonInputElement | null>(null);
+  const descRef = useRef<HTMLIonTextareaElement | null>(null);
+  const locationRef = useRef<HTMLIonInputElement | null>(null);
+  const dateTimeRef = useRef<HTMLIonDatetimeElement | null>(null);
+  const websiteUrlRef = useRef<HTMLIonInputElement | null>(null);
+
+  const refs = [nameRef, descRef, locationRef, dateTimeRef, websiteUrlRef];
+
+  const [photos, setPhotos] = useState<string[] | undefined>(undefined);
+  const [blobs, setBlobs] = useState<Blob[] | null>(null);
+  const [addressValidating, setAddressValidating] = useState<boolean>(false);
+  const [location, setLocation] = useState<string>("");
   const [zoom, setZoom] = useState(15);
   const [center, setCenter] = useState<[number, number]>([40.87649434150835, -124.07918370203882]);
   const [mapPinLatLong, setMapPinLatLong] = useState<[number, number] | null>(null);
+  const [visibleTags, setVisibleTags] = useState<string[]>(eventTags.slice(0, 20));
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const [event, setEvent] = useState<HumspotEvent>({
-    name: '',
-    description: '',
-    location: '',
-    addedByUserID: '', // This should probably come from context or user session
-    date: '',
-    time: '',
-    latitude: null,
-    longitude: null,
-    organizer: '',
-    tags: [],
-    photoUrls: [],
-    websiteURL: null,
-  });
-
-  const handleChange = (field: keyof HumspotEvent) => (e: CustomEvent) => {
-    let value: any = e.detail.value;
-
-    // Special handling for photoUrls as an array
-    if (field === 'photoUrls' && typeof value === 'string') {
-      value = value ? [value] : [];
+  const toggleTag = (tag: string) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter(t => t !== tag));
+    } else {
+      setSelectedTags([...selectedTags, tag]);
     }
+  };
 
-    // Update the event state
-    setEvent({ ...event, [field]: value });
+  const showMoreTags = () => {
+    const nextTags = eventTags.slice(visibleTags.length, visibleTags.length + 20);
+    setVisibleTags([...visibleTags, ...nextTags]);
+  };
+
+  const isFormValid = () => {
+    return refs.every(ref => ref.current && ref.current.value && (ref.current.value as string).trim() !== '');
   };
 
   const getLatLong = async (address: string): Promise<{ latitude: number; longitude: number; } | undefined> => {
@@ -55,7 +172,7 @@ export const EventForm = () => {
     const response = await fetch(url);
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      return;
     }
 
     const data = await response.json();
@@ -68,47 +185,97 @@ export const EventForm = () => {
     };
   };
 
-  // 
-  const handleSubmit = async () => {
-    // should add in more robust error notification to the user, possibly a toast message or something  
-    if (!context.humspotUser || !context.humspotUser.userID) return;
-    if (!addressValidated) {
-      const t = Toast.create({ message: 'Please validate provided description', duration: 2000, color: 'danger' });
-      t.present();
-      return;
-    }
+  const handleSelectImages = async () => {
+    present({ message: "Loading..." });
+    const images = await Camera.pickImages({
+      quality: 90,
+      limit: 5,
+    });
 
-    if (!event.name || !event.description) {
+    if (!images || !images.photos) return;
+    setPhotos([]);
+    setBlobs([]);
+    let blobArr: Blob[] = [];
+    let photoArr: string[] = [];
+    let limit: number = images.photos.length > PHOTO_UPLOAD_LIMIT ? PHOTO_UPLOAD_LIMIT : images.photos.length;
+    for (let i = 0; i < limit; ++i) {
+      const image = images.photos[i];
+      console.log(image);
+      if (!image.webPath) {
+        const toast = Toast.create({ message: 'Something went wrong with one or more of the photos', duration: 2000, color: 'danger' });
+        toast.present();
+      }
+      const res = await fetch(image.webPath!);
+      const blobRes = await res.blob();
+      if (blobRes) {
+        if (blobRes.size > 15_000_000) { // 15 MB
+          const toast = Toast.create({ message: 'Image ' + (i + 1) + ' too large', duration: 2000, color: 'danger' });
+          toast.present();
+        } else {
+          blobArr.push(blobRes);
+          photoArr.push(image.webPath!);
+        }
+      }
+    }
+    setBlobs(blobArr);
+    setPhotos(photoArr);
+    dismiss();
+  }
+
+  const handleSubmit = async () => {
+    if (!context.humspotUser || !context.humspotUser.userID) return;
+    if (!isFormValid()) {
       const t = Toast.create({ message: 'Please fill out all input fields!', duration: 2000, color: 'danger' });
       t.present();
       return;
     }
 
-    let eventCopy = event;
-    if (mapPinLatLong) {
-      eventCopy.latitude = mapPinLatLong[0];
-      eventCopy.longitude = mapPinLatLong[1];
+    present({ message: "Submitting event..." });
+
+    let uploadedPhotoUrls: string[] = [];
+    if (blobs) {
+      const res = await handleUploadEventImages(blobs);
+      if (!res.success) {
+        const t = Toast.create({ message: "Photos failed to upload, reload the page to try again", duration: 2000, color: 'danger' });
+        t.present();
+      } else {
+        uploadedPhotoUrls = res.photoUrls;
+      }
     }
 
-    eventCopy.addedByUserID = context.humspotUser.userID;
-    eventCopy.organizer = context.humspotUser.username ?? '';
-    setEvent(eventCopy);
-    const response = await handleSubmitEventForApproval(eventCopy);
-    console.log(response);
+    const selectedDateTime = new Date(dateTimeRef?.current?.value as string);
 
-    // Display toast on successful submission
+    const event: HumspotEvent = {
+      name: nameRef?.current?.value! as string,
+      description: descRef?.current?.value! as string,
+      location: locationRef?.current?.value! as string,
+      websiteURL: websiteUrlRef?.current?.value! as string,
+      addedByUserID: context.humspotUser.userID,
+      latitude: mapPinLatLong ? mapPinLatLong[0] : null,
+      longitude: mapPinLatLong ? mapPinLatLong[1] : null,
+      organizer: context.humspotUser.username ?? '',
+      tags: selectedTags,
+      date: selectedDateTime.toISOString().split('T')[0],
+      time: selectedDateTime.toTimeString().split(' ')[0],
+      photoUrls: uploadedPhotoUrls
+    }
+
+    const response = await handleSubmitEventForApproval(event);
+
     let color = "danger";
-
     if (response.success) {
       color = "success";
     }
-
     const t = Toast.create({ message: response.message, duration: 2000, color: color });
     t.present();
+
+    dismiss();
   }
 
   const handleAddressValidation = async () => {
-    let latLong = await getLatLong(event.location);
+    if (!locationRef || !locationRef.current || !locationRef.current.value) return;
+    setAddressValidating(true);
+    let latLong = await getLatLong(locationRef.current.value as string);
     if (!latLong) {
       const t = Toast.create({ message: 'Address not found, place pin on map', duration: 2000, color: 'warning' });
       t.present();
@@ -118,116 +285,157 @@ export const EventForm = () => {
       setCenter([latLong.latitude, latLong.longitude]);
       setMapPinLatLong([latLong.latitude, latLong.longitude]);
     }
-    setAddressValidated(true);
+    setAddressValidating(false);
   }
 
   return (
     <IonPage>
-      <IonContent className="event-form-content">
+      <IonContent className="">
         <IonTitle className="ion-text-center event-form-title">Submit an Event</IonTitle>
 
         {context.humspotUser?.accountType !== 'user' ?
-          <form className="event-form">
-            <IonList lines="full">
+          <>
+            <IonList lines="inset" style={{ padding: "5px" }}>
               <IonItem>
-                <IonLabel position="floating">Name</IonLabel>
-                <IonInput value={event.name} onIonChange={handleChange('name')} placeholder="Enter Name" />
+                <IonLabel position='stacked'>Name</IonLabel>
+                <IonInput ref={nameRef} placeholder="Cal Poly Humboldt - Grad Party" />
               </IonItem>
-
               <IonItem>
-                <IonLabel position="floating">Description</IonLabel>
-                <IonTextarea value={event.description} onIonChange={handleChange('description')} placeholder="Enter Description" />
+                <IonLabel position='stacked'>Description</IonLabel>
+                <IonTextarea maxlength={500} rows={5} ref={descRef} placeholder="This event will be super fun! Graduates + family are invited to this special event. Visit our site for more info." />
               </IonItem>
-
-              <>
-                <IonItem>
-                  <IonLabel position="floating">Location/Address</IonLabel>
-                  <IonInput value={event.location} onIonChange={handleChange('location')} placeholder="Enter Location" />
-                  <IonButton onClick={() => { handleAddressValidation() }}>Validate Address</IonButton>
-                </IonItem>
-              </>
-
-              <>
-                <IonItem>
-                  <IonLabel position="floating">Drop pin(optional)</IonLabel>
-                  <div style={{ position: 'relative' }}>
-                    <Map
-                      maxZoom={14}
-                      height={300}
-                      width={300}
-                      attribution={false}
-                      zoom={zoom}
-                      center={center}
-                      onClick={(e) => {
-                        setMapPinLatLong(e.latLng);
-                      }}
-                      onBoundsChanged={({ center, zoom }) => {
-                        setCenter(center);
-                        setZoom(zoom);
-                      }}
-                    >
-                      {mapPinLatLong &&
-                        <Marker width={40} anchor={[mapPinLatLong[0], mapPinLatLong[1]]}></Marker>
-                      }
-                    </Map>
-                    {!addressValidated &&
-                      <div style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        fontSize: '20px'
-                      }}>
-                        <IonTitle color='primary'>Enter a Location First</IonTitle>
+              <IonItem>
+                <IonLabel position='stacked'>Website</IonLabel>
+                <IonInput ref={websiteUrlRef} placeholder="https://www.google.com" />
+              </IonItem>
+              <IonItem lines="full" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+                <IonLabel position="stacked">Location / Address</IonLabel>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                  <IonInput
+                    ref={locationRef}
+                    placeholder="1 Harpst St, Arcata CA"
+                    onIonInput={(e) => { setLocation(e.detail.value ?? '') }}
+                    style={{ flexGrow: 1, marginRight: '10px' }}
+                  />
+                  <IonButton id='address-verification' disabled={!location}>
+                    <IonIcon icon={mapOutline} />
+                  </IonButton>
+                </div>
+              </IonItem>
+              <IonItem className='no-ripple'>
+                <IonLabel position='stacked'>Date and Time</IonLabel>
+                <IonDatetime style={{ marginTop: "20px" }} ref={dateTimeRef} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position='stacked'>Tags</IonLabel>
+              </IonItem>
+              <IonItem>
+                <IonLabel position='stacked'>Photos</IonLabel>
+                <IonButton onClick={handleSelectImages}>{photos && photos.length > 0 ? 'Change' : 'Add'} Photos &nbsp;<IonIcon icon={cameraOutline} /></IonButton>
+                {photos && photos.length > 0 &&
+                  photos.map((url: string, index: number) => {
+                    return (
+                      <div key={index}>
+                        <IonCard className='ion-no-margin' >
+                          <img src={url} />
+                        </IonCard>
+                        <br />
                       </div>
-                    }
+                    )
+                  })
+                }
+              </IonItem>
+              <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
+                {visibleTags.map(tag => (
+                  <IonChip
+                    key={tag}
+                    onClick={() => toggleTag(tag)}
+                    color={selectedTags.includes(tag) ? "primary" : "secondary"}
+                  >
+                    <IonLabel>{tag}</IonLabel>
+                  </IonChip>
+                ))}
+                {visibleTags.length < eventTags.length && (
+                  <div style={{ display: "flex", marginLeft: "25vw", marginRight: "25vw" }}>
+                    <IonButton fill='clear' onClick={showMoreTags}>Show More &nbsp;<IonIcon icon={chevronDownOutline} /></IonButton>
                   </div>
-                </IonItem>
+                )}
+              </div>
 
-
-              </>
-              <br></br>
-              <IonItem>
-                <IonLabel>Date & Time</IonLabel>
-                <IonDatetime onIonChange={handleChange('date')} placeholder="Select Date" />
-              </IonItem>
-
-              <IonItem>
-                <IonInput value={event.photoUrls ? event.photoUrls[0] : ''}
-                  onIonChange={handleChange('photoUrls')} placeholder="Enter Photo URL" />
-              </IonItem>
-
-              <IonItem>
-                <IonInput value={event.websiteURL || ''} onIonChange={handleChange('websiteURL')} placeholder="Enter Website URL" />
-              </IonItem>
-
-              <IonItem>
-                <IonLabel>Organizer</IonLabel>
-                <IonInput value={context.humspotUser?.username ?? ''} disabled placeholder="Organizer Name" />
-              </IonItem>
+              <IonButton expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmit()}>Submit</IonButton>
+              <br />
             </IonList>
 
-            <IonButton expand="block" onClick={async () => await handleSubmit()}>Submit</IonButton>
-
-          </form>
+          </>
           :
           <div className="ion-text-center access-denied-message">
             You must be an admin or organizer to submit an event or attraction!
           </div>
         }
+
+        <IonModal ref={mapModalRef} canDismiss={canDismiss} onIonModalWillPresent={handleAddressValidation} trigger='address-verification' handle={false}>
+          <IonContent fullscreen>
+            <IonLoading isOpen={addressValidating} />
+            <IonHeader className='ion-no-border'>
+              <IonToolbar style={{ '--background': 'black' }}>
+                <IonButtons >
+                  <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { mapModalRef && mapModalRef.current && mapModalRef.current.dismiss() }}>
+                    <IonIcon icon={chevronBackOutline} />
+                  </IonButton>
+                  <IonTitle>Map Pin Selection</IonTitle>
+                </IonButtons>
+              </IonToolbar>
+            </IonHeader>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{}}>
+                <Map
+                  maxZoom={14}
+                  height={400}
+                  width={500}
+                  attribution={false}
+                  zoom={zoom}
+                  center={center}
+                  onClick={(e) => {
+                    setMapPinLatLong(e.latLng);
+                  }}
+                  onBoundsChanged={({ center, zoom }) => {
+                    setCenter(center);
+                    setZoom(zoom);
+                  }}
+                >
+                  {mapPinLatLong &&
+                    <Marker width={40} anchor={[mapPinLatLong[0], mapPinLatLong[1]]}></Marker>
+                  }
+                </Map>
+              </div>
+              {!addressValidating && locationRef?.current?.value &&
+                <div style={{ margin: '10px', width: '100%', textAlign: 'center' }}>
+                  <p style={{ fontSize: '16px', fontWeight: '500' }}>Address Entered: {locationRef.current.value}</p>
+                </div>
+              }
+              <IonButton expand="block" color='danger' style={{ padding: "5px" }}
+                onClick={() => {
+                  setMapPinLatLong(null);
+                  mapModalRef?.current?.dismiss();
+                }}
+              >
+                Do Not Use Precise Location
+              </IonButton>
+              <IonButton expand="block" style={{ padding: "5px" }}
+                onClick={() => {
+                  mapModalRef?.current?.dismiss();
+                }}
+              >
+                Save Location
+              </IonButton>
+            </div>
+          </IonContent>
+        </IonModal>
+
       </IonContent>
-    </IonPage>
+    </IonPage >
   );
 };
 
 
 export default EventForm;
-/*
-if user inputs a valid location, update the map pin to that location
-else user inputs a location that does not have a valid lat/long, then do nothing
-*/ 

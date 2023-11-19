@@ -18,3 +18,8 @@
     color: var(--ion-color-danger);
     font-size: 1.2rem;
 }
+
+.no-ripple {
+  --ripple-color: transparent;
+  --background-activated: transparent;
+}
