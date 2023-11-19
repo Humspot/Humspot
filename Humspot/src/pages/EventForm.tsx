@@ -331,7 +331,8 @@ export const EventForm = () => {
               </IonItem>
               <IonItem>
                 <IonLabel position='stacked'>Photos</IonLabel>
-                <IonButton onClick={handleSelectImages}>{photos && photos.length > 0 ? 'Change' : 'Add'} Photos &nbsp;<IonIcon icon={cameraOutline} /></IonButton>
+                <div style={{ height: "1vh" }} />
+                <IonButton style={{ marginLeft: '-1px' }} onClick={handleSelectImages}>{photos && photos.length > 0 ? 'Change' : 'Add'} Photos &nbsp;<IonIcon icon={cameraOutline} /></IonButton>
                 {photos && photos.length > 0 &&
                   photos.map((url: string, index: number) => {
                     return (
@@ -345,6 +346,7 @@ export const EventForm = () => {
                   })
                 }
               </IonItem>
+              <br />
               <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
                 {visibleTags.map(tag => (
                   <IonChip
