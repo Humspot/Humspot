@@ -9,8 +9,10 @@ import { useToast } from "@agney/ir-toast";
 
 import avatar from '../../assets/images/avatar.svg';
 import { useContext } from "../../utils/my-context";
-import { handleAddImages, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
+import { handleAddProfileImageToS3, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
+import { Camera, CameraResultType } from "@capacitor/camera";
 
+let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
 
 const ProfileEditModal: React.FC = () => {
 
@@ -28,26 +30,39 @@ const ProfileEditModal: React.FC = () => {
       t.present();
       return;
     }
-    const res = await handleAddImages('profile--photos', `profile-pictures/${context.humspotUser.userID}-profile-photo`, false, 1, present);
-    if (res.message || !res.photoUrls || !res.photoUrls[0]) {
-      const t = Toast.create({ message: res.message, duration: 2000, color: "danger" });
-      t.present();
-      dismiss();
+    present({ message: "Loading..." });
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      // source: CameraSource.Prompt, uncomment when on iOS / Android
+      resultType: CameraResultType.Uri,
+    });
+
+    if (!image) return;
+    if (!image.webPath) {
+      const toast = Toast.create({ message: 'Something went wrong', duration: 2000, color: 'danger' });
+      toast.present();
       return;
     }
-
-    if (res.photoUrls[0]) {
-      const added = await handleUpdateProfilePhoto(context.humspotUser.userID, res.photoUrls[0]);
-      if (!added.success) {
-        const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
+    const path = await fetch(image.webPath!);
+    const blobRes = await path.blob();
+    if (blobRes) {
+      if (blobRes.size > 15_000_000) { // 15 MB
+        const toast = Toast.create({ message: 'Image too large', duration: 2000, color: 'danger' });
+        toast.present();
+        return;
+      } else {
+        const res = await handleAddProfileImageToS3(context.humspotUser.userID, blobRes);
+        const added = await handleUpdateProfilePhoto(context.humspotUser.userID, res.photoUrl);
+        if (!added.success) {
+          const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
+          t.present();
+        }
+        let tempUser = { ...context.humspotUser, profilePicURL: `${res.photoUrl}?${uniqueString}` };
+        context.setHumspotUser(tempUser);
+        const t = Toast.create({ message: "File uploaded successfully", duration: 2000, color: "success" });
         t.present();
       }
-      let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
-      let updatedImageUrl = `${res.photoUrls[0]}?${uniqueString}`;
-      let tempUser = { ...context.humspotUser, profilePicURL: updatedImageUrl };
-      context.setHumspotUser(tempUser);
-      const t = Toast.create({ message: "File uploaded successfully", duration: 2000, color: "success" });
-      t.present();
     }
     dismiss();
   };
@@ -110,7 +125,7 @@ const ProfileEditModal: React.FC = () => {
               <IonAvatar className="user-avatar-settings">
                 <img
                   style={{ opacity: "0.5" }}
-                  src={context.humspotUser.profilePicURL ?? avatar}
+                  src={`${context.humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
                   alt="User Profile Picture"
                 />
                 <IonIcon size="large" icon={cameraReverseOutline}

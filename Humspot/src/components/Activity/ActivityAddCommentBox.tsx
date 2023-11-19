@@ -7,7 +7,7 @@ import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { useToast } from "@agney/ir-toast";
 import { cameraOutline } from "ionicons/icons";
 
-const ActivityAddCommentBox = (props: { id: string }) => {
+const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
   const id: string = props.id;
   const Toast = useToast();
   const context = useContext();
@@ -62,7 +62,7 @@ const ActivityAddCommentBox = (props: { id: string }) => {
       activityID: id,
       photoUrl: photo ?? null
     };
-    const res = await handleAddComment(humspotComment, blob);
+    const res = await handleAddComment(humspotComment, blob, props.activityName);
     if (res.success) {
       const t = Toast.create({ message: "Comment added", duration: 2000, color: 'success' });
       t.present();

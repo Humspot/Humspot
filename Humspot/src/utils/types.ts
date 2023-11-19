@@ -92,7 +92,7 @@ export type GetEventsGivenTagResponse = {
 export type AddImageResponse = {
   success: boolean;
   message?: string;
-  photoUrls: string[];
+  photoUrl: string;
 };
 
 export type AddToFavoritesResponse = {
@@ -210,3 +210,12 @@ export type GetEventsBetweenTwoDatesStatusResponse = {
   })[];
   success: boolean;
 };
+
+export type AddCommentImageResponse = {
+  message: string;
+  success: boolean;
+  uploadUrl: string;
+  bucketName: string;
+  region: string;
+  key: string;
+}

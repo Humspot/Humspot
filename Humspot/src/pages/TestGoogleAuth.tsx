@@ -15,7 +15,7 @@ import {
   handleAddToRSVP,
   handleAddToVisited,
   // handleGetCommentsGivenUserID,
-  handleGetEventGivenTag,
+  // handleGetEventGivenTag,
   handleGetFavoritesGivenUserID,
   handleGetVisitedGivenUserID,
   handleGoogleLoginAndVerifyAWSUser,
@@ -97,7 +97,7 @@ const TestGoogleAuth: React.FC = () => {
   };
 
   const handleTestGetEventGivenTag = async () => {
-    const res = await handleGetActivitiesGivenTag(1, "fun");
+    // const res = await handleGetActivitiesGivenTag(1, "fun");
   };
 
   const handleTestImages = async () => {

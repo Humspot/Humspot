@@ -48,6 +48,8 @@ import { ToastProvider } from "@agney/ir-toast";
 import { useContext } from "./utils/my-context";
 import { handleUserLogin } from "./utils/server";
 import { LoginResponse } from "./utils/types";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 setupIonicReact({ mode: "md" });
 
@@ -122,6 +124,9 @@ const App: React.FC = () => {
               <Route exact path="/profile" component={ProfilePage} />
               <Route exact path="/sign-up" component={SignUp} />
               <Route exact path="/sign-in" component={SignIn} />
+              <Route exact path="/forgot-password" component={ForgotPassword} />
+              <Route exact path="/terms-and-conditions" component={TermsAndConditions} />
+              <Route exact path="/privacy-policy" component={PrivacyPolicy} />
               <Route exact path="/forgot-password" component={ForgotPassword} />
               <Route
                 exact

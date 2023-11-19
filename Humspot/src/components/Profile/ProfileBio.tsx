@@ -4,10 +4,11 @@ import {
 } from "@ionic/react";
 
 import { useContext } from "../../utils/my-context";
-import { formatDate } from "../../utils/formatDate";
 import avatar from '../../assets/images/avatar.svg';
 
 import './Profile.css';
+
+let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
 
 const ProfileBio: React.FC = () => {
 
@@ -24,7 +25,7 @@ const ProfileBio: React.FC = () => {
                 <IonSkeletonText animated />
                 :
                 <img
-                  src={context.humspotUser?.profilePicURL ?? avatar}
+                  src={`${context.humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
                   alt="User Profile Picture"
                 />
               }
