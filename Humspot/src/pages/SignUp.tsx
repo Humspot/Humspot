@@ -63,44 +63,39 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <>
-
-      <IonPage>
-
+    <IonPage>
+      <IonContent scrollY={false}>
         <GoBackHeader title="Sign Up" />
+        <div className="center-content">
+          <section className="center-container">
 
-        <IonContent>
-          <div className="center-content">
-            <section className="center-container">
+            <IonLabel id="email-label" className="login-label">Email</IonLabel>
+            <IonItem className='login-input'>
+              <IonInput aria-labelledby="email-label" type="email" ref={emailRef} placeholder="email@email.com" />
+            </IonItem>
 
-              <IonLabel id="email-label" className="login-label">Email</IonLabel>
-              <IonItem className='login-input'>
-                <IonInput aria-labelledby="email-label" type="email" ref={emailRef} placeholder="email@email.com" />
-              </IonItem>
+            <IonLabel id="password-label" className="login-label">Password</IonLabel>
+            <IonItem className='login-input'>
+              <IonInput aria-labelledby='password-label' clearOnEdit={false} type={showPassword ? "text" : "password"} ref={passwordRef} placeholder="••••••••" />
+              <IonButton slot="end" fill="clear" onClick={() => { setShowPassword(!showPassword) }}>
+                <IonIcon color="medium" icon={showPassword ? eyeOutline : eyeOffOutline} />
+              </IonButton>
+            </IonItem>
+            <br />
 
-              <IonLabel id="password-label" className="login-label">Password</IonLabel>
-              <IonItem className='login-input'>
-                <IonInput aria-labelledby='password-label' clearOnEdit={false} type={showPassword ? "text" : "password"} ref={passwordRef} placeholder="••••••••" />
-                <IonButton slot="end" fill="clear" onClick={() => { setShowPassword(!showPassword) }}>
-                  <IonIcon color="medium" icon={showPassword ? eyeOutline : eyeOffOutline} />
-                </IonButton>
-              </IonItem>
-              <br />
+            <div style={{ height: "5%" }} />
 
-              <div style={{ height: "5%" }} />
+            <IonButton className="login-button" onClick={async () => { await clickOnSignUp() }} fill="clear" expand="block" id="signUpButton" >Sign Up</IonButton>
+            <p style={{ fontSize: "0.9rem" }}><IonText color='primary'><span onClick={() => { router.push("/sign-in") }}>Sign In to an Existing Account</span></IonText></p>
 
-              <IonButton className="login-button" onClick={async () => { await clickOnSignUp() }} fill="clear" expand="block" id="signUpButton" >Sign Up</IonButton>
-              <p style={{ fontSize: "0.9rem" }}><IonText color='primary'><span onClick={() => { router.push("/sign-in") }}>Sign In to an Existing Account</span></IonText></p>
+            <p>OR</p>
 
-              <p>OR</p>
+            <GoogleLoginButton />
 
-              <GoogleLoginButton />
-
-            </section>
-          </div>
-        </IonContent>
-      </IonPage>
-    </>
+          </section>
+        </div>
+      </IonContent>
+    </IonPage>
   );
 
 };

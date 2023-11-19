@@ -99,7 +99,9 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
 
     const query: string = `
-      SELECT * FROM Submissions
+      SELECT name, description, submissionID
+      FROM Submissions
+      ORDER BY submissionDate DESC
       LIMIT 20 OFFSET ?;
     `;
 
@@ -126,3 +128,4 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
   }
 };
+

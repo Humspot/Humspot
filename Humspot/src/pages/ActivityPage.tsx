@@ -125,7 +125,7 @@ function ActivityPage() {
         {/* Comments Section */}
         <ActivityCommentsSection activity={activity}></ActivityCommentsSection>
         {/* Add a Comment Box */}
-        <ActivityAddCommentBox id={id}></ActivityAddCommentBox>
+        <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'}></ActivityAddCommentBox>
       </IonContent>
     </IonPage>
   );

@@ -3,12 +3,11 @@
  * @filetype contains the code used to access backend services like Google and AWS.
  */
 
-import AWS from "aws-sdk";
+import { nanoid } from "nanoid";
+
 import awsconfig from "../aws-exports";
 import { Amplify, Auth } from "aws-amplify";
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
-
-import { nanoid } from "nanoid";
 
 import {
   AddAttractionResponse,
@@ -27,7 +26,8 @@ import {
   AddToRSVPResponse,
   GetFavoritesAndVisitedAndRSVPStatusResponse,
   GetHumspotEventResponse,
-  GetEventsBetweenTwoDatesStatusResponse
+  GetEventsBetweenTwoDatesStatusResponse,
+  AddCommentImageResponse
 } from "./types";
 
 import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
@@ -350,141 +350,6 @@ export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string):
 
 
 /**
- * @function handleAddCommentImage 
- * @description uploads an image to the S3 database and returns the imageUrl. 
- * 
- * @param {string} photoUrl 
- * @returns {Promise<string>} url of uploaded image or empty string if failed.
- */
-const handleAddCommentImage = async (photoUrl: string | null, blob: Blob): Promise<string> => {
-  if (!photoUrl || !blob) return '';
-
-  AWS.config.update({
-    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
-    secretAccessKey: import.meta.env.VITE_AWS_SECRET_KEY,
-    region: "us-west-1",
-  });
-
-  const s3 = new AWS.S3();
-  const id: string = nanoid(8);
-  const uploadedFileName = `comment-photos/${photoUrl}-${id}-${Date.now()}`;
-
-  const params: AWS.S3.PutObjectRequest = {
-    Bucket: 'activityphotos',
-    Key: uploadedFileName,
-    Body: blob,
-    ContentType: blob.type,
-  };
-
-  try {
-    const data = await s3.upload(params).promise();
-    console.log(`File uploaded successfully at ${data.Location}`);
-    return data.Location;
-  } catch (error) {
-    console.log("Error uploading file:", error);
-    return '';
-  }
-};
-
-
-/**
- * @function handleAddImages
- * @description Calls the Capacitor Camera API to pick images from the gallery for upload.
- * After uploading to the provided bucker, the photoUrls are returned for later use.
- * 
- * NOTE: There is no API gateway or lambda function that uploads the images, 
- * it is all handled here on the client
- *
- * @param {string} bucketName the name of the S3 bucket to upload the images to
- * @param {string} fileName the name of the file path to upload the images to (e.g. event-photos/1234)
- * @param {boolean} isUnique whether the image should be a unique upload or override an existing image (as is the case with profile photos). Defaults to true.
- * @param {number} limit the maximum number of images to be uploaded. Defaults to 1.
- * @param {any} present A function that displays a toast message indicating upload status to the user.
- *
- * @returns {Promise<AddImageResponse>} the success status as well as an array of photoUrls returned from S3
- */
-export const handleAddImages = async (bucketName: string, fileName: string, isUnique: boolean = true, limit: number = 1, present: any): Promise<AddImageResponse> => {
-
-  AWS.config.update({
-    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
-    secretAccessKey: import.meta.env.VITE_AWS_SECRET_KEY,
-    region: "us-west-1",
-  });
-
-  let message = "";
-
-  const photos: GalleryPhotos = await Camera.pickImages({
-    quality: 90,
-    limit: limit,
-  });
-
-  await present({ message: "Uploading..." });
-  const s3 = new AWS.S3();
-  const photoUrls: string[] = [];
-
-  for (let i = 0; i < limit; ++i) {
-    const photo: GalleryPhoto = photos.photos[i];
-    if (
-      photo.format !== "jpeg" &&
-      photo.format !== "jpg" &&
-      photo.format !== "png"
-    ) {
-      message = "One or more images are not in jpg / png format!";
-      continue;
-    }
-    const response: Response = await fetch(photo.webPath);
-    const blob: Blob = await response.blob();
-
-    if (blob.size > 15_000_000) {
-      message = "One or more images exceeds the maximum file size limit (15 MB)";
-      continue;
-    }
-
-    let uploadedFileName: string = '';
-
-    if (isUnique) {
-      const id: string = nanoid(8);
-      uploadedFileName = `${fileName}-${id}-${Date.now()}-${photo.format}`;
-    } else {
-      uploadedFileName = `${fileName}`;
-    }
-
-    const params: AWS.S3.PutObjectRequest = {
-      Bucket: bucketName,
-      Key: uploadedFileName,
-      Body: blob,
-      ContentType: blob.type,
-    };
-
-    try {
-      const data = await s3.upload(params).promise();
-      console.log(`File uploaded successfully at ${data.Location}`);
-      photoUrls.push(data.Location);
-    } catch (error) {
-      console.log("Error uploading file:", error);
-      return {
-        success: false,
-        message: "Error uploading 1 or more files",
-        photoUrls: [],
-      };
-    }
-  }
-
-  if (message !== "") { // if there is an error message (outside of failing to upload)
-    return {
-      success: true,
-      message: message,
-      photoUrls: photoUrls,
-    };
-  }
-  return {
-    success: true,
-    photoUrls: photoUrls,
-  };
-};
-
-
-/**
  * @function handleAddToFavorites
  * @description Adds the activity (event or attraction) to the User's favorites list.
  * 
@@ -626,6 +491,54 @@ export const handleAddToRSVP = async (userID: string, activityID: string, rsvpDa
   }
 };
 
+export const handleAddProfileImageToS3 = async (userID: string, blob: Blob): Promise<AddImageResponse> => {
+  try {
+    let photoUrl: string = '';
+    if (blob) {
+      const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_ADD_IMAGE_TO_S3_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          photoType: blob.type,
+          activityName: `${userID}-profile-photo`,
+          folderName: 'profile-pictures',
+          bucketName: 'profile--photos',
+          isUnique: false,
+        })
+      });
+      const data: AddCommentImageResponse = await res.json();
+      console.log(data);
+      if (!res.ok || !data.success) throw new Error("Error uploading photo to S3 database!");
+      const { uploadUrl, bucketName, region, key } = data;
+      const s3Response = await fetch(uploadUrl, {
+        method: 'PUT',
+        body: blob,
+        headers: {
+          'Content-Type': blob.type,
+        },
+      });
+
+      if (s3Response.ok) {
+        console.log('Image uploaded successfully');
+        photoUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${key}`;
+      } else {
+        throw new Error("Error uploading photo to S3 database!");
+      }
+    }
+    return {
+      success: true,
+      message: 'Added profile photo successfully',
+      photoUrl: photoUrl
+    }
+  } catch (err) {
+    console.log(err);
+    return {
+      success: false,
+      message: 'Something went wrong uploading photo to S3 database',
+      photoUrl: ''
+    }
+  }
+};
+
 
 /**
  * @function handleAddComment
@@ -635,7 +548,7 @@ export const handleAddToRSVP = async (userID: string, activityID: string, rsvpDa
  *
  * @returns
  */
-export const handleAddComment = async (comment: HumspotCommentSubmit, blob: Blob | null) => {
+export const handleAddComment = async (comment: HumspotCommentSubmit, blob: Blob | null, activityName: string) => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -644,11 +557,41 @@ export const handleAddComment = async (comment: HumspotCommentSubmit, blob: Blob
     const idToken = currentUserSession.getIdToken();
     const jwtToken = idToken.getJwtToken();
 
+    // if the user submitted a photo with their comment
     let photoUrl: string | null = null;
-
     if (comment.photoUrl && blob) {
-      photoUrl = await handleAddCommentImage(comment.photoUrl, blob);
-      if (!photoUrl) throw new Error("Error uploading photo to S3 database!");
+      const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_ADD_IMAGE_TO_S3_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          photoType: blob.type,
+          activityName: activityName,
+          folderName: 'comment-photos',
+          bucketName: 'activityphotos',
+          isUnique: true,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      const data: AddCommentImageResponse = await res.json();
+      console.log(data);
+      if (!res.ok || !data.success) throw new Error("Error uploading photo to S3 database!");
+      const { uploadUrl, bucketName, region, key } = data;
+
+      const s3Response = await fetch(uploadUrl, {
+        method: 'PUT',
+        body: blob,
+        headers: {
+          'Content-Type': blob.type,
+        },
+      });
+
+      if (s3Response.ok) {
+        console.log('Image uploaded successfully');
+        photoUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${key}`;
+      } else {
+        throw new Error("Error uploading photo to S3 database!");
+      }
     }
 
     let commentWithPhotoUrl = comment;
@@ -1044,7 +987,7 @@ export const handleGetEventsBetweenTwoDates = async (date1: string, date2: strin
     return responseData;
   } catch (err) {
     console.error(err);
-    return { message: "Error calling API Gateway" + err, events: [], success:false };
+    return { message: "Error calling API Gateway" + err, events: [], success: false };
   }
 };
 
@@ -1124,5 +1067,95 @@ export const handleGetThisWeeksEvents = async (): Promise<{ message: string; suc
   } catch (error) {
     console.error("Error calling API Gateway", error);
     return { message: "Error calling API Gateway" + error, success: false, events: [] };
+  }
+};
+
+
+export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_EVENT_FOR_APPROVAL_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(event),
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
+};
+
+
+export const handleUploadEventImages = async (blobs: Blob[] | null) => {
+  if (!blobs) {
+    return {
+      success: false,
+      message: 'Blobs array is not available',
+      photoUrls: []
+    }
+  }
+  try {
+    let photoUrls: string[] = [];
+    for (let i = 0; i < blobs.length; ++i) {
+      const blob: Blob = blobs[i];
+      const id: string = nanoid(8);
+      const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_ADD_IMAGE_TO_S3_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          photoType: blob.type,
+          activityName: id,
+          folderName: 'event-photos',
+          bucketName: 'activityphotos',
+          isUnique: false,
+        })
+      });
+      const data: AddCommentImageResponse = await res.json();
+      console.log(data);
+      if (!res.ok || !data.success) throw new Error("Error uploading photo to S3 database!");
+      const { uploadUrl, bucketName, region, key } = data;
+      const s3Response = await fetch(uploadUrl, {
+        method: 'PUT',
+        body: blob,
+        headers: {
+          'Content-Type': blob.type,
+        },
+      });
+
+      if (s3Response.ok) {
+        console.log('Image uploaded successfully');
+        photoUrls.push(`https://${bucketName}.s3.${region}.amazonaws.com/${key}`);
+      } else {
+        throw new Error("Error uploading photo to S3 database!");
+      }
+    }
+    return {
+      success: true,
+      message: "Photos uploaded successfully",
+      photoUrls: photoUrls
+    }
+  } catch (err) {
+    console.log(err);
+    return {
+      message: "error uploading",
+      success: false,
+      photoUrls: []
+    }
   }
 }

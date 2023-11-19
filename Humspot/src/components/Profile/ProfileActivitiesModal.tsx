@@ -2,23 +2,25 @@
 
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle } from "@ionic/react";
 import { calendarOutline, compassOutline, clipboardOutline, listCircleOutline } from "ionicons/icons";
+import { useRef } from "react";
 
 const ProfileActivitiesModal: React.FC = () => {
 
   const router = useIonRouter();
+  const modalRef = useRef<HTMLIonModalElement | null>(null);
 
   return (
-    <IonModal trigger="open-add-activity-modal" handle={false} breakpoints={[0, 0.55, 0.99]} initialBreakpoint={0.55}>
+    <IonModal ref={modalRef} trigger="open-add-activity-modal" handle={false} breakpoints={[0, 0.55, 0.99]} initialBreakpoint={0.55}>
       <IonContent style={{ '--background': 'var(--ion-item-background' }}>
         <br />
         <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Activities</IonTitle>
         <IonList lines='full'>
-          <IonItem>
+          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/submit-event") }}>
             <IonIcon aria-hidden="true" icon={calendarOutline} slot="start"></IonIcon>
             <IonLabel>Submit an Event</IonLabel>
           </IonItem>
           <br />
-          <IonItem>
+          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/submit-attraction") }}>
             <IonIcon aria-hidden="true" icon={compassOutline} slot="start"></IonIcon>
             <IonLabel>Submit an Attraction</IonLabel>
           </IonItem>
