@@ -302,7 +302,7 @@ export const EventForm = () => {
               </IonItem>
               <IonItem>
                 <IonLabel position='stacked'>Description</IonLabel>
-                <IonTextarea maxlength={500} rows={5} ref={descRef} placeholder="This event will be super fun! Graduates + family are invited to this special event. Visit our site for more info." />
+                <IonTextarea maxlength={500} rows={3} ref={descRef} placeholder="This event will be super fun! Graduates + family are invited to this special event. Visit our site for more info." />
               </IonItem>
               <IonItem>
                 <IonLabel position='stacked'>Website</IonLabel>
