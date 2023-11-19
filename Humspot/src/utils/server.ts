@@ -3,12 +3,9 @@
  * @filetype contains the code used to access backend services like Google and AWS.
  */
 
-// import AWS from "aws-sdk";
 import awsconfig from "../aws-exports";
 import { Amplify, Auth } from "aws-amplify";
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
-
-import { nanoid } from "nanoid";
 
 import {
   AddAttractionResponse,
