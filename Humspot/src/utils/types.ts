@@ -87,18 +87,12 @@ export type GetEventsGivenTagResponse = {
     tagID: string;
     tagName: string;
   })[];
-
-export type GetActivitiesGivenTagResponse = {
-  message: string;
-  events: ExtendedHumspotEvent[];
-  success: boolean
-
 };
 
 export type AddImageResponse = {
   success: boolean;
   message?: string;
-  photoUrls: string[];
+  photoUrl: string;
 };
 
 export type AddToFavoritesResponse = {
@@ -207,6 +201,21 @@ export type GetFavoritesAndVisitedAndRSVPStatusResponse = {
 
 export type GetEventsBetweenTwoDatesStatusResponse = {
   message: string;
-  events: ExtendedHumspotEvent[];
+  events: (HumspotEvent & {
+    eventID: string;
+    activityID: string;
+    activityType: string;
+    tagID: string;
+    tagName: string;
+  })[];
   success: boolean;
 };
+
+export type AddCommentImageResponse = {
+  message: string;
+  success: boolean;
+  uploadUrl: string;
+  bucketName: string;
+  region: string;
+  key: string;
+}

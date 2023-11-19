@@ -55,8 +55,7 @@ function ActivityPage() {
       <IonContent>
 
         <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
-      <IonLoading isOpen={activityLoading} message={"Loading..."} />
-      <IonContent>
+        <IonLoading isOpen={activityLoading} message={"Loading..."} />
 
         {/* Header Image */}
         <div className="headerDiv">
@@ -126,7 +125,7 @@ function ActivityPage() {
         {/* Comments Section */}
         <ActivityCommentsSection activity={activity}></ActivityCommentsSection>
         {/* Add a Comment Box */}
-        <ActivityAddCommentBox id={id}></ActivityAddCommentBox>
+        <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'}></ActivityAddCommentBox>
       </IonContent>
     </IonPage>
   );

@@ -128,9 +128,9 @@ function CalendarPage() {
               <EventsListEntry events={eventsToday}></EventsListEntry>
             ) : (
               <>
-                <IonSkeletonText style={{ height: "5rem" }} animated />
-                <IonSkeletonText style={{ height: "5rem" }} animated />
-                <IonSkeletonText style={{ height: "5rem" }} animated />
+                <IonSkeletonText style={{ height: "4rem" }} animated />
+                <IonSkeletonText style={{ height: "4rem" }} animated />
+                <IonSkeletonText style={{ height: "4rem" }} animated />
               </>
             )}
             {/* Events This Week */}
@@ -143,9 +143,9 @@ function CalendarPage() {
               <EventsListEntry events={eventsWeek}></EventsListEntry>
             ) : (
               <>
-                <IonSkeletonText style={{ height: "5rem" }} animated />
-                <IonSkeletonText style={{ height: "5rem" }} animated />
-                <IonSkeletonText style={{ height: "5rem" }} animated />
+                <IonSkeletonText style={{ height: "4rem" }} animated />
+                <IonSkeletonText style={{ height: "4rem" }} animated />
+                <IonSkeletonText style={{ height: "4rem" }} animated />
               </>
             )}
             {/* Events This Month */}
@@ -158,9 +158,9 @@ function CalendarPage() {
               <EventsListEntry events={eventsMonth}></EventsListEntry>
             ) : (
               <>
-                <IonSkeletonText style={{ height: "5rem" }} animated />
-                <IonSkeletonText style={{ height: "5rem" }} animated />
-                <IonSkeletonText style={{ height: "5rem" }} animated />
+                <IonSkeletonText style={{ height: "4rem" }} animated />
+                <IonSkeletonText style={{ height: "4rem" }} animated />
+                <IonSkeletonText style={{ height: "4rem" }} animated />
               </>
             )}
           </IonList>
