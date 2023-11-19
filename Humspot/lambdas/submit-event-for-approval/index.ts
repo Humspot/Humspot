@@ -117,16 +117,30 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     query = `
       INSERT INTO Submissions (
           submissionID, name, description, location, addedByUserID, activityType,
-          websiteURL, date, time, latitude, longitude, organizer, tags, submissionDate
+          websiteURL, date, time, latitude, longitude, organizer, submissionDate
       ) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
     `;
     params = [
       submissionID, event.name, event.description, event.location, event.addedByUserID,
-      'event', event.websiteURL, event.date, event.time, event.latitude, event.longitude, event.organizer, null
+      'event', event.websiteURL, event.date, event.time, event.latitude, event.longitude, event.organizer
     ];
 
     await conn.query(query, params);
+
+    // Insert Tags into SubmissionTags table
+    for (const tag of event.tags) {
+      const tagInsertQuery: string = 'INSERT INTO SubmissionTags (tagID, submissionID, tagName) VALUES (?, ?, ?)';
+      const tagID: string = crypto.randomBytes(16).toString('hex');
+      await conn.query(tagInsertQuery, [tagID, submissionID, tag]);
+    }
+
+    // Insert Photo URLs into SubmissionPhotos table
+    for (const photoUrl of event.photoUrls) {
+      const photoInsertQuery: string = 'INSERT INTO SubmissionPhotos (photoID, submissionID, photoUrl) VALUES (?, ?, ?)';
+      const photoID: string = crypto.randomBytes(16).toString('hex');
+      await conn.query(photoInsertQuery, [photoID, submissionID, photoUrl]);
+    }
 
     await conn.commit();
 
