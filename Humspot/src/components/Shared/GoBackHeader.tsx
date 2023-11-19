@@ -20,6 +20,8 @@ const GoBackHeader: React.FC<GoBackHeaderProps> = (props: GoBackHeaderProps) => 
             <p>Back</p>
           </IonButton>
           <IonTitle>{title}</IonTitle>
+        </IonButtons>
+        <IonButtons slot="end">
           {props.buttons}
         </IonButtons>
       </IonToolbar>

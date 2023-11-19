@@ -12,7 +12,6 @@ let uniqueString = new Date().getTime(); // Use a timestamp to force cache refre
 
 const ProfileBio: React.FC = () => {
 
-
   const context = useContext();
 
   return (
@@ -25,8 +24,8 @@ const ProfileBio: React.FC = () => {
               <IonSkeletonText animated />
               :
               <img
-                src={context.humspotUser?.profilePicURL ?? avatar}
-                alt="User Profile Picture"
+              src={`${context.humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
+              alt="User Profile Picture"
               />
             }
           </IonAvatar>
