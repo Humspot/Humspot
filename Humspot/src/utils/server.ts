@@ -3,6 +3,8 @@
  * @filetype contains the code used to access backend services like Google and AWS.
  */
 
+import { nanoid } from "nanoid";
+
 import awsconfig from "../aws-exports";
 import { Amplify, Auth } from "aws-amplify";
 import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth/lib/types";
@@ -1065,5 +1067,95 @@ export const handleGetThisWeeksEvents = async (): Promise<{ message: string; suc
   } catch (error) {
     console.error("Error calling API Gateway", error);
     return { message: "Error calling API Gateway" + error, success: false, events: [] };
+  }
+};
+
+
+export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_EVENT_FOR_APPROVAL_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(event),
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
+};
+
+
+export const handleUploadEventImages = async (blobs: Blob[] | null) => {
+  if (!blobs) {
+    return {
+      success: false,
+      message: 'Blobs array is not available',
+      photoUrls: []
+    }
+  }
+  try {
+    let photoUrls: string[] = [];
+    for (let i = 0; i < blobs.length; ++i) {
+      const blob: Blob = blobs[i];
+      const id: string = nanoid(8);
+      const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_ADD_IMAGE_TO_S3_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          photoType: blob.type,
+          activityName: id,
+          folderName: 'event-photos',
+          bucketName: 'activityphotos',
+          isUnique: false,
+        })
+      });
+      const data: AddCommentImageResponse = await res.json();
+      console.log(data);
+      if (!res.ok || !data.success) throw new Error("Error uploading photo to S3 database!");
+      const { uploadUrl, bucketName, region, key } = data;
+      const s3Response = await fetch(uploadUrl, {
+        method: 'PUT',
+        body: blob,
+        headers: {
+          'Content-Type': blob.type,
+        },
+      });
+
+      if (s3Response.ok) {
+        console.log('Image uploaded successfully');
+        photoUrls.push(`https://${bucketName}.s3.${region}.amazonaws.com/${key}`);
+      } else {
+        throw new Error("Error uploading photo to S3 database!");
+      }
+    }
+    return {
+      success: true,
+      message: "Photos uploaded successfully",
+      photoUrls: photoUrls
+    }
+  } catch (err) {
+    console.log(err);
+    return {
+      message: "error uploading",
+      success: false,
+      photoUrls: []
+    }
   }
 }

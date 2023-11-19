@@ -6,8 +6,8 @@ import GoBackHeader from "../components/Shared/GoBackHeader";
 const TermsAndConditions: React.FC = () => {
   return (
     <IonPage>
-      <GoBackHeader title="Terms and Conditions" />
       <IonContent className="ion-padding">
+        <GoBackHeader title="Terms and Conditions" />
         <IonText>
           <h2>Welcome to Humspot</h2>
           <p>

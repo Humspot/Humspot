@@ -6,8 +6,8 @@ import GoBackHeader from "../components/Shared/GoBackHeader";
 const PrivacyPolicy: React.FC = () => {
   return (
     <IonPage>
-      <GoBackHeader title="Privacy Policy" />
       <IonContent className="ion-padding">
+        <GoBackHeader title="Privacy Policy" />
         <IonText>
           <h2>Welcome to Humspot</h2>
           <p>
