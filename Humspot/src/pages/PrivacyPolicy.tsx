@@ -97,7 +97,7 @@ const PrivacyPolicy: React.FC = () => {
               <li><strong> Your Rights </strong></li>
               <p>You have the right to access, update, or delete your
                 personal information at any time. If you wish to exercise any of
-                these rights, please contact us at dy45@humboldt.edu </p>
+                these rights, please contact us at support@humspotapp.com </p>
 
               <li><strong>Changes to This Privacy Policy </strong></li>
               <p>We may update our Privacy Policy from time to
@@ -108,7 +108,7 @@ const PrivacyPolicy: React.FC = () => {
 
               <li><strong>Contact Us</strong></li>
               <p>If you have any questions about this Privacy
-                Policy, please contact us at dy45@humboldt.edu </p>
+                Policy, please contact us at support@humspotapp.com </p>
             </ol>
           </IonText>
         </section>

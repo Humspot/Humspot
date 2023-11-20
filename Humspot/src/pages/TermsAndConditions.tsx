@@ -130,7 +130,7 @@ const TermsAndConditions: React.FC = () => {
 
               <li><strong>Contact</strong>
                 <p>Contact Us If you have any questions about these Terms, please
-                  contact us at dy45@humboldt.edu</p>
+                  contact us at support@humspotapp.com</p>
               </li>
             </ol>
             <h3>Hyperlinking to our Content</h3>
