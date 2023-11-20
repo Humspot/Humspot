@@ -29,11 +29,14 @@ import {
   GetEventsBetweenTwoDatesStatusResponse,
   AddCommentImageResponse
 } from "./types";
+import { urlOpener } from "./urlOpener";
 
-import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
 
 
 /* Allows for AWS Authentication */
+// awsconfig.oauth.redirectSignIn = `${window.location.origin}/`;
+// awsconfig.oauth.redirectSignOut = `${window.location.origin}/`;
+// awsconfig.oauth.urlOpener = urlOpener;
 Amplify.configure(awsconfig);
 
 /**

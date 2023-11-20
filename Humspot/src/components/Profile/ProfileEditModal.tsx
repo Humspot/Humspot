@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel,
   IonList, IonLoading, IonModal, IonTextarea, IonTitle, IonToolbar, useIonLoading
@@ -23,6 +23,20 @@ const ProfileEditModal: React.FC = () => {
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const usernameRef = useRef<HTMLIonInputElement | null>(null);
   const bioRef = useRef<HTMLIonTextareaElement | null>(null);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, async () => {
+        await modalRef?.current?.dismiss();
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [modalRef]);
 
   const clickUpdateProfilePhoto = async () => {
     if (!context.humspotUser) {

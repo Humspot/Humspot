@@ -37,9 +37,11 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
       if (blobRes.size > 15_000_000) { // 15 MB
         const toast = Toast.create({ message: 'Image too large', duration: 2000, color: 'danger' });
         toast.present();
+        dismiss();
       } else {
         setBlob(blobRes);
         setPhoto(image.webPath);
+        dismiss();
       }
     }
     dismiss();

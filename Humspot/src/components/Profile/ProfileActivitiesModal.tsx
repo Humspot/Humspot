@@ -2,12 +2,26 @@
 
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle } from "@ionic/react";
 import { calendarOutline, compassOutline, clipboardOutline, listCircleOutline } from "ionicons/icons";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const ProfileActivitiesModal: React.FC = () => {
 
   const router = useIonRouter();
   const modalRef = useRef<HTMLIonModalElement | null>(null);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, async () => {
+        await modalRef?.current?.dismiss();
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [modalRef]);
 
   return (
     <IonModal ref={modalRef} trigger="open-add-activity-modal" handle={false} breakpoints={[0, 0.55, 0.99]} initialBreakpoint={0.55}>

@@ -4,6 +4,7 @@ import {
   IonLoading,
   IonPage,
   IonSkeletonText,
+  useIonRouter,
   useIonViewWillEnter,
 } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -24,6 +25,7 @@ import {
 import { useToast } from "@agney/ir-toast";
 import CarouselEntrySecondary from "../components/Explore/CarouselEntrySecondary";
 import { useContext } from "../utils/my-context";
+import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
 <link
   href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
@@ -50,6 +52,7 @@ function ExplorePage() {
   }, []);
 
   const context = useContext();
+  const router = useIonRouter();
   useIonViewWillEnter(() => {
     context.setShowTabs(true);
   });
@@ -120,6 +123,20 @@ function ExplorePage() {
   useEffect(() => {
     fetchActivitiesFourth();
   }, [fetchActivitiesFourth]);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(10, () => {
+        navigateBack(router);
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [router]);
 
   return (
     <>

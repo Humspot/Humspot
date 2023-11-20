@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, IonList,
-  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard
+  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, useIonRouter
 } from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/my-context';
@@ -12,6 +12,7 @@ import { Map, Marker } from "pigeon-maps";
 import { cameraOutline, chevronBackOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import GoBackHeader from '../components/Shared/GoBackHeader';
+import { navigateBack } from '../components/Shared/BackButtonNavigation';
 
 
 const eventTags: string[] = [
@@ -123,6 +124,7 @@ export const EventForm = () => {
 
   const context = useContext();
   const Toast = useToast();
+  const router = useIonRouter();
   const [present, dismiss] = useIonLoading();
 
   const mapModalRef = useRef<HTMLIonModalElement | null>(null);
@@ -287,7 +289,25 @@ export const EventForm = () => {
       setMapPinLatLong([latLong.latitude, latLong.longitude]);
     }
     setAddressValidating(false);
-  }
+  };
+
+  useIonViewWillEnter(() => {
+    context.setShowTabs(false);
+  }, []);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, () => {
+        navigateBack(router, false);
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [router]);
 
   return (
     <IonPage>

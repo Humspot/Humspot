@@ -32,6 +32,7 @@ import placeholder from "../assets/images/placeholder.png";
 import { formatDate } from "../utils/formatDate";
 import EventsListEntry from "../components/Calendar/EventsListEntry";
 import { getDateStrings } from "../utils/calcDates";
+import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
 function CalendarPage() {
   const context = useContext();
@@ -111,6 +112,20 @@ function CalendarPage() {
   }, [fetchEventsMonth]);
 
   const router = useIonRouter();
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(10, () => {
+        navigateBack(router);
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [router]);
 
   return (
     <>

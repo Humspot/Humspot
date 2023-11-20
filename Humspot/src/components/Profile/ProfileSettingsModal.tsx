@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   IonModal,
   IonList,
@@ -31,6 +31,20 @@ const ProfileSettingsModal = () => {
   const router = useIonRouter();
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, async () => {
+        await modalRef?.current?.dismiss();
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [modalRef]);
 
   const clickOnLogout = async () => {
     const { value } = await Dialog.confirm({
