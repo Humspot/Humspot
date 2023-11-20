@@ -39,7 +39,7 @@ const ProfileActivitiesModal: React.FC = () => {
             <IonLabel>Submit an Attraction</IonLabel>
           </IonItem>
           <br />
-          <IonItem>
+          <IonItem  onClick={() => { modalRef?.current?.dismiss(); router.push("/submitted-activities") }}>
             <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
             <IonLabel>See Submitted Activities</IonLabel>
           </IonItem>

@@ -320,41 +320,43 @@ export const EventForm = () => {
             <IonList lines="inset" style={{ padding: "5px" }}>
               <IonItem>
                 <IonLabel position='stacked'>Name</IonLabel>
-                <IonInput ref={nameRef} placeholder="Cal Poly Humboldt - Grad Party" />
+                <IonInput aria-label="Name" style={{ marginTop: "5px" }} ref={nameRef} placeholder="Cal Poly Humboldt - Grad Party" />
               </IonItem>
+              <br />
               <IonItem>
                 <IonLabel position='stacked'>Description</IonLabel>
                 <IonTextarea maxlength={500} rows={3} ref={descRef} placeholder="This event will be super fun! Graduates + family are invited to this special event. Visit our site for more info." />
               </IonItem>
+              <br />
               <IonItem>
                 <IonLabel position='stacked'>Website</IonLabel>
-                <IonInput ref={websiteUrlRef} placeholder="https://www.google.com" />
+                <IonInput aria-label="Website" style={{ marginTop: "5px" }} ref={websiteUrlRef} placeholder="https://www.google.com" />
               </IonItem>
+              <br />
               <IonItem lines="full" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
                 <IonLabel position="stacked">Location / Address</IonLabel>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                   <IonInput
+                    aria-label="Location / Address"
                     ref={locationRef}
                     placeholder="1 Harpst St, Arcata CA"
                     onIonInput={(e) => { setLocation(e.detail.value ?? '') }}
-                    style={{ flexGrow: 1, marginRight: '10px' }}
+                    style={{ flexGrow: 1, marginRight: '10px', marginTop: '5px' }}
                   />
                   <IonButton id='address-verification' disabled={!location}>
                     <IonIcon icon={mapOutline} />
                   </IonButton>
                 </div>
               </IonItem>
+              <br />
               <IonItem className='no-ripple'>
                 <IonLabel position='stacked'>Date and Time</IonLabel>
                 <IonDatetime style={{ marginTop: "20px" }} ref={dateTimeRef} />
               </IonItem>
-              <IonItem>
-                <IonLabel position='stacked'>Tags</IonLabel>
-              </IonItem>
+              <br />
               <IonItem>
                 <IonLabel position='stacked'>Photos</IonLabel>
                 <div style={{ height: "1vh" }} />
-                <IonButton style={{ marginLeft: '-1px' }} onClick={handleSelectImages}>{photos && photos.length > 0 ? 'Change' : 'Add'} Photos &nbsp;<IonIcon icon={cameraOutline} /></IonButton>
                 {photos && photos.length > 0 &&
                   photos.map((url: string, index: number) => {
                     return (
@@ -367,8 +369,12 @@ export const EventForm = () => {
                     )
                   })
                 }
+                <IonButton style={{ marginLeft: '-1px' }} onClick={handleSelectImages}>{photos && photos.length > 0 ? 'Change' : 'Add'} Photos &nbsp;<IonIcon icon={cameraOutline} /></IonButton>
               </IonItem>
               <br />
+              <IonItem>
+                <IonLabel position='stacked'>Tags</IonLabel>
+              </IonItem>
               <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
                 {visibleTags.map(tag => (
                   <IonChip

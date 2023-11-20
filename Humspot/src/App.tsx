@@ -53,6 +53,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import { App as CapacitorApp } from "@capacitor/app";
+import SubmittedActivities from "./pages/SubmittedActivities";
 
 setupIonicReact({ mode: "md" });
 
@@ -151,6 +152,7 @@ const App: React.FC = () => {
                 component={VerifyEmail}
               />
               <Route exact path="/submit-event" component={SubmitEventPage} />
+              <Route exact path="/submitted-activities" component={SubmittedActivities} />
               <Route exact path="/activity/:id" component={ActivityPage} />
             </IonRouterOutlet>
 
