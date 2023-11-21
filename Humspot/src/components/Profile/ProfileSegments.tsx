@@ -165,7 +165,7 @@ const ProfileSegments: React.FC = memo(() => {
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Places Visited</IonTitle>
               :
               <IonCard>
-                <IonCardContent>
+                <IonCardContent className='ion-no-padding'>
                   <IonList>
                     {!visitedLoading ?
                       visited.map((visitedPlace: HumspotVisitedResponse, index: number) => {
