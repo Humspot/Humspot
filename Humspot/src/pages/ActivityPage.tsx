@@ -48,6 +48,7 @@ function ActivityPage() {
 
   const [hasSwipedIn, setHasSwipedIn] = useState<boolean>(false);
 
+
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
   const [activityLoading, setActivityLoading] = useState<boolean>(true);
 
