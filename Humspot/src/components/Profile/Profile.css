@@ -19,9 +19,17 @@
   align-items: center;
 }
 
-@media (max-width: 389px) { 
+ion-segment-button {
+  --color: gray;
+}
+
+ion-segment-button.segment-button-checked {
+  --color: var(--ion-color-primary);
+}
+
+@media (max-width: 389px) {
   .segment-button {
-    font-size: 0.6rem; 
+    font-size: 0.6rem;
   }
 
   .segment-button ion-icon {
@@ -33,7 +41,7 @@
 
 @media (max-width: 389px) {
   .segment-button ion-label {
-    display: none; 
+    display: none;
   }
 }
 

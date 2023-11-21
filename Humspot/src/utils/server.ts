@@ -27,13 +27,17 @@ import {
   GetFavoritesAndVisitedAndRSVPStatusResponse,
   GetHumspotEventResponse,
   GetEventsBetweenTwoDatesStatusResponse,
-  AddCommentImageResponse
+  AddCommentImageResponse,
+  GetSubmittedActivitiesResponse
 } from "./types";
+import { urlOpener } from "./urlOpener";
 
-import { Camera, GalleryPhoto, GalleryPhotos } from "@capacitor/camera";
 
 
 /* Allows for AWS Authentication */
+// awsconfig.oauth.redirectSignIn = `${window.location.origin}/`;
+// awsconfig.oauth.redirectSignOut = `${window.location.origin}/`;
+// awsconfig.oauth.urlOpener = urlOpener;
 Amplify.configure(awsconfig);
 
 /**
@@ -1158,4 +1162,40 @@ export const handleUploadEventImages = async (blobs: Blob[] | null) => {
       photoUrls: []
     }
   }
-}
+};
+
+
+export const handleGetSubmittedActivities = async (userID: string, pageNum: number): Promise<GetSubmittedActivitiesResponse> => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GET_SUBMITTED_ACTIVITIES_GIVEN_USER_ID + "/" + userID + "/" + pageNum,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    const responseData: GetSubmittedActivitiesResponse = await response.json();
+
+    console.log(responseData);
+    return responseData;
+
+  } catch (err) {
+    console.error(err);
+    return {
+      message: "Error fetching status",
+      success: false,
+      submittedActivities: []
+    }
+  }
+};
