@@ -30,8 +30,8 @@ const PrivacyPolicy: React.FC = () => {
 
   return (
     <IonPage>
+      <GoBackHeader title="Privacy Policy" />
       <IonContent>
-        <GoBackHeader title="Privacy Policy" />
         <section className='ion-padding'>
           <IonText>
             <h2>Welcome to Humspot</h2>

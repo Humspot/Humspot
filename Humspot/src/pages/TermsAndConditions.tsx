@@ -30,8 +30,9 @@ const TermsAndConditions: React.FC = () => {
 
   return (
     <IonPage>
+      <GoBackHeader title="Terms and Conditions" />
+
       <IonContent>
-        <GoBackHeader title="Terms and Conditions" />
         <section className="ion-padding">
           <IonText >
             <h2>Welcome to Humspot</h2>

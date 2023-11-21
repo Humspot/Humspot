@@ -64,8 +64,8 @@ const SignUp: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent scrollY={false}>
-        <GoBackHeader title="Sign Up" />
+      <GoBackHeader title="Sign Up" />
+      <IonContent>
         <div className="center-content">
           <section className="center-container">
 
@@ -91,6 +91,8 @@ const SignUp: React.FC = () => {
             <p>OR</p>
 
             <GoogleLoginButton />
+
+            <br />
 
           </section>
         </div>

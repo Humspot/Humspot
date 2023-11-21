@@ -965,12 +965,12 @@ export const handleGetFavoritesAndVisitedAndRSVPStatus = async (userID: string, 
 export const handleGetEventsBetweenTwoDates = async (date1: string, date2: string): Promise<GetEventsBetweenTwoDatesStatusResponse> => {
 
   try {
-    const currentUserSession = await Auth.currentSession();
+    // const currentUserSession = await Auth.currentSession();
 
-    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+    // if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
 
-    const idToken = currentUserSession.getIdToken();
-    const jwtToken = idToken.getJwtToken();
+    // const idToken = currentUserSession.getIdToken();
+    // const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
 
@@ -979,7 +979,7 @@ export const handleGetEventsBetweenTwoDates = async (date1: string, date2: strin
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
+          // Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
@@ -1045,12 +1045,12 @@ export const handleGetPendingActivitySubmissions = async (pageNum: number, userI
  */
 export const handleGetThisWeeksEvents = async (): Promise<{ message: string; success: boolean; events: GetHumspotEventResponse[] }> => {
   try {
-    const currentUserSession = await Auth.currentSession();
+    // const currentUserSession = await Auth.currentSession();
 
-    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+    // if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
 
-    const idToken = currentUserSession.getIdToken();
-    const jwtToken = idToken.getJwtToken();
+    // const idToken = currentUserSession.getIdToken();
+    // const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_THIS_WEEKS_EVENTS,
@@ -1058,7 +1058,7 @@ export const handleGetThisWeeksEvents = async (): Promise<{ message: string; suc
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
+          // Authorization: `Bearer ${jwtToken}`,
         },
       }
     );

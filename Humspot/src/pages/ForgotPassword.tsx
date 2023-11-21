@@ -30,9 +30,10 @@ const ForgotPassword = () => {
   return (
     <IonPage>
 
-      <IonContent scrollY={false}>
+      <GoBackHeader title="Forgot Password" />
 
-        <GoBackHeader title="Forgot Password" />
+      <IonContent>
+
 
         <div className="center-content">
           <section className="center-container">
@@ -43,6 +44,8 @@ const ForgotPassword = () => {
             </IonItem>
 
             <IonButton className="login-button" onClick={async () => { await clickOnForgotPassword() }} fill="clear" expand="block" id="passwordResetButton" >Send Password Reset</IonButton>
+
+            <div style={{ height: "25vh" }} />
 
           </section>
         </div>

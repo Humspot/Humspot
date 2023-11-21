@@ -62,8 +62,8 @@ const SignIn = () => {
 
   return (
     <IonPage>
-      <IonContent scrollY={false}>
-        <GoBackHeader title="Sign In" />
+      <GoBackHeader title="Sign In" />
+      <IonContent>
         <div className="center-content">
           <section className="center-container">
 
@@ -91,6 +91,8 @@ const SignIn = () => {
             <p>OR</p>
 
             <GoogleLoginButton />
+
+            <br />
 
           </section>
         </div>
