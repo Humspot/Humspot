@@ -28,3 +28,20 @@ export const formatDate = (dateString: string): string => {
 
   return `${monthNames[monthIndex]} ${day}, ${year}`;
 };
+
+export const extractDateFromSqlDatetime = (datetimeStr: string): string => {
+  // Create a Date object from the datetime string
+  const dateObj = new Date(datetimeStr);
+
+  // Extract the year, month, and day
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth() + 1; // getMonth() returns 0-11
+  const day = dateObj.getDate();
+
+  // Format the month and day to ensure two digits
+  const formattedMonth = month.toString().padStart(2, '0');
+  const formattedDay = day.toString().padStart(2, '0');
+
+  // Construct and return the date string in 'YYYY-MM-DD' format
+  return `${year}-${formattedMonth}-${formattedDay}`;
+};

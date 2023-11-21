@@ -12,6 +12,8 @@ import {
   IonPage,
   IonSkeletonText,
   IonText,
+  useIonRouter,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
 import "./ActivityPage.css";
@@ -28,6 +30,8 @@ import ActivityFavoriteVisitedRSVPButtons from "../components/Activity/ActivityF
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
+import { useContext } from "../utils/my-context";
+import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
 type ActivityPageParams = {
   id: string;
@@ -36,6 +40,8 @@ type ActivityPageParams = {
 function ActivityPage() {
   const params = useParams<ActivityPageParams>();
   const id: string = params.id;
+  const context = useContext();
+  const router = useIonRouter();
 
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
   const [activityLoading, setActivityLoading] = useState<boolean>(true);
@@ -48,6 +54,24 @@ function ActivityPage() {
   useEffect(() => {
     if (id) handleGetActivityCallback(id);
   }, [id]);
+
+  useIonViewWillEnter(() => {
+    context.setShowTabs(false);
+  }, []);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, () => {
+        navigateBack(router, false);
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [router]);
 
   return (
     <IonPage>

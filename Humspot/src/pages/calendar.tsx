@@ -32,6 +32,7 @@ import placeholder from "../assets/images/placeholder.png";
 import { formatDate } from "../utils/formatDate";
 import EventsListEntry from "../components/Calendar/EventsListEntry";
 import { getDateStrings } from "../utils/calcDates";
+import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
 function CalendarPage() {
   const context = useContext();
@@ -112,13 +113,27 @@ function CalendarPage() {
 
   const router = useIonRouter();
 
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(10, () => {
+        navigateBack(router);
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [router]);
+
   return (
     <>
       <IonPage>
         <FilterButton></FilterButton>
         <IonContent>
           <IonList>
-            <IonItemDivider>
+            <IonItemDivider color='dark'>
               <IonLabel>
                 <h1>Today</h1>
               </IonLabel>
@@ -134,7 +149,7 @@ function CalendarPage() {
               </>
             )}
             {/* Events This Week */}
-            <IonItemDivider>
+            <IonItemDivider color='dark'>
               <IonLabel>
                 <h1>Next 7 Days</h1>
               </IonLabel>
@@ -149,7 +164,7 @@ function CalendarPage() {
               </>
             )}
             {/* Events This Month */}
-            <IonItemDivider>
+            <IonItemDivider color='dark'>
               <IonLabel>
                 <h1>Next 30 Days</h1>
               </IonLabel>

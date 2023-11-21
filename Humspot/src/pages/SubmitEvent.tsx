@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, IonList,
-  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard
+  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, useIonRouter, IonCardContent, IonCardHeader, IonCardTitle
 } from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/my-context';
@@ -12,6 +12,7 @@ import { Map, Marker } from "pigeon-maps";
 import { cameraOutline, chevronBackOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import GoBackHeader from '../components/Shared/GoBackHeader';
+import { navigateBack } from '../components/Shared/BackButtonNavigation';
 
 
 const eventTags: string[] = [
@@ -123,6 +124,7 @@ export const EventForm = () => {
 
   const context = useContext();
   const Toast = useToast();
+  const router = useIonRouter();
   const [present, dismiss] = useIonLoading();
 
   const mapModalRef = useRef<HTMLIonModalElement | null>(null);
@@ -193,7 +195,7 @@ export const EventForm = () => {
       limit: 5,
     });
 
-    if (!images || !images.photos) return;
+    if (!images || !images.photos) { dismiss(); return; }
     setPhotos([]);
     setBlobs([]);
     let blobArr: Blob[] = [];
@@ -287,54 +289,74 @@ export const EventForm = () => {
       setMapPinLatLong([latLong.latitude, latLong.longitude]);
     }
     setAddressValidating(false);
-  }
+  };
+
+  useIonViewWillEnter(() => {
+    context.setShowTabs(false);
+  }, []);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, () => {
+        navigateBack(router, false);
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [router]);
 
   return (
     <IonPage>
-      <IonContent className="">
+      <IonContent >
 
         <GoBackHeader title="Submit Event" />
 
         {context.humspotUser?.accountType !== 'user' ?
           <>
-            <IonList lines="inset" style={{ padding: "5px" }}>
-              <IonItem>
+            <div style={{ background: 'var(--ion-background-color)', padding: '5px' }}>
+              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Name</IonLabel>
-                <IonInput ref={nameRef} placeholder="Cal Poly Humboldt - Grad Party" />
+                <IonInput aria-label="Name" style={{ marginTop: "5px" }} ref={nameRef} placeholder="Cal Poly Humboldt - Grad Party" />
               </IonItem>
-              <IonItem>
+              <br />
+              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Description</IonLabel>
                 <IonTextarea maxlength={500} rows={3} ref={descRef} placeholder="This event will be super fun! Graduates + family are invited to this special event. Visit our site for more info." />
               </IonItem>
-              <IonItem>
+              <br />
+              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Website</IonLabel>
-                <IonInput ref={websiteUrlRef} placeholder="https://www.google.com" />
+                <IonInput aria-label="Website" style={{ marginTop: "5px" }} ref={websiteUrlRef} placeholder="https://www.google.com" />
               </IonItem>
-              <IonItem lines="full" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+              <br />
+              <IonItem lines="full" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', '--background': 'var(--ion-background-color)' }}>
                 <IonLabel position="stacked">Location / Address</IonLabel>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                   <IonInput
+                    aria-label="Location / Address"
                     ref={locationRef}
                     placeholder="1 Harpst St, Arcata CA"
                     onIonInput={(e) => { setLocation(e.detail.value ?? '') }}
-                    style={{ flexGrow: 1, marginRight: '10px' }}
+                    style={{ flexGrow: 1, marginRight: '10px', marginTop: '5px' }}
                   />
-                  <IonButton id='address-verification' disabled={!location}>
+                  <IonButton color='secondary' id='address-verification' disabled={!location}>
                     <IonIcon icon={mapOutline} />
                   </IonButton>
                 </div>
               </IonItem>
-              <IonItem className='no-ripple'>
+              <br />
+              <IonItem className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Date and Time</IonLabel>
                 <IonDatetime style={{ marginTop: "20px" }} ref={dateTimeRef} />
               </IonItem>
-              <IonItem>
-                <IonLabel position='stacked'>Tags</IonLabel>
-              </IonItem>
-              <IonItem>
+              <br />
+              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Photos</IonLabel>
                 <div style={{ height: "1vh" }} />
-                <IonButton style={{ marginLeft: '-1px' }} onClick={handleSelectImages}>{photos && photos.length > 0 ? 'Change' : 'Add'} Photos &nbsp;<IonIcon icon={cameraOutline} /></IonButton>
                 {photos && photos.length > 0 &&
                   photos.map((url: string, index: number) => {
                     return (
@@ -347,28 +369,45 @@ export const EventForm = () => {
                     )
                   })
                 }
+                <IonCard button onClick={handleSelectImages} style={{ position: 'relative', textAlign: 'center', height: "100px", width: "100px", marginLeft: "-1.5px" }}>
+                  <br />
+                  <IonCardContent>
+                    <IonIcon
+                      icon={cameraOutline}
+                      style={{ fontSize: '40px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+                    />
+                  </IonCardContent>
+                  <IonCardHeader>
+                    <p className='ion-no-padding ion-no-margin' style={{fontSize: "1rem"}}>
+                      {photos && photos.length > 0 ? 'Change' : 'Add'}
+                    </p>
+                  </IonCardHeader>
+                </IonCard>
               </IonItem>
               <br />
+              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
+                <IonLabel position='stacked'>Tags</IonLabel>
+              </IonItem>
               <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
                 {visibleTags.map(tag => (
                   <IonChip
                     key={tag}
                     onClick={() => toggleTag(tag)}
-                    color={selectedTags.includes(tag) ? "primary" : "secondary"}
+                    color={selectedTags.includes(tag) ? "secondary" : "light"}
                   >
                     <IonLabel>{tag}</IonLabel>
                   </IonChip>
                 ))}
                 {visibleTags.length < eventTags.length && (
                   <div style={{ display: "flex", marginLeft: "25vw", marginRight: "25vw" }}>
-                    <IonButton fill='clear' onClick={showMoreTags}>Show More &nbsp;<IonIcon icon={chevronDownOutline} /></IonButton>
+                    <IonButton color='secondry' fill='clear' onClick={showMoreTags}> &nbsp;&nbsp;Show More &nbsp;<IonIcon icon={chevronDownOutline} /></IonButton>
                   </div>
                 )}
               </div>
 
-              <IonButton expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmit()}>Submit</IonButton>
+              <IonButton color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmit()}>Submit</IonButton>
               <br />
-            </IonList>
+            </div>
 
           </>
           :

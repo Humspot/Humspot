@@ -37,9 +37,11 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
       if (blobRes.size > 15_000_000) { // 15 MB
         const toast = Toast.create({ message: 'Image too large', duration: 2000, color: 'danger' });
         toast.present();
+        dismiss();
       } else {
         setBlob(blobRes);
         setPhoto(image.webPath);
+        dismiss();
       }
     }
     dismiss();
@@ -100,12 +102,14 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
             <img src={photo} />
           }
           <IonButton
+            color='secondary'
             onClick={handleSubmitComment}
             disabled={!context.humspotUser}
           >
             {context.humspotUser ? "Submit Comment" : "Log in to add comments."}
           </IonButton>
           <IonButton
+            color='secondary'
             onClick={async () => await handleSelectImage()}
           >
             <IonIcon icon={cameraOutline} />
