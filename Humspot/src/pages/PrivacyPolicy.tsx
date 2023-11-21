@@ -31,10 +31,10 @@ const PrivacyPolicy: React.FC = () => {
   return (
     <IonPage>
       <GoBackHeader title="Privacy Policy" />
-      <IonContent>
+      <IonContent style={{ '--background': '#121212' }}>
+        <h2 style={{ paddingLeft: "20px" }}>Welcome to Humspot</h2>
         <section className='ion-padding'>
           <IonText>
-            <h2>Welcome to Humspot</h2>
             <p>
               Welcome to Humspot! Your privacy is of utmost importance to us.
               This Privacy Policy explains how we collect, use, share, and protect

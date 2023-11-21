@@ -83,7 +83,7 @@ const ProfileSegments: React.FC = memo(() => {
 
   return (
     <>
-      <div style={{ marginLeft: "2.5%", marginRight: "2.5%" }}>
+      <div style={{ marginLeft: "2.5%", marginRight: "2.5%", backgroundColor: "var(--ion-background-color)" }}>
         <IonSegment className="ion-justify-content-center" value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
 
           <IonSegmentButton value="favorites">
@@ -122,7 +122,7 @@ const ProfileSegments: React.FC = memo(() => {
         </IonSegment>
       </div>
 
-      <div style={{ height: "1vh" }} />
+      {/* <div style={{ height: "1vh", backgroundColor: "var(--ion-background-color)" }} /> */}
 
       <IonContent>
 
@@ -133,7 +133,7 @@ const ProfileSegments: React.FC = memo(() => {
         {selectedSegment === "favorites" ? (
           <>
             {!favoritesLoading && favorites.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Favorites</IonTitle>
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Favorites</IonTitle>
               :
               <IonCard>
                 <IonCardContent className='ion-no-padding'>
@@ -165,7 +165,7 @@ const ProfileSegments: React.FC = memo(() => {
         ) : selectedSegment === "visited" ? (
           <>
             {!visitedLoading && visited.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Places Visited</IonTitle>
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Places Visited</IonTitle>
               :
               <IonCard>
                 <IonCardContent className='ion-no-padding'>
@@ -197,7 +197,7 @@ const ProfileSegments: React.FC = memo(() => {
         ) : (
           <>
             {!interactionsLoading && interactions.length >= 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Interactions <br /> or Comments</IonTitle>
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Interactions <br /> or Comments</IonTitle>
               :
               <IonCard>
                 <IonCardContent className='ion-no-padding'>

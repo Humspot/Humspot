@@ -4,7 +4,7 @@
  * If not logged in, it will prompt the user to do so.
  */
 
-import { IonPage, useIonRouter, useIonViewWillEnter } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter, useIonViewDidEnter } from "@ionic/react";
 
 import { memo, useEffect, useRef } from "react";
 import { useContext } from "../utils/my-context";
@@ -33,7 +33,7 @@ const Profile: React.FC = () => {
     }
   }, [context.humspotUser]);
 
-  useIonViewWillEnter(() => {
+  useIonViewDidEnter(() => {
     context.setShowTabs(true);
   }, []);
 
@@ -58,11 +58,13 @@ const Profile: React.FC = () => {
         {/* Add, Edit, and Settings button */}
         <ProfileHeader />
 
-        {/* Top Bio */}
-        <ProfileBio />
+        <IonContent scrollY={false}>
+          {/* Top Bio */}
+          <ProfileBio />
 
-        {/* Middle Segmented Area */}
-        <ProfileSegments />
+          {/* Middle Segmented Area */}
+          <ProfileSegments />
+        </IonContent>
 
         {/* Modal that pops in at the bottom of the page where a user can request to submit events/attractions */}
         <ProfileAddActivityModal page={page.current} />

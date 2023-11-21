@@ -311,9 +311,8 @@ export const EventForm = () => {
 
   return (
     <IonPage>
+      <GoBackHeader title="Submit Event" />
       <IonContent >
-
-        <GoBackHeader title="Submit Event" />
 
         {context.humspotUser?.accountType !== 'user' ?
           <>
@@ -393,7 +392,7 @@ export const EventForm = () => {
                   <IonChip
                     key={tag}
                     onClick={() => toggleTag(tag)}
-                    color={selectedTags.includes(tag) ? "secondary" : "light"}
+                    color={selectedTags.includes(tag) ? "secondary" : "dark"}
                   >
                     <IonLabel>{tag}</IonLabel>
                   </IonChip>

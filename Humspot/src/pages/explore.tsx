@@ -5,7 +5,7 @@ import {
   IonPage,
   IonSkeletonText,
   useIonRouter,
-  useIonViewWillEnter,
+  useIonViewDidEnter,
 } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -55,7 +55,7 @@ function ExplorePage() {
 
   const context = useContext();
   const router = useIonRouter();
-  useIonViewWillEnter(() => {
+  useIonViewDidEnter(() => {
     context.setShowTabs(true);
   });
 

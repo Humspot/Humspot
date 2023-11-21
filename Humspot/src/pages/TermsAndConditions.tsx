@@ -33,9 +33,9 @@ const TermsAndConditions: React.FC = () => {
       <GoBackHeader title="Terms and Conditions" />
 
       <IonContent>
+        <h2 style={{ paddingLeft: "20px" }}>Welcome to Humspot</h2>
         <section className="ion-padding">
-          <IonText >
-            <h2>Welcome to Humspot</h2>
+          <>
             <p>
               These terms and conditions outline the rules and regulations for the
               use of HumSpot's Website, located at . By
@@ -156,7 +156,7 @@ const TermsAndConditions: React.FC = () => {
                 </ol>
               </li>
             </ol>
-          </IonText>
+          </>
         </section>
       </IonContent>
     </IonPage>

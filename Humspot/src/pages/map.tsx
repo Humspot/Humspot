@@ -1,5 +1,5 @@
 
-import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, useIonRouter, useIonViewWillEnter } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, useIonRouter, useIonViewDidEnter } from "@ionic/react";
 import { Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/my-context";
 import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/map-config";
@@ -24,7 +24,7 @@ function MapPage() {
   const [showThisWeeksEvents, setShowThisWeeksEvents] = useState<boolean>(true);
   const [thisWeeksEvents, setThisWeeksEvents] = useState<GetHumspotEventResponse[]>([]);
 
-  useIonViewWillEnter(() => {
+  useIonViewDidEnter(() => {
     context.setShowTabs(true);
   }, []);
 

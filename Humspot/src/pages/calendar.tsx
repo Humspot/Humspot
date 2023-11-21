@@ -9,7 +9,7 @@ import {
   IonThumbnail,
   IonToolbar,
   useIonRouter,
-  useIonViewWillEnter,
+  useIonViewDidEnter,
 } from "@ionic/react";
 import React, { useState, useEffect, useCallback } from "react";
 import {
@@ -38,7 +38,7 @@ import '../App.css';
 
 function CalendarPage() {
   const context = useContext();
-  useIonViewWillEnter(() => {
+  useIonViewDidEnter(() => {
     context.setShowTabs(true);
   });
   const [eventsToday, seteventsToday] = useState<any>([]);
