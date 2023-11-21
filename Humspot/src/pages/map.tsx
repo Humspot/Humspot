@@ -58,7 +58,7 @@ function MapPage() {
       <IonContent fullscreen>
         <Map
           provider={(x, y, z, dpr) =>
-            mapTiler(false /* context.darkMode */, x, y, z, dpr)
+            mapTiler(context.darkMode, x, y, z, dpr)
           }
           minZoom={10}
           zoomSnap={false}
@@ -88,7 +88,7 @@ function MapPage() {
             if (!marker.latitude || !marker.longitude) return;
             return (
               <Marker
-                color={"var(--ion-color-secondary)"}
+                color={"var(--ion-color-event-marker)"}
                 style={{ opacity: "85%" }}
                 key={marker.name + index.toString()}
                 anchor={[parseFloat(marker.latitude), parseFloat(marker.longitude)]}

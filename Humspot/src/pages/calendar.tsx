@@ -133,7 +133,7 @@ function CalendarPage() {
         <FilterButton></FilterButton>
         <IonContent>
           <IonList>
-            <IonItemDivider>
+            <IonItemDivider color='dark'>
               <IonLabel>
                 <h1>Today</h1>
               </IonLabel>
@@ -149,7 +149,7 @@ function CalendarPage() {
               </>
             )}
             {/* Events This Week */}
-            <IonItemDivider>
+            <IonItemDivider color='dark'>
               <IonLabel>
                 <h1>Next 7 Days</h1>
               </IonLabel>
@@ -164,7 +164,7 @@ function CalendarPage() {
               </>
             )}
             {/* Events This Month */}
-            <IonItemDivider>
+            <IonItemDivider color='dark'>
               <IonLabel>
                 <h1>Next 30 Days</h1>
               </IonLabel>

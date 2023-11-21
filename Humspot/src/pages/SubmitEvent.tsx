@@ -393,7 +393,7 @@ export const EventForm = () => {
                   <IonChip
                     key={tag}
                     onClick={() => toggleTag(tag)}
-                    color={selectedTags.includes(tag) ? "secondary" : ""}
+                    color={selectedTags.includes(tag) ? "secondary" : "light"}
                   >
                     <IonLabel>{tag}</IonLabel>
                   </IonChip>

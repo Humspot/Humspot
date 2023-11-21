@@ -24,14 +24,14 @@ const ProfileHeader: React.FC = () => {
           }
         </IonCardTitle>
         <IonButtons slot='end'>
-          <IonButton color='secondary' disabled={!context.humspotUser} id='open-edit-profile-modal' slot='end'>
+          <IonButton disabled={!context.humspotUser} id='open-edit-profile-modal' slot='end'>
             <IonIcon size='large' style={{ padding: "1%" }} icon={pencilOutline} />
           </IonButton>
-          <IonButton color='secondary' disabled={!context.humspotUser} id='open-add-activity-modal' slot='end'>
+          <IonButton disabled={!context.humspotUser} id='open-add-activity-modal' slot='end'>
             <IonIcon size='large' style={{ padding: "1%" }} icon={addCircleOutline} />
           </IonButton>
-          <IonButton color='secondary' id='open-profile-page-modal' slot='end'>
-            <IonIcon color='secondary' size='large' style={{ padding: "2.5%" }} icon={settingsOutline} />
+          <IonButton id='open-profile-page-modal' slot='end'>
+            <IonIcon size='large' style={{ padding: "2.5%" }} icon={settingsOutline} />
           </IonButton>
         </IonButtons>
       </IonToolbar>
