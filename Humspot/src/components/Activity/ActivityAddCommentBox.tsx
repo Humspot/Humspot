@@ -17,7 +17,6 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
   const [blob, setBlob] = useState<Blob | null>(null);
 
   const handleSelectImage = async () => {
-    present({ message: "Loading..." });
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
@@ -30,6 +29,8 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
       const toast = Toast.create({ message: 'Something went wrong', duration: 2000, color: 'danger' });
       toast.present();
     }
+
+    present({ message: "Loading..." });
 
     const res = await fetch(image.webPath!);
     const blobRes = await res.blob();

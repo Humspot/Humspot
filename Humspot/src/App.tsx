@@ -52,7 +52,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { Capacitor } from "@capacitor/core";
 import { App as CapacitorApp } from "@capacitor/app";
 import SubmittedActivities from "./pages/SubmittedActivities";
-import { Keyboard, KeyboardResize, KeyboardResizeOptions, KeyboardStyle, KeyboardStyleOptions } from "@capacitor/keyboard";
+import { Keyboard, KeyboardStyle, KeyboardStyleOptions } from "@capacitor/keyboard";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { Preferences } from "@capacitor/preferences";
 
@@ -63,14 +63,6 @@ const keyStyleOptionsLight: KeyboardStyleOptions = {
 };
 const keyStyleOptionsDark: KeyboardStyleOptions = {
   style: KeyboardStyle.Dark
-};
-
-const resizeOptions: KeyboardResizeOptions = {
-  mode: KeyboardResize.None,
-};
-
-const defaultResizeOptions: KeyboardResizeOptions = {
-  mode: KeyboardResize.Body,
 };
 
 const App: React.FC = () => {
@@ -153,19 +145,6 @@ const App: React.FC = () => {
     handleDarkMode();
   }, [handleDarkMode]);
 
-
-  useEffect(() => {
-    Keyboard.addListener('keyboardWillShow', () => {
-      Keyboard.setResizeMode(resizeOptions);
-    });
-
-    Keyboard.addListener('keyboardWillHide', () => {
-      Keyboard.setResizeMode(defaultResizeOptions);
-    });
-    return () => {
-      Keyboard.removeAllListeners();
-    };
-  }, [])
 
   return (
     <IonApp>
