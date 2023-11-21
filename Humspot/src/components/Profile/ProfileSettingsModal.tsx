@@ -75,29 +75,29 @@ const ProfileSettingsModal = () => {
           <br />
           <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/contact-us") }}>
             <IonIcon aria-hidden="true" icon={mailOutline} slot="start"></IonIcon>
-            <IonLabel color='primary'>Contact Us</IonLabel>
+            <IonLabel color='secondary'>Contact Us</IonLabel>
           </IonItem>
           <br />
           <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/privacy-policy") }}>
             <IonIcon aria-hidden="true" icon={shieldOutline} slot="start"></IonIcon>
-            <IonLabel color='primary'>Privacy Policy</IonLabel>
+            <IonLabel color='secondary'>Privacy Policy</IonLabel>
           </IonItem>
           <br />
           <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/terms-and-conditions") }}>
             <IonIcon aria-hidden="true" icon={readerOutline} slot="start"></IonIcon>
-            <IonLabel color='primary'>Terms and Conditions</IonLabel>
+            <IonLabel color='secondary'>Terms and Conditions</IonLabel>
           </IonItem>
           <br />
           {context.humspotUser === undefined ?
             <>
               <IonItem role='button' onClick={() => { modalRef?.current?.dismiss(); router.push("/sign-up") }}>
                 <IonIcon aria-hidden="true" icon={logInOutline} slot="start"></IonIcon>
-                <IonLabel color='primary'>Sign Up / Sign In</IonLabel>
+                <IonLabel color='secondary'>Sign Up / Sign In</IonLabel>
               </IonItem>
               <br />
               <IonItem role='button' onClick={async () => { modalRef?.current?.dismiss(); await handleGoogleLoginAndVerifyAWSUser() }}>
                 <IonIcon aria-hidden="true" icon={logOutOutline} slot="start"></IonIcon>
-                <IonLabel color='primary'>Google Sign In</IonLabel>
+                <IonLabel color='secondary'>Google Sign In</IonLabel>
               </IonItem>
             </>
             : context.humspotUser ?

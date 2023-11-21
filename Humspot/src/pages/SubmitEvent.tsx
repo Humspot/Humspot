@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, IonList,
-  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, useIonRouter
+  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, useIonRouter, IonCardContent, IonCardHeader, IonCardTitle
 } from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/my-context';
@@ -195,7 +195,7 @@ export const EventForm = () => {
       limit: 5,
     });
 
-    if (!images || !images.photos) return;
+    if (!images || !images.photos) { dismiss(); return; }
     setPhotos([]);
     setBlobs([]);
     let blobArr: Blob[] = [];
@@ -311,29 +311,29 @@ export const EventForm = () => {
 
   return (
     <IonPage>
-      <IonContent className="">
+      <IonContent >
 
         <GoBackHeader title="Submit Event" />
 
         {context.humspotUser?.accountType !== 'user' ?
           <>
-            <IonList lines="inset" style={{ padding: "5px" }}>
-              <IonItem>
+            <div style={{ background: 'var(--ion-background-color)', padding: '5px' }}>
+              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Name</IonLabel>
                 <IonInput aria-label="Name" style={{ marginTop: "5px" }} ref={nameRef} placeholder="Cal Poly Humboldt - Grad Party" />
               </IonItem>
               <br />
-              <IonItem>
+              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Description</IonLabel>
                 <IonTextarea maxlength={500} rows={3} ref={descRef} placeholder="This event will be super fun! Graduates + family are invited to this special event. Visit our site for more info." />
               </IonItem>
               <br />
-              <IonItem>
+              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Website</IonLabel>
                 <IonInput aria-label="Website" style={{ marginTop: "5px" }} ref={websiteUrlRef} placeholder="https://www.google.com" />
               </IonItem>
               <br />
-              <IonItem lines="full" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+              <IonItem lines="full" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', '--background': 'var(--ion-background-color)' }}>
                 <IonLabel position="stacked">Location / Address</IonLabel>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                   <IonInput
@@ -343,18 +343,18 @@ export const EventForm = () => {
                     onIonInput={(e) => { setLocation(e.detail.value ?? '') }}
                     style={{ flexGrow: 1, marginRight: '10px', marginTop: '5px' }}
                   />
-                  <IonButton id='address-verification' disabled={!location}>
+                  <IonButton color='secondary' id='address-verification' disabled={!location}>
                     <IonIcon icon={mapOutline} />
                   </IonButton>
                 </div>
               </IonItem>
               <br />
-              <IonItem className='no-ripple'>
+              <IonItem className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Date and Time</IonLabel>
                 <IonDatetime style={{ marginTop: "20px" }} ref={dateTimeRef} />
               </IonItem>
               <br />
-              <IonItem>
+              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Photos</IonLabel>
                 <div style={{ height: "1vh" }} />
                 {photos && photos.length > 0 &&
@@ -369,10 +369,23 @@ export const EventForm = () => {
                     )
                   })
                 }
-                <IonButton style={{ marginLeft: '-1px' }} onClick={handleSelectImages}>{photos && photos.length > 0 ? 'Change' : 'Add'} Photos &nbsp;<IonIcon icon={cameraOutline} /></IonButton>
+                <IonCard button onClick={handleSelectImages} style={{ position: 'relative', textAlign: 'center', height: "100px", width: "100px", marginLeft: "-1.5px" }}>
+                  <br />
+                  <IonCardContent>
+                    <IonIcon
+                      icon={cameraOutline}
+                      style={{ fontSize: '40px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+                    />
+                  </IonCardContent>
+                  <IonCardHeader>
+                    <p className='ion-no-padding ion-no-margin' style={{fontSize: "1rem"}}>
+                      {photos && photos.length > 0 ? 'Change' : 'Add'}
+                    </p>
+                  </IonCardHeader>
+                </IonCard>
               </IonItem>
               <br />
-              <IonItem>
+              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Tags</IonLabel>
               </IonItem>
               <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
@@ -380,21 +393,21 @@ export const EventForm = () => {
                   <IonChip
                     key={tag}
                     onClick={() => toggleTag(tag)}
-                    color={selectedTags.includes(tag) ? "primary" : "secondary"}
+                    color={selectedTags.includes(tag) ? "secondary" : ""}
                   >
                     <IonLabel>{tag}</IonLabel>
                   </IonChip>
                 ))}
                 {visibleTags.length < eventTags.length && (
                   <div style={{ display: "flex", marginLeft: "25vw", marginRight: "25vw" }}>
-                    <IonButton fill='clear' onClick={showMoreTags}>Show More &nbsp;<IonIcon icon={chevronDownOutline} /></IonButton>
+                    <IonButton color='secondry' fill='clear' onClick={showMoreTags}> &nbsp;&nbsp;Show More &nbsp;<IonIcon icon={chevronDownOutline} /></IonButton>
                   </div>
                 )}
               </div>
 
-              <IonButton expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmit()}>Submit</IonButton>
+              <IonButton color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmit()}>Submit</IonButton>
               <br />
-            </IonList>
+            </div>
 
           </>
           :

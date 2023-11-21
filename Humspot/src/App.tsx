@@ -158,7 +158,6 @@ const App: React.FC = () => {
 
             <IonTabBar
               slot="bottom"
-              color="primary"
               onIonTabsWillChange={handleTabChange}
               style={tabBarStyle ? {} : { display: "none" }}
             >
@@ -166,7 +165,7 @@ const App: React.FC = () => {
                 <IonIcon
                   aria-hidden="true"
                   icon={compass}
-                  color={currentTab == "tab1" ? "icon-highlight" : "icon-dark"}
+                  color={currentTab == "tab1" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>
@@ -174,7 +173,7 @@ const App: React.FC = () => {
                 <IonIcon
                   aria-hidden="true"
                   icon={map}
-                  color={currentTab == "tab2" ? "icon-highlight" : "icon-dark"}
+                  color={currentTab == "tab2" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>
@@ -182,7 +181,7 @@ const App: React.FC = () => {
                 <IonIcon
                   aria-hidden="true"
                   icon={calendar}
-                  color={currentTab == "tab3" ? "icon-highlight" : "icon-dark"}
+                  color={currentTab == "tab3" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>
@@ -190,7 +189,7 @@ const App: React.FC = () => {
                 <IonIcon
                   aria-hidden="true"
                   icon={person}
-                  color={currentTab == "tab4" ? "icon-highlight" : "icon-dark"}
+                  color={currentTab == "tab4" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>

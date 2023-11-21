@@ -124,7 +124,7 @@ const ProfileEditModal: React.FC = () => {
           <IonHeader className='ion-no-border'>
             <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
               <IonButtons>
-                <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
+                <IonButton color='secondary' style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
                   <IonIcon icon={chevronBackOutline} />
                 </IonButton>
                 <IonTitle>Edit Profile</IonTitle>
@@ -165,7 +165,7 @@ const ProfileEditModal: React.FC = () => {
 
             <br />
 
-            <IonButton className="login-button" onClick={async () => { await clickUpdateProfile() }} fill="clear" expand="block" id="submit-profile-edit-changes">Update</IonButton>
+            <IonButton color='secondary' className="edit-modal-button" onClick={async () => { await clickUpdateProfile() }}  expand="block" id="submit-profile-edit-changes">Update</IonButton>
 
           </IonContent>
 
