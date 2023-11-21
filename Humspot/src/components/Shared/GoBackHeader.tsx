@@ -13,7 +13,7 @@ const GoBackHeader: React.FC<GoBackHeaderProps> = (props: GoBackHeaderProps) => 
 
   return (
     <IonHeader className='ion-no-border'>
-      <IonToolbar style={{ '--background': '--ion-background-color' }}>
+      <IonToolbar style={{ '--background': 'var(--ion-tab-bar-background)' }}>
         <IonButtons >
           <IonButton color='secondary' style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { router.goBack(); }}>
             <IonIcon icon={chevronBackOutline} />

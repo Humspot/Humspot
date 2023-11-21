@@ -13,6 +13,7 @@ import {
   IonSkeletonText,
   IonText,
   useIonRouter,
+  useIonViewDidEnter,
   useIonViewWillEnter,
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
@@ -43,6 +44,8 @@ function ActivityPage() {
   const context = useContext();
   const router = useIonRouter();
 
+  const [hasSwipedIn, setHasSwipedIn] = useState<boolean>(false);
+
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
   const [activityLoading, setActivityLoading] = useState<boolean>(true);
 
@@ -58,6 +61,10 @@ function ActivityPage() {
   useIonViewWillEnter(() => {
     context.setShowTabs(false);
   }, []);
+
+  useIonViewDidEnter(() => {
+    setHasSwipedIn(true);
+  }, [])
 
   useEffect(() => {
     const eventListener: any = (ev: CustomEvent<any>) => {
@@ -76,10 +83,16 @@ function ActivityPage() {
   return (
     <IonPage>
 
+      {hasSwipedIn &&
+        <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
+      }
+
       <IonContent>
 
-        <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
-        <IonLoading isOpen={activityLoading} message={"Loading..."} />
+        {!hasSwipedIn &&
+          <GoBackHeader title={''} />
+        }
+        {/* <IonLoading isOpen={activityLoading} message={"Loading..."} /> */}
 
         {/* Header Image */}
         <div className="headerDiv">
@@ -132,7 +145,7 @@ function ActivityPage() {
         {/* Description */}
         <IonCard>
           <IonCardContent>
-            <IonText color={"dark"}>
+            <IonText color={"light"}>
               <p>{activity?.description ?? ""}</p>
               <p>
                 <a
