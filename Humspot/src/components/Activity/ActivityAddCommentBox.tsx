@@ -108,12 +108,14 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
           >
             {context.humspotUser ? "Submit Comment" : "Log in to add comments."}
           </IonButton>
-          <IonButton
-            color='secondary'
-            onClick={async () => await handleSelectImage()}
-          >
-            <IonIcon icon={cameraOutline} />
-          </IonButton>
+          {context.humspotUser &&
+            <IonButton
+              color='secondary'
+              onClick={async () => await handleSelectImage()}
+            >
+              <IonIcon icon={cameraOutline} />
+            </IonButton>
+          }
         </IonCardContent>
       </IonCard>
     </>

@@ -20,6 +20,7 @@ import GoogleLoginButton from "../components/Login/GoogleLoginButton";
 
 
 import '../components/Login/AuthPages.css';
+import { dynamicNavigate } from "../utils/dynamicNavigate";
 
 
 const SignUp: React.FC = () => {
@@ -36,7 +37,7 @@ const SignUp: React.FC = () => {
 
   useIonViewWillEnter(() => {
     if (context.humspotUser) {
-      router.push("/explore");
+      dynamicNavigate(router, '/explore', 'root');
     }
   }, [context.humspotUser]);
 
@@ -54,7 +55,7 @@ const SignUp: React.FC = () => {
     if (success) { // route to verify page, on success email is sent with code
       const t = Toast.create({ message: "Success! Check your email for a verification code.", duration: 2000, color: "success" });
       t.present();
-      router.push("/verify-email/" + encodeURIComponent(emailRef.current?.value as string) + "/sign-up-verify");
+      dynamicNavigate(router, "/verify-email/" + encodeURIComponent(emailRef.current?.value as string) + "/sign-up-verify", 'root')
     } else {
       const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: "danger" });
       t.present();

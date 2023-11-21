@@ -3,6 +3,7 @@ import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage, useIonLoad
 import { useRef } from "react";
 import { handleForgotPassword } from "../utils/server";
 import GoBackHeader from "../components/Shared/GoBackHeader";
+import { dynamicNavigate } from "../utils/dynamicNavigate";
 
 const ForgotPassword = () => {
 
@@ -19,7 +20,7 @@ const ForgotPassword = () => {
     if (success) { // route to verify page, on success email is sent with code
       const t = Toast.create({ message: "Success! Check your email for a verification code.", duration: 2000, color: "success" });
       t.present();
-      router.push("/verify-email/" + encodeURIComponent(emailRef.current?.value as string) + "/password-verify");
+      dynamicNavigate(router, "/verify-email/" + encodeURIComponent(emailRef.current?.value as string) + "/password-verify", 'root');
     } else {
       const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: "danger" });
       t.present();

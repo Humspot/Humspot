@@ -20,6 +20,7 @@ import { useContext } from "../utils/my-context";
 
 import '../components/Login/AuthPages.css';
 import { eyeOutline, eyeOffOutline } from "ionicons/icons";
+import { dynamicNavigate } from "../utils/dynamicNavigate";
 
 
 type VerifyEmailParams = {
@@ -56,7 +57,7 @@ const VerifyEmail = () => {
     } else {
       const t = Toast.create({ message: "Success! Redirecting to sign in...", duration: 2000, color: "success" });
       t.present();
-      router.push("/sign-in");
+      dynamicNavigate(router, '/sign-in', 'root');
     }
     await dismiss();
   };

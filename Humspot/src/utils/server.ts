@@ -882,12 +882,12 @@ export const handleUpdateProfilePhoto = async (userID: string, profilePicURL: st
  */
 export const handleGetActivity = async (activityID: string): Promise<GetActivityResponse> => {
   try {
-    const currentUserSession = await Auth.currentSession();
+    // const currentUserSession = await Auth.currentSession();
 
-    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+    // if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
 
-    const idToken = currentUserSession.getIdToken();
-    const jwtToken = idToken.getJwtToken();
+    // const idToken = currentUserSession.getIdToken();
+    // const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_ACTIVITY_URL + `/${activityID}`,
@@ -895,7 +895,7 @@ export const handleGetActivity = async (activityID: string): Promise<GetActivity
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
+          // Authorization: `Bearer ${jwtToken}`,
         }
       }
     );

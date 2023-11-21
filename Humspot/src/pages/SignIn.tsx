@@ -14,6 +14,7 @@ import GoBackHeader from "../components/Shared/GoBackHeader";
 import GoogleLoginButton from "../components/Login/GoogleLoginButton";
 
 import '../components/Login/AuthPages.css';
+import { dynamicNavigate } from "../utils/dynamicNavigate";
 
 const inputNote: React.CSSProperties = {
   fontSize: "0.85em",
@@ -55,7 +56,7 @@ const SignIn = () => {
       const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: "danger" });
       t.present();
     } else {
-      router.push("/profile");
+      dynamicNavigate(router, '/profile', 'root');
     }
     await dismiss();
   };

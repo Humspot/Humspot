@@ -76,11 +76,10 @@ function ActivityPage() {
   }, [router]);
 
   return (
-    <IonPage className='ion-page-ios-notch'>
-
+    <IonPage>
       <IonContent>
-
         <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
+
         {/* <IonLoading isOpen={activityLoading} message={"Loading..."} /> */}
 
         {/* Header Image */}
