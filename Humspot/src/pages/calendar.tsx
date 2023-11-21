@@ -133,9 +133,9 @@ function CalendarPage() {
         <FilterButton></FilterButton>
         <IonContent>
           <IonList>
-            <IonItemDivider color='dark'>
+            <IonItemDivider color='light'>
               <IonLabel>
-                <h1>Today</h1>
+                <h1 style={{ paddingTop: "5px", paddingBottom: "5px", color: "var(--ion-color-dark)" }}>Today</h1>
               </IonLabel>
             </IonItemDivider>
             {/* Events Today */}
@@ -149,9 +149,9 @@ function CalendarPage() {
               </>
             )}
             {/* Events This Week */}
-            <IonItemDivider color='dark'>
+            <IonItemDivider color='light'>
               <IonLabel>
-                <h1>Next 7 Days</h1>
+                <h1 style={{ paddingTop: "5px", paddingBottom: "5px", color: "var(--ion-color-dark)" }}>Next 7 Days</h1>
               </IonLabel>
             </IonItemDivider>
             {!eventsWeekLoading ? (
@@ -164,9 +164,9 @@ function CalendarPage() {
               </>
             )}
             {/* Events This Month */}
-            <IonItemDivider color='dark'>
+            <IonItemDivider color='light'>
               <IonLabel>
-                <h1>Next 30 Days</h1>
+                <h1 style={{ paddingTop: "5px", paddingBottom: "5px", color: "var(--ion-color-dark)" }}>Next 30 Days</h1>
               </IonLabel>
             </IonItemDivider>
             {!eventsMonthLoading ? (

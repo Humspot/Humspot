@@ -79,7 +79,7 @@ function ActivityPage() {
       <IonContent>
 
         <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
-        <IonLoading isOpen={activityLoading} message={"Loading..."} />
+        {/* <IonLoading isOpen={activityLoading} message={"Loading..."} /> */}
 
         {/* Header Image */}
         <div className="headerDiv">
@@ -132,7 +132,7 @@ function ActivityPage() {
         {/* Description */}
         <IonCard>
           <IonCardContent>
-            <IonText color={"dark"}>
+            <IonText>
               <p>{activity?.description ?? ""}</p>
               <p>
                 <a

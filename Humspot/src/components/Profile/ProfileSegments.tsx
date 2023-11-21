@@ -83,44 +83,46 @@ const ProfileSegments: React.FC = memo(() => {
 
   return (
     <>
-      <IonSegment style={{ paddingLeft: "2.5%", paddingRight: "2.5%" }} value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
+      <div style={{ marginLeft: "2.5%", marginRight: "2.5%" }}>
+        <IonSegment className="ion-justify-content-center" value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
 
-        <IonSegmentButton value="favorites">
-          <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-            <IonIcon
-              icon={star}
-              style={{ margin: "5%" }}
-              size="large"
-            ></IonIcon>
-            <IonLabel>Favorites</IonLabel>
-          </div>
-        </IonSegmentButton>
+          <IonSegmentButton value="favorites">
+            <div className="segment-button" style={{ fontSize: "0.8rem" }}>
+              <IonIcon
+                icon={star}
+                style={{ margin: "5%" }}
+                size="large"
+              ></IonIcon>
+              <IonLabel>Favorites</IonLabel>
+            </div>
+          </IonSegmentButton>
 
-        <IonSegmentButton value="visited" className="segment-button" style={{ fontSize: "0.8rem" }}>
-          <div className="segment-button">
-            <IonIcon
-              icon={walk}
-              style={{ margin: "5%" }}
-              size="large"
-            ></IonIcon>
-            <IonLabel>Visited</IonLabel>
-          </div>
-        </IonSegmentButton>
+          <IonSegmentButton value="visited" className="segment-button" style={{ fontSize: "0.8rem" }}>
+            <div className="segment-button">
+              <IonIcon
+                icon={walk}
+                style={{ margin: "5%" }}
+                size="large"
+              ></IonIcon>
+              <IonLabel>Visited</IonLabel>
+            </div>
+          </IonSegmentButton>
 
-        <IonSegmentButton value="interactions" className="segment-button" style={{ fontSize: "0.7rem" }}>
-          <div className="segment-button">
-            <IonIcon
-              icon={people}
-              style={{ margin: "5%" }}
-              size="large"
-            ></IonIcon>
-            <IonLabel>Interactions</IonLabel>
-          </div>
-        </IonSegmentButton>
+          <IonSegmentButton value="interactions" className="segment-button" style={{ fontSize: "0.7rem" }}>
+            <div className="segment-button">
+              <IonIcon
+                icon={people}
+                style={{ margin: "5%" }}
+                size="large"
+              ></IonIcon>
+              <IonLabel>Interactions</IonLabel>
+            </div>
+          </IonSegmentButton>
 
-      </IonSegment>
+        </IonSegment>
+      </div>
 
-      <div style={{ height: "0.75vh" }} />
+      <div style={{ height: "1vh" }} />
 
       <IonContent>
 
@@ -141,7 +143,7 @@ const ProfileSegments: React.FC = memo(() => {
                         return (
                           <FadeIn key={favorite.name + index} delay={index * 50}>
                             <IonItem className='ion-no-padding' role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
-                              <IonThumbnail><img src={favorite.photoUrl || placeholder} /></IonThumbnail>
+                              <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={favorite.photoUrl || placeholder} /></IonThumbnail>
                               <IonLabel style={{ paddingLeft: "10px" }}>
                                 <h2>{favorite.name}</h2>
                                 <div style={{ height: "5px" }} />
@@ -173,7 +175,7 @@ const ProfileSegments: React.FC = memo(() => {
                         return (
                           <FadeIn key={visitedPlace.name + index} delay={index * 50}>
                             <IonItem className='ion-no-padding' role='button' onClick={() => { if (visitedPlace.activityID) router.push("/activity/" + visitedPlace.activityID) }}>
-                              <IonThumbnail><img src={visitedPlace.photoUrl || placeholder} /></IonThumbnail>
+                              <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={visitedPlace.photoUrl || placeholder} /></IonThumbnail>
                               <IonLabel style={{ paddingLeft: "10px" }}>
                                 <h2>{visitedPlace.name}</h2>
                                 <div style={{ height: "5px" }} />
@@ -205,7 +207,7 @@ const ProfileSegments: React.FC = memo(() => {
                         return (
                           <FadeIn key={interaction.name + index} delay={index * 50}>
                             <IonItem className='ion-no-padding' role='button' onClick={() => { if (interaction.activityID) router.push("/activity/" + interaction.activityID) }}>
-                              <IonThumbnail><img src={interaction.photoUrl || placeholder} /></IonThumbnail>
+                              <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={interaction.photoUrl || placeholder} /></IonThumbnail>
                               <IonLabel style={{ paddingLeft: "10px" }}>
                                 <h2>{interaction.name}</h2>
                                 {interaction.interactionType === 'comment' ?

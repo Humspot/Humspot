@@ -30,7 +30,6 @@ import {
   AddCommentImageResponse,
   GetSubmittedActivitiesResponse
 } from "./types";
-import { urlOpener } from "./urlOpener";
 
 
 

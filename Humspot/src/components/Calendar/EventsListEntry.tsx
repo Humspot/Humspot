@@ -1,4 +1,5 @@
 import {
+  IonCardTitle,
   IonContent,
   IonItem,
   IonLabel,
@@ -31,15 +32,24 @@ const EventsListEntry = (props: { events: any }) => {
                 <img src={activity?.photoUrl || placeholder} alt="Activity Photo" />
               </IonThumbnail>
               <IonLabel>
-                {activity?.name} <br></br>
-                <IonNote>{formatDate(activity?.date)}</IonNote>
+                {activity?.name}
+                <div style={{ height: "1rem" }} />
+                <IonNote >{formatDate(activity?.date)}</IonNote>
               </IonLabel>
             </IonItem>
           </FadeIn>
         ))
         :
-        <div style={{ paddingTop: "25px", paddingBottom: "25px", background: "var(--ion-color-dark)" }}>
-          <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Events</IonTitle>
+        <div style={{
+          paddingTop: "25px",
+          paddingBottom: "25px",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+          width: '100%'
+        }}>
+          <IonCardTitle style={{ fontSize: "1.25rem" }} className='ion-text-center'>No Events</IonCardTitle>
         </div>
       }
     </>

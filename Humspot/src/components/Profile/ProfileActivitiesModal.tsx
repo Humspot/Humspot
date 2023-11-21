@@ -27,10 +27,10 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
     <IonModal ref={modalRef} trigger="open-add-activity-modal" presentingElement={presentingElement} canDismiss={canDismiss}>
       <IonContent style={{ '--background': 'var(--ion-item-background' }}>
         <IonHeader className='ion-no-border'>
-          <IonToolbar>
+          <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
             <IonTitle style={{ fontSize: "1.25rem" }}>Activities</IonTitle>
             <IonButtons style={{ height: "5vh" }}>
-              <IonButton style={{ fontSize: '1.15em', }} onClick={() => { modalRef.current?.dismiss(); }}>
+              <IonButton style={{ fontSize: '1.15em', }} onClick={() => { modalRef.current?.dismiss() }}>
                 <p>Close</p>
               </IonButton>
             </IonButtons>
@@ -38,7 +38,7 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
         </IonHeader>
         <br />
         <IonList lines='full'>
-          <IonItem>
+          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/submit-event") }}>
             <IonIcon aria-hidden="true" icon={calendarOutline} slot="start"></IonIcon>
             <IonLabel>Submit an Event</IonLabel>
           </IonItem>
@@ -48,13 +48,13 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
             <IonLabel>Submit an Attraction</IonLabel>
           </IonItem>
           <br />
-          <IonItem  onClick={() => { modalRef?.current?.dismiss(); router.push("/submitted-activities") }}>
-            <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start" color="light"></IonIcon>
+          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/submitted-activities") }}>
+            <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
             <IonLabel>See Submitted Activities</IonLabel>
           </IonItem>
           <br />
           <IonItem role='button' id="become-a-coordinator">
-            <IonIcon aria-hidden="true" icon={clipboardOutline} slot="start" color="light"></IonIcon>
+            <IonIcon aria-hidden="true" icon={clipboardOutline} slot="start"></IonIcon>
             <IonLabel>Become an Organizer</IonLabel>
           </IonItem>
           <br />

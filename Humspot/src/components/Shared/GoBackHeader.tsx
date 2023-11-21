@@ -14,16 +14,18 @@ const GoBackHeader: React.FC<GoBackHeaderProps> = (props: GoBackHeaderProps) => 
   return (
     <IonHeader className='ion-no-border'>
       <IonToolbar style={{ '--background': '--ion-background-color' }}>
-        <IonTitle style={{ fontSize: "1.25rem" }}>{title}</IonTitle>
+        {/* <IonTitle style={{ fontSize: "1.25rem" }}>{title}</IonTitle> */}
         <IonButtons >
           <IonButton style={{ fontSize: '1.15em', marginLeft: '5px' }} onClick={() => { router.goBack(); }}>
             <p>Back</p>
           </IonButton>
           <IonTitle>{title}</IonTitle>
         </IonButtons>
-        <IonButtons slot="end">
-          {props.buttons}
-        </IonButtons>
+        {props.buttons &&
+          <IonButtons slot="end">
+            {props.buttons}
+          </IonButtons>
+        }
       </IonToolbar>
     </IonHeader>
 

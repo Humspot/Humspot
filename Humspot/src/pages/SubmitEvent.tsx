@@ -349,7 +349,7 @@ export const EventForm = () => {
                 </div>
               </IonItem>
               <br />
-              <IonItem className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
+              <IonItem button={false} className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Date and Time</IonLabel>
                 <IonDatetime style={{ marginTop: "20px" }} ref={dateTimeRef} />
               </IonItem>
@@ -385,7 +385,7 @@ export const EventForm = () => {
                 </IonCard>
               </IonItem>
               <br />
-              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
+              <IonItem style={{ '--background': 'var(--ion-background-color)', '--min-height' : "50px" }} lines='none'>
                 <IonLabel position='stacked'>Tags</IonLabel>
               </IonItem>
               <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
