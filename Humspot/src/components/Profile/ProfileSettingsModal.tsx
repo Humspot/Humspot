@@ -133,7 +133,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
             <IonLabel>Contact Us</IonLabel>
           </IonItem>
           <br />
-          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/privacy-policy") }}>
+          <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/privacy-policy") }) }}>
             <IonIcon aria-hidden="true" icon={shieldOutline} slot="start" ></IonIcon>
             <IonLabel>Privacy Policy</IonLabel>
           </IonItem>
