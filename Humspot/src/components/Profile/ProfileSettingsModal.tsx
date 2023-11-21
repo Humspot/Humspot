@@ -128,7 +128,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
             <IonLabel><IonToggle checked={context.darkMode} onIonChange={(e) => { toggleDarkMode(e.detail.checked) }}>Dark Mode</IonToggle></IonLabel>
           </IonItem>
           <br />
-          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/contact-us") }}>
+          <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/contact-us") }) }}>
             <IonIcon aria-hidden="true" icon={mailOutline} slot="start" ></IonIcon>
             <IonLabel>Contact Us</IonLabel>
           </IonItem>
@@ -138,14 +138,14 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
             <IonLabel>Privacy Policy</IonLabel>
           </IonItem>
           <br />
-          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/terms-and-conditions") }}>
+          <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/terms-and-conditions") }) }}>
             <IonIcon aria-hidden="true" icon={readerOutline} slot="start" ></IonIcon>
             <IonLabel>Terms and Conditions</IonLabel>
           </IonItem>
           <br />
           {context.humspotUser === undefined ?
             <>
-              <IonItem role='button' onClick={() => { modalRef?.current?.dismiss(); router.push("/sign-up") }}>
+              <IonItem role='button' onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/sign-up") }) }}>
                 <IonIcon aria-hidden="true" icon={logInOutline} slot="start" ></IonIcon>
                 <IonLabel>Sign Up / Sign In</IonLabel>
               </IonItem>
