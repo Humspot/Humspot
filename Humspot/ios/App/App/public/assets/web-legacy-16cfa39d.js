@@ -1,0 +1,1 @@
+System.register(["./index-legacy-5410ad73.js"],(function(e,n){"use strict";var s;return{setters:[e=>{s=e.W}],execute:function(){e("DialogWeb",class extends s{async alert(e){window.alert(e.message)}async prompt(e){const n=window.prompt(e.message,e.inputText||"");return{value:null!==n?n:"",cancelled:null===n}}async confirm(e){return{value:window.confirm(e.message)}}})}}}));

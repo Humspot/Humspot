@@ -12,7 +12,6 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  isPlatform,
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
@@ -50,7 +49,6 @@ import { handleUserLogin } from "./utils/server";
 import { LoginResponse } from "./utils/types";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import { App as CapacitorApp } from "@capacitor/app";
 import SubmittedActivities from "./pages/SubmittedActivities";
@@ -124,20 +122,6 @@ const App: React.FC = () => {
   function handleTabChange(event: CustomEvent<{ tab: string }>): void {
     setCurrentTab(event.detail.tab);
   };
-
-  useEffect(() => {
-    if (Capacitor.isNativePlatform()) {
-      CapacitorApp.addListener('appUrlOpen', ({ url }) => {
-        // @ts-ignore
-        // eslint-disable-next-line no-underscore-dangle
-        (Auth as any)._handleAuthResponse(url);
-
-        if (isPlatform('ios')) {
-          Browser.close();
-        }
-      });
-    }
-  }, []);
 
   const handleDarkMode = useCallback(async () => {
     const isChecked = await Preferences.get({ key: "darkMode" });

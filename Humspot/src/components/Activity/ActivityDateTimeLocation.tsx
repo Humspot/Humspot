@@ -16,7 +16,7 @@ const ActivityDateTimeLocation = (props: { activity: HumspotActivity | null }) =
     <IonCard>
       {activity ? (
         <IonCardContent className="locationcard">
-          <IonText color={"dark"}>
+          <IonText color={"light"}>
             <div className="locationlabel">
               <IonIcon icon={compass} size="small"></IonIcon>
               <h2>{activity?.location ?? ""}</h2>
