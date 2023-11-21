@@ -27,6 +27,8 @@ import CarouselEntrySecondary from "../components/Explore/CarouselEntrySecondary
 import { useContext } from "../utils/my-context";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
+import '../App.css';
+
 <link
   href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
   rel="stylesheet"
@@ -140,7 +142,7 @@ function ExplorePage() {
 
   return (
     <>
-      <IonPage>
+      <IonPage className='ion-page-ios-notch'>
         <FilterButton></FilterButton>
         <IonLoading
           isOpen={

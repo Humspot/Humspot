@@ -33,6 +33,8 @@ import { Autoplay } from "swiper/modules";
 import { useContext } from "../utils/my-context";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
+import '../App.css';
+
 type ActivityPageParams = {
   id: string;
 };
@@ -74,7 +76,7 @@ function ActivityPage() {
   }, [router]);
 
   return (
-    <IonPage>
+    <IonPage className='ion-page-ios-notch'>
 
       <IonContent>
 

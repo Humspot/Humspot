@@ -1,0 +1,4 @@
+.ion-page-ios-notch {
+  margin-top: constant(safe-area-inset-top);
+  margin-top: env(safe-area-inset-top);
+}

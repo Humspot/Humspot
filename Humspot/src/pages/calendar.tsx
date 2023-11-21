@@ -34,6 +34,8 @@ import EventsListEntry from "../components/Calendar/EventsListEntry";
 import { getDateStrings } from "../utils/calcDates";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
+import '../App.css';
+
 function CalendarPage() {
   const context = useContext();
   useIonViewWillEnter(() => {
@@ -129,7 +131,7 @@ function CalendarPage() {
 
   return (
     <>
-      <IonPage>
+      <IonPage className='ion-page-ios-notch'>
         <FilterButton></FilterButton>
         <IonContent>
           <IonList>
