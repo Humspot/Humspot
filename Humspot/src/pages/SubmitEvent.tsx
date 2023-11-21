@@ -378,14 +378,14 @@ export const EventForm = () => {
                     />
                   </IonCardContent>
                   <IonCardHeader>
-                    <p className='ion-no-padding ion-no-margin' style={{fontSize: "1rem"}}>
+                    <p className='ion-no-padding ion-no-margin' style={{ fontSize: "1rem" }}>
                       {photos && photos.length > 0 ? 'Change' : 'Add'}
                     </p>
                   </IonCardHeader>
                 </IonCard>
               </IonItem>
               <br />
-              <IonItem style={{ '--background': 'var(--ion-background-color)', '--min-height' : "50px" }} lines='none'>
+              <IonItem style={{ '--background': 'var(--ion-background-color)', '--min-height': "50px" }} lines='none'>
                 <IonLabel position='stacked'>Tags</IonLabel>
               </IonItem>
               <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
@@ -411,8 +411,8 @@ export const EventForm = () => {
 
           </>
           :
-          <div className="ion-text-center access-denied-message">
-            You must be an admin or organizer to submit an event or attraction!
+          <div style={{ display: "flex", height: "100%", padding: "50px", fontSize: "1.05rem" }}>
+            <p className="ion-text-center">You must be an admin or organizer to submit an event or attraction!</p>
           </div>
         }
 
