@@ -27,7 +27,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setFavorited(true);
-      const t = Toast.create({ message: "Added to favorites!", duration: 2000, color: "light" });
+      const t = Toast.create({ message: "Added to favorites!", duration: 2000, color: "secondary" });
       t.present();
     } else if (res && res.removed) {
       setFavorited(false);

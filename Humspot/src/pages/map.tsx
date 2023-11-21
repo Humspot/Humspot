@@ -1,5 +1,5 @@
 
-import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, useIonRouter } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, useIonRouter, useIonViewWillEnter } from "@ionic/react";
 import { Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/my-context";
 import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/map-config";
@@ -8,6 +8,7 @@ import { handleGetThisWeeksEvents } from "../utils/server";
 import { GetHumspotEventResponse } from "../utils/types";
 import { settingsOutline } from "ionicons/icons";
 import MapSettingsModal from "../components/Map/MapSettingsModal";
+import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
 
 function MapPage() {
@@ -22,6 +23,24 @@ function MapPage() {
 
   const [showThisWeeksEvents, setShowThisWeeksEvents] = useState<boolean>(true);
   const [thisWeeksEvents, setThisWeeksEvents] = useState<GetHumspotEventResponse[]>([]);
+
+  useIonViewWillEnter(() => {
+    context.setShowTabs(true);
+  }, []);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(10, () => {
+        navigateBack(router);
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [router]);
 
 
   const fetchThisWeeksEvents = useCallback(async () => {
@@ -39,7 +58,7 @@ function MapPage() {
       <IonContent fullscreen>
         <Map
           provider={(x, y, z, dpr) =>
-            mapTiler(false /* context.darkMode */, x, y, z, dpr)
+            mapTiler(context.darkMode, x, y, z, dpr)
           }
           minZoom={10}
           zoomSnap={false}

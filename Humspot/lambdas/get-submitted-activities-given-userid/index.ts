@@ -1,5 +1,5 @@
 /**
- * AWS lambda function to retrieve the 20 most recent pending activities from the Submissions table.
+ * AWS lambda function to retrieve the 20 most recent activity submissions submitted by the user.
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
@@ -18,16 +18,16 @@ const pool: mysql.Pool = mysql.createPool({
 });
 
 type Submission = {
-  submissionID: string;
   name: string;
   description: string;
   activityType: 'event' | 'attraction' | 'custom';
+  submissionDate: string;
 };
 
-type GetPendingActivitySubmissionsResponse = {
+type GetActivitySubmissionsResponse = {
   success: boolean;
   message: string;
-  pendingSubmissions: Submission[];
+  submittedActivities: Submission[];
 };
 
 export const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
@@ -47,7 +47,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     const offset: number = (pageNum - 1) * 20;
 
     if (isNaN(pageNum) || pageNum < 1 || !userID) {
-      const resBody: GetPendingActivitySubmissionsResponse = { message: 'Invalid path parameters', success: false, pendingSubmissions: [] };
+      const resBody: GetActivitySubmissionsResponse = { message: 'Invalid path parameters', success: false, submittedActivities: [] };
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
@@ -70,7 +70,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
             "Access-Control-Allow-Origin": '*'
           },
           body: JSON.stringify({
-            message: `User with ID ${userID} is not approved to view submissions`, success: false, pendingSubmissions: []
+            message: `User with ID ${userID} is not approved to view submissions`, success: false, submittedActivities: []
           }),
         };
       }
@@ -83,21 +83,22 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: `No user found with ID: ${userID}`, success: false, pendingSubmissions: []
+          message: `No user found with ID: ${userID}`, success: false, submittedActivities: []
         }),
       };
     }
 
     const query: string = `
-      SELECT name, description, activityType, submissionID
+      SELECT name, description, activityType, submissionID, submissionDate
       FROM Submissions
+      WHERE addedByUserID = ?
       ORDER BY submissionDate DESC
       LIMIT 20 OFFSET ?;
     `;
 
-    const [rows]: any = await conn.query(query, [offset]);
+    const [rows]: any = await conn.query(query, [userID, offset]);
 
-    const resBody: GetPendingActivitySubmissionsResponse = { message: "Pending submissions query successful", success: true, pendingSubmissions: rows};
+    const resBody: GetActivitySubmissionsResponse = { message: "Submissions successful", success: true, submittedActivities: rows};
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
@@ -106,7 +107,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
 
   } catch (error) {
     console.error('Query execution error:', error);
-    const resBody: GetPendingActivitySubmissionsResponse = { message: 'Internal Server Error, query execution error', success: false, pendingSubmissions: [] };
+    const resBody: GetActivitySubmissionsResponse = { message: 'Internal Server Error, query execution error', success: false, submittedActivities: [] };
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },

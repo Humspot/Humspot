@@ -164,7 +164,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
 
             <br />
 
-            <IonButton className="login-button" onClick={async () => { await clickUpdateProfile() }} fill="clear" expand="block" id="submit-profile-edit-changes">Update</IonButton>
+            <IonButton color='secondary' className="edit-modal-button" onClick={async () => { await clickUpdateProfile() }}  expand="block" id="submit-profile-edit-changes">Update</IonButton>
 
           </IonContent>
 

@@ -218,4 +218,19 @@ export type AddCommentImageResponse = {
   bucketName: string;
   region: string;
   key: string;
-}
+};
+
+export type SubmittedActivities = {
+  submissionID: string;
+  name: string;
+  activityType: string;
+  description: string;
+  submissionDate: string;
+};
+
+export type GetSubmittedActivitiesResponse = {
+  message: string;
+  success: boolean;
+  submittedActivities: SubmittedActivities[];
+};
+

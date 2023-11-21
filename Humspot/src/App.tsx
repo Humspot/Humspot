@@ -3,7 +3,7 @@
  * @fileoverview Define routes and main application components here.
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
@@ -12,6 +12,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  isPlatform,
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
@@ -33,7 +34,6 @@ import ExplorePage from "./pages/explore";
 import CalendarPage from "./pages/calendar";
 import MapPage from "./pages/map";
 import ProfilePage from "./pages/Profile";
-import TestGoogleAuth from "./pages/TestGoogleAuth";
 
 import ActivityPage from "./pages/ActivityPage";
 import SubmitEventPage from "./pages/SubmitEvent";
@@ -50,8 +50,22 @@ import { handleUserLogin } from "./utils/server";
 import { LoginResponse } from "./utils/types";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import { Browser } from "@capacitor/browser";
+import { Capacitor } from "@capacitor/core";
+import { App as CapacitorApp } from "@capacitor/app";
+import SubmittedActivities from "./pages/SubmittedActivities";
+import { Keyboard, KeyboardStyle, KeyboardStyleOptions } from "@capacitor/keyboard";
+import { StatusBar, Style } from "@capacitor/status-bar";
+import { Preferences } from "@capacitor/preferences";
 
 setupIonicReact({ mode: "ios" });
+
+const keyStyleOptionsLight: KeyboardStyleOptions = {
+  style: KeyboardStyle.Light
+};
+const keyStyleOptionsDark: KeyboardStyleOptions = {
+  style: KeyboardStyle.Dark
+};
 
 const App: React.FC = () => {
   const context = useContext();
@@ -109,7 +123,43 @@ const App: React.FC = () => {
 
   function handleTabChange(event: CustomEvent<{ tab: string }>): void {
     setCurrentTab(event.detail.tab);
-  }
+  };
+
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) {
+      CapacitorApp.addListener('appUrlOpen', ({ url }) => {
+        // @ts-ignore
+        // eslint-disable-next-line no-underscore-dangle
+        (Auth as any)._handleAuthResponse(url);
+
+        if (isPlatform('ios')) {
+          Browser.close();
+        }
+      });
+    }
+  }, []);
+
+  const handleDarkMode = useCallback(async () => {
+    const isChecked = await Preferences.get({ key: "darkMode" });
+    if (isChecked.value === "false") {
+      context.setDarkMode(false);
+      if (Capacitor.getPlatform() === 'ios') {
+        Keyboard.setStyle(keyStyleOptionsLight);
+        StatusBar.setStyle({ style: Style.Light });
+      }
+    } else if (!isChecked || !isChecked.value || isChecked.value === 'true') {
+      document.body.classList.toggle("dark");
+      context.setDarkMode(true);
+      if (Capacitor.getPlatform() === 'ios') {
+        Keyboard.setStyle(keyStyleOptionsDark);
+        StatusBar.setStyle({ style: Style.Dark });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    handleDarkMode();
+  }, [handleDarkMode])
 
   return (
     <IonApp>
@@ -133,14 +183,13 @@ const App: React.FC = () => {
                 path="/verify-email/:email/:toVerify"
                 component={VerifyEmail}
               />
-              <Route exact path="/google-auth" component={TestGoogleAuth} />
               <Route exact path="/submit-event" component={SubmitEventPage} />
+              <Route exact path="/submitted-activities" component={SubmittedActivities} />
               <Route exact path="/activity/:id" component={ActivityPage} />
             </IonRouterOutlet>
 
             <IonTabBar
               slot="bottom"
-              color="primary"
               onIonTabsWillChange={handleTabChange}
               style={tabBarStyle ? {} : { display: "none" }}
             >
@@ -148,7 +197,7 @@ const App: React.FC = () => {
                 <IonIcon
                   aria-hidden="true"
                   icon={compass}
-                  color={currentTab == "tab1" ? "icon-highlight" : "icon-dark"}
+                  color={currentTab == "tab1" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>
@@ -156,7 +205,7 @@ const App: React.FC = () => {
                 <IonIcon
                   aria-hidden="true"
                   icon={map}
-                  color={currentTab == "tab2" ? "icon-highlight" : "icon-dark"}
+                  color={currentTab == "tab2" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>
@@ -164,7 +213,7 @@ const App: React.FC = () => {
                 <IonIcon
                   aria-hidden="true"
                   icon={calendar}
-                  color={currentTab == "tab3" ? "icon-highlight" : "icon-dark"}
+                  color={currentTab == "tab3" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>
@@ -172,7 +221,7 @@ const App: React.FC = () => {
                 <IonIcon
                   aria-hidden="true"
                   icon={person}
-                  color={currentTab == "tab4" ? "icon-highlight" : "icon-dark"}
+                  color={currentTab == "tab4" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>

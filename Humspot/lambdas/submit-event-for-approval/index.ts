@@ -34,6 +34,54 @@ export type Event = {
   websiteURL: string | null;
 };
 
+import * as nodemailer from 'nodemailer';
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  service: 'gmail',
+  auth: {
+    user: "app.tellu@gmail.com",
+    pass: "ryphaisxcgpcsvau"
+  }
+});
+
+
+async function sendEmail(e: Event) {
+  // Constructing the tags and photo URLs as HTML strings
+  const tagsHtml = e.tags.map(tag => `<span style="padding: 5px; margin-right: 5px; background-color: #1eba4e; color: white; border-radius: 5px;">${tag}</span>`).join('');
+  const photosHtml = e.photoUrls.map(url => `<img src="${url}" alt="Event Photo" style="max-width: 100%; height: auto; margin-top: 10px;">`).join('');
+
+  const mailOptions = {
+    from: `app.tellU@gmail.com`,
+    to: `dy45@humboldt.edu,np157@humboldt.edu,sr407@humboldt.edu,dvn8@humboldt.edu,app.tellu@gmail.com,kodiak0823@gmail.com`,
+    subject: 'An event for Humspot was submitted and is now pending approval from an admin.',
+    html: `
+      <div style="font-family: Arial, sans-serif; color: #333;">
+        <h1 style="color: black;">Event Info</h1>
+        <p><strong>Event Name:</strong> ${e.name}</p>
+        <p><strong>Description:</strong> ${e.description}</p>
+        <p><strong>Location:</strong> ${e.location}</p>
+        <p><strong>Date:</strong> ${e.date}</p>
+        <p><strong>Time:</strong> ${e.time}</p>
+        <p><strong>Organizer:</strong> ${e.organizer}</p>
+        ${e.websiteURL ? `<p><strong>Website:</strong> <a href="${e.websiteURL}">${e.websiteURL}</a></p>` : ''}
+        <p><strong>Tags:</strong> ${tagsHtml}</p>
+        ${photosHtml}
+        <p>See list of pending submissions <a href='https://humspotapp.com/admin-dashboard'>here</a>.</p>
+      </div>
+    `
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ' + info.response);
+  } catch (error) {
+    console.error('Error sending email', error);
+  }
+};
+
 export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   const conn = await pool.getConnection();
   try {
@@ -88,7 +136,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: `No user found with ID: ${userID}`, success: false
+          message: `No user found with ID: ${userID} `, success: false
         }),
       };
     }
@@ -115,11 +163,11 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     // Add to Submissions table
     const submissionID: string = crypto.randomBytes(16).toString('hex');
     query = `
-      INSERT INTO Submissions (
-          submissionID, name, description, location, addedByUserID, activityType,
-          websiteURL, date, time, latitude, longitude, organizer, submissionDate
-      ) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+      INSERT INTO Submissions(
+      submissionID, name, description, location, addedByUserID, activityType,
+      websiteURL, date, time, latitude, longitude, organizer, submissionDate
+    )
+  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
     `;
     params = [
       submissionID, event.name, event.description, event.location, event.addedByUserID,
@@ -143,6 +191,8 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     }
 
     await conn.commit();
+
+    await sendEmail(event);
 
     return {
       statusCode: 200,

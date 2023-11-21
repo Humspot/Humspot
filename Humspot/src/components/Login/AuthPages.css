@@ -39,6 +39,16 @@
   background: var(--ion-color-primary);
 }
 
+.edit-modal-button {
+  width: 92.5%;
+  margin: auto;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  height: 50px;
+  font-size: large;
+  border-radius: 5px;
+}
+
 .login-label {
   align-self: stretch; 
   text-align: left; 

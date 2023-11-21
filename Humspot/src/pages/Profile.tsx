@@ -16,6 +16,7 @@ import ProfileHeader from "../components/Profile/ProfileHeader";
 import ProfileSettingsModal from "../components/Profile/ProfileSettingsModal";
 import ProfileAddActivityModal from "../components/Profile/ProfileActivitiesModal";
 import ProfileEditModal from "../components/Profile/ProfileEditModal";
+import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
 const Profile: React.FC = () => {
 
@@ -34,7 +35,21 @@ const Profile: React.FC = () => {
 
   useIonViewWillEnter(() => {
     context.setShowTabs(true);
-  })
+  }, []);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(10, () => {
+        navigateBack(router);
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [router]);
 
   return (
     <>
