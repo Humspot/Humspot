@@ -145,6 +145,22 @@ const App: React.FC = () => {
     handleDarkMode();
   }, [handleDarkMode]);
 
+  // const darkModeListener = useCallback(async () => {
+  //   if (Capacitor.getPlatform() === 'ios') {
+  //     if (context.darkMode) {
+  //       await Keyboard.setStyle(keyStyleOptionsDark);
+  //       await StatusBar.setStyle({ style: Style.Dark });
+  //     } else {
+  //       await Keyboard.setStyle(keyStyleOptionsLight);
+  //       await StatusBar.setStyle({ style: Style.Light });
+  //     }
+  //   }
+  // }, [context.darkMode]);
+
+  // useEffect(() => {
+  //   darkModeListener();
+  // }, [darkModeListener])
+
 
   return (
     <IonApp>

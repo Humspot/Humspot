@@ -61,15 +61,6 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
     }
     context.setDarkMode(isChecked);
     await Preferences.set({ key: "darkMode", value: JSON.stringify(isChecked) });
-    if (Capacitor.getPlatform() === 'ios') {
-      if (isChecked) {
-        await Keyboard.setStyle(keyStyleOptionsDark);
-        await StatusBar.setStyle({ style: Style.Dark });
-      } else {
-        await Keyboard.setStyle(keyStyleOptionsLight);
-        await StatusBar.setStyle({ style: Style.Light });
-      }
-    }
   }
 
   useEffect(() => {

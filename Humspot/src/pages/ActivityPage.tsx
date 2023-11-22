@@ -130,7 +130,7 @@ function ActivityPage() {
           </IonCardHeader>
         </IonCard>
         {/* Tags */}
-        <div style={{ paddingLeft: "5px" }}>
+        <div style={{ paddingLeft: "10px" }}> {/* why is the padding different on iOS it makes no sense please help */}
           {activity &&
             "tags" in activity &&
             activity.tags &&
