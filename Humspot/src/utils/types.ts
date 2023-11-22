@@ -53,15 +53,13 @@ export type HumspotAttraction = {
   description: string;
   location: string;
   addedByUserID: string;
-  date: string;
-  time: string;
   latitude: number | null;
   longitude: number | null;
   websiteURL: string;
   organizer: string;
-  openTimes: string | null;
+  openTimes: string;
   tags: string[];
-  photoUrls: string[];
+  photoUrls: string[] | null;
 };
 
 export type LoginResponse = {

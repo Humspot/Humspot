@@ -92,12 +92,11 @@ const SubmitAttractionPage = () => {
   const nameRef = useRef<HTMLIonInputElement | null>(null);
   const descRef = useRef<HTMLIonTextareaElement | null>(null);
   const locationRef = useRef<HTMLIonInputElement | null>(null);
-  const dateTimeRef = useRef<HTMLIonDatetimeElement | null>(null);
   const websiteUrlRef = useRef<HTMLIonInputElement | null>(null);
   const openTimesRef = useRef<HTMLIonInputElement | null>(null);
 
 
-  const refs = [nameRef, descRef, locationRef, dateTimeRef, websiteUrlRef];
+  const refs = [nameRef, descRef, locationRef];
 
   const [photos, setPhotos] = useState<string[] | undefined>(undefined);
   const [blobs, setBlobs] = useState<Blob[] | null>(null);
@@ -253,32 +252,30 @@ const SubmitAttractionPage = () => {
       }
     }
 
-    const selectedDateTime = new Date(dateTimeRef?.current?.value as string); // is this needed because attractions won't have a date time?
 
     const attraction: HumspotAttraction = {
       name: nameRef?.current?.value! as string,
       description: descRef?.current?.value! as string,
       location: locationRef?.current?.value! as string,
-      websiteURL: websiteUrlRef?.current?.value! as string,
+      websiteURL: (websiteUrlRef?.current?.value! as string) ?? "",
       addedByUserID: context.humspotUser.userID,
+      openTimes: (openTimesRef?.current?.value! as string) ?? null,
       latitude: mapPinLatLong ? mapPinLatLong[0] : null,
       longitude: mapPinLatLong ? mapPinLatLong[1] : null,
       organizer: context.humspotUser.username ?? "",
       tags: selectedTags,
-      date: selectedDateTime.toISOString().split("T")[0],
-      time: selectedDateTime.toTimeString().split(" ")[0],
-      openTimes: openTimesRef?.current?.value! as string,
+
       photoUrls: uploadedPhotoUrls,
     };
 
-    const res = await handleSubmitAttractionForApproval(attraction);
+    const response = await handleSubmitAttractionForApproval(attraction);
 
     let color = "danger";
-    if (res.success) {
+    if (response.success) {
       color = "success";
     }
     const t = Toast.create({
-      message: res.message,
+      message: response.message,
       duration: 2000,
       color: color,
     });
@@ -352,7 +349,7 @@ const SubmitAttractionPage = () => {
                   aria-label="Name"
                   style={{ marginTop: "5px" }}
                   ref={nameRef}
-                  placeholder="Cal Poly Humboldt - Grad Party"
+                  placeholder="Humboldt Redwoods State Park"
                 />
               </IonItem>
               <br />
@@ -365,7 +362,7 @@ const SubmitAttractionPage = () => {
                   maxlength={500}
                   rows={3}
                   ref={descRef}
-                  placeholder="This event will be super fun! Graduates + family are invited to this special event. Visit our site for more info."
+                  placeholder="Humboldt Redwoods State Park is a state park of California"
                 />
               </IonItem>
               <br />
@@ -378,7 +375,7 @@ const SubmitAttractionPage = () => {
                   aria-label="Website"
                   style={{ marginTop: "5px" }}
                   ref={websiteUrlRef}
-                  placeholder="https://www.google.com"
+                  placeholder="https://www.parks.ca.gov/?page_id=425"
                 />
               </IonItem>
               <br />
@@ -422,17 +419,6 @@ const SubmitAttractionPage = () => {
                 </div>
               </IonItem>
               <br />
-              <IonItem
-                className="no-ripple"
-                style={{ "--background": "var(--ion-background-color)" }}
-                lines="full"
-              >
-                <IonLabel position="stacked">Date and Time</IonLabel>
-                <IonDatetime
-                  style={{ marginTop: "20px" }}
-                  ref={dateTimeRef}
-                />
-              </IonItem>
               <IonItem
                 style={{ "--background": "var(--ion-background-color)" }}
                 lines="full"

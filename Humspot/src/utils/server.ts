@@ -1075,7 +1075,6 @@ export const handleGetThisWeeksEvents = async (): Promise<{ message: string; suc
   }
 };
 
-
 export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1086,7 +1085,7 @@ export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
     const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
-      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_EVENT_FOR_APPROVAL_URL,
+      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_ATTRACTION_FOR_APPROVAL,
       {
         method: "POST",
         headers: {
@@ -1107,14 +1106,7 @@ export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
   }
 };
 
-/**
- * @function handleSubmitAttractionForApproval
- * @description expects a HumspotAttraction object and submits it for approval
- * 
- * @returns {message: string; success: boolean}
- */
-
-  export const handleSubmitAttractionForApproval = async (event: HumspotAttraction) => {
+export const handleSubmitAttractionForApproval = async (event: HumspotAttraction) => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -1124,7 +1116,7 @@ export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
     const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
-      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_ATTRACTION_FOR_APPROVAL_URL,
+      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_ATTRACTION_FOR_APPROVAL,
       {
         method: "POST",
         headers: {
