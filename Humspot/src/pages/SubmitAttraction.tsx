@@ -285,372 +285,372 @@ const SubmitAttractionPage = () => {
     t.present();
 
     dismiss();
+  }
 
-    const handleAddressValidation = async () => {
-      if (!locationRef || !locationRef.current || !locationRef.current.value)
-        return;
-      setAddressValidating(true);
-      let latLong = await getLatLong(locationRef.current.value as string);
-      if (!latLong) {
-        const t = Toast.create({
-          message: "Address not found, place pin on map",
-          duration: 2000,
-          color: "warning",
-        });
-        t.present();
-      } else {
-        const t = Toast.create({
-          message: "Address found, validate location on map",
-          duration: 2000,
-          color: "success",
-        });
-        t.present();
-        setCenter([latLong.latitude, latLong.longitude]);
-        setMapPinLatLong([latLong.latitude, latLong.longitude]);
-      }
-      setAddressValidating(false);
+  const handleAddressValidation = async () => {
+    if (!locationRef || !locationRef.current || !locationRef.current.value)
+      return;
+    setAddressValidating(true);
+    let latLong = await getLatLong(locationRef.current.value as string);
+    if (!latLong) {
+      const t = Toast.create({
+        message: "Address not found, place pin on map",
+        duration: 2000,
+        color: "warning",
+      });
+      t.present();
+    } else {
+      const t = Toast.create({
+        message: "Address found, validate location on map",
+        duration: 2000,
+        color: "success",
+      });
+      t.present();
+      setCenter([latLong.latitude, latLong.longitude]);
+      setMapPinLatLong([latLong.latitude, latLong.longitude]);
+    }
+    setAddressValidating(false);
+  };
+
+  useIonViewWillEnter(() => {
+    context.setShowTabs(false);
+  }, []);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, () => {
+        navigateBack(router, false);
+      });
     };
 
-    useIonViewWillEnter(() => {
-      context.setShowTabs(false);
-    }, []);
+    document.addEventListener("ionBackButton", eventListener);
 
-    useEffect(() => {
-      const eventListener: any = (ev: CustomEvent<any>) => {
-        ev.detail.register(20, () => {
-          navigateBack(router, false);
-        });
-      };
+    return () => {
+      document.removeEventListener("ionBackButton", eventListener);
+    };
+  }, [router]);
 
-      document.addEventListener("ionBackButton", eventListener);
+  return (
+    <IonPage>
+      <IonContent>
+        <GoBackHeader title="Submit Attraction" />
 
-      return () => {
-        document.removeEventListener("ionBackButton", eventListener);
-      };
-    }, [router]);
-
-    return (
-      <IonPage>
-        <IonContent>
-          <GoBackHeader title="Submit Attraction" />
-
-          {context.humspotUser?.accountType !== "user" ? (
-            <>
-              <div
-                style={{
-                  background: "var(--ion-background-color)",
-                  padding: "5px",
-                }}
+        {context.humspotUser?.accountType !== "user" ? (
+          <>
+            <div
+              style={{
+                background: "var(--ion-background-color)",
+                padding: "5px",
+              }}
+            >
+              <IonItem
+                style={{ "--background": "var(--ion-background-color)" }}
+                lines="full"
               >
-                <IonItem
-                  style={{ "--background": "var(--ion-background-color)" }}
-                  lines="full"
-                >
-                  <IonLabel position="stacked">Name</IonLabel>
-                  <IonInput
-                    aria-label="Name"
-                    style={{ marginTop: "5px" }}
-                    ref={nameRef}
-                    placeholder="Cal Poly Humboldt - Grad Party"
-                  />
-                </IonItem>
-                <br />
-                <IonItem
-                  style={{ "--background": "var(--ion-background-color)" }}
-                  lines="full"
-                >
-                  <IonLabel position="stacked">Description</IonLabel>
-                  <IonTextarea
-                    maxlength={500}
-                    rows={3}
-                    ref={descRef}
-                    placeholder="This event will be super fun! Graduates + family are invited to this special event. Visit our site for more info."
-                  />
-                </IonItem>
-                <br />
-                <IonItem
-                  style={{ "--background": "var(--ion-background-color)" }}
-                  lines="full"
-                >
-                  <IonLabel position="stacked">Website</IonLabel>
-                  <IonInput
-                    aria-label="Website"
-                    style={{ marginTop: "5px" }}
-                    ref={websiteUrlRef}
-                    placeholder="https://www.google.com"
-                  />
-                </IonItem>
-                <br />
-                <IonItem
-                  lines="full"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "stretch",
-                    "--background": "var(--ion-background-color)",
-                  }}
-                >
-                  <IonLabel position="stacked">Location / Address</IonLabel>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <IonInput
-                      aria-label="Location / Address"
-                      ref={locationRef}
-                      placeholder="1 Harpst St, Arcata CA"
-                      onIonInput={(e) => {
-                        setLocation(e.detail.value ?? "");
-                      }}
-                      style={{
-                        flexGrow: 1,
-                        marginRight: "10px",
-                        marginTop: "5px",
-                      }}
-                    />
-                    <IonButton
-                      color="secondary"
-                      id="address-verification"
-                      disabled={!location}
-                    >
-                      <IonIcon icon={mapOutline} />
-                    </IonButton>
-                  </div>
-                </IonItem>
-                <br />
-                <IonItem
-                  className="no-ripple"
-                  style={{ "--background": "var(--ion-background-color)" }}
-                  lines="full"
-                >
-                  <IonLabel position="stacked">Date and Time</IonLabel>
-                  <IonDatetime
-                    style={{ marginTop: "20px" }}
-                    ref={dateTimeRef}
-                  />
-                </IonItem>
-                <IonItem
-                  style={{ "--background": "var(--ion-background-color)" }}
-                  lines="full"
-                >
-                  <IonLabel position="stacked">Open Times</IonLabel>
-                  <IonInput
-                    aria-label="Open Time"
-                    style={{ marginTop: "5px" }}
-                    ref={openTimesRef}
-                    placeholder="9AM - 5PM"
-                  />
-                </IonItem>
-                <br />
-                <IonItem
-                  style={{ "--background": "var(--ion-background-color)" }}
-                  lines="full"
-                >
-                  <IonLabel position="stacked">Photos</IonLabel>
-                  <div style={{ height: "1vh" }} />
-                  {photos &&
-                    photos.length > 0 &&
-                    photos.map((url: string, index: number) => {
-                      return (
-                        <div key={index}>
-                          <IonCard className="ion-no-margin">
-                            <img src={url} />
-                          </IonCard>
-                          <br />
-                        </div>
-                      );
-                    })}
-                  <IonCard
-                    button
-                    onClick={handleSelectImages}
-                    style={{
-                      position: "relative",
-                      textAlign: "center",
-                      height: "100px",
-                      width: "100px",
-                      marginLeft: "-1.5px",
-                    }}
-                  >
-                    <br />
-                    <IonCardContent>
-                      <IonIcon
-                        icon={cameraOutline}
-                        style={{
-                          fontSize: "40px",
-                          position: "absolute",
-                          top: "50%",
-                          left: "50%",
-                          transform: "translate(-50%, -50%)",
-                        }}
-                      />
-                    </IonCardContent>
-                    <IonCardHeader>
-                      <p
-                        className="ion-no-padding ion-no-margin"
-                        style={{ fontSize: "1rem" }}
-                      >
-                        {photos && photos.length > 0 ? "Change" : "Add"}
-                      </p>
-                    </IonCardHeader>
-                  </IonCard>
-                </IonItem>
-                <br />
-                <IonItem
-                  style={{ "--background": "var(--ion-background-color)" }}
-                  lines="full"
-                >
-                  <IonLabel position="stacked">Tags</IonLabel>
-                </IonItem>
-                <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
-                  {visibleTags.map((tag) => (
-                    <IonChip
-                      key={tag}
-                      onClick={() => toggleTag(tag)}
-                      color={selectedTags.includes(tag) ? "secondary" : "light"}
-                    >
-                      <IonLabel>{tag}</IonLabel>
-                    </IonChip>
-                  ))}
-                  {visibleTags.length < attractionTags.length && (
-                    <div
-                      style={{
-                        display: "flex",
-                        marginLeft: "25vw",
-                        marginRight: "25vw",
-                      }}
-                    >
-                      <IonButton
-                        color="secondry"
-                        fill="clear"
-                        onClick={showMoreTags}
-                      >
-                        {" "}
-                        &nbsp;&nbsp;Show More &nbsp;
-                        <IonIcon icon={chevronDownOutline} />
-                      </IonButton>
-                    </div>
-                  )}
-                </div>
-
-                <IonButton
-                  color="secondary"
-                  expand="block"
-                  style={{ padding: "10px" }}
-                  onClick={async () => await handleSubmit()}
-                >
-                  Submit
-                </IonButton>
-                <br />
-              </div>
-            </>
-          ) : (
-            <div className="ion-text-center access-denied-message">
-              You must be an admin or organizer to submit an event or
-              attraction!
-            </div>
-          )}
-
-          <IonModal
-            ref={mapModalRef}
-            canDismiss={canDismiss}
-            onIonModalWillPresent={handleAddressValidation}
-            trigger="address-verification"
-            handle={false}
-          >
-            <IonContent fullscreen>
-              <IonLoading isOpen={addressValidating} />
-              <IonHeader className="ion-no-border">
-                <IonToolbar style={{ "--background": "black" }}>
-                  <IonButtons>
-                    <IonButton
-                      style={{ fontSize: "1.25em", marginLeft: "5px" }}
-                      onClick={() => {
-                        mapModalRef &&
-                          mapModalRef.current &&
-                          mapModalRef.current.dismiss();
-                      }}
-                    >
-                      <IonIcon icon={chevronBackOutline} />
-                    </IonButton>
-                    <IonTitle>Map Pin Selection</IonTitle>
-                  </IonButtons>
-                </IonToolbar>
-              </IonHeader>
-              <div
+                <IonLabel position="stacked">Name</IonLabel>
+                <IonInput
+                  aria-label="Name"
+                  style={{ marginTop: "5px" }}
+                  ref={nameRef}
+                  placeholder="Cal Poly Humboldt - Grad Party"
+                />
+              </IonItem>
+              <br />
+              <IonItem
+                style={{ "--background": "var(--ion-background-color)" }}
+                lines="full"
+              >
+                <IonLabel position="stacked">Description</IonLabel>
+                <IonTextarea
+                  maxlength={500}
+                  rows={3}
+                  ref={descRef}
+                  placeholder="This event will be super fun! Graduates + family are invited to this special event. Visit our site for more info."
+                />
+              </IonItem>
+              <br />
+              <IonItem
+                style={{ "--background": "var(--ion-background-color)" }}
+                lines="full"
+              >
+                <IonLabel position="stacked">Website</IonLabel>
+                <IonInput
+                  aria-label="Website"
+                  style={{ marginTop: "5px" }}
+                  ref={websiteUrlRef}
+                  placeholder="https://www.google.com"
+                />
+              </IonItem>
+              <br />
+              <IonItem
+                lines="full"
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  alignItems: "stretch",
+                  "--background": "var(--ion-background-color)",
                 }}
               >
-                <div style={{}}>
-                  <Map
-                    maxZoom={14}
-                    height={400}
-                    width={500}
-                    attribution={false}
-                    zoom={zoom}
-                    center={center}
-                    onClick={(e) => {
-                      setMapPinLatLong(e.latLng);
+                <IonLabel position="stacked">Location / Address</IonLabel>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <IonInput
+                    aria-label="Location / Address"
+                    ref={locationRef}
+                    placeholder="1 Harpst St, Arcata CA"
+                    onIonInput={(e) => {
+                      setLocation(e.detail.value ?? "");
                     }}
-                    onBoundsChanged={({ center, zoom }) => {
-                      setCenter(center);
-                      setZoom(zoom);
+                    style={{
+                      flexGrow: 1,
+                      marginRight: "10px",
+                      marginTop: "5px",
                     }}
+                  />
+                  <IonButton
+                    color="secondary"
+                    id="address-verification"
+                    disabled={!location}
                   >
-                    {mapPinLatLong && (
-                      <Marker
-                        width={40}
-                        anchor={[mapPinLatLong[0], mapPinLatLong[1]]}
-                      ></Marker>
-                    )}
-                  </Map>
+                    <IonIcon icon={mapOutline} />
+                  </IonButton>
                 </div>
-                {!addressValidating && locationRef?.current?.value && (
+              </IonItem>
+              <br />
+              <IonItem
+                className="no-ripple"
+                style={{ "--background": "var(--ion-background-color)" }}
+                lines="full"
+              >
+                <IonLabel position="stacked">Date and Time</IonLabel>
+                <IonDatetime
+                  style={{ marginTop: "20px" }}
+                  ref={dateTimeRef}
+                />
+              </IonItem>
+              <IonItem
+                style={{ "--background": "var(--ion-background-color)" }}
+                lines="full"
+              >
+                <IonLabel position="stacked">Open Times</IonLabel>
+                <IonInput
+                  aria-label="Open Time"
+                  style={{ marginTop: "5px" }}
+                  ref={openTimesRef}
+                  placeholder="9AM - 5PM"
+                />
+              </IonItem>
+              <br />
+              <IonItem
+                style={{ "--background": "var(--ion-background-color)" }}
+                lines="full"
+              >
+                <IonLabel position="stacked">Photos</IonLabel>
+                <div style={{ height: "1vh" }} />
+                {photos &&
+                  photos.length > 0 &&
+                  photos.map((url: string, index: number) => {
+                    return (
+                      <div key={index}>
+                        <IonCard className="ion-no-margin">
+                          <img src={url} />
+                        </IonCard>
+                        <br />
+                      </div>
+                    );
+                  })}
+                <IonCard
+                  button
+                  onClick={handleSelectImages}
+                  style={{
+                    position: "relative",
+                    textAlign: "center",
+                    height: "100px",
+                    width: "100px",
+                    marginLeft: "-1.5px",
+                  }}
+                >
+                  <br />
+                  <IonCardContent>
+                    <IonIcon
+                      icon={cameraOutline}
+                      style={{
+                        fontSize: "40px",
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                      }}
+                    />
+                  </IonCardContent>
+                  <IonCardHeader>
+                    <p
+                      className="ion-no-padding ion-no-margin"
+                      style={{ fontSize: "1rem" }}
+                    >
+                      {photos && photos.length > 0 ? "Change" : "Add"}
+                    </p>
+                  </IonCardHeader>
+                </IonCard>
+              </IonItem>
+              <br />
+              <IonItem
+                style={{ "--background": "var(--ion-background-color)" }}
+                lines="full"
+              >
+                <IonLabel position="stacked">Tags</IonLabel>
+              </IonItem>
+              <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
+                {visibleTags.map((tag) => (
+                  <IonChip
+                    key={tag}
+                    onClick={() => toggleTag(tag)}
+                    color={selectedTags.includes(tag) ? "secondary" : "light"}
+                  >
+                    <IonLabel>{tag}</IonLabel>
+                  </IonChip>
+                ))}
+                {visibleTags.length < attractionTags.length && (
                   <div
                     style={{
-                      margin: "10px",
-                      width: "100%",
-                      textAlign: "center",
+                      display: "flex",
+                      marginLeft: "25vw",
+                      marginRight: "25vw",
                     }}
                   >
-                    <p style={{ fontSize: "16px", fontWeight: "500" }}>
-                      Address Entered: {locationRef.current.value}
-                    </p>
+                    <IonButton
+                      color="secondry"
+                      fill="clear"
+                      onClick={showMoreTags}
+                    >
+                      {" "}
+                      &nbsp;&nbsp;Show More &nbsp;
+                      <IonIcon icon={chevronDownOutline} />
+                    </IonButton>
                   </div>
                 )}
-                <IonButton
-                  expand="block"
-                  color="danger"
-                  style={{ padding: "5px" }}
-                  onClick={() => {
-                    setMapPinLatLong(null);
-                    mapModalRef?.current?.dismiss();
-                  }}
-                >
-                  Do Not Use Precise Location
-                </IonButton>
-                <IonButton
-                  expand="block"
-                  style={{ padding: "5px" }}
-                  onClick={() => {
-                    mapModalRef?.current?.dismiss();
-                  }}
-                >
-                  Save Location
-                </IonButton>
               </div>
-            </IonContent>
-          </IonModal>
-        </IonContent>
-      </IonPage>
-    );
-  };
+
+              <IonButton
+                color="secondary"
+                expand="block"
+                style={{ padding: "10px" }}
+                onClick={async () => await handleSubmit()}
+              >
+                Submit
+              </IonButton>
+              <br />
+            </div>
+          </>
+        ) : (
+          <div className="ion-text-center access-denied-message">
+            You must be an admin or organizer to submit an event or
+            attraction!
+          </div>
+        )}
+
+        <IonModal
+          ref={mapModalRef}
+          canDismiss={canDismiss}
+          onIonModalWillPresent={handleAddressValidation}
+          trigger="address-verification"
+          handle={false}
+        >
+          <IonContent fullscreen>
+            <IonLoading isOpen={addressValidating} />
+            <IonHeader className="ion-no-border">
+              <IonToolbar style={{ "--background": "black" }}>
+                <IonButtons>
+                  <IonButton
+                    style={{ fontSize: "1.25em", marginLeft: "5px" }}
+                    onClick={() => {
+                      mapModalRef &&
+                        mapModalRef.current &&
+                        mapModalRef.current.dismiss();
+                    }}
+                  >
+                    <IonIcon icon={chevronBackOutline} />
+                  </IonButton>
+                  <IonTitle>Map Pin Selection</IonTitle>
+                </IonButtons>
+              </IonToolbar>
+            </IonHeader>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div style={{}}>
+                <Map
+                  maxZoom={14}
+                  height={400}
+                  width={500}
+                  attribution={false}
+                  zoom={zoom}
+                  center={center}
+                  onClick={(e) => {
+                    setMapPinLatLong(e.latLng);
+                  }}
+                  onBoundsChanged={({ center, zoom }) => {
+                    setCenter(center);
+                    setZoom(zoom);
+                  }}
+                >
+                  {mapPinLatLong && (
+                    <Marker
+                      width={40}
+                      anchor={[mapPinLatLong[0], mapPinLatLong[1]]}
+                    ></Marker>
+                  )}
+                </Map>
+              </div>
+              {!addressValidating && locationRef?.current?.value && (
+                <div
+                  style={{
+                    margin: "10px",
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                >
+                  <p style={{ fontSize: "16px", fontWeight: "500" }}>
+                    Address Entered: {locationRef.current.value}
+                  </p>
+                </div>
+              )}
+              <IonButton
+                expand="block"
+                color="danger"
+                style={{ padding: "5px" }}
+                onClick={() => {
+                  setMapPinLatLong(null);
+                  mapModalRef?.current?.dismiss();
+                }}
+              >
+                Do Not Use Precise Location
+              </IonButton>
+              <IonButton
+                expand="block"
+                style={{ padding: "5px" }}
+                onClick={() => {
+                  mapModalRef?.current?.dismiss();
+                }}
+              >
+                Save Location
+              </IonButton>
+            </div>
+          </IonContent>
+        </IonModal>
+      </IonContent>
+    </IonPage>
+  );
 };
 
 export default SubmitAttractionPage; 

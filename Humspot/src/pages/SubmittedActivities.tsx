@@ -46,10 +46,9 @@ const SubmittedActivitiesPage = () => {
 
   return (
     <IonPage>
+      <GoBackHeader title="Submitted Activities" />
+
       <IonContent>
-
-        <GoBackHeader title="Submitted Activities" />
-
         <IonList>
           {submittedActivities && submittedActivities.map((activity, index: number) => {
             return (
