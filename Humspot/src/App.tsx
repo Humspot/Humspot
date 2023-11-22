@@ -37,6 +37,7 @@ import ProfilePage from "./pages/Profile";
 
 import ActivityPage from "./pages/ActivityPage";
 import SubmitEventPage from "./pages/SubmitEvent";
+import SubmitAttractionPage from "./pages/SubmitAttraction";
 import SignUp from "./pages/SignUp";
 import VerifyEmail from "./pages/VerifyEmail";
 import SignIn from "./pages/SignIn";
@@ -50,7 +51,7 @@ import { handleUserLogin } from "./utils/server";
 import { LoginResponse } from "./utils/types";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import { Browser } from "@capacitor/browser";
+// import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import { App as CapacitorApp } from "@capacitor/app";
 import SubmittedActivities from "./pages/SubmittedActivities";
@@ -125,19 +126,19 @@ const App: React.FC = () => {
     setCurrentTab(event.detail.tab);
   };
 
-  useEffect(() => {
-    if (Capacitor.isNativePlatform()) {
-      CapacitorApp.addListener('appUrlOpen', ({ url }) => {
-        // @ts-ignore
-        // eslint-disable-next-line no-underscore-dangle
-        (Auth as any)._handleAuthResponse(url);
+  // useEffect(() => {
+  //   if (Capacitor.isNativePlatform()) {
+  //     CapacitorApp.addListener('appUrlOpen', ({ url }) => {
+  //       // @ts-ignore
+  //       // eslint-disable-next-line no-underscore-dangle
+  //       (Auth as any)._handleAuthResponse(url);
 
-        if (isPlatform('ios')) {
-          Browser.close();
-        }
-      });
-    }
-  }, []);
+  //       if (isPlatform('ios')) {
+  //         Browser.close();
+  //       }
+  //     });
+  //   }
+  // }, []);
 
   const handleDarkMode = useCallback(async () => {
     const isChecked = await Preferences.get({ key: "darkMode" });
@@ -184,6 +185,7 @@ const App: React.FC = () => {
                 component={VerifyEmail}
               />
               <Route exact path="/submit-event" component={SubmitEventPage} />
+              <Route exact path="/submit-attraction" component={SubmitAttractionPage} />
               <Route exact path="/submitted-activities" component={SubmittedActivities} />
               <Route exact path="/activity/:id" component={ActivityPage} />
             </IonRouterOutlet>
