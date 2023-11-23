@@ -24,8 +24,8 @@ export type Attraction = {
   description: string;
   location: string;
   addedByUserID: string;
-  date: string;
-  time: string;
+  // date: string;
+  // time: string;
   latitude: number | null;
   longitude: number | null;
   websiteURL: string;
@@ -64,9 +64,9 @@ async function sendEmail(e: Attraction) {
         <p><strong>Attraction Name:</strong> ${e.name}</p>
         <p><strong>Description:</strong> ${e.description}</p>
         <p><strong>Location:</strong> ${e.location}</p>
-        <p><strong>Date:</strong> ${e.date}</p>
-        <p><strong>Time:</strong> ${e.time}</p>
         <p><strong>Organizer:</strong> ${e.organizer}</p>
+        <p><strong>Latitude:</strong> ${e.latitude}</p>
+        <p><strong>Longitude:</strong> ${e.longitude}</p>
         <p><strong>Open Times:</strong> ${e.openTimes}</p>
         ${e.websiteURL ? `<p><strong>Website:</strong> <a href="${e.websiteURL}">${e.websiteURL}</a></p>` : ''}
         <p><strong>Tags:</strong> ${tagsHtml}</p>
@@ -115,20 +115,6 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     const [result]: any[] = await conn.query(query, params);
 
     if (result.length > 0) { // The user exists, and we have the accountType.
-      const accountType: string = result[0].accountType;
-      if (accountType !== 'admin' && accountType !== 'organizer') {
-        return {
-          statusCode: 400,
-          headers: {
-            "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-            "Access-Control-Allow-Methods": '*',
-            "Access-Control-Allow-Origin": '*'
-          },
-          body: JSON.stringify({
-            message: `User with ID ${userID} is not approved to add an attr!`, success: false
-          }),
-        };
-      }
     } else {  // No user found with the provided userID.
       return {
         statusCode: 400,
@@ -166,14 +152,14 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     const submissionID: string = crypto.randomBytes(16).toString('hex');
     query = `
       INSERT INTO Submissions(
-      submissionID, name, description, location, addedByUserID, activityType,
-      websiteURL, date, time, latitude, longitude, organizer, submissionDate, openTimes
-    )
-  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+        submissionID, name, description, location, addedByUserID, activityType,
+        websiteURL, latitude, longitude, organizer, submissionDate, openTimes
+      )
+      VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)
     `;
     params = [
       submissionID, attr.name, attr.description, attr.location, attr.addedByUserID,
-      'attraction', attr.websiteURL, attr.date, attr.time, attr.latitude, attr.longitude, attr.organizer, attr.openTimes
+      'attraction', attr.websiteURL, attr.latitude, attr.longitude, attr.organizer, attr.openTimes
     ];
 
     await conn.query(query, params);
