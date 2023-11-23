@@ -1,8 +1,10 @@
-import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage, useIonViewWillEnter } from "@ionic/react";
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage, IonTextarea, useIonLoading, useIonViewWillEnter } from "@ionic/react";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { useRef } from "react";
 import { useContext } from "../utils/my-context";
 import { useToast } from "@agney/ir-toast";
+import { OrganizerRequestSubmission } from "../utils/types";
+import { handleSubmitRequestToBecomeOrganizer } from "../utils/server";
 
 const BecomeACoodinator: React.FC = () => {
 
@@ -11,7 +13,9 @@ const BecomeACoodinator: React.FC = () => {
 
   const nameRef = useRef<HTMLIonInputElement | null>(null);
   const emailRef = useRef<HTMLIonInputElement | null>(null);
-  const descRef = useRef<HTMLIonInputElement | null>(null);
+  const descRef = useRef<HTMLIonTextareaElement | null>(null);
+
+  const [present, dismiss] = useIonLoading();
 
   const refs = [nameRef, emailRef];
 
@@ -26,11 +30,27 @@ const BecomeACoodinator: React.FC = () => {
       t.present();
     }
 
+    const data: OrganizerRequestSubmission = {
+      name: nameRef?.current?.value as string ?? '',
+      description: descRef?.current?.value as string ?? '',
+      email: emailRef?.current?.value as string ?? '',
+      userID: context.humspotUser.userID
+    };
+    present({ message: "Submitting request..." })
+    const res = await handleSubmitRequestToBecomeOrganizer(data);
+    if (res.success) {
+      let tempUser = { ...context.humspotUser, requestForCoordinatorSubmitted: 1 };
+      context.setHumspotUser(tempUser);
+    } else {
+
+    }
+    dismiss();
+
   };
 
   useIonViewWillEnter(() => {
     context.setShowTabs(false);
-  }, [])
+  }, []);
 
 
   return (
@@ -52,7 +72,7 @@ const BecomeACoodinator: React.FC = () => {
             </IonItem>
             <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
               <IonLabel position='stacked'>Reason for request (optional)</IonLabel>
-              <IonInput ref={descRef} type='text' />
+              <IonTextarea rows={3} maxlength={350} ref={descRef} />
             </IonItem>
             <IonButton disabled={!context.humspotUser} color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmitRequest()}>Submit</IonButton>
           </div>

@@ -28,7 +28,8 @@ import {
   GetHumspotEventResponse,
   GetEventsBetweenTwoDatesStatusResponse,
   AddCommentImageResponse,
-  GetSubmittedActivitiesResponse
+  GetSubmittedActivitiesResponse,
+  OrganizerRequestSubmission
 } from "./types";
 
 
@@ -1220,6 +1221,38 @@ export const handleSubmitAttractionForApproval = async (event: HumspotAttraction
           Authorization: `Bearer ${jwtToken}`,
         },
         body: JSON.stringify(event),
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
+};
+
+
+export const handleSubmitRequestToBecomeOrganizer = async (data: OrganizerRequestSubmission) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_REQUEST_FOR_EVENT_ORGANIZER_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(data),
       }
     );
 

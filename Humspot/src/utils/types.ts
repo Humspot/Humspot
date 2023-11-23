@@ -14,7 +14,7 @@ export type HumspotUser = {
   dateCreated: string;
   username?: string;
   bio: string;
-  requestForCoordinatorSubmitted: 0 | 1;
+  requestForCoordinatorSubmitted: number;
 };
 
 export type HumspotEvent = {
@@ -238,3 +238,10 @@ export type GetSubmittedActivitiesResponse = {
   submittedActivities: SubmittedActivities[];
 };
 
+
+export type OrganizerRequestSubmission = {
+  userID: string;
+  name: string;
+  email: string;
+  description: string;
+};
