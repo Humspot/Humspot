@@ -14,6 +14,7 @@ export type HumspotUser = {
   dateCreated: string;
   username?: string;
   bio: string;
+  requestForCoordinatorSubmitted: 0 | 1;
 };
 
 export type HumspotEvent = {
