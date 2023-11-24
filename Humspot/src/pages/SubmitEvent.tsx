@@ -394,7 +394,7 @@ export const EventForm = () => {
               </IonItem>
               <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', paddingRight: "5px", paddingLeft: "5px" }}>
                 <IonButton id='add-custom-tag' className='ion-no-padding' fill='clear'>
-                  <IonChip style={{ width: `60px` }}>
+                  <IonChip style={{ width: `60px` }} color='light'>
                     <IonIcon icon={addOutline} style={{ marginRight: '5px' }} />
                   </IonChip>
                 </IonButton>
