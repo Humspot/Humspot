@@ -71,7 +71,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setRsvp(true);
-      const t = Toast.create({ message: "RSVP'd for event!", duration: 2000, color: "light" });
+      const t = Toast.create({ message: "RSVP'd for event!", duration: 2000, color: "secondary" });
       t.present();
     } else if (res && res.removed) {
       setRsvp(false);
