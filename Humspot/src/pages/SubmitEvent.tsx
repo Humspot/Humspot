@@ -146,8 +146,6 @@ export const EventForm = () => {
   const [mapPinLatLong, setMapPinLatLong] = useState<[number, number] | null>(null);
   const [visibleTags, setVisibleTags] = useState<string[]>(eventTags.slice(0, 20));
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [customTagWidth, setCustomTagWidth] = useState<string>("60px");
-  const [showCustomTagInput, setShowCustomTagInput] = useState<boolean>(false);
 
   const toggleTag = (tag: string) => {
     if (selectedTags.includes(tag)) {
@@ -396,7 +394,7 @@ export const EventForm = () => {
               </IonItem>
               <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', paddingRight: "5px", paddingLeft: "5px" }}>
                 <IonButton id='add-custom-tag' className='ion-no-padding' fill='clear'>
-                  <IonChip style={{ width: `${customTagWidth}` }} onClick={() => setShowCustomTagInput(true)}>
+                  <IonChip style={{ width: `60px` }}>
                     <IonIcon icon={addOutline} style={{ marginRight: '5px' }} />
                   </IonChip>
                 </IonButton>
