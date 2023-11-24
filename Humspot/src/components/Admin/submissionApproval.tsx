@@ -24,8 +24,6 @@ import {
 import { checkmarkCircleOutline } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
 import { useContext } from "../../utils/my-context";
-import { memo } from "react";
-import { HumspotFavoriteResponse } from "../../utils/types";
 import { handleGetPendingActivitySubmissions } from "../../utils/server";
 
 
@@ -56,7 +54,7 @@ function SubmissionApproval({ title, description, imgsrc, id }: any) {
             <IonItem
               key={index}
               onClick={() => {
-                router.push("/submissions/" + submission.submissionID);
+                router.push("/admin-dashboard/" + submission.submissionID);
               }}
             >
               <IonLabel style={{ paddingLeft: "10px" }}>

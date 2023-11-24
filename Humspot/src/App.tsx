@@ -55,6 +55,7 @@ import { useContext } from "./utils/my-context";
 import { handleUserLogin } from "./utils/server";
 import { LoginResponse } from "./utils/types";
 import adminMain from "./pages/adminMain";
+import SubmissionDetailPage from "./components/Admin/submissionsDetails";
 
 
 
@@ -139,7 +140,8 @@ const App: React.FC = () => {
               <Route exact path="/submit-event" component={SubmitEventPage} />
               <Route exact path="/activity/:id" component={ActivityPage} />
               <Route exact path="/admin-dashboard" component={adminMain}/>
-            </IonRouterOutlet>
+              <Route exact path="/submissions/:id" component={SubmissionDetailPage} />
+             </IonRouterOutlet>
 
             <IonTabBar
               slot="bottom"
