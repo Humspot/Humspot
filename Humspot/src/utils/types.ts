@@ -193,6 +193,7 @@ export type HumspotActivity = {
   organizer: string;
   openTimes: string | null;
   comments: any[];
+  avgRating: number;
 }
 
 export type GetFavoritesAndVisitedAndRSVPStatusResponse = {
