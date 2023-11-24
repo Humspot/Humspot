@@ -28,6 +28,7 @@ const BecomeACoodinator: React.FC = () => {
     if (!isFormValid()) {
       const t = Toast.create({ message: "Please enter a name and an email", duration: 2000, color: 'danger' });
       t.present();
+      return;
     }
 
     const data: OrganizerRequestSubmission = {

@@ -145,7 +145,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
             {!!originalUserRating && !hasUpdated &&
               <p className='ion-text-center'>You previously gave this a {originalUserRating} / 5</p>
             }
-            <IonButton color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await submitRating()}>Submit</IonButton>
+            <IonButton disabled={!hasUpdated} color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await submitRating()}>Submit</IonButton>
           </IonContent>
         </IonModal>
       }

@@ -61,7 +61,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     if (result.length > 0) { // The user exists, and we have the accountStatus
       const accountStatus: string = result[0].accountStatus;
       const accountType: string = result[0].accountType;
-      if (accountStatus !== 'active' || accountType !== 'admin') {
+      if (accountStatus !== 'active') {
         return {
           statusCode: 400,
           headers: {
@@ -119,4 +119,3 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
   }
 };
-
