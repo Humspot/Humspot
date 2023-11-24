@@ -19,7 +19,8 @@ const monthNames = [
   "December",
 ];
 
-export const formatDate = (dateString: string): string => {
+export const formatDate = (dateString: string | null): string => {
+  if (!dateString) return '';
   const date = new Date(dateString);
 
   const day = date.getUTCDate();

@@ -14,6 +14,7 @@ export type HumspotUser = {
   dateCreated: string;
   username?: string;
   bio: string;
+  requestForCoordinatorSubmitted: number;
 };
 
 export type HumspotEvent = {
@@ -53,10 +54,13 @@ export type HumspotAttraction = {
   description: string;
   location: string;
   addedByUserID: string;
-  websiteURL: string;
+  date: string;
+  time: string;
   latitude: number | null;
   longitude: number | null;
-  openTimes: string;
+  websiteURL: string;
+  organizer: string;
+  openTimes: string | null;
   tags: string[];
   photoUrls: string[];
 };
@@ -189,6 +193,7 @@ export type HumspotActivity = {
   organizer: string;
   openTimes: string | null;
   comments: any[];
+  avgRating: number;
 }
 
 export type GetFavoritesAndVisitedAndRSVPStatusResponse = {
@@ -234,3 +239,10 @@ export type GetSubmittedActivitiesResponse = {
   submittedActivities: SubmittedActivities[];
 };
 
+
+export type OrganizerRequestSubmission = {
+  userID: string;
+  name: string;
+  email: string;
+  description: string;
+};

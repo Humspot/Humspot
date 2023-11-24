@@ -13,12 +13,13 @@ import {
   IonSkeletonText,
   IonText,
   useIonRouter,
+  useIonViewDidEnter,
   useIonViewWillEnter,
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
 import "./ActivityPage.css";
 import { useCallback, useEffect, useState } from "react";
-import { handleGetActivity } from "../utils/server";
+import { handleAddRating, handleGetActivity } from "../utils/server";
 
 import placeholder from "../assets/images/placeholder.png";
 import ActivityDateTimeLocation from "../components/Activity/ActivityDateTimeLocation";
@@ -33,6 +34,9 @@ import { Autoplay } from "swiper/modules";
 import { useContext } from "../utils/my-context";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
+import { Rating } from 'react-custom-rating-component'
+import ActivityHeaderTitle from "../components/Activity/ActivityHeaderTitle";
+
 type ActivityPageParams = {
   id: string;
 };
@@ -42,6 +46,8 @@ function ActivityPage() {
   const id: string = params.id;
   const context = useContext();
   const router = useIonRouter();
+
+  const [hasSwipedIn, setHasSwipedIn] = useState<boolean>(false);
 
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
   const [activityLoading, setActivityLoading] = useState<boolean>(true);
@@ -59,6 +65,10 @@ function ActivityPage() {
     context.setShowTabs(false);
   }, []);
 
+  useIonViewDidEnter(() => {
+    setHasSwipedIn(true);
+  }, [])
+
   useEffect(() => {
     const eventListener: any = (ev: CustomEvent<any>) => {
       ev.detail.register(20, () => {
@@ -73,13 +83,20 @@ function ActivityPage() {
     };
   }, [router]);
 
+
   return (
     <IonPage>
 
+      {hasSwipedIn &&
+        <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
+      }
+
       <IonContent>
 
-        <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
-        <IonLoading isOpen={activityLoading} message={"Loading..."} />
+        {!hasSwipedIn &&
+          <GoBackHeader title={''} />
+        }
+        {/* <IonLoading isOpen={activityLoading} message={"Loading..."} /> */}
 
         {/* Header Image */}
         <div className="headerDiv">
@@ -99,19 +116,7 @@ function ActivityPage() {
         </div>
 
         {/* Header Title */}
-        <IonCard color={"primary"} className="headercard">
-          <IonCardHeader>
-            {activity ? (
-              <IonCardTitle>
-                {activity && <h1>{activity.name}</h1>}
-              </IonCardTitle>
-            ) : (
-              <IonCardTitle>
-                <IonSkeletonText animated></IonSkeletonText>
-              </IonCardTitle>
-            )}
-          </IonCardHeader>
-        </IonCard>
+        <ActivityHeaderTitle id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name}/>
         {/* Tags */}
         <div style={{ paddingLeft: "5px" }}>
           {activity &&
@@ -132,12 +137,11 @@ function ActivityPage() {
         {/* Description */}
         <IonCard>
           <IonCardContent>
-            <IonText color={"dark"}>
+            <IonText color={"light"}>
               <p>{activity?.description ?? ""}</p>
               <p>
                 <a
-                  href={activity?.websiteURL ?? "#"}
-                  target="_blank"
+                  href={activity?.websiteURL ?? ""}
                   rel="noopener noreferrer"
                 >
                   Visit Site
