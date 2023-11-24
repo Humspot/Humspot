@@ -14,7 +14,12 @@ type ActivityHeaderTitleProps = {
   id: string;
   name: string | undefined;
   avgRating: number | undefined;
-}
+  page: HTMLElement | undefined;
+};
+
+async function canDismiss(data?: any, role?: string) {
+  return role !== 'gesture';
+};
 
 const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
 
@@ -67,15 +72,15 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
   return (
     <>
       <IonCard color={"primary"} className="headercard">
-        <IonCardHeader>
+        <section style={{ padding: "10px" }}>
           {props.activity ? (
             <>
-              <IonCardTitle>
-                {<h1>{props.name}</h1>}
-              </IonCardTitle>
+              {/* <IonCardTitle> */}
+              {<h1>{props.name}</h1>}
+              {/* </IonCardTitle> */}
               {props.activityType === 'attraction' &&
                 <>
-                  <br />
+                  {/* <br /> */}
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Rating
                       readOnly={true}
@@ -89,11 +94,11 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                     </p>
                   </div>
 
-                  <div>
-                    <IonButton className='ion-no-padding' slot='start' fill="clear" style={{ color: "#3D6876" }} id='add-rating-button'>
-                      Add Rating
-                    </IonButton>
-                  </div>
+                  {/* <div> */}
+                  <IonButton className='ion-no-padding ion-no-margin' slot='start' fill="clear" style={{ color: "#3D6876" }} id='add-rating-button'>
+                    Add Rating
+                  </IonButton>
+                  {/* </div> */}
                 </>
               }
             </>
@@ -102,19 +107,19 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
               <IonSkeletonText animated></IonSkeletonText>
             </IonCardTitle>
           )}
-        </IonCardHeader>
+        </section>
       </IonCard>
 
       {props.activityType === 'attraction' &&
-        <IonModal trigger='add-rating-button' ref={modalRef}>
-          <IonContent>
+        <IonModal trigger='add-rating-button' ref={modalRef} presentingElement={props.page} canDismiss={canDismiss}>
+          <IonContent style={{ '--background': 'var(--ion-item-background' }}>
             <IonHeader className='ion-no-border'>
               <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
-                <IonButtons>
-                  <IonButton color='secondary' style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { modalRef.current?.dismiss().then(() => { setNewUserRating(originalUserRating); setHasUpdated(false); }) }}>
-                    <IonIcon icon={chevronBackOutline} />
+                <IonTitle style={{ fontSize: "1.25rem" }}>Rate Attraction</IonTitle>
+                <IonButtons style={{ height: "5vh" }}>
+                  <IonButton style={{ fontSize: '1.15em', }} onClick={() => { modalRef.current?.dismiss().then(() => { setNewUserRating(originalUserRating); setHasUpdated(false); }) }}>
+                    <p>Back</p>
                   </IonButton>
-                  <IonTitle>Rate Attraction</IonTitle>
                 </IonButtons>
               </IonToolbar>
             </IonHeader>

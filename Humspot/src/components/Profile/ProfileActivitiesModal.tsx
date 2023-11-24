@@ -3,6 +3,7 @@
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle, IonHeader, IonToolbar, IonButton, IonButtons } from "@ionic/react";
 import { calendarOutline, compassOutline, clipboardOutline, listCircleOutline } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
+import { useContext } from "../../utils/my-context";
 
 type ProfileActivitiesModalProps = {
   page: HTMLElement | undefined;
@@ -18,10 +19,6 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
   const context = useContext();
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
-
-  useEffect(() => {
-    setPresentingElement(props.page);
-  }, [props.page]);
 
 
   return (
@@ -49,15 +46,15 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
             <IonLabel>Submit an Attraction</IonLabel>
           </IonItem>
           <br />
-          <IonItem  onClick={() => { modalRef?.current?.dismiss(); router.push("/submitted-activities") }}>
-            <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start" color="light"></IonIcon>
+          <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submitted-activities") }) }}>
+            <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
             <IonLabel>See Submitted Activities</IonLabel>
           </IonItem>
           <br />
           {context.humspotUser?.accountType === 'user' &&
             <>
-              <IonItem role='button' onClick={() => { modalRef?.current?.dismiss(); router.push("/become-a-coordinator") }}>
-                <IonIcon aria-hidden="true" icon={clipboardOutline} slot="start" color="light"></IonIcon>
+              <IonItem role='button' onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/become-a-coordinator") }) }}>
+                <IonIcon aria-hidden="true" icon={clipboardOutline} slot="start"></IonIcon>
                 <IonLabel>Become an Organizer</IonLabel>
               </IonItem>
               <br />

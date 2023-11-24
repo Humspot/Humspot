@@ -18,7 +18,7 @@ import {
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
 import "./ActivityPage.css";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { handleAddRating, handleGetActivity } from "../utils/server";
 
 import placeholder from "../assets/images/placeholder.png";
@@ -47,8 +47,8 @@ function ActivityPage() {
   const context = useContext();
   const router = useIonRouter();
 
+  const page = useRef();
   const [hasSwipedIn, setHasSwipedIn] = useState<boolean>(false);
-
 
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
   const [activityLoading, setActivityLoading] = useState<boolean>(true);
@@ -86,7 +86,7 @@ function ActivityPage() {
 
 
   return (
-    <IonPage>
+    <IonPage ref={page}>
 
       {hasSwipedIn &&
         <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
@@ -118,7 +118,7 @@ function ActivityPage() {
         </div>
 
         {/* Header Title */}
-        <ActivityHeaderTitle id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name}/>
+        <ActivityHeaderTitle page={page.current} id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name} />
         {/* Tags */}
         <div style={{ paddingLeft: "10px" }}> {/* why is the padding different on iOS it makes no sense please help */}
           {activity &&
