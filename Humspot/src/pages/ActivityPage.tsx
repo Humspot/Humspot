@@ -19,7 +19,7 @@ import {
 import { useParams } from "react-router-dom";
 import "./ActivityPage.css";
 import { useCallback, useEffect, useState } from "react";
-import { handleGetActivity } from "../utils/server";
+import { handleAddRating, handleGetActivity } from "../utils/server";
 
 import placeholder from "../assets/images/placeholder.png";
 import ActivityDateTimeLocation from "../components/Activity/ActivityDateTimeLocation";
@@ -33,6 +33,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import { useContext } from "../utils/my-context";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
+
+import { Rating } from 'react-custom-rating-component'
+import ActivityHeaderTitle from "../components/Activity/ActivityHeaderTitle";
 
 type ActivityPageParams = {
   id: string;
@@ -80,6 +83,7 @@ function ActivityPage() {
     };
   }, [router]);
 
+
   return (
     <IonPage>
 
@@ -112,19 +116,7 @@ function ActivityPage() {
         </div>
 
         {/* Header Title */}
-        <IonCard color={"primary"} className="headercard">
-          <IonCardHeader>
-            {activity ? (
-              <IonCardTitle>
-                {activity && <h1>{activity.name}</h1>}
-              </IonCardTitle>
-            ) : (
-              <IonCardTitle>
-                <IonSkeletonText animated></IonSkeletonText>
-              </IonCardTitle>
-            )}
-          </IonCardHeader>
-        </IonCard>
+        <ActivityHeaderTitle id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name}/>
         {/* Tags */}
         <div style={{ paddingLeft: "5px" }}>
           {activity &&
@@ -149,8 +141,7 @@ function ActivityPage() {
               <p>{activity?.description ?? ""}</p>
               <p>
                 <a
-                  href={activity?.websiteURL ?? "#"}
-                  target="_blank"
+                  href={activity?.websiteURL ?? ""}
                   rel="noopener noreferrer"
                 >
                   Visit Site

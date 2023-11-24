@@ -132,7 +132,7 @@ function CalendarPage() {
       <IonPage>
         <FilterButton></FilterButton>
         <IonContent>
-          <IonList>
+          <IonList style={{paddingTop: "0", marginTop: "0"}}>
             <IonItemDivider color='dark'>
               <IonLabel>
                 <h1>Today</h1>

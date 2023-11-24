@@ -3,7 +3,7 @@ import { useContext } from "../../utils/my-context";
 import { handleAddToFavorites, handleAddToRSVP, handleAddToVisited, handleGetFavoritesAndVisitedAndRSVPStatus } from "../../utils/server";
 import { useToast } from "@agney/ir-toast";
 import { IonButton, IonIcon } from "@ionic/react";
-import { calendar, calendarOutline, star, starOutline, walk, walkOutline } from "ionicons/icons";
+import { calendar, calendarOutline, heart, heartOutline, star, starOutline, walk, walkOutline } from "ionicons/icons";
 
 
 const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'event' | 'attraction' | 'custom' | undefined }) => {
@@ -49,7 +49,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setVisited(true);
-      const t = Toast.create({ message: "Added to visited!", duration: 2000, color: "light" });
+      const t = Toast.create({ message: "Added to visited!", duration: 2000, color: "secondary" });
       t.present();
     } else if (res && res.removed) {
       setVisited(false);
@@ -71,7 +71,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setRsvp(true);
-      const t = Toast.create({ message: "RSVP'd for event!", duration: 2000, color: "light" });
+      const t = Toast.create({ message: "RSVP'd for event!", duration: 2000, color: "secondary" });
       t.present();
     } else if (res && res.removed) {
       setRsvp(false);
@@ -96,7 +96,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   }, [getButtonStatus])
 
   return (
-    <div style={{zIndex: "1000"}}>
+    <div style={{ zIndex: "1000" }}>
 
       <IonButton
         className="FavoritesButton"
@@ -109,7 +109,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
       >
         <IonIcon
           slot="icon-only"
-          icon={favorited === true ? star : starOutline}
+          icon={favorited === true ? heart : heartOutline}
         />
       </IonButton>
 
