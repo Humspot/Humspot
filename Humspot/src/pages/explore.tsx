@@ -124,7 +124,6 @@ function ExplorePage() {
   return (
     <>
       <IonPage>
-        <FilterButton></FilterButton>
         <IonLoading
           isOpen={
             activitiesHighlightLoading &&
