@@ -20,6 +20,10 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
+  useEffect(() => {
+    setPresentingElement(props.page);
+  }, [props.page])
+
 
   return (
     <IonModal ref={modalRef} trigger="open-add-activity-modal" presentingElement={presentingElement} canDismiss={canDismiss}>

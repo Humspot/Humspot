@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, IonList,
-  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, useIonRouter, IonCardContent, IonCardHeader, IonCardTitle
+  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, useIonRouter, IonCardContent, IonCardHeader, IonCardTitle, IonAlert
 } from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/my-context';
@@ -9,7 +9,7 @@ import { useToast } from '@agney/ir-toast';
 import { handleSubmitEventForApproval, handleUploadEventImages } from '../utils/server';
 // import './EventForm.css';
 import { Map, Marker } from "pigeon-maps";
-import { cameraOutline, chevronBackOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
+import { addOutline, cameraOutline, chevronBackOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import GoBackHeader from '../components/Shared/GoBackHeader';
 import { navigateBack } from '../components/Shared/BackButtonNavigation';
@@ -153,6 +153,10 @@ export const EventForm = () => {
     } else {
       setSelectedTags([...selectedTags, tag]);
     }
+  };
+
+  const addNewTag = (tag: string) => {
+    setVisibleTags([tag, ...visibleTags]);
   };
 
   const showMoreTags = () => {
@@ -387,10 +391,15 @@ export const EventForm = () => {
               <IonItem style={{ '--background': 'var(--ion-background-color)', '--min-height': "50px" }} lines='none'>
                 <IonLabel position='stacked'>Tags</IonLabel>
               </IonItem>
-              <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
-                {visibleTags.map(tag => (
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', paddingRight: "5px", paddingLeft: "5px" }}>
+                <IonButton id='add-custom-tag' className='ion-no-padding' fill='clear'>
+                  <IonChip style={{ width: `60px` }}>
+                    <IonIcon icon={addOutline} style={{ marginRight: '5px' }} />
+                  </IonChip>
+                </IonButton>
+                {visibleTags.map((tag: string, idx: number) => (
                   <IonChip
-                    key={tag}
+                    key={tag + idx}
                     onClick={() => toggleTag(tag)}
                     color={selectedTags.includes(tag) ? "secondary" : "dark"}
                   >
@@ -402,6 +411,36 @@ export const EventForm = () => {
                     <IonButton color='secondry' fill='clear' onClick={showMoreTags}> &nbsp;&nbsp;Show More &nbsp;<IonIcon icon={chevronDownOutline} /></IonButton>
                   </div>
                 )}
+
+                <IonAlert
+                  trigger="add-custom-tag"
+                  header="Add custom tag"
+                  buttons={[
+                    'Cancel',
+                    {
+                      text: 'Add',
+                      handler: (data) => {
+                        if (data.tag.length > 50) {
+                          const t = Toast.create({ message: "Custom tag must not exceed 50 characters", duration: 3000, color: "danger" });
+                          t.present();
+                          return;
+                        }
+                        if (data.tag.length > 0) {
+                          addNewTag(data.tag);
+                        }
+                      }
+                    }
+                  ]}
+                  inputs={[
+                    {
+                      name: 'tag',
+                      type: 'text',
+                      placeholder: 'House Party',
+                      max: '50'
+                    }
+                  ]}
+                />
+
               </div>
 
               <IonButton color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmit()}>Submit</IonButton>
