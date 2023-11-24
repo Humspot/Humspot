@@ -102,7 +102,7 @@ exports.handler = async (event: any): Promise<LambdaResponse> => {
     for (let i = 0; i < itemsList.length; ++i) {
       const item = itemsList[i];
       const infoFromDescription = parseDescription(item.description[0] || '');
-      const photoUrls = infoFromDescription.imageUrl ? [infoFromDescription.imageUrl] : [];
+      const photoUrls = infoFromDescription.imageUrl ? [infoFromDescription.imageUrl] : ["https://upload.wikimedia.org/wikipedia/en/thumb/1/14/Cal_Poly_Humboldt_seal.svg/1200px-Cal_Poly_Humboldt_seal.svg.png"];
       if (!infoFromDescription) continue;
       const event: HumspotEvent = {
         name: item.title[0],

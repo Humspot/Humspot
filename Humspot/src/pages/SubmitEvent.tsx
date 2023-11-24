@@ -135,7 +135,7 @@ export const EventForm = () => {
   const dateTimeRef = useRef<HTMLIonDatetimeElement | null>(null);
   const websiteUrlRef = useRef<HTMLIonInputElement | null>(null);
 
-  const refs = [nameRef, descRef, locationRef, dateTimeRef, websiteUrlRef];
+  const refs = [nameRef, descRef, locationRef, dateTimeRef];
 
   const [photos, setPhotos] = useState<string[] | undefined>(undefined);
   const [blobs, setBlobs] = useState<Blob[] | null>(null);

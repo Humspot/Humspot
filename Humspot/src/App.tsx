@@ -55,6 +55,7 @@ import SubmittedActivities from "./pages/SubmittedActivities";
 import { Keyboard, KeyboardStyle, KeyboardStyleOptions } from "@capacitor/keyboard";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { Preferences } from "@capacitor/preferences";
+import BecomeACoodinator from "./pages/BecomeACoodinator";
 
 setupIonicReact({ mode: "ios" });
 
@@ -104,7 +105,7 @@ const App: React.FC = () => {
         "identities" in currentUser?.attributes
       )
         .then((res: LoginResponse) => {
-          console.log(res.message);
+          console.log(res);
           if (!res.user) throw new Error(res.message);
           context.setHumspotUser(res.user);
         })
@@ -179,6 +180,7 @@ const App: React.FC = () => {
               <Route exact path="/terms-and-conditions" component={TermsAndConditions} />
               <Route exact path="/privacy-policy" component={PrivacyPolicy} />
               <Route exact path="/forgot-password" component={ForgotPassword} />
+              <Route exact path="/become-a-coordinator" component={BecomeACoodinator} />
               <Route
                 exact
                 path="/verify-email/:email/:toVerify"
