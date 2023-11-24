@@ -3,8 +3,10 @@ import { Rating } from "react-custom-rating-component"
 import { useContext } from "../../utils/my-context";
 import { handleAddRating } from "../../utils/server";
 import { useToast } from "@agney/ir-toast";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { chevronBackOutline } from "ionicons/icons";
+
+import { getUserRatingGivenUserID } from "../../utils/server";
 
 type ActivityHeaderTitleProps = {
   activity: boolean;
@@ -22,11 +24,16 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
   const modalRef = useRef<HTMLIonModalElement | null>(null);
 
   const [ratingLoading, setRatingLoading] = useState<boolean>(false);
+  const [newUserRating, setNewUserRating] = useState<number>(0);
+  const [originalUserRating, setOriginalUserRating] = useState<number>(0);
+  const [hasUpdated, setHasUpdated] = useState<boolean>(false);
+  const [hasLoadedInitial, setHasLoadedInitial] = useState<boolean>(false);
 
-  const changeRating = async (rating: number) => {
+  const submitRating = async () => {
     if (!context.humspotUser) return;
+    if (!newUserRating) return;
     setRatingLoading(true);
-    const res = await handleAddRating(context.humspotUser.userID, props.id, rating);
+    const res = await handleAddRating(context.humspotUser.userID, props.id, newUserRating);
     if (res.success) {
       const t = Toast.create({ message: "Rating added!", duration: 2000, color: 'secondary' });
       t.present();
@@ -34,8 +41,28 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
       const t = Toast.create({ message: "Something went wrong", duration: 2000, color: 'danger' });
       t.present();
     }
+    setOriginalUserRating(newUserRating);
     setRatingLoading(false);
-  }
+  };
+
+  const getUserRating = useCallback(async () => {
+    if (!context.humspotUser) return;
+    setRatingLoading(true);
+    const res = await getUserRatingGivenUserID(context.humspotUser.userID, props.id);
+    if (res.success) {
+      setOriginalUserRating(res.ratingInfo?.rating ?? 0);
+      setRatingLoading(false);
+    } else {
+      const t = Toast.create({ message: "Unable to get user rating, unable to rate at this time", color: "danger", duration: 2000 });
+      t.present();
+    }
+    setRatingLoading(false);
+    setHasLoadedInitial(true);
+  }, [context.humspotUser]);
+
+  useEffect(() => {
+    getUserRating();
+  }, [getUserRating])
 
   return (
     <>
@@ -56,7 +83,6 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                       spacing='5px'
                       activeColor='#F6D075'
                       precision={0.5}
-                      onChange={async (newRating) => await changeRating(newRating)}
                     />
                     <p style={{ paddingLeft: "15px", fontSize: "1.15rem", paddingTop: "1px" }}>
                       {props.avgRating ? `(${props.avgRating})` : ''}
@@ -85,24 +111,41 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
             <IonHeader className='ion-no-border'>
               <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
                 <IonButtons>
-                  <IonButton color='secondary' style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { modalRef.current?.dismiss(); }}>
+                  <IonButton color='secondary' style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { modalRef.current?.dismiss().then(() => { setNewUserRating(originalUserRating); setHasUpdated(false); }) }}>
                     <IonIcon icon={chevronBackOutline} />
                   </IonButton>
                   <IonTitle>Rate Attraction</IonTitle>
                 </IonButtons>
               </IonToolbar>
             </IonHeader>
-            <section style={ratingLoading ? { opacity: "0.5" } : { opacity: "1" }}>
-              <Rating
-                readOnly={ratingLoading}
-                defaultValue={props.avgRating ?? 0}
-                size='30px'
-                spacing='10px'
-                activeColor='#F6D075'
-                precision={0.5}
-                onChange={async (newRating) => await changeRating(newRating)}
-              />
+            <b><p className='ion-text-center' style={{ padding: "10px" }}>Been here before? Give it a rating to let Humspot users know what you thought!</p></b>
+            <section style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: "50px",
+              ...ratingLoading ? { opacity: "0.5" } : { opacity: "1" }
+            }}>
+              {hasLoadedInitial ?
+                <Rating
+                  readOnly={ratingLoading}
+                  defaultValue={originalUserRating}
+                  size='30px'
+                  spacing='10px'
+                  activeColor='#F6D075'
+                  precision={0.5}
+                  onChange={(newRating) => { setHasUpdated(true); setNewUserRating(newRating) }}
+                />
+                :
+                <>
+                  <IonSkeletonText style={{ height: "30px", width: "75vw" }} animated />
+                </>
+              }
             </section>
+            {!!originalUserRating && !hasUpdated &&
+              <p className='ion-text-center'>You previously gave this a {originalUserRating} / 5</p>
+            }
+            <IonButton color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await submitRating()}>Submit</IonButton>
           </IonContent>
         </IonModal>
       }

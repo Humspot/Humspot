@@ -116,7 +116,7 @@ function ActivityPage() {
         </div>
 
         {/* Header Title */}
-        <ActivityHeaderTitle id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name} />
+        <ActivityHeaderTitle id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name}/>
         {/* Tags */}
         <div style={{ paddingLeft: "5px" }}>
           {activity &&
@@ -141,8 +141,7 @@ function ActivityPage() {
               <p>{activity?.description ?? ""}</p>
               <p>
                 <a
-                  href={activity?.websiteURL ?? "#"}
-                  target="_blank"
+                  href={activity?.websiteURL ?? ""}
                   rel="noopener noreferrer"
                 >
                   Visit Site

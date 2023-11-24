@@ -1302,4 +1302,39 @@ export const handleAddRating = async (userID: string, activityID: string, rating
     console.error("Error calling API Gateway", error);
     return { message: "Error calling API Gateway" + error, success: false };
   }
+};
+
+
+export const getUserRatingGivenUserID = async (userID: string, activityID: string): Promise<{ message: string, success: boolean; ratingInfo?: { rating: number; hasRated: string } }> => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_RATING_GIVEN_USERID +
+      "/" +
+      userID +
+      "/" +
+      activityID,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
 }
