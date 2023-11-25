@@ -45,6 +45,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
       a.location, 
       a.activityType, 
       a.websiteURL,
+      a.avgRating,
       
       CASE WHEN a.activityType = 'Event' THEN e.date ELSE NULL END as date,
       CASE WHEN a.activityType = 'Event' THEN e.time ELSE NULL END as time,

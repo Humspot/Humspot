@@ -3,10 +3,12 @@
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle } from "@ionic/react";
 import { calendarOutline, compassOutline, clipboardOutline, listCircleOutline } from "ionicons/icons";
 import { useEffect, useRef } from "react";
+import { useContext } from "../../utils/my-context";
 
 const ProfileActivitiesModal: React.FC = () => {
 
   const router = useIonRouter();
+  const context = useContext();
   const modalRef = useRef<HTMLIonModalElement | null>(null);
 
   useEffect(() => {
@@ -39,16 +41,20 @@ const ProfileActivitiesModal: React.FC = () => {
             <IonLabel>Submit an Attraction</IonLabel>
           </IonItem>
           <br />
-          <IonItem  onClick={() => { modalRef?.current?.dismiss(); router.push("/submitted-activities") }}>
+          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/submitted-activities") }}>
             <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start" color="light"></IonIcon>
             <IonLabel>See Submitted Activities</IonLabel>
           </IonItem>
           <br />
-          <IonItem role='button' id="become-a-coordinator">
-            <IonIcon aria-hidden="true" icon={clipboardOutline} slot="start" color="light"></IonIcon>
-            <IonLabel>Become an Organizer</IonLabel>
-          </IonItem>
-          <br />
+          {context.humspotUser?.accountType === 'user' &&
+            <>
+              <IonItem role='button' onClick={() => { modalRef?.current?.dismiss(); router.push("/become-a-coordinator") }}>
+                <IonIcon aria-hidden="true" icon={clipboardOutline} slot="start" color="light"></IonIcon>
+                <IonLabel>Become an Organizer</IonLabel>
+              </IonItem>
+              <br />
+            </>
+          }
         </IonList>
       </IonContent>
     </IonModal>

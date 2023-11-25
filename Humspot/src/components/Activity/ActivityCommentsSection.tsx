@@ -35,7 +35,7 @@ const ActivityCommentsSection = (props: { activity: any }) => {
                     {comment.username}
                   </IonCardTitle>
                   <IonCardContent className="commentcontents">
-                    <IonText color={"dark"}>{comment.commentText}</IonText>
+                    <IonText color={"light"}>{comment.commentText}</IonText>
                     {comment.photoUrl &&
                       <img src={comment.photoUrl} />
                     }
