@@ -34,6 +34,7 @@ import {
 
 
 
+
 /* Allows for AWS Authentication */
 // awsconfig.oauth.redirectSignIn = `${window.location.origin}/`;
 // awsconfig.oauth.redirectSignOut = `${window.location.origin}/`;
@@ -1074,7 +1075,6 @@ export const handleGetThisWeeksEvents = async (): Promise<{ message: string; suc
   }
 };
 
-
 export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1106,8 +1106,39 @@ export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
   }
 };
 
+export const handleSubmitAttractionForApproval = async (event: HumspotAttraction) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
 
-export const handleUploadEventImages = async (blobs: Blob[] | null) => {
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_ATTRACTION_FOR_APPROVAL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(event),
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
+};
+
+
+export const handleUploadSubmissionImages = async (blobs: Blob[] | null, folderName: string) => {
   if (!blobs) {
     return {
       success: false,
@@ -1125,7 +1156,7 @@ export const handleUploadEventImages = async (blobs: Blob[] | null) => {
         body: JSON.stringify({
           photoType: blob.type,
           activityName: id,
-          folderName: 'event-photos',
+          folderName: folderName,
           bucketName: 'activityphotos',
           isUnique: false,
         })
@@ -1198,6 +1229,7 @@ export const handleGetSubmittedActivities = async (userID: string, pageNum: numb
       submittedActivities: []
     }
   }
+
 };
 
 

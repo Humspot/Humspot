@@ -36,6 +36,7 @@ import ProfilePage from "./pages/Profile";
 
 import ActivityPage from "./pages/ActivityPage";
 import SubmitEventPage from "./pages/SubmitEvent";
+import SubmitAttractionPage from "./pages/SubmitAttraction";
 import SignUp from "./pages/SignUp";
 import VerifyEmail from "./pages/VerifyEmail";
 import SignIn from "./pages/SignIn";
@@ -170,6 +171,7 @@ const App: React.FC = () => {
                 component={VerifyEmail}
               />
               <Route exact path="/submit-event" component={SubmitEventPage} />
+              <Route exact path="/submit-attraction" component={SubmitAttractionPage} />
               <Route exact path="/submitted-activities" component={SubmittedActivities} />
               <Route exact path="/activity/:id" component={ActivityPage} />
             </IonRouterOutlet>
