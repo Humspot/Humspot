@@ -6,7 +6,7 @@ import {
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/my-context';
 import { useToast } from '@agney/ir-toast';
-import { handleSubmitEventForApproval, handleUploadEventImages } from '../utils/server';
+import { handleSubmitEventForApproval, handleUploadSubmissionImages } from '../utils/server';
 // import './EventForm.css';
 import { Map, Marker } from "pigeon-maps";
 import { cameraOutline, chevronBackOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
@@ -135,7 +135,7 @@ export const EventForm = () => {
   const dateTimeRef = useRef<HTMLIonDatetimeElement | null>(null);
   const websiteUrlRef = useRef<HTMLIonInputElement | null>(null);
 
-  const refs = [nameRef, descRef, locationRef, dateTimeRef, websiteUrlRef];
+  const refs = [nameRef, descRef, locationRef, dateTimeRef];
 
   const [photos, setPhotos] = useState<string[] | undefined>(undefined);
   const [blobs, setBlobs] = useState<Blob[] | null>(null);
@@ -237,7 +237,7 @@ export const EventForm = () => {
 
     let uploadedPhotoUrls: string[] = [];
     if (blobs) {
-      const res = await handleUploadEventImages(blobs);
+      const res = await handleUploadSubmissionImages(blobs, 'event-photos');
       if (!res.success) {
         const t = Toast.create({ message: "Photos failed to upload, reload the page to try again", duration: 2000, color: 'danger' });
         t.present();
@@ -378,7 +378,7 @@ export const EventForm = () => {
                     />
                   </IonCardContent>
                   <IonCardHeader>
-                    <p className='ion-no-padding ion-no-margin' style={{fontSize: "1rem"}}>
+                    <p className='ion-no-padding ion-no-margin' style={{ fontSize: "1rem" }}>
                       {photos && photos.length > 0 ? 'Change' : 'Add'}
                     </p>
                   </IonCardHeader>

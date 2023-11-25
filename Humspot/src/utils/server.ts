@@ -1085,7 +1085,7 @@ export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
     const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
-      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_ATTRACTION_FOR_APPROVAL,
+      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_EVENT_FOR_APPROVAL_URL,
       {
         method: "POST",
         headers: {
@@ -1138,7 +1138,7 @@ export const handleSubmitAttractionForApproval = async (event: HumspotAttraction
 };
 
 
-export const handleUploadEventImages = async (blobs: Blob[] | null) => {
+export const handleUploadSubmissionImages = async (blobs: Blob[] | null, folderName: string) => {
   if (!blobs) {
     return {
       success: false,
@@ -1156,7 +1156,7 @@ export const handleUploadEventImages = async (blobs: Blob[] | null) => {
         body: JSON.stringify({
           photoType: blob.type,
           activityName: id,
-          folderName: 'event-photos',
+          folderName: folderName,
           bucketName: 'activityphotos',
           isUnique: false,
         })

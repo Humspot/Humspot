@@ -37,7 +37,7 @@ import {
 } from "ionicons/icons";
 import {
   handleSubmitAttractionForApproval,
-  handleUploadEventImages,
+  handleUploadSubmissionImages,
 } from "../utils/server";
 import { Camera, CameraResultType } from "@capacitor/camera";
 import GoBackHeader from "../components/Shared/GoBackHeader";
@@ -239,7 +239,7 @@ const SubmitAttractionPage = () => {
 
     let uploadedPhotoUrls: string[] = [];
     if (blobs) {
-      const res = await handleUploadEventImages(blobs); // might need to change this to handleUploadAttractionImages
+      const res = await handleUploadSubmissionImages(blobs, 'attraction-photos');
       if (!res.success) {
         const t = Toast.create({
           message: "Photos failed to upload, reload the page to try again",
@@ -251,7 +251,6 @@ const SubmitAttractionPage = () => {
         uploadedPhotoUrls = res.photoUrls;
       }
     }
-
 
     const attraction: HumspotAttraction = {
       name: nameRef?.current?.value! as string,
