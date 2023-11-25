@@ -39,7 +39,7 @@ const FilterButton = (props: {
   return (
     <IonButton
       fill="clear"
-      color="dark"
+      color="light"
       onClick={() => {
         setFilter((prevFilter) => (prevFilter === label ? null : label));
       }}
@@ -47,9 +47,10 @@ const FilterButton = (props: {
       <div className="FilterEntry">
         <IonIcon
           icon={filterprop === label ? filledIcon : outlineIcon}
+          color={filterprop === label ? "secondary" : ""}
           size="large"
         ></IonIcon>
-        <IonLabel>{label}</IonLabel>
+        <IonLabel color={filterprop === label ? "secondary" : ""}>{label}</IonLabel>
       </div>
     </IonButton>
   );
@@ -67,7 +68,7 @@ const FilterAccordion = (props: {
         toggleIcon={caretDownCircle}
         toggleIconSlot="start"
       >
-        <IonItem slot="header" color="light">
+        <IonItem slot="header" color="dark">
           <IonLabel>Filters</IonLabel>
         </IonItem>
         <div slot="content">
