@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, IonList,
-  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, useIonRouter, IonCardContent, IonCardHeader, IonCardTitle
+  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, useIonRouter, IonCardContent, IonCardHeader, IonCardTitle, IonAlert
 } from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/my-context';
@@ -9,7 +9,7 @@ import { useToast } from '@agney/ir-toast';
 import { handleSubmitEventForApproval, handleUploadEventImages } from '../utils/server';
 // import './EventForm.css';
 import { Map, Marker } from "pigeon-maps";
-import { cameraOutline, chevronBackOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
+import { addOutline, cameraOutline, chevronBackOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import GoBackHeader from '../components/Shared/GoBackHeader';
 import { navigateBack } from '../components/Shared/BackButtonNavigation';
@@ -159,6 +159,10 @@ export const EventForm = () => {
     const nextTags = eventTags.slice(visibleTags.length, visibleTags.length + 20);
     setVisibleTags([...visibleTags, ...nextTags]);
   };
+
+  const addNewTag = (tag: string) => {
+    setVisibleTags([tag, ...visibleTags]);
+  }
 
   const isFormValid = () => {
     return refs.every(ref => ref.current && ref.current.value && (ref.current.value as string).trim() !== '');
@@ -378,7 +382,7 @@ export const EventForm = () => {
                     />
                   </IonCardContent>
                   <IonCardHeader>
-                    <p className='ion-no-padding ion-no-margin' style={{fontSize: "1rem"}}>
+                    <p className='ion-no-padding ion-no-margin' style={{ fontSize: "1rem" }}>
                       {photos && photos.length > 0 ? 'Change' : 'Add'}
                     </p>
                   </IonCardHeader>
@@ -388,10 +392,15 @@ export const EventForm = () => {
               <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Tags</IonLabel>
               </IonItem>
-              <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
-                {visibleTags.map(tag => (
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', paddingRight: "5px", paddingLeft: "5px" }}>
+                <IonButton id='add-custom-tag' className='ion-no-padding' fill='clear'>
+                  <IonChip style={{ width: `60px` }}>
+                    <IonIcon icon={addOutline} style={{ marginRight: '5px' }} />
+                  </IonChip>
+                </IonButton>
+                {visibleTags.map((tag: string, idx: number) => (
                   <IonChip
-                    key={tag}
+                    key={tag + idx}
                     onClick={() => toggleTag(tag)}
                     color={selectedTags.includes(tag) ? "secondary" : "light"}
                   >
@@ -407,73 +416,104 @@ export const EventForm = () => {
 
               <IonButton color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmit()}>Submit</IonButton>
               <br />
+
+              <IonAlert
+                trigger="add-custom-tag"
+                header="Add custom tag"
+                buttons={[
+                  'Cancel',
+                  {
+                    text: 'Add',
+                    handler: (data) => {
+                      if (data.tag.length > 50) {
+                        const t = Toast.create({ message: "Custom tag must not exceed 50 characters", duration: 3000, color: "danger" });
+                        t.present();
+                        return;
+                      }
+                      if (data.tag.length > 0) {
+                        addNewTag(data.tag);
+                      }
+                    }
+                  }
+                ]}
+                inputs={[
+                  {
+                    name: 'tag',
+                    type: 'text',
+                    placeholder: 'House Party',
+                    max: '50'
+                  }
+                ]}
+              />
             </div>
 
           </>
           :
-          <div className="ion-text-center access-denied-message">
+          <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
             You must be an admin or organizer to submit an event or attraction!
           </div>
         }
 
-        <IonModal ref={mapModalRef} canDismiss={canDismiss} onIonModalWillPresent={handleAddressValidation} trigger='address-verification' handle={false}>
-          <IonContent fullscreen>
-            <IonLoading isOpen={addressValidating} />
-            <IonHeader className='ion-no-border'>
-              <IonToolbar style={{ '--background': 'black' }}>
-                <IonButtons >
-                  <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { mapModalRef && mapModalRef.current && mapModalRef.current.dismiss() }}>
-                    <IonIcon icon={chevronBackOutline} />
-                  </IonButton>
-                  <IonTitle>Map Pin Selection</IonTitle>
-                </IonButtons>
-              </IonToolbar>
-            </IonHeader>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{}}>
-                <Map
-                  maxZoom={14}
-                  height={400}
-                  width={500}
-                  attribution={false}
-                  zoom={zoom}
-                  center={center}
-                  onClick={(e) => {
-                    setMapPinLatLong(e.latLng);
-                  }}
-                  onBoundsChanged={({ center, zoom }) => {
-                    setCenter(center);
-                    setZoom(zoom);
+        {context.humspotUser?.accountType !== 'user' &&
+          <IonModal ref={mapModalRef} canDismiss={canDismiss} onIonModalWillPresent={handleAddressValidation} trigger='address-verification' handle={false}>
+            <IonContent fullscreen>
+              <IonLoading isOpen={addressValidating} />
+              <IonHeader className='ion-no-border'>
+                <IonToolbar style={{ '--background': 'black' }}>
+                  <IonButtons >
+                    <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { mapModalRef && mapModalRef.current && mapModalRef.current.dismiss() }}>
+                      <IonIcon icon={chevronBackOutline} />
+                    </IonButton>
+                    <IonTitle>Map Pin Selection</IonTitle>
+                  </IonButtons>
+                </IonToolbar>
+              </IonHeader>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{}}>
+                  <Map
+                    maxZoom={14}
+                    height={400}
+                    width={500}
+                    attribution={false}
+                    zoom={zoom}
+                    center={center}
+                    onClick={(e) => {
+                      setMapPinLatLong(e.latLng);
+                    }}
+                    onBoundsChanged={({ center, zoom }) => {
+                      setCenter(center);
+                      setZoom(zoom);
+                    }}
+                  >
+                    {mapPinLatLong &&
+                      <Marker width={40} anchor={[mapPinLatLong[0], mapPinLatLong[1]]}></Marker>
+                    }
+                  </Map>
+                </div>
+                {!addressValidating && locationRef?.current?.value &&
+                  <div style={{ margin: '10px', width: '100%', textAlign: 'center' }}>
+                    <p style={{ fontSize: '16px', fontWeight: '500' }}>Address Entered: {locationRef.current.value}</p>
+                  </div>
+                }
+                <IonButton expand="block" color='danger' style={{ padding: "5px" }}
+                  onClick={() => {
+                    setMapPinLatLong(null);
+                    mapModalRef?.current?.dismiss();
                   }}
                 >
-                  {mapPinLatLong &&
-                    <Marker width={40} anchor={[mapPinLatLong[0], mapPinLatLong[1]]}></Marker>
-                  }
-                </Map>
+                  Do Not Use Precise Location
+                </IonButton>
+                <IonButton expand="block" style={{ padding: "5px" }}
+                  onClick={() => {
+                    mapModalRef?.current?.dismiss();
+                  }}
+                >
+                  Save Location
+                </IonButton>
               </div>
-              {!addressValidating && locationRef?.current?.value &&
-                <div style={{ margin: '10px', width: '100%', textAlign: 'center' }}>
-                  <p style={{ fontSize: '16px', fontWeight: '500' }}>Address Entered: {locationRef.current.value}</p>
-                </div>
-              }
-              <IonButton expand="block" color='danger' style={{ padding: "5px" }}
-                onClick={() => {
-                  setMapPinLatLong(null);
-                  mapModalRef?.current?.dismiss();
-                }}
-              >
-                Do Not Use Precise Location
-              </IonButton>
-              <IonButton expand="block" style={{ padding: "5px" }}
-                onClick={() => {
-                  mapModalRef?.current?.dismiss();
-                }}
-              >
-                Save Location
-              </IonButton>
-            </div>
-          </IonContent>
-        </IonModal>
+            </IonContent>
+          </IonModal>
+        }
 
       </IonContent>
     </IonPage >
