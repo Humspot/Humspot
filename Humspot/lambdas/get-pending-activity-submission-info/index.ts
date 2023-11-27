@@ -73,9 +73,9 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
 
     const query: string = `
       SELECT 
-        s.*, 
-        sp.photoUrl, 
-        st.tagName
+        s.*,
+        GROUP_CONCAT(DISTINCT sp.photoUrl SEPARATOR ', ') AS photoUrls,
+        GROUP_CONCAT(DISTINCT st.tagName SEPARATOR ', ') AS tagNames
       FROM 
         Submissions s
       LEFT JOIN 
@@ -84,11 +84,13 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
         SubmissionTags st ON s.submissionID = st.submissionID
       WHERE 
         s.submissionID = ?
+      GROUP BY 
+        s.submissionID;
     `;
 
     const [rows]: any = await conn.query(query, [submissionID]);
 
-    const resBody: GetPendingActivitySubmissionsResponse = { message: "Pending submissions query successful", success: true, submissionInfo: rows };
+    const resBody: GetPendingActivitySubmissionsResponse = { message: "Pending submissions query successful", success: true, submissionInfo: rows[0] };
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
@@ -109,4 +111,3 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
   }
 };
-
