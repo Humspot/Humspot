@@ -1201,8 +1201,6 @@ export const handleGetSubmittedActivities = async (userID: string, pageNum: numb
 };
 
 
-
-
 export const handleSubmitAttractionForApproval = async (event: HumspotAttraction) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1338,3 +1336,117 @@ export const getUserRatingGivenUserID = async (userID: string, activityID: strin
     return { message: "Error calling API Gateway" + error, success: false };
   }
 }
+
+export const handleGetPendingOrganizerSubmissions = async (pageNum: number, userID: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_PENDING_ORGANIZER_SUBMISSIONS_URL +
+      "/" +
+      pageNum +
+      "/" +
+      userID,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false, pendingSubmissions: [] };
+  }
+};
+
+export const handleApproveOrganizer = async (approverID: string, submitterID: string, submitterEmail: string, submissionID: string, reason: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const info = {
+      approverID: approverID,
+      submitterID: submitterID,
+      submitterEmail: submitterEmail,
+      submissionID: submissionID,
+      reason: reason,
+    };
+
+    console.log(info);
+
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_APPROVE_ORGANIZER_SUBMISSION,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(info)
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
+};
+
+export const handleDenyOrganizer = async (approverID: string, submitterID: string, submitterEmail: string, submissionID: string, reason: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const info = {
+      approverID: approverID,
+      submitterID: submitterID,
+      submitterEmail: submitterEmail,
+      submissionID: submissionID,
+      reason: reason,
+    };
+
+    console.log(info);
+
+    const response = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_DENY_ORGANIZER_SUBMISSION,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(info)
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
+};

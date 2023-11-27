@@ -26,7 +26,7 @@ const ProfileActivitiesModal: React.FC = () => {
   }, [modalRef]);
 
   return (
-    <IonModal ref={modalRef} trigger="open-add-activity-modal" handle={false} breakpoints={[0, 0.55, 0.99]} initialBreakpoint={0.55}>
+    <IonModal ref={modalRef} trigger="open-add-activity-modal" handle breakpoints={[0, 0.55, 0.99]} initialBreakpoint={0.55}>
       <IonContent style={{ '--background': 'var(--ion-item-background' }}>
         <br />
         <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Activities</IonTitle>

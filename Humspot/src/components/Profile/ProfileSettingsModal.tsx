@@ -17,7 +17,8 @@ import {
   mailOutline,
   shieldOutline,
   readerOutline,
-  logInOutline
+  logInOutline,
+  constructOutline
 } from "ionicons/icons";
 import { Dialog } from "@capacitor/dialog";
 
@@ -87,16 +88,16 @@ const ProfileSettingsModal = () => {
 
 
   return (
-    <IonModal ref={modalRef} trigger="open-profile-page-modal" handle={false} breakpoints={[0, 0.8, 0.99]} initialBreakpoint={0.8}>
+    <IonModal ref={modalRef} trigger="open-profile-page-modal" handle breakpoints={[0, 0.8, 0.99]} initialBreakpoint={0.8}>
       <IonContent style={{ '--background': 'var(--ion-item-background' }}>
         <br />
         <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Settings</IonTitle>
         <IonList lines='full'>
-          <IonItem disabled={!context.humspotUser} style={{}}>
+          {/* <IonItem disabled={!context.humspotUser} style={{}}>
             <IonIcon aria-hidden="true" icon={notificationsOutline} slot="start" color='medium'></IonIcon>
             <IonLabel><IonToggle disabled={!context.humspotUser}>Notifications </IonToggle></IonLabel>
           </IonItem>
-          <br />
+          <br /> */}
           <IonItem>
             <IonIcon aria-hidden="true" icon={moonOutline} slot="start" color='medium'></IonIcon>
             <IonLabel><IonToggle checked={context.darkMode} onIonChange={(e) => { toggleDarkMode(e.detail.checked) }}>Dark Mode</IonToggle></IonLabel>
@@ -117,6 +118,15 @@ const ProfileSettingsModal = () => {
             <IonLabel>Terms and Conditions</IonLabel>
           </IonItem>
           <br />
+          {context.humspotUser?.accountType === 'admin' &&
+            <>
+              <IonItem role='button' onClick={() => { modalRef?.current?.dismiss(); router.push("/admin-dashboard") }}>
+                <IonIcon aria-hidden="true" icon={constructOutline} slot="start" color='medium'></IonIcon>
+                <IonLabel>Admin Dashboard</IonLabel>
+              </IonItem>
+              <br />
+            </>
+          }
           {context.humspotUser === undefined ?
             <>
               <IonItem role='button' onClick={() => { modalRef?.current?.dismiss(); router.push("/sign-up") }}>
