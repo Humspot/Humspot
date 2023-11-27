@@ -326,7 +326,7 @@ export const handleAddAttraction = async (newAttraction: HumspotAttraction): Pro
  *
  * @returns {Promise<GetActivitiesGivenTagResponse>} a status message along with an array of events that have a certain tag associated with it.
  */
-export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string): Promise<any> => {
+export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string): Promise<{ message: string; activities: any[]; success: boolean; }> => {
   try {
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_ACTIVITIES_GIVEN_TAG_URL +
@@ -348,7 +348,7 @@ export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string):
     return responseData;
   } catch (error) {
     console.error("Error calling API Gateway", error);
-    return { message: "Error calling API Gateway" + error, events: [] };
+    return { message: "Error calling API Gateway" + error, activities: [], success: false };
   }
 };
 

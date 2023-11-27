@@ -1,4 +1,5 @@
-import { IonCheckbox, IonContent, IonList, IonModal } from "@ionic/react";
+import { IonCheckbox, IonContent, IonDatetime, IonItem, IonLabel, IonList, IonModal } from "@ionic/react";
+import { useState } from "react";
 
 type MapSettingsModalProps = {
   showThisWeeksEvents: boolean;
@@ -6,6 +7,11 @@ type MapSettingsModalProps = {
 };
 
 const MapSettingsModal = (props: MapSettingsModalProps) => {
+
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
+
+  // const handleUpdate
 
   return (
     <IonModal trigger="map-settings-modal" handle={false} breakpoints={[0, 0.85, 0.99]} initialBreakpoint={0.85}>
@@ -18,6 +24,16 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
         <IonList lines="none">
           <IonCheckbox checked={props.showThisWeeksEvents} onIonChange={(e) => { props.setShowThisWeeksEvents(e.detail.checked) }}>Events within the week</IonCheckbox>
         </IonList>
+
+        <div>
+          <IonLabel>Start Date</IonLabel>
+          <input type='date' onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setStartDate(e.target.value) }} />
+        </div>
+
+        <div>
+          <IonLabel>End Date</IonLabel>
+          <input type='date' onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setEndDate(e.target.value) }} />
+        </div>
 
       </IonContent>
     </IonModal>

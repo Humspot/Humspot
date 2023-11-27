@@ -26,7 +26,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   const conn = await pool.getConnection();
   try {
     const page = event.pathParameters && event.pathParameters["page"];
-    const tag = event.pathParameters && event.pathParameters["tag"];
+    const tag = event.pathParameters && event.pathParameters["tag"].toLowerCase();
 
     if (!page || !tag) {
       return {
@@ -51,15 +51,25 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       a.*,
       e.eventID,
       at.attractionID, at.openTimes,
-      ap.photoID, ap.photoUrl
-      FROM Activities a
-      LEFT JOIN ActivityTags atg ON a.activityID = atg.activityID
-      LEFT JOIN Tags t ON atg.tagID = t.tagID
-      LEFT JOIN Events e ON a.activityID = e.activityID AND a.activityType = 'event'
-      LEFT JOIN Attractions at ON a.activityID = at.activityID AND a.activityType = 'attraction'
-      LEFT JOIN ActivityPhotos ap ON a.activityID = ap.activityID
-      WHERE t.tagName = ?
-      LIMIT 10 OFFSET ?;
+      ap.photoID, ap.photoUrl,
+      CASE 
+        WHEN a.activityType = 'event' AND e.date >= CURDATE() THEN 1
+        WHEN a.activityType = 'attraction' THEN 2
+        ELSE 3
+      END as sortPriority,
+      IF(a.activityType = 'event', e.date, NULL) as eventDate
+    FROM Activities a
+    LEFT JOIN ActivityTags atg ON a.activityID = atg.activityID
+    LEFT JOIN Tags t ON atg.tagID = t.tagID
+    LEFT JOIN Events e ON a.activityID = e.activityID AND a.activityType = 'event'
+    LEFT JOIN Attractions at ON a.activityID = at.activityID AND a.activityType = 'attraction'
+    LEFT JOIN ActivityPhotos ap ON a.activityID = ap.activityID
+    WHERE LOWER(t.tagName) LIKE CONCAT('%', LOWER(?), '%')
+    ORDER BY 
+      sortPriority ASC,
+      IF(a.activityType = 'event', e.date, a.avgRating) DESC,
+      a.name ASC
+    LIMIT 10 OFFSET ?;  
     `;
     const [rows] = await conn.query(query, [tag, offset]);
 
