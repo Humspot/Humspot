@@ -50,9 +50,8 @@ const SubmittedActivitiesPage = () => {
 
   return (
     <IonPage>
-      <IonContent>
+      <GoBackHeader title="Submitted Activities" />
 
-        <GoBackHeader title="Submitted Activities" />
 
         <IonList className='ion-no-padding'>
           {loading ?

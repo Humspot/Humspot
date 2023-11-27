@@ -6,7 +6,7 @@ import {
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/my-context';
 import { useToast } from '@agney/ir-toast';
-import { handleSubmitEventForApproval, handleUploadEventImages } from '../utils/server';
+import { handleSubmitEventForApproval, handleUploadSubmissionImages } from '../utils/server';
 // import './EventForm.css';
 import { Map, Marker } from "pigeon-maps";
 import { addOutline, cameraOutline, chevronBackOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
@@ -241,7 +241,7 @@ export const EventForm = () => {
 
     let uploadedPhotoUrls: string[] = [];
     if (blobs) {
-      const res = await handleUploadEventImages(blobs);
+      const res = await handleUploadSubmissionImages(blobs, 'event-photos');
       if (!res.success) {
         const t = Toast.create({ message: "Photos failed to upload, reload the page to try again", duration: 2000, color: 'danger' });
         t.present();
