@@ -1,5 +1,6 @@
 /**
- * AWS lambda function to retrieve the 20 most recent pending activities from the Submissions table.
+ * AWS lambda function to retrieve info from the Submissions table for a specific entry.
+ * This function differs from get-pending-activity-submissions because it retrieves ALL info (SELECT *), along with tags and photos.
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
@@ -17,41 +18,23 @@ const pool: mysql.Pool = mysql.createPool({
   debug: true
 });
 
-type Submission = {
-  submissionID: string;
-  name: string;
-  description: string;
-  activityType: 'event' | 'attraction' | 'custom';
-};
-
 type GetPendingActivitySubmissionsResponse = {
   success: boolean;
   message: string;
-  pendingSubmissions: Submission[];
+  submissionInfo: any;
 };
 
 export const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   context.callbackWaitsForEmptyEventLoop = false;
   const conn = await pool.getConnection();
   try {
-    const page = event.pathParameters && event.pathParameters["page"];
     const userID = event.pathParameters && event.pathParameters["userID"];
-    if (!page || !userID) {
+    const submissionID = event.pathParameters && event.pathParameters["submissionID"];
+    if (!submissionID || !userID) {
       return {
         statusCode: 400,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: "Invalid path parameters!" })
-      };
-    }
-    const pageNum: number = Number(page);
-    const offset: number = (pageNum - 1) * 20;
-
-    if (isNaN(pageNum) || pageNum < 1 || !userID) {
-      const resBody: GetPendingActivitySubmissionsResponse = { message: 'Invalid path parameters', success: false, pendingSubmissions: [] };
-      return {
-        statusCode: 400,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(resBody),
       };
     }
 
@@ -70,7 +53,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
             "Access-Control-Allow-Origin": '*'
           },
           body: JSON.stringify({
-            message: `User with ID ${userID} is not approved to view submissions`, success: false, pendingSubmissions: []
+            message: `User with ID ${userID} is not approved to view submissions info`, success: false, submissionInfo: []
           }),
         };
       }
@@ -89,15 +72,23 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
 
     const query: string = `
-      SELECT name, description, activityType, submissionID, organizer
-      FROM Submissions
-      ORDER BY submissionDate DESC
-      LIMIT 20 OFFSET ?;
+      SELECT 
+        s.*, 
+        sp.photoUrl, 
+        st.tagName
+      FROM 
+        Submissions s
+      LEFT JOIN 
+        SubmissionPhotos sp ON s.submissionID = sp.submissionID
+      LEFT JOIN 
+        SubmissionTags st ON s.submissionID = st.submissionID
+      WHERE 
+        s.submissionID = ?
     `;
 
-    const [rows]: any = await conn.query(query, [offset]);
+    const [rows]: any = await conn.query(query, [submissionID]);
 
-    const resBody: GetPendingActivitySubmissionsResponse = { message: "Pending submissions query successful", success: true, pendingSubmissions: rows};
+    const resBody: GetPendingActivitySubmissionsResponse = { message: "Pending submissions query successful", success: true, submissionInfo: rows };
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
@@ -106,7 +97,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
 
   } catch (error) {
     console.error('Query execution error:', error);
-    const resBody: GetPendingActivitySubmissionsResponse = { message: 'Internal Server Error, query execution error', success: false, pendingSubmissions: [] };
+    const resBody: GetPendingActivitySubmissionsResponse = { message: 'Internal Server Error, query execution error', success: false, submissionInfo: [] };
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },

@@ -62,7 +62,7 @@ const FilterAccordion = (props: {
 }) => {
   const { filterprop, setFilter } = props;
   return (
-    <IonAccordionGroup>
+    <IonAccordionGroup  style={{ position: 'sticky', top: 0, zIndex: 100, }}>
       <IonAccordion
         value="first"
         toggleIcon={caretDownCircle}

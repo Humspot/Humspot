@@ -36,6 +36,8 @@ import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
 import { Rating } from 'react-custom-rating-component'
 import ActivityHeaderTitle from "../components/Activity/ActivityHeaderTitle";
+import { Preferences } from "@capacitor/preferences";
+import { updateRecentlyViewed } from "../utils/updateRecentlyViewed";
 
 type ActivityPageParams = {
   id: string;
@@ -53,10 +55,13 @@ function ActivityPage() {
   const [activityLoading, setActivityLoading] = useState<boolean>(true);
 
   const handleGetActivityCallback = useCallback(async (id: string) => {
+    setActivityLoading(true);
     const res = await handleGetActivity(id);
     if ("activity" in res && res.activity) setActivity(res.activity);
     setActivityLoading(false);
-  }, []);
+    await updateRecentlyViewed(id, res.activity?.name ?? '', res.activity?.description ?? '', res.activity?.date ?? '', res.activity?.photoUrls ?? '');
+    context.setRecentlyViewedUpdated(true);
+  }, [id]);
   useEffect(() => {
     if (id) handleGetActivityCallback(id);
   }, [id]);
@@ -116,7 +121,7 @@ function ActivityPage() {
         </div>
 
         {/* Header Title */}
-        <ActivityHeaderTitle id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name}/>
+        <ActivityHeaderTitle id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name} />
         {/* Tags */}
         <div style={{ paddingLeft: "5px" }}>
           {activity &&
