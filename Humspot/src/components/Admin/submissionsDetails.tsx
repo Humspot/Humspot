@@ -7,7 +7,9 @@ import { IonPage,
     IonButtons, 
     IonBackButton, 
     IonContent, 
-    IonLabel 
+    IonLabel,  
+    IonFooter,  
+    IonRow
 } from '@ionic/react';
 
 import { useHistory } from 'react-router-dom';
@@ -22,6 +24,14 @@ const SubmissionDetailPage: React.FC<any> = ({ match }) => {
   const handleBackButtonClick = () => {
     history.push('/admin-dashboard');
   };
+
+  const handleApprove = () => {
+    console.log("Submission Approved");
+  };
+  
+  const handleDecline = () => {
+    console.log('Submissions Decline');
+  };  
 
   const fetchSubmissionsDetails = useCallback(async () => {
     //Assume handleGetSubmissionsDetails
@@ -54,8 +64,25 @@ const SubmissionDetailPage: React.FC<any> = ({ match }) => {
         {/* Render submission details here */}
         <h2>Submission ID: { submissionID } </h2>
         <h3>Event Name: { submissionID } </h3>
-        {/* Other details go here */}
+        <h4>Description: </h4> 
+        <p> Test Description{ submissionID } </p>
+        {/* Other details go here */}    
       </IonContent>
+      <IonFooter>
+        <IonToolbar>
+          <IonRow style={{ border: '1px solid #ccc', borderRadius: '8px', overflow: 'hidden', marginBottom: '10px' }}>
+            <IonButtons onClick={handleApprove} color="success">
+              Approve
+            </IonButtons>
+          </IonRow>
+
+          <IonRow>
+            <IonButtons onClick={handleDecline} color="danger">
+             Decline
+            </IonButtons>
+          </IonRow>
+        </IonToolbar>
+      </IonFooter>
     </IonPage>
   );
 };
