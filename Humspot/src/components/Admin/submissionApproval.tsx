@@ -29,7 +29,8 @@ import { handleGetPendingActivitySubmissions } from "../../utils/server";
 
 function SubmissionApproval({ title, description, imgsrc, id }: any) {
   const router = useIonRouter();
-  const context = useContext();
+  const context = useContext();  
+  const [orgSubmissions, setOrgSubumissions] = useState<any[]>([]);
 
   const fetchSubmissions = useCallback(async () => {
     if (!context.humspotUser) return;
@@ -54,7 +55,7 @@ function SubmissionApproval({ title, description, imgsrc, id }: any) {
             <IonItem
               key={index}
               onClick={() => {
-                router.push("/admin-dashboard/" + submission.submissionID);
+                router.push("/admin-dashboard/submission/" + submission.submissionID);
               }}
             >
               <IonLabel style={{ paddingLeft: "10px" }}>

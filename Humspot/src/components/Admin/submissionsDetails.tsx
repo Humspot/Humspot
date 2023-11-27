@@ -1,6 +1,6 @@
 // Should open a submission page with the info stuff 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { IonPage, 
     IonHeader, 
     IonToolbar, 
@@ -11,6 +11,7 @@ import { IonPage,
 } from '@ionic/react';
 
 import { useHistory } from 'react-router-dom';
+import { handleGetPendingActivitySubmissions } from '../../utils/server';
 
 
 const SubmissionDetailPage: React.FC<any> = ({ match }) => {
@@ -21,22 +22,21 @@ const SubmissionDetailPage: React.FC<any> = ({ match }) => {
   const handleBackButtonClick = () => {
     history.push('/admin-dashboard');
   };
+
+  const fetchSubmissionsDetails = useCallback(async () => {
+    //Assume handleGetSubmissionsDetails
+    try {
+      const details = await handleGetPendingActivitySubmissions(submissionDetails);
+      setSubmissionDetails(details);
+    } catch (error) {
+      console.error('Error fetching submission details:', error);
+    }
+  }, [ submissionID ]);
+
+  useEffect (()=> {
+    fetchSubmissionsDetails();
+  }, [fetchSubmissionsDetails]);
   
-  useEffect(() => {
-    // Fetch submission details based on submissionID
-    // Replace the following with your actual API call
-    const fetchSubmissionDetails = async () => {
-      try {
-        // Example API call using fetch
-        const response = await fetch(`/api/submissions/${submissionID}`);
-        const data = await response.json();
-        setSubmissionDetails(data);
-      } catch (error) {
-        console.error('Error fetching submission details:', error);
-      }
-    };     
-    fetchSubmissionDetails();
-  }, [submissionID]);
 
   // Fetch submission details based on submissionID, if needed
 
@@ -52,7 +52,8 @@ const SubmissionDetailPage: React.FC<any> = ({ match }) => {
       </IonHeader>
       <IonContent>
         {/* Render submission details here */}
-        <h2>Submission ID: {submissionID}</h2>
+        <h2>Submission ID: { submissionID } </h2>
+        <h3>Event Name: { submissionID } </h3>
         {/* Other details go here */}
       </IonContent>
     </IonPage>

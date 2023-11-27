@@ -140,7 +140,7 @@ const App: React.FC = () => {
               <Route exact path="/submit-event" component={SubmitEventPage} />
               <Route exact path="/activity/:id" component={ActivityPage} />
               <Route exact path="/admin-dashboard" component={adminMain}/>
-              <Route exact path="/submissions/:id" component={SubmissionDetailPage} />
+              <Route exact path="/admin-dashboard/submission/:id" component={SubmissionDetailPage} />
              </IonRouterOutlet>
 
             <IonTabBar
