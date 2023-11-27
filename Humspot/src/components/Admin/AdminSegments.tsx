@@ -17,9 +17,10 @@ import {
 } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
 import { useContext } from "../../utils/my-context";
-import { handleGetPendingActivitySubmissions, handleGetPendingOrganizerSubmissions } from "../../utils/server";
+import { handleGetApprovedOrganizerSubmissions, handleGetPendingActivitySubmissions, handleGetPendingOrganizerSubmissions } from "../../utils/server";
 import AdminSubmissionsList from "./AdminSubmissionsList";
 import AdminPendingOrganizersList from "./AdminPendingOrganizersList";
+import AdminApprovedOrganizersList from "./AdminApprovedOrganizersList";
 
 const AdminSegment: React.FC = () => {
 
@@ -30,8 +31,12 @@ const AdminSegment: React.FC = () => {
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [submissionsLoading, setSubmissionsLoading] = useState<boolean>(false);
 
+  // List of pending requests to be an organizer
   const [organizers, setOrganizers] = useState<any[]>([]);
   const [organizersLoading, setOrganizersLoading] = useState<boolean>(false);
+
+  const [approvedOrganizers, setApprovedOrganizers] = useState<any[]>([]);
+  const [approvedOrganizersLoading, setApprovedOrganizersLoading] = useState<boolean>(false);
 
   const fetchSubmissions = useCallback(async () => {
     if (!context.humspotUser) return;
@@ -43,7 +48,6 @@ const AdminSegment: React.FC = () => {
     setSubmissions(response.pendingSubmissions);
     setSubmissionsLoading(false);
   }, [context.humspotUser]);
-
   useEffect(() => {
     fetchSubmissions();
   }, [fetchSubmissions]);
@@ -55,15 +59,25 @@ const AdminSegment: React.FC = () => {
     setOrganizers(res.pendingOrganizers);
     setOrganizersLoading(false);
   }, [context.humspotUser]);
-
   useEffect(() => {
     fetchOrganizerSubmissions();
   }, [fetchOrganizerSubmissions]);
 
+  const fetchApprovedOrganizers = useCallback(async () => {
+    if (!context.humspotUser) return;
+    setOrganizersLoading(true);
+    const res = await handleGetApprovedOrganizerSubmissions(1, context.humspotUser.userID);
+    setApprovedOrganizers(res.organizerList);
+    setApprovedOrganizersLoading(false);
+  }, []);
+  useEffect(() => {
+    fetchApprovedOrganizers();
+  }, [fetchApprovedOrganizers])
+
   const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     await fetchSubmissions();
     await fetchOrganizerSubmissions();
-    // await fetchApprovedOrganizers();
+    await fetchApprovedOrganizers();
     event.detail.complete();
   }
 
@@ -125,6 +139,7 @@ const AdminSegment: React.FC = () => {
           </IonCard>
         ) : selectedSegment === "approvedOrganizer" ? (
           <IonCard>
+            <AdminApprovedOrganizersList approvedOrganizers={approvedOrganizers} loading={approvedOrganizersLoading} />
           </IonCard>
         ) : (
           <></>

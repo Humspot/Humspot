@@ -57,6 +57,7 @@ import { StatusBar, Style } from "@capacitor/status-bar";
 import { Preferences } from "@capacitor/preferences";
 import BecomeACoodinator from "./pages/BecomeACoodinator";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminApproveActivitySubmission from "./pages/AdminApproveActivitySubmission";
 
 setupIonicReact({ mode: "md" });
 
@@ -166,6 +167,7 @@ const App: React.FC = () => {
               <Route exact path="/forgot-password" component={ForgotPassword} />
               <Route exact path="/become-a-coordinator" component={BecomeACoodinator} />
               <Route exact path="/admin-dashboard" component={AdminDashboard} />
+              <Route exact path="/submission/:id" component={AdminApproveActivitySubmission} />
               <Route
                 exact
                 path="/verify-email/:email/:toVerify"
