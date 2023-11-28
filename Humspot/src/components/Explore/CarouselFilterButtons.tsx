@@ -80,7 +80,7 @@ const CarouselFilterButtons = (props: { setShowFilterList: React.Dispatch<React.
       {filter ?
         <>
           {loadingFiltersActivities ?
-            <FadeIn>
+            <>
               <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
                 <div style={{ padding: "10px" }}>
                   <IonSkeletonText style={{ height: "200px", borderRadius: "10px" }} animated />
@@ -98,7 +98,7 @@ const CarouselFilterButtons = (props: { setShowFilterList: React.Dispatch<React.
                   <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
                 </div>
               </IonCard>
-            </FadeIn>
+            </>
             :
             filteredActivities && filteredActivities.length > 0 ?
               filteredActivities.map((activity, idx: number) => {
@@ -134,7 +134,9 @@ const CarouselFilterButtons = (props: { setShowFilterList: React.Dispatch<React.
               :
               !loadingFiltersActivities ?
                 <div style={{ paddingTop: "25px", paddingBottom: "25px", background: "var(--ion-color-dark)" }}>
-                  <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Events Matching Filter</IonTitle>
+                  <FadeIn>
+                    <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Events Matching Filter</IonTitle>
+                  </FadeIn>
                 </div>
                 :
                 <></>

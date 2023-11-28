@@ -41,6 +41,7 @@ const AdminApproveActivitySubmission = () => {
 
   const context = useContext();
 
+  const [loading, setLoading] = useState<boolean>(false);
   const [submissionInfo, setSubmissionInfo] = useState<SubmissionInfo | null>(null);
 
   const mapModalRef = useRef<HTMLIonModalElement | null>(null);
@@ -54,8 +55,10 @@ const AdminApproveActivitySubmission = () => {
   };
   const fetchSubmissionInfo = useCallback(async () => {
     if (!context.humspotUser) return;
+    setLoading(true);
     const res = await handleGetSubmissionInfo(context.humspotUser.userID, id);
     setSubmissionInfo(res.submissionInfo);
+    setLoading(false);
   }, [context.humspotUser])
   useEffect(() => {
     fetchSubmissionInfo();
@@ -66,6 +69,8 @@ const AdminApproveActivitySubmission = () => {
       <IonContent >
 
         <GoBackHeader title="Approve Event" />
+
+        <IonLoading message={"Loading..."} isOpen={loading} />
 
         {context.humspotUser?.accountType !== 'user' ?
           <>

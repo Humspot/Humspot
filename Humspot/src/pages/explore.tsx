@@ -3,6 +3,7 @@ import {
   IonItemDivider,
   IonPage,
   IonSkeletonText,
+  IonText,
   useIonRouter,
   useIonViewWillEnter,
 } from "@ionic/react";
@@ -26,11 +27,6 @@ import { useContext } from "../utils/my-context";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
 import CarouselFilterButtons from "../components/Explore/CarouselFilterButtons";
 import CarouselRecentlyViewed from "../components/Explore/CarouselRecentlyViewed";
-
-<link
-  href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
-  rel="stylesheet"
-></link>;
 
 function ExplorePage() {
 

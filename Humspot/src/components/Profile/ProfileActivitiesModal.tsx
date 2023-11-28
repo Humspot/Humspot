@@ -43,7 +43,7 @@ const ProfileActivitiesModal: React.FC = () => {
           <br />
           <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/submitted-activities") }}>
             <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start" color="light"></IonIcon>
-            <IonLabel>See Submitted Activities</IonLabel>
+            <IonLabel>See Pending Submissions</IonLabel>
           </IonItem>
           <br />
           {context.humspotUser?.accountType === 'user' &&
