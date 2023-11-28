@@ -67,7 +67,9 @@ function ExplorePage() {
             <>
               <ExploreCarouselRecentlyViewed />
               <ExploreCarouselGeneral title='Highlights' activities={highlights} />
-              <ExploreCarouselGeneral title='Highlights' activities={highlights} />
+              <ExploreCarouselGeneral title='Upcoming Events' activities={highlights} />
+              <ExploreCarouselGeneral title='Chill Places' activities={highlights} />
+              <ExploreCarouselGeneral title='Adventure' activities={highlights} />
             </>
           }
         </IonContent>
