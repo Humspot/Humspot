@@ -42,7 +42,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
                   width: "100%"
                 }}
                 onClick={() => {
-                  if ("id" in activity && activity.id) router.push("/activity/" + activity.id);
+                  if ("activityID" in activity && activity.activityID) router.push("/activity/" + activity.activityID);
                 }}
               >
                 <div style={{ height: '175px', overflow: 'hidden', borderRadius: '10px' }}>

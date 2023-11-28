@@ -154,7 +154,6 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
                 })}
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
-                    if (!context.humspotUser) return;
                     const response = await handleGetActivitiesGivenTag(filterPageNum, filter);
                     if (response.success) {
                       setFilterPageNum((prev) => prev + 1);
