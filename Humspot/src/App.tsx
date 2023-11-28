@@ -168,7 +168,7 @@ const App: React.FC = () => {
               <Route exact path="/forgot-password" component={ForgotPassword} />
               <Route exact path="/become-a-coordinator" component={BecomeACoodinator} />
               <Route exact path="/admin-dashboard" component={AdminDashboard} />
-              <Route exact path="/submission/:id" component={AdminApproveActivitySubmission} />
+              <Route exact path="/admin-dashboard/submission/:id" component={AdminApproveActivitySubmission} />
               <Route
                 exact
                 path="/verify-email/:email/:toVerify"

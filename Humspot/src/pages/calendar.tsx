@@ -201,7 +201,7 @@ function CalendarPage() {
                     events={eventsTodayFiltered}
                   ></EventsListEntry>
                 ) : (
-                  <IonNote class="ion-padding" style={{ fontStyle: "italic" }}>
+                  <IonNote className="ion-padding" style={{ fontStyle: "italic" }}>
                     No events found.
                   </IonNote>
                 )}
@@ -226,7 +226,7 @@ function CalendarPage() {
                     events={eventsWeekFiltered}
                   ></EventsListEntry>
                 ) : (
-                  <IonNote class="ion-padding" style={{ fontStyle: "italic" }}>
+                  <IonNote className="ion-padding" style={{ fontStyle: "italic" }}>
                     No events found.
                   </IonNote>
                 )}
@@ -251,7 +251,7 @@ function CalendarPage() {
                     events={eventsMonthFiltered}
                   ></EventsListEntry>
                 ) : (
-                  <IonNote class="ion-padding" style={{ fontStyle: "italic" }}>
+                  <IonNote className="ion-padding" style={{ fontStyle: "italic" }}>
                     No events found.
                   </IonNote>
                 )}

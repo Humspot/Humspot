@@ -37,7 +37,7 @@ async function sendEmail(submitterEmail: string, reason: string) {
     subject: 'You\'ve been denied as a Humspot organizer',
     html: `
       <div style="font-family: Arial, sans-serif; color: #333;">
-        <p>You're request to become a Humspot organizer has been denited. Submit another request in the app.</p>
+        <p>You're request to become a Humspot organizer has been denied. Submit another request in the app.</p>
         <p>Message from Admin: ${reason}</p>
       </div>
     `

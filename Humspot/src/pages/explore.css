@@ -30,10 +30,10 @@ swiper-slide {
 .Header {
   padding: 4px;
   padding-left: 10px;
-  font-family: "Atkinson Hyperlegible";
   font-size: larger;
   font-weight: bolder;
   text-transform: capitalize;
+  font-size: 1.3rem;
 }
 
 .wrap-text {
