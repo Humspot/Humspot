@@ -55,8 +55,8 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
 
   return (
     <>
-      <div style={{ padding: "10px" }}>
-        <Swiper slidesPerView={5.5}>
+      <div style={filter && !loadingFiltersActivities ? { position: 'sticky', top: 0, zIndex: 1000, padding: "10px 0", background: "var(--ion-background-color)" } : { padding: "10px 0" }}>
+        <Swiper slidesPerView={5.5} spaceBetween={-20}>
           {MAIN_FILTERS.map((entry, idx) => {
             return (
               <SwiperSlide key={idx}>
