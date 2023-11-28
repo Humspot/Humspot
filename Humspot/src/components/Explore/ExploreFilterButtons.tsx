@@ -1,6 +1,6 @@
 import { IonButton, IonCard, IonCardTitle, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItemDivider, IonLabel, IonList, IonSkeletonText, IonText, IonTitle, useIonRouter } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { musicalNotes, school, schoolOutline } from "ionicons/icons";
+import { colorPalette, colorPaletteOutline, fastFood, fastFoodOutline, fitness, fitnessOutline, football, footballOutline, globe, globeOutline, laptop, laptopOutline, musicalNotes, partlySunny, partlySunnyOutline, school, schoolOutline } from "ionicons/icons";
 import { musicalNotesOutline } from "ionicons/icons";
 import { useState, useCallback, useEffect } from "react";
 import { handleGetActivitiesGivenTag } from "../../utils/server";
@@ -22,7 +22,42 @@ const MAIN_FILTERS = [
     name: "Music",
     icon: musicalNotes,
     iconOutline: musicalNotesOutline
-  }
+  },
+  {
+    name: "Food",
+    icon: fastFood,
+    iconOutline: fastFoodOutline
+  },
+  {
+    name: "Outdoor",
+    icon: partlySunny,
+    iconOutline: partlySunnyOutline,
+  },
+  {
+    name: "Art",
+    icon: colorPalette,
+    iconOutline: colorPaletteOutline,
+  },
+  {
+    name: "Fitness",
+    icon: fitness,
+    iconOutline: fitnessOutline
+  },
+  {
+    name: "Tech",
+    icon: laptop,
+    iconOutline: laptopOutline,
+  },
+  {
+    name: "Culture",
+    icon: globe,
+    iconOutline: globeOutline,
+  },
+  {
+    name: "Sports",
+    icon: football,
+    iconOutline: footballOutline
+  },
 ];
 
 const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.SetStateAction<boolean>> }) => {

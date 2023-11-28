@@ -134,9 +134,10 @@ const AdminApproveActivitySubmission = () => {
                   }
                 </IonItem>
                 <br />
-                <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
-                  <IonLabel position='stacked'>Tags</IonLabel>
-                </IonItem>
+                {/* <IonItem style={{ '--background': 'var(--ion-background-color)', '--max-height': "10px" }} lines='none'> */}
+                <IonLabel style={{ padding: "15px" }} position='stacked'>Tags</IonLabel>
+                <div style={{ height: "10px" }} />
+                {/* </IonItem> */}
                 <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', paddingRight: "5px", paddingLeft: "5px" }}>
                   {submissionInfo && submissionInfo.tagNames && submissionInfo.tagNames.length > 0 &&
                     submissionInfo.tagNames.split(',').map((tag: string, idx: number) => (
