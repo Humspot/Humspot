@@ -645,17 +645,17 @@ const SubmitAttractionPage = () => {
           <IonContent fullscreen>
             <IonLoading isOpen={addressValidating} />
             <IonHeader className="ion-no-border">
-              <IonToolbar style={{ "--background": "black" }}>
+              <IonToolbar>
                 <IonButtons>
                   <IonButton
-                    style={{ fontSize: "1.25em", marginLeft: "5px" }}
+                    style={{ fontSize: "1.05em", marginLeft: "-7.5px" }}
                     onClick={() => {
                       mapModalRef &&
                         mapModalRef.current &&
                         mapModalRef.current.dismiss();
                     }}
                   >
-                    <IonIcon icon={chevronBackOutline} />
+                    Close
                   </IonButton>
                   <IonTitle>Map Pin Selection</IonTitle>
                 </IonButtons>

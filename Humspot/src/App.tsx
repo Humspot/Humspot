@@ -31,7 +31,7 @@ import "./theme/variables.css";
 
 import ExplorePage from "./pages/Explore";
 import CalendarPage from "./pages/Calendar";
-import MapPage from "./pages/map";
+import MapPage from "./pages/Map";
 import ProfilePage from "./pages/Profile";
 
 import ActivityPage from "./pages/ActivityPage";

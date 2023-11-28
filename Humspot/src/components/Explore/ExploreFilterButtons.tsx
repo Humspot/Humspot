@@ -87,33 +87,33 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
           {loadingFiltersActivities ?
             <>
               <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
-                <div style={{ padding: "10px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "10px" }} animated />
-                  <br />
+                <div style={{ padding: "5px" }}>
+                  <IonSkeletonText style={{ height: "180px", borderRadius: "10px" }} animated />
+                  {/* <br /> */}
+                  <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
+                  <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
+                </div>
+              </IonCard>
+              <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
+                <div style={{ padding: "5px" }}>
+                  <IonSkeletonText style={{ height: "180px", borderRadius: "10px" }} animated />
+                  {/* <br /> */}
+                  <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
+                  <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
+                </div>
+              </IonCard>
+              <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
+                <div style={{ padding: "5px" }}>
+                  <IonSkeletonText style={{ height: "180px", borderRadius: "10px" }} animated />
+                  {/* <br /> */}
                   <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
                   <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
                 </div>
               </IonCard>
               <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
                 <div style={{ padding: "10px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "10px" }} animated />
-                  <br />
-                  <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
-                  <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
-                </div>
-              </IonCard>
-              <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
-                <div style={{ padding: "10px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "10px" }} animated />
-                  <br />
-                  <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
-                  <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
-                </div>
-              </IonCard>
-              <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
-                <div style={{ padding: "10px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "10px" }} animated />
-                  <br />
+                  <IonSkeletonText style={{ height: "180px", borderRadius: "10px" }} animated />
+                  {/* <br /> */}
                   <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
                   <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
                 </div>

@@ -169,7 +169,7 @@ function CalendarPage() {
 
   return (
     <>
-      <IonPage>
+      <IonPage className='ion-page-ios-notch'>
         <IonContent>
           <FilterAccordion
             filterprop={filterVariable}

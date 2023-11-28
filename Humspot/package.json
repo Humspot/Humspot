@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@agney/ir-toast": "^0.3.0",
-    "@capacitor/android": "5.4.0",
     "@capacitor/app": "5.0.6",
     "@capacitor/camera": "^5.0.7",
     "@capacitor/core": "5.5.0",
@@ -38,8 +37,7 @@
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
     "serpapi": "^2.0.0",
-    "swiper": "^10.3.1",
-    "uuidv4": "^6.2.13"
+    "swiper": "^10.3.1"
   },
   "devDependencies": {
     "@capacitor/cli": "5.4.0",
