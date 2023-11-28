@@ -16,7 +16,7 @@ type AdminApproveActivitySubmissionParams = {
 };
 
 type SubmissionInfo = {
-  activityTyp: "event" | "attraction" | "custom"
+  activityType: "event" | "attraction" | "custom"
   addedByUserID: string;
   date: string | null;
   description: string;
@@ -68,7 +68,7 @@ const AdminApproveActivitySubmission = () => {
     <IonPage>
       <IonContent >
 
-        <GoBackHeader title="Approve Event" />
+        <GoBackHeader title={submissionInfo?.activityType ? "Approve " + submissionInfo.activityType : ""} />
 
         <IonLoading message={"Loading..."} isOpen={loading} />
 

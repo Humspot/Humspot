@@ -29,8 +29,8 @@ import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
-import ExplorePage from "./pages/explore";
-import CalendarPage from "./pages/calendar";
+import ExplorePage from "./pages/Explore";
+import CalendarPage from "./pages/Calendar";
 import MapPage from "./pages/map";
 import ProfilePage from "./pages/Profile";
 

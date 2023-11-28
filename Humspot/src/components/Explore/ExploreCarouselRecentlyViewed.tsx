@@ -9,7 +9,7 @@ import { formatDate } from "../../utils/formatDate";
 import placeholder from '../../assets/images/placeholder.jpeg';
 
 
-const CarouselRecentlyViewed = () => {
+const ExploreCarouselRecentlyViewed = () => {
 
   const context = useContext();
   const router = useIonRouter();
@@ -100,4 +100,4 @@ const CarouselRecentlyViewed = () => {
   );
 };
 
-export default CarouselRecentlyViewed;
+export default ExploreCarouselRecentlyViewed;

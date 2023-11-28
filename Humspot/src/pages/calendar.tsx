@@ -1,33 +1,19 @@
 import {
   IonContent,
-  IonLoading,
   IonNote,
   IonPage,
   IonProgressBar,
-  IonRippleEffect,
   IonSkeletonText,
-  IonThumbnail,
-  IonToolbar,
   useIonRouter,
   useIonViewWillEnter,
-} from "@ionic/react";
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
   IonList,
-  IonItem,
   IonItemDivider,
-  IonAvatar,
-  IonLabel,
+  IonLabel
 } from "@ionic/react";
-import FilterButton from "../components/Shared/FilterButton";
+import { useState, useEffect, useCallback } from "react";
 import { useContext } from "../utils/my-context";
 import { useToast } from "@agney/ir-toast";
-import {
-  handleGetActivitiesGivenTag,
-  handleGetEventsBetweenTwoDates,
-} from "../utils/server";
+import { handleGetEventsBetweenTwoDates } from "../utils/server";
 import placeholder from "../assets/images/placeholder.png";
 import { formatDate } from "../utils/formatDate";
 import EventsListEntry from "../components/Calendar/EventsListEntry";
@@ -187,7 +173,7 @@ function CalendarPage() {
             filterprop={filterVariable}
             setFilter={setFilter}
           ></FilterAccordion>
-          <IonList style={{paddingTop: "0", marginTop: "0"}}>
+          <IonList style={{ paddingTop: "0", marginTop: "0" }}>
             <IonItemDivider color='dark'>
               <IonLabel>
                 <h1>Today</h1>
