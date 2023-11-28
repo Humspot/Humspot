@@ -52,7 +52,7 @@ const SubmittedActivitiesPage = () => {
     <IonPage>
       <GoBackHeader title="Submitted Activities" />
 
-
+      <IonContent>
         <IonList className='ion-no-padding'>
           {loading ?
             <SkeletonLoading count={6} height={"5rem"} animated={true} />
