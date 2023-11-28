@@ -176,9 +176,9 @@ function CalendarPage() {
             setFilter={setFilter}
           ></FilterAccordion>
           <IonList style={{ paddingTop: "0", marginTop: "0" }}>
-            <IonItemDivider color='dark'>
+            <IonItemDivider color='light'>
               <IonLabel>
-                <h1 style={{ paddingTop: "5px", paddingBottom: "5px", color: "var(--ion-color-dark)" }}>Today</h1>
+                <h1 style={{ paddingTop: "5px", paddingBottom: "5px"}}>Today</h1>
               </IonLabel>
             </IonItemDivider>
             {/* Events Today */}

@@ -1,4 +1,4 @@
-import { IonButton, IonCard, IonCardTitle, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItemDivider, IonLabel, IonList, IonSkeletonText, IonTitle, useIonRouter } from "@ionic/react";
+import { IonButton, IonCard, IonCardTitle, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItemDivider, IonLabel, IonList, IonSkeletonText, IonText, IonTitle, useIonRouter } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { musicalNotes, school, schoolOutline } from "ionicons/icons";
 import { musicalNotesOutline } from "ionicons/icons";
@@ -71,10 +71,10 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
                   <div className="FilterEntry">
                     <IonIcon
                       icon={filter === entry.name ? entry.icon : entry.iconOutline}
-                      color={filter === entry.name ? "secondary" : ""}
+                      color={filter === entry.name ? "secondary" : "dark"}
                       size="large"
                     ></IonIcon>
-                    <IonLabel color={filter === entry.name ? "secondary" : ""}>{entry.name}</IonLabel>
+                    <IonLabel color={filter === entry.name ? "secondary" : "dark"}>{entry.name}</IonLabel>
                   </div>
                 </IonButton>
               </SwiperSlide>
@@ -132,7 +132,7 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                         </div>
-                        <IonCardTitle style={{ marginTop: "5px" }}>{activity.name}</IonCardTitle>
+                        <IonCardTitle style={{ marginTop: "5px", fontSize: "1.35rem" }}>{activity.name}</IonCardTitle>
                         <p style={{
                           display: '-webkit-box',
                           WebkitLineClamp: 2,
@@ -167,10 +167,8 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
               </>
               :
               !loadingFiltersActivities ?
-                <div style={{ paddingTop: "25px", paddingBottom: "25px", background: "var(--ion-color-dark)" }}>
-                  <FadeIn>
-                    <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Events Matching Filter</IonTitle>
-                  </FadeIn>
+                <div style={{ paddingTop: "25px", paddingBottom: "25px" }}>
+                  <IonTitle className="ion-text-center" style={{ display: "flex", height: "110%", background: "var(--ion-background-color)" }}><IonText color='dark'>No Events Matching Filter</IonText></IonTitle>
                 </div>
                 :
                 <></>

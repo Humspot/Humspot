@@ -42,16 +42,16 @@ const ExploreCarouselRecentlyViewed = () => {
   return (
     <>
       {recentActivities.length > 0 &&
-        <IonItemDivider className='Header'><IonText color='primary'>Recently Viewed</IonText></IonItemDivider>
+        <IonItemDivider style={{ background: "var(--ion-background-color)", fontSize: "1.50rem" }}><IonText color='primary'>Recently Viewed</IonText></IonItemDivider>
       }
       <Swiper
         ref={swiperRef}
         slidesPerView={1.25}
-        spaceBetween={20}
+        spaceBetween={0}
         style={{ width: '100%', height: 'auto' }}
       >
         {recentActivities && recentActivities.map((activity, index) => (
-          <SwiperSlide key={index} style={{ width: 'auto', height: '100%' }}>
+          <SwiperSlide key={index} style={{ width: 'auto', height: '100%', paddingRight: "20px" }}>
             <FadeIn delay={(index % 20) * 50}>
               <IonCard
                 style={{
@@ -69,7 +69,7 @@ const ExploreCarouselRecentlyViewed = () => {
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </div>
-                <IonCardTitle style={{ textAlign: 'left', paddingTop: "5px" }}>
+                <IonCardTitle style={{ textAlign: 'left', paddingTop: "5px", fontSize: "1.35rem" }}>
                   {activity.name}
                 </IonCardTitle>
                 <p style={{

@@ -24,7 +24,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
   return (
     <>
       {props.activities.length > 0 &&
-        <IonItemDivider className='Header'><IonText color='primary'>{props.title}</IonText></IonItemDivider>
+        <IonItemDivider style={{ background: "var(--ion-background-color)", fontSize: "1.50rem" }}><IonText color='primary'>{props.title}</IonText></IonItemDivider>
       }
       <Swiper
         ref={swiperRef}
@@ -51,7 +51,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </div>
-                <IonCardTitle style={{ textAlign: 'left', paddingTop: "5px" }}>
+                <IonCardTitle style={{ textAlign: 'left', paddingTop: "5px", fontSize: "1.35rem" }}>
                   {activity.name}
                 </IonCardTitle>
                 <p style={{

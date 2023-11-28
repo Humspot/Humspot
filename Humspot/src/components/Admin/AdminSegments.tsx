@@ -83,52 +83,54 @@ const AdminSegment: React.FC = () => {
 
   return (
     <>
-      <IonSegment
-        scrollable
-        style={{ paddingLeft: "2.5%", paddingRight: "2.5%" }}
-        value={selectedSegment}
-        onIonChange={(e) => setSelectedSegment(e.detail.value as string)}
-      >
-        <IonSegmentButton value="pendingActivities">
-          <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-            <IonIcon
-              icon={addCircleOutline}
-              style={{ margin: "5%" }}
-              size="large">
-            </IonIcon>
-            <IonLabel>Pending Activities</IonLabel>
-          </div>
-        </IonSegmentButton>
+      <div style={{ marginLeft: "2.5%", marginRight: "2.5%", backgroundColor: "var(--ion-background-color)" }}>
+        <IonSegment
+          scrollable
+          // className="ion-justify-content-center"
+          value={selectedSegment}
+          onIonChange={(e) => setSelectedSegment(e.detail.value as string)}
+        >
+          <IonSegmentButton value="pendingActivities">
+            <div className="segment-button" style={{ fontSize: "0.8rem" }}>
+              <IonIcon
+                icon={addCircleOutline}
+                style={{ margin: "5%" }}
+                size="large">
+              </IonIcon>
+              <IonLabel>Pending Activities</IonLabel>
+            </div>
+          </IonSegmentButton>
 
-        <IonSegmentButton value="pendingOrganizer">
-          <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-            <IonIcon
-              icon={personAddOutline}
-              style={{ margin: "5%" }}
-              size="large">
-            </IonIcon>
-            <IonLabel>Pending Organizers</IonLabel>
-          </div>
-        </IonSegmentButton>
+          <IonSegmentButton value="pendingOrganizer">
+            <div className="segment-button" style={{ fontSize: "0.8rem" }}>
+              <IonIcon
+                icon={personAddOutline}
+                style={{ margin: "5%" }}
+                size="large">
+              </IonIcon>
+              <IonLabel>Pending Organizers</IonLabel>
+            </div>
+          </IonSegmentButton>
 
-        <IonSegmentButton value="approvedOrganizer">
-          <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-            <IonIcon
-              icon={personOutline}
-              style={{ margin: "5%" }}
-              size="large">
-            </IonIcon>
-            <IonLabel>Approved Organizers</IonLabel>
-          </div>
-        </IonSegmentButton>
+          <IonSegmentButton value="approvedOrganizer">
+            <div className="segment-button" style={{ fontSize: "0.8rem" }}>
+              <IonIcon
+                icon={personOutline}
+                style={{ margin: "5%" }}
+                size="large">
+              </IonIcon>
+              <IonLabel>Approved Organizers</IonLabel>
+            </div>
+          </IonSegmentButton>
 
-      </IonSegment>
+        </IonSegment>
+      </div>
 
-      <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
-        <IonRefresherContent></IonRefresherContent>
-      </IonRefresher>
 
       <IonContent>
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
         {selectedSegment === "pendingActivities" ? (
           <IonCard>
             <AdminSubmissionsList submissions={submissions} loading={submissionsLoading} />

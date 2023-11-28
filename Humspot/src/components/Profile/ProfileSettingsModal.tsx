@@ -138,8 +138,8 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
           <br />
           {context.humspotUser?.accountType === 'admin' &&
             <>
-              <IonItem role='button' onClick={() => { modalRef?.current?.dismiss(); router.push("/admin-dashboard") }}>
-                <IonIcon aria-hidden="true" icon={constructOutline} slot="start" color='medium'></IonIcon>
+              <IonItem role='button' onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/admin-dashboard") }) }}>
+                <IonIcon aria-hidden="true" icon={constructOutline} slot="start"></IonIcon>
                 <IonLabel>Admin Dashboard</IonLabel>
               </IonItem>
               <br />

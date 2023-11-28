@@ -45,13 +45,13 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
             <IonLabel>Submit an Event</IonLabel>
           </IonItem>
           <br />
-          <IonItem>
+          <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submit-attraction") }) }}>
             <IonIcon aria-hidden="true" icon={compassOutline} slot="start"></IonIcon>
             <IonLabel>Submit an Attraction</IonLabel>
           </IonItem>
           <br />
-          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/submitted-activities") }}>
-            <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start" color="light"></IonIcon>
+          <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submitted-activities") }) }}>
+            <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
             <IonLabel>See Pending Submissions</IonLabel>
           </IonItem>
           <br />

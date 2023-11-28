@@ -23,94 +23,6 @@ function ExplorePage() {
 
   const context = useContext();
   const router = useIonRouter();
-  useIonViewDidEnter(() => {
-    context.setShowTabs(true);
-  });
-
-  useEffect(() => {
-    fetchActivitiesHighlight();
-  }, [fetchActivitiesHighlight]);
-
-  const [activitiesSecond, setActivitiesSecond] = useState<any>([]);
-  const [activitiesSecondLoading, setActivitiesSecondLoading] =
-    useState<boolean>(true);
-  const fetchActivitiesSecond = useCallback(async () => {
-    const response = await handleGetActivitiesGivenTag(1, "School");
-    if (!response.success) {
-      const toast = Toast.create({
-        message: response.message,
-        duration: 2000,
-        color: "danger",
-      });
-      toast.present();
-    }
-    setActivitiesSecond(response.activities);
-    setActivitiesSecondLoading(false);
-  }, []);
-
-  useEffect(() => {
-    fetchActivitiesSecond();
-  }, [fetchActivitiesSecond]);
-
-  const [activitiesThird, setActivitiesThird] = useState<any>([]);
-  const [activitiesThirdLoading, setActivitiesThirdLoading] =
-    useState<boolean>(true);
-  const fetchActivitiesThird = useCallback(async () => {
-    const response = await handleGetActivitiesGivenTag(1, "hsu");
-    if (!response.success) {
-      const toast = Toast.create({
-        message: response.message,
-        duration: 2000,
-        color: "danger",
-      });
-      toast.present();
-    }
-    setActivitiesThird(response.activities);
-    setActivitiesThirdLoading(false);
-  }, []);
-
-  useEffect(() => {
-    fetchActivitiesThird();
-  }, [fetchActivitiesThird]);
-
-  const [activitiesFourth, setActivitiesFourth] = useState<any>([]);
-  const [activitiesFourthLoading, setActivitiesFourthLoading] =
-    useState<boolean>(true);
-  const fetchActivitiesFourth = useCallback(async () => {
-    const response = await handleGetActivitiesGivenTag(1, "School");
-    if (!response.success) {
-      const toast = Toast.create({
-        message: response.message,
-        duration: 2000,
-        color: "danger",
-      });
-      toast.present();
-    }
-    setActivitiesFourth(response.activities);
-    setActivitiesFourthLoading(false);
-  }, []);
-
-  useEffect(() => {
-    fetchActivitiesFourth();
-  }, [fetchActivitiesFourth]);
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(10, () => {
-        navigateBack(router);
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [router]);
-
-  useIonViewWillEnter(() => {
-    context.setShowTabs(true);
-  });
 
   const [showFilterList, setShowFilterList] = useState<boolean>(false);
 
@@ -125,19 +37,13 @@ function ExplorePage() {
     fetchHighlights();
   }, [fetchHighlights])
 
+  useIonViewDidEnter(() => {
+    context.setShowTabs(true);
+  }, [])
+
   return (
     <>
       <IonPage className='ion-page-ios-notch'>
-        <FilterButton></FilterButton>
-        <IonLoading
-          isOpen={
-            activitiesHighlightLoading &&
-            activitiesSecondLoading &&
-            activitiesThirdLoading &&
-            activitiesFourthLoading
-          }
-          message={"Loading..."}
-        />
         <IonContent>
 
           <ExploreFilterButtons setShowFilterList={setShowFilterList} />
