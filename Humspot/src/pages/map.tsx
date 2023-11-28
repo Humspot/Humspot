@@ -4,7 +4,7 @@ import { Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/my-context";
 import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/map-config";
 import { useCallback, useEffect, useState } from "react";
-import { handleGetThisWeeksEvents } from "../utils/server";
+import { handleGetEventsBetweenTwoDates, handleGetThisWeeksEvents } from "../utils/server";
 import { GetHumspotEventResponse } from "../utils/types";
 import { settingsOutline } from "ionicons/icons";
 import MapSettingsModal from "../components/Map/MapSettingsModal";
@@ -22,7 +22,7 @@ function MapPage() {
   const [overlayIndex, setOverlayIndex] = useState<number>(-1);
 
   const [showThisWeeksEvents, setShowThisWeeksEvents] = useState<boolean>(true);
-  const [thisWeeksEvents, setThisWeeksEvents] = useState<GetHumspotEventResponse[]>([]);
+  const [events, setEvents] = useState<GetHumspotEventResponse[]>([]);
 
   useIonViewDidEnter(() => {
     context.setShowTabs(true);
@@ -42,10 +42,17 @@ function MapPage() {
     };
   }, [router]);
 
+  const fetchEventsBetweenTwoDates = useCallback(async (date1: string, date2: string) => {
+    const res = await handleGetEventsBetweenTwoDates(date1, date2);
+    if (res.success) {
+      // setEvents(res.events);
+    }
+  }, []);
+
 
   const fetchThisWeeksEvents = useCallback(async () => {
     const res = await handleGetThisWeeksEvents();
-    setThisWeeksEvents(res.events);
+    setEvents(res.events);
   }, []);
   useEffect(() => {
     fetchThisWeeksEvents();
@@ -84,7 +91,7 @@ function MapPage() {
           />
 
           {/* Render the map markers */}
-          {showThisWeeksEvents && thisWeeksEvents && thisWeeksEvents.map((marker: GetHumspotEventResponse, index: number) => {
+          {showThisWeeksEvents && events && events.map((marker: GetHumspotEventResponse, index: number) => {
             if (!marker.latitude || !marker.longitude) return;
             return (
               <Marker
@@ -116,11 +123,11 @@ function MapPage() {
           })}
 
           {/* If map marker is clicked, show card overlay */}
-          {showThisWeeksEvents && overlayIndex != -1 && thisWeeksEvents[overlayIndex] && thisWeeksEvents[overlayIndex].latitude && thisWeeksEvents[overlayIndex].longitude ? (
+          {showThisWeeksEvents && overlayIndex != -1 && events[overlayIndex] && events[overlayIndex].latitude && events[overlayIndex].longitude ? (
             <Overlay
               anchor={[
-                parseFloat(thisWeeksEvents[overlayIndex].latitude!),
-                parseFloat(thisWeeksEvents[overlayIndex].longitude!),
+                parseFloat(events[overlayIndex].latitude!),
+                parseFloat(events[overlayIndex].longitude!),
               ]}
               offset={[125, 19.5]}
             >
@@ -131,37 +138,37 @@ function MapPage() {
                     : { width: "55vw", opacity: "95%" }
                 }
                 mode="ios"
-                onClick={() => router.push("/activity/" + thisWeeksEvents[overlayIndex].activityID)}
+                onClick={() => router.push("/activity/" + events[overlayIndex].activityID)}
               >
                 <IonCardContent>
                   <div style={{ height: "0.5vh" }} />
                   <IonCardTitle style={{ fontSize: "medium" }} mode="ios">
-                    {thisWeeksEvents[overlayIndex].name}
+                    {events[overlayIndex].name}
                   </IonCardTitle>
                   <IonFab horizontal="end" vertical="top">
                     <p style={{ fontWeight: "bold", fontSize: "2.5vw", color: 'var(--ion-color-primary)' }}>
-                      {thisWeeksEvents[overlayIndex].tags}
+                      {events[overlayIndex].tags}
                     </p>
                   </IonFab>
                   <div style={{ height: "0.5vh" }} />
                   <p>
-                    {thisWeeksEvents[overlayIndex].description.substring(0, 120)}
-                    {thisWeeksEvents[overlayIndex].description.length > 120 &&
+                    {events[overlayIndex].description.substring(0, 120)}
+                    {events[overlayIndex].description.length > 120 &&
                       " ... "
                     }
                   </p>
 
-                  {thisWeeksEvents[overlayIndex].photoUrl &&
-                    thisWeeksEvents[overlayIndex].photoUrl!.length > 0 ? (
+                  {events[overlayIndex].photoUrl &&
+                    events[overlayIndex].photoUrl!.length > 0 ? (
                     <>
                       <div style={{ height: "1vh" }} />
                       <img
                         className="ion-img-container"
                         style={{ borderRadius: '10px', width: '100%' }}
-                        src={thisWeeksEvents[overlayIndex].photoUrl!}
+                        src={events[overlayIndex].photoUrl!}
                         alt=""
                         onError={() => {
-                          thisWeeksEvents[overlayIndex].photoUrl! = '';
+                          events[overlayIndex].photoUrl! = '';
                         }}
                       />
                     </>

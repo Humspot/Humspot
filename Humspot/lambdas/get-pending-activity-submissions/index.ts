@@ -89,7 +89,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
 
     const query: string = `
-      SELECT name, description, activityType, submissionID
+      SELECT name, description, activityType, submissionID, organizer
       FROM Submissions
       ORDER BY submissionDate DESC
       LIMIT 20 OFFSET ?;

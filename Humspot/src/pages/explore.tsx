@@ -1,57 +1,25 @@
 import {
   IonContent,
-  IonItemDivider,
-  IonLoading,
   IonPage,
-  IonSkeletonText,
   useIonRouter,
   useIonViewDidEnter,
 } from "@ionic/react";
-import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
-import "./explore.css";
+import "./Explore.css";
 import "../components/Explore/CarouselEntry.css";
 import "@ionic/react/css/ionic-swiper.css";
-import CarouselEntry from "../components/Explore/CarouselEntry";
-import SecondaryCarouselEntry from "../components/Explore/CarouselEntrySecondary";
-import FilterButton from "../components/Shared/FilterButton";
 
 import { useCallback, useEffect, useState } from "react";
-import {
-  handleGetActivitiesGivenTag,
-  handleGetActivity,
-} from "../utils/server";
 import { useToast } from "@agney/ir-toast";
-import CarouselEntrySecondary from "../components/Explore/CarouselEntrySecondary";
 import { useContext } from "../utils/my-context";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
-
-import '../App.css';
-
-<link
-  href="https://fonts.googleapis.com/css?family=Atkinson Hyperlegible"
-  rel="stylesheet"
-></link>;
+import ExploreFilterButtons from "../components/Explore/ExploreFilterButtons";
+import ExploreCarouselRecentlyViewed from "../components/Explore/ExploreCarouselRecentlyViewed";
+import ExploreCarouselGeneral from "../components/Explore/ExploreCarouselGeneral";
+import { handleGetActivitiesGivenTag } from "../utils/server";
 
 function ExplorePage() {
-  const [activitiesHighlight, setActivitiesHighlight] = useState<any>([]);
-  const [activitiesHighlightLoading, setActivitiesHighlightLoading] =
-    useState<boolean>(true);
-  const Toast = useToast();
-  const fetchActivitiesHighlight = useCallback(async () => {
-    const response = await handleGetActivitiesGivenTag(1, "fun");
-    if (!response.success) {
-      const toast = Toast.create({
-        message: response.message,
-        duration: 2000,
-        color: "danger",
-      });
-      toast.present();
-    }
-    setActivitiesHighlight(response.activities);
-    setActivitiesHighlightLoading(false);
-  }, []);
 
   const context = useContext();
   const router = useIonRouter();
@@ -140,6 +108,23 @@ function ExplorePage() {
     };
   }, [router]);
 
+  useIonViewWillEnter(() => {
+    context.setShowTabs(true);
+  });
+
+  const [showFilterList, setShowFilterList] = useState<boolean>(false);
+
+  const [highlights, setHighlights] = useState<any[]>([]);
+
+  const fetchHighlights = useCallback(async () => {
+    const res = await handleGetActivitiesGivenTag(1, 'highlight');
+    setHighlights(res.activities);
+  }, []);
+
+  useEffect(() => {
+    fetchHighlights();
+  }, [fetchHighlights])
+
   return (
     <>
       <IonPage className='ion-page-ios-notch'>
@@ -154,103 +139,15 @@ function ExplorePage() {
           message={"Loading..."}
         />
         <IonContent>
-          <IonItemDivider className="Header" color={"primary"}>
-            Highlights
-          </IonItemDivider>
-          <div className="MainCarousel">
-            <Swiper slidesPerView={1.2}>
-              {!activitiesHighlightLoading ? (
-                activitiesHighlight.map((activity: any, index: any) => (
-                  <SwiperSlide key={index}>
-                    <div className="MainCarouselSlide">
-                      <CarouselEntry
-                        title={activity?.name}
-                        description={activity?.description}
-                        imgsrc={activity?.photoUrl}
-                        id={activity?.activityID}
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))
-              ) : (
-                <>
-                  <IonSkeletonText style={{ height: "2rem" }} animated />
-                </>
-              )}
-            </Swiper>
-          </div>
-          <IonItemDivider className="Header" color={"primary"}>
-            Upcoming Events
-          </IonItemDivider>
-          <div className="SecondaryCarousel">
-            <Swiper slidesPerView={1.2}>
-              {!activitiesSecondLoading ? (
-                activitiesSecond.map((activity: any, index: any) => (
-                  <SwiperSlide key={index}>
-                    <div className="SecondaryCarouselSlide">
-                      <CarouselEntrySecondary
-                        title={activity?.name}
-                        imgsrc={activity?.photoUrl}
-                        id={activity?.activityID}
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))
-              ) : (
-                <>
-                  <IonSkeletonText style={{ height: "2rem" }} animated />
-                </>
-              )}
-            </Swiper>
-          </div>
-          <IonItemDivider className="Header" color={"primary"}>
-            Chill Spots
-          </IonItemDivider>
-          <div className="SecondaryCarousel">
-            <Swiper slidesPerView={1.2}>
-              {!activitiesThirdLoading ? (
-                activitiesThird.map((activity: any, index: any) => (
-                  <SwiperSlide key={index}>
-                    <div className="SecondaryCarouselSlide">
-                      <CarouselEntrySecondary
-                        title={activity?.name}
-                        imgsrc={activity?.photoUrl}
-                        id={activity?.activityID}
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))
-              ) : (
-                <>
-                  <IonSkeletonText style={{ height: "2rem" }} animated />
-                </>
-              )}
-            </Swiper>
-          </div>
-          <IonItemDivider className="Header" color={"primary"}>
-            Local Adventures
-          </IonItemDivider>
-          <div className="SecondaryCarousel">
-            <Swiper slidesPerView={1.2}>
-              {!activitiesFourthLoading ? (
-                activitiesFourth.map((activity: any, index: any) => (
-                  <SwiperSlide key={index}>
-                    <div className="SecondaryCarouselSlide">
-                      <CarouselEntrySecondary
-                        title={activity?.name}
-                        imgsrc={activity?.photoUrl}
-                        id={activity?.activityID}
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))
-              ) : (
-                <>
-                  <IonSkeletonText style={{ height: "2rem" }} animated />
-                </>
-              )}
-            </Swiper>
-          </div>
+
+          <ExploreFilterButtons setShowFilterList={setShowFilterList} />
+          {!showFilterList &&
+            <>
+              <ExploreCarouselRecentlyViewed />
+              <ExploreCarouselGeneral title='Highlights' activities={highlights} />
+              <ExploreCarouselGeneral title='Highlights' activities={highlights} />
+            </>
+          }
         </IonContent>
       </IonPage>
     </>

@@ -1,38 +1,25 @@
 import {
   IonContent,
-  IonLoading,
   IonNote,
   IonPage,
   IonProgressBar,
-  IonRippleEffect,
   IonSkeletonText,
-  IonThumbnail,
-  IonToolbar,
   useIonRouter,
   useIonViewDidEnter,
-} from "@ionic/react";
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
   IonList,
-  IonItem,
   IonItemDivider,
-  IonAvatar,
-  IonLabel,
+  IonLabel
 } from "@ionic/react";
-import FilterButton from "../components/Shared/FilterButton";
+import { useState, useEffect, useCallback } from "react";
 import { useContext } from "../utils/my-context";
 import { useToast } from "@agney/ir-toast";
-import {
-  handleGetActivitiesGivenTag,
-  handleGetEventsBetweenTwoDates,
-} from "../utils/server";
+import { handleGetEventsBetweenTwoDates } from "../utils/server";
 import placeholder from "../assets/images/placeholder.png";
 import { formatDate } from "../utils/formatDate";
 import EventsListEntry from "../components/Calendar/EventsListEntry";
 import { getDateStrings } from "../utils/calcDates";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
+import FilterAccordion from "../components/Calendar/FilterAccordion";
 
 import '../App.css';
 
@@ -44,6 +31,7 @@ function CalendarPage() {
   const [eventsToday, seteventsToday] = useState<any>([]);
   const [eventsTodayLoading, setEventsTodayLoading] = useState<boolean>(true);
   const Toast = useToast();
+  const [filterVariable, setFilter] = useState<string | null>(null);
   // FetchEventsToday
   const fetchEventsToday = useCallback(async () => {
     const response = await handleGetEventsBetweenTwoDates(
@@ -112,6 +100,56 @@ function CalendarPage() {
   useEffect(() => {
     fetchEventsMonth();
   }, [fetchEventsMonth]);
+  const [eventsTodayFiltered, seteventsTodayFiltered] = useState<any>([]);
+  const [eventsWeekFiltered, seteventsWeekFiltered] = useState<any>([]);
+  const [eventsMonthFiltered, seteventsMonthFiltered] = useState<any>([]);
+  function filterAllEvents(
+    eventsToday: any,
+    eventsWeek: any,
+    eventsMonth: any
+  ) {
+    if (filterVariable != null && eventsToday) {
+      const eventsTodayFiltered = eventsToday.filter((event: any) => {
+        return event?.tags && event.tags.includes(filterVariable as string);
+      });
+
+      seteventsTodayFiltered(eventsTodayFiltered);
+    } else {
+      seteventsTodayFiltered(eventsToday);
+    }
+    if (filterVariable != null && eventsWeek) {
+      const eventsWeekFiltered = eventsWeek.filter((event: any) => {
+        return event?.tags && event.tags.includes(filterVariable as string);
+      });
+
+      seteventsWeekFiltered(eventsWeekFiltered);
+    } else {
+      seteventsWeekFiltered(eventsWeek);
+    }
+    if (filterVariable != null && eventsMonth) {
+      const eventsMonthFiltered = eventsMonth.filter((event: any) => {
+        return event?.tags && event.tags.includes(filterVariable as string);
+      });
+
+      seteventsMonthFiltered(eventsMonthFiltered);
+    } else {
+      seteventsMonthFiltered(eventsMonth);
+    }
+  }
+  useEffect(() => {
+    // Check if events are loaded before filtering
+    if (!eventsTodayLoading && !eventsWeekLoading && !eventsMonthLoading) {
+      filterAllEvents(eventsToday, eventsWeek, eventsMonth);
+    }
+  }, [
+    filterVariable,
+    eventsToday,
+    eventsWeek,
+    eventsMonth,
+    eventsTodayLoading,
+    eventsWeekLoading,
+    eventsMonthLoading,
+  ]);
 
   const router = useIonRouter();
 
@@ -131,18 +169,31 @@ function CalendarPage() {
 
   return (
     <>
-      <IonPage className='ion-page-ios-notch'>
-        <FilterButton></FilterButton>
+      <IonPage>
         <IonContent>
-          <IonList>
-            <IonItemDivider color='light'>
+          <FilterAccordion
+            filterprop={filterVariable}
+            setFilter={setFilter}
+          ></FilterAccordion>
+          <IonList style={{ paddingTop: "0", marginTop: "0" }}>
+            <IonItemDivider color='dark'>
               <IonLabel>
                 <h1 style={{ paddingTop: "5px", paddingBottom: "5px", color: "var(--ion-color-dark)" }}>Today</h1>
               </IonLabel>
             </IonItemDivider>
             {/* Events Today */}
             {!eventsTodayLoading ? (
-              <EventsListEntry events={eventsToday}></EventsListEntry>
+              <>
+                {eventsTodayFiltered.length > 0 ? (
+                  <EventsListEntry
+                    events={eventsTodayFiltered}
+                  ></EventsListEntry>
+                ) : (
+                  <IonNote className="ion-padding" style={{ fontStyle: "italic" }}>
+                    No events found.
+                  </IonNote>
+                )}
+              </>
             ) : (
               <>
                 <IonSkeletonText style={{ height: "4rem" }} animated />
@@ -157,7 +208,17 @@ function CalendarPage() {
               </IonLabel>
             </IonItemDivider>
             {!eventsWeekLoading ? (
-              <EventsListEntry events={eventsWeek}></EventsListEntry>
+              <>
+                {eventsWeekFiltered.length > 0 ? (
+                  <EventsListEntry
+                    events={eventsWeekFiltered}
+                  ></EventsListEntry>
+                ) : (
+                  <IonNote className="ion-padding" style={{ fontStyle: "italic" }}>
+                    No events found.
+                  </IonNote>
+                )}
+              </>
             ) : (
               <>
                 <IonSkeletonText style={{ height: "4rem" }} animated />
@@ -172,7 +233,17 @@ function CalendarPage() {
               </IonLabel>
             </IonItemDivider>
             {!eventsMonthLoading ? (
-              <EventsListEntry events={eventsMonth}></EventsListEntry>
+              <>
+                {eventsWeekFiltered.length > 0 ? (
+                  <EventsListEntry
+                    events={eventsMonthFiltered}
+                  ></EventsListEntry>
+                ) : (
+                  <IonNote className="ion-padding" style={{ fontStyle: "italic" }}>
+                    No events found.
+                  </IonNote>
+                )}
+              </>
             ) : (
               <>
                 <IonSkeletonText style={{ height: "4rem" }} animated />

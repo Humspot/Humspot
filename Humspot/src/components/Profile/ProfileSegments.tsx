@@ -1,4 +1,4 @@
-import { IonSegment, IonSegmentButton, IonIcon, IonLabel, IonCard, IonCardContent, IonList, IonItem, IonThumbnail, useIonRouter, IonContent, IonTitle, IonRefresher, RefresherEventDetail, IonRefresherContent } from "@ionic/react";
+import { IonSegment, IonSegmentButton, IonIcon, IonLabel, IonCard, IonCardContent, IonList, IonItem, IonThumbnail, useIonRouter, IonContent, IonTitle, IonRefresher, RefresherEventDetail, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/react";
 import { people, star, walk } from "ionicons/icons";
 import { memo, useCallback, useEffect, useState } from "react";
 import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
@@ -28,6 +28,10 @@ const ProfileSegments: React.FC = memo(() => {
   const [favoritesLoading, setFavoritesLoading] = useState<boolean>(true);
   const [visitedLoading, setVisitedLoading] = useState<boolean>(true);
   const [interactionsLoading, setInteractionsLoading] = useState<boolean>(true);
+
+  const [favoritesPageCount, setFavoritesPageCount] = useState<number>(2);
+  const [visitedPageCount, setVisitedPageCount] = useState<number>(2);
+  const [interactionsPageCount, setInteractionsPageCount] = useState<number>(2);
 
   const fetchFavorites = useCallback(async () => {
     if (!context.humspotUser) return;

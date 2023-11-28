@@ -21,7 +21,8 @@ import {
   mailOutline,
   shieldOutline,
   readerOutline,
-  logInOutline
+  logInOutline,
+  constructOutline
 } from "ionicons/icons";
 import { Dialog } from "@capacitor/dialog";
 
@@ -111,9 +112,10 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
         <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Settings</IonTitle>
         <IonList lines='full'>
           <IonItem disabled={!context.humspotUser} style={{}}>
-            <IonIcon aria-hidden="true" icon={notificationsOutline} slot="start" ></IonIcon>
+            <IonIcon aria-hidden="true" icon={notificationsOutline} slot="start" color='medium'></IonIcon>
             <IonLabel><IonToggle disabled={!context.humspotUser}>Notifications </IonToggle></IonLabel>
           </IonItem>
+          <br />
           <IonItem>
             <IonIcon aria-hidden="true" icon={moonOutline} slot="start" ></IonIcon>
             <IonLabel><IonToggle checked={context.darkMode} onIonChange={(e) => { toggleDarkMode(e.detail.checked) }}>Dark Mode</IonToggle></IonLabel>
@@ -134,6 +136,15 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
             <IonLabel>Terms and Conditions</IonLabel>
           </IonItem>
           <br />
+          {context.humspotUser?.accountType === 'admin' &&
+            <>
+              <IonItem role='button' onClick={() => { modalRef?.current?.dismiss(); router.push("/admin-dashboard") }}>
+                <IonIcon aria-hidden="true" icon={constructOutline} slot="start" color='medium'></IonIcon>
+                <IonLabel>Admin Dashboard</IonLabel>
+              </IonItem>
+              <br />
+            </>
+          }
           {context.humspotUser === undefined ?
             <>
               <IonItem role='button' onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/sign-up") }) }}>

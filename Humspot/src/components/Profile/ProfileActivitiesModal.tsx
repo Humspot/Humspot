@@ -50,9 +50,9 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
             <IonLabel>Submit an Attraction</IonLabel>
           </IonItem>
           <br />
-          <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submitted-activities") }) }}>
-            <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
-            <IonLabel>See Submitted Activities</IonLabel>
+          <IonItem onClick={() => { modalRef?.current?.dismiss(); router.push("/submitted-activities") }}>
+            <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start" color="light"></IonIcon>
+            <IonLabel>See Pending Submissions</IonLabel>
           </IonItem>
           <br />
           {context.humspotUser?.accountType === 'user' &&
