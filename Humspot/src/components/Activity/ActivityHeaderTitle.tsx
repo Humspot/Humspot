@@ -84,16 +84,18 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                       activeColor='#F6D075'
                       precision={0.5}
                     />
-                    <p style={{ paddingLeft: "15px", fontSize: "1.15rem", paddingTop: "1px" }}>
+                    {/* <p style={{ paddingLeft: "15px", fontSize: "1.15rem", paddingTop: "1px" }}>
                       {props.avgRating ? `(${props.avgRating})` : ''}
-                    </p>
+                    </p> */}
                   </div>
 
-                  <div>
-                    <IonButton className='ion-no-padding' slot='start' fill="clear" style={{ color: "#3D6876" }} id='add-rating-button'>
-                      Add Rating
-                    </IonButton>
-                  </div>
+                  {context.humspotUser &&
+                    <div>
+                      <IonButton className='ion-no-padding' slot='start' fill="clear" style={{ color: "#3D6876" }} id='add-rating-button'>
+                        Add Rating
+                      </IonButton>
+                    </div>
+                  }
                 </>
               }
             </>
