@@ -549,7 +549,7 @@ const SubmitAttractionPage = () => {
           <IonContent fullscreen>
             <IonLoading isOpen={addressValidating} />
             <IonHeader className="ion-no-border">
-              <IonToolbar style={{ "--background": "black" }}>
+              <IonToolbar>
                 <IonButtons>
                   <IonButton
                     style={{ fontSize: "1.25em", marginLeft: "5px" }}

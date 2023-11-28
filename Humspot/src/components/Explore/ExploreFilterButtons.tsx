@@ -1,6 +1,6 @@
 import { IonButton, IonCard, IonCardTitle, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItemDivider, IonLabel, IonList, IonSkeletonText, IonTitle, useIonRouter } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { musicalNotes, school, schoolOutline } from "ionicons/icons";
+import { colorPalette, colorPaletteOutline, fastFood, fastFoodOutline, fitness, fitnessOutline, football, footballOutline, globe, globeOutline, laptop, laptopOutline, musicalNotes, partlySunny, partlySunnyOutline, school, schoolOutline } from "ionicons/icons";
 import { musicalNotesOutline } from "ionicons/icons";
 import { useState, useCallback, useEffect } from "react";
 import { handleGetActivitiesGivenTag } from "../../utils/server";
@@ -22,7 +22,42 @@ const MAIN_FILTERS = [
     name: "Music",
     icon: musicalNotes,
     iconOutline: musicalNotesOutline
-  }
+  },
+  {
+    name: "Food",
+    icon: fastFood,
+    iconOutline: fastFoodOutline
+  },
+  {
+    name: "Outdoor",
+    icon: partlySunny,
+    iconOutline: partlySunnyOutline,
+  },
+  {
+    name: "Fitness",
+    icon: fitness,
+    iconOutline: fitnessOutline
+  },
+  {
+    name: "Art",
+    icon: colorPalette,
+    iconOutline: colorPaletteOutline,
+  },
+  {
+    name: "Tech",
+    icon: laptop,
+    iconOutline: laptopOutline,
+  },
+  {
+    name: "Culture",
+    icon: globe,
+    iconOutline: globeOutline,
+  },
+  {
+    name: "Sports",
+    icon: football,
+    iconOutline: footballOutline
+  },
 ];
 
 const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.SetStateAction<boolean>> }) => {
@@ -55,8 +90,8 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
 
   return (
     <>
-      <div style={{ padding: "10px" }}>
-        <Swiper slidesPerView={5.5}>
+      <div style={filter && !loadingFiltersActivities ? { position: 'sticky', top: 0, zIndex: 1000, padding: "10px 0", background: "var(--ion-background-color)" } : { padding: "10px 0" }}>
+        <Swiper slidesPerView={5.5} spaceBetween={-20}>
           {MAIN_FILTERS.map((entry, idx) => {
             return (
               <SwiperSlide key={idx}>
@@ -68,13 +103,13 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
                     setFilter((prev) => prev === entry.name ? '' : entry.name);
                   }}
                 >
-                  <div className="FilterEntry">
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <IonIcon
                       icon={filter === entry.name ? entry.icon : entry.iconOutline}
                       color={filter === entry.name ? "secondary" : ""}
                       size="large"
                     ></IonIcon>
-                    <IonLabel color={filter === entry.name ? "secondary" : ""}>{entry.name}</IonLabel>
+                    <IonLabel style={{ fontSize: "0.7rem" }} color={filter === entry.name ? "secondary" : ""}>{entry.name}</IonLabel>
                   </div>
                 </IonButton>
               </SwiperSlide>
@@ -87,33 +122,33 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
           {loadingFiltersActivities ?
             <>
               <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
-                <div style={{ padding: "10px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "10px" }} animated />
-                  <br />
+                <div style={{ padding: "5px" }}>
+                  <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                  {/* <br /> */}
                   <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
                   <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
                 </div>
               </IonCard>
               <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
-                <div style={{ padding: "10px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "10px" }} animated />
-                  <br />
+                <div style={{ padding: "5px" }}>
+                  <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                  {/* <br /> */}
                   <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
                   <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
                 </div>
               </IonCard>
               <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
-                <div style={{ padding: "10px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "10px" }} animated />
-                  <br />
+                <div style={{ padding: "5px" }}>
+                  <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                  {/* <br /> */}
                   <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
                   <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
                 </div>
               </IonCard>
               <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
-                <div style={{ padding: "10px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "10px" }} animated />
-                  <br />
+                <div style={{ padding: "5px" }}>
+                  <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                  {/* <br /> */}
                   <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
                   <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
                 </div>
@@ -126,7 +161,7 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
                   return (
                     <FadeIn key={idx} delay={(idx % 20) * 50}>
                       <IonCard style={{ '--background': 'var(--ion-background-color)', paddingLeft: "5px", paddingRight: "5px" }} onClick={() => { if ("activityID" in activity && activity.activityID) router.push("/activity/" + activity.activityID) }}>
-                        <div style={{ height: '175px', overflow: 'hidden', borderRadius: "10px" }}>
+                        <div style={{ height: '175px', overflow: 'hidden', borderRadius: "5px" }}>
                           <img
                             src={activity.photoUrl ? activity.photoUrl : (filter === "School" ? school_placeholder : placeholder)}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}

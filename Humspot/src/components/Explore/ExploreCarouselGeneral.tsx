@@ -45,7 +45,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
                   if ("activityID" in activity && activity.activityID) router.push("/activity/" + activity.activityID);
                 }}
               >
-                <div style={{ height: '175px', overflow: 'hidden', borderRadius: '10px' }}>
+                <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px' }}>
                   <img
                     src={activity.photoUrl ? activity.photoUrl : placeholder}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
