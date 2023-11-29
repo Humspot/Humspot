@@ -13,6 +13,7 @@
   display: flex;
   align-items: flex-start;
 }
+
 .commentcontents {
   display: flex;
   flex-direction: column;
@@ -30,10 +31,14 @@
 }
 
 .commentavatar {
-  width: 50px; /* Adjust the width to your desired size */
-  height: 50px; /* Adjust the height to your desired size */
-  flex-shrink: 0; /* Prevents the avatar from shrinking */
-  margin-right: 10px; /* Adds spacing between the avatar and content */
+  width: 50px;
+  /* Adjust the width to your desired size */
+  height: 50px;
+  /* Adjust the height to your desired size */
+  flex-shrink: 0;
+  /* Prevents the avatar from shrinking */
+  margin-right: 10px;
+  /* Adds spacing between the avatar and content */
   margin-left: 5px;
   margin-top: 5px;
 }
@@ -60,9 +65,11 @@
   /* margin-bottom: 20px; */
   padding: 5px;
 }
+
 h1 {
   margin: 0px;
 }
+
 .headerDiv {
   width: 100%;
   height: 30vh;
@@ -70,14 +77,17 @@ h1 {
   overflow: hidden;
   z-index: 0;
 }
+
 .fill-frame-image {
-  height: 30;
-  object-fit: cover;
-  position: inherit;
+  width: 100%;
+  height: 100%;
+  position: relative;
   z-index: 0;
 }
 
 .headerImage {
+  width: 100%;
   height: 100%;
-  z-index: 0;
+  object-fit: cover;
+  object-position: center;
 }

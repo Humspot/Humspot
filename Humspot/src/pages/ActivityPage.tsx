@@ -111,27 +111,26 @@ function ActivityPage() {
         }
         {/* <IonLoading isOpen={activityLoading} message={"Loading..."} /> */}
 
-        {/* Header Image */}
-        <div className="headerDiv">
+        <div style={{ width: "100%", height: "30vh", position: "absolute", overflow: "hidden", zIndex: 0 }}>
           <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }}>
             {activity?.photoUrls ?
               activity?.photoUrls?.split(",").map((url: any, index: any) => (
-                <SwiperSlide key={index} className="fill-frame-image">
-                  <img
-                    alt="Attraction Image"
-                    src={url || placeholder}
-                    loading="lazy"
-                    className="headerImage"
-                  ></img>
+                <SwiperSlide key={index} >
+                  <IonCard className='ion-no-padding ion-no-margin' style={{ width: "100vw" }}>
+                    <img
+                      alt="Attraction Image"
+                      src={url || placeholder}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </IonCard>
                 </SwiperSlide>
               ))
               :
-              <SwiperSlide className="fill-frame-image">
+              <SwiperSlide>
                 <img
                   alt="Attraction Image"
                   src={placeholder}
                   loading="lazy"
-                  className="headerImage"
                 ></img>
               </SwiperSlide>
             }
