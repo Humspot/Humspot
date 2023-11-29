@@ -29,8 +29,8 @@ import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
-import ExplorePage from "./pages/explore";
-import CalendarPage from "./pages/calendar";
+import ExplorePage from "./pages/Explore";
+import CalendarPage from "./pages/Calendar";
 import MapPage from "./pages/map";
 import ProfilePage from "./pages/Profile";
 
@@ -57,6 +57,8 @@ import { Keyboard, KeyboardStyle, KeyboardStyleOptions } from "@capacitor/keyboa
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { Preferences } from "@capacitor/preferences";
 import BecomeACoodinator from "./pages/BecomeACoodinator";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminApproveActivitySubmission from "./pages/AdminApproveActivitySubmission";
 
 setupIonicReact({ mode: "md" });
 
@@ -165,6 +167,8 @@ const App: React.FC = () => {
               <Route exact path="/privacy-policy" component={PrivacyPolicy} />
               <Route exact path="/forgot-password" component={ForgotPassword} />
               <Route exact path="/become-a-coordinator" component={BecomeACoodinator} />
+              <Route exact path="/admin-dashboard" component={AdminDashboard} />
+              <Route exact path="/admin-dashboard/submission/:id" component={AdminApproveActivitySubmission} />
               <Route
                 exact
                 path="/verify-email/:email/:toVerify"

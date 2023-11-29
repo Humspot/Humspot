@@ -17,6 +17,8 @@ export type ContextType = {
   setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
   showTabs: boolean;
   setShowTabs: React.Dispatch<React.SetStateAction<boolean>>;
+  recentlyViewedUpdated: boolean;
+  setRecentlyViewedUpdated: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Context = React.createContext<ContextType | null>(null);
@@ -24,6 +26,7 @@ export const ContextProvider = ({ children }: Props) => {
   const [humspotUser, setHumspotUser] = React.useState<HumspotUser | null | undefined>(null);
   const [darkMode, setDarkMode] = React.useState<boolean>(true);
   const [showTabs, setShowTabs] = React.useState<boolean>(true);
+  const [recentlyViewedUpdated, setRecentlyViewedUpdated] = React.useState<boolean>(false);
 
   const memoizedContextValue = React.useMemo(
     () => ({
@@ -32,9 +35,11 @@ export const ContextProvider = ({ children }: Props) => {
       darkMode,
       setDarkMode,
       showTabs,
-      setShowTabs
+      setShowTabs,
+      recentlyViewedUpdated,
+      setRecentlyViewedUpdated
     }),
-    [humspotUser, setHumspotUser, darkMode, setDarkMode, showTabs, setShowTabs]
+    [humspotUser, setHumspotUser, darkMode, setDarkMode, showTabs, setShowTabs, recentlyViewedUpdated, setRecentlyViewedUpdated]
   );
 
   return (
