@@ -1,4 +1,4 @@
-import { IonPage, IonContent, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonIcon, IonDatetime, IonCard, IonCardContent, IonCardHeader, IonChip, IonAlert, IonModal, IonLoading, IonHeader, IonToolbar, IonButtons, IonTitle } from "@ionic/react";
+import { IonPage, IonContent, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonIcon, IonDatetime, IonCard, IonCardContent, IonCardHeader, IonChip, IonAlert, IonModal, IonLoading, IonHeader, IonToolbar, IonButtons, IonTitle, IonItemDivider } from "@ionic/react";
 import { mapOutline, cameraOutline, addOutline, chevronDownOutline, chevronBackOutline } from "ionicons/icons";
 import { Map, Marker } from "pigeon-maps";
 import GoBackHeader from "../components/Shared/GoBackHeader";
@@ -32,7 +32,7 @@ type SubmissionInfo = {
   tagNames: string | null;
   time: string | null;
   websiteURL: string | null;
-}
+};
 
 const AdminApproveActivitySubmission = () => {
 
@@ -45,9 +45,11 @@ const AdminApproveActivitySubmission = () => {
   const [submissionInfo, setSubmissionInfo] = useState<SubmissionInfo | null>(null);
 
   const mapModalRef = useRef<HTMLIonModalElement | null>(null);
+  const descRef = useRef<HTMLIonTextareaElement | null>(null);
 
   const handleApprove = async () => {
-
+    if(!context.humspotUser || !submissionInfo) return;
+    // const res = await handleApproveActivitySubmission(context.humspotUser.userID, submissionInfo.submissionID, descRef?.current?.value ?? '')
   };
 
   const handleDeny = async () => {
@@ -149,6 +151,14 @@ const AdminApproveActivitySubmission = () => {
                       </IonChip>
                     ))}
                 </div>
+
+                <br />
+                <br />
+                <br />
+                <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
+                  <IonLabel position='stacked'>Message to Submitter (Optional)</IonLabel>
+                  <IonTextarea maxlength={500} rows={3} ref={descRef} />
+                </IonItem>
 
                 <IonButton color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleApprove()}>Approve</IonButton>
                 <IonButton color='danger' expand="block" style={{ padding: "10px" }} onClick={async () => await handleDeny()}>Deny</IonButton>
