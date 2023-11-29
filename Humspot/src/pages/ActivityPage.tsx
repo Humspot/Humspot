@@ -121,6 +121,7 @@ function ActivityPage() {
         </div>
 
         {/* Header Title */}
+
         <ActivityHeaderTitle id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name} />
         {/* Tags */}
         <div style={{ paddingLeft: "5px" }}>
@@ -135,10 +136,12 @@ function ActivityPage() {
               );
             })}
         </div>
+
         {/* Date Time Location */}
         <ActivityDateTimeLocation
           activity={activity}
         ></ActivityDateTimeLocation>
+
         {/* Description */}
         <IonCard>
           <IonCardContent>
@@ -155,8 +158,10 @@ function ActivityPage() {
             </IonText>
           </IonCardContent>
         </IonCard>
+
         {/* Comments Section */}
         <ActivityCommentsSection activity={activity}></ActivityCommentsSection>
+        
         {/* Add a Comment Box */}
         <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'}></ActivityAddCommentBox>
       </IonContent>

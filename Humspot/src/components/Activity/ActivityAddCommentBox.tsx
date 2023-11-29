@@ -1,11 +1,11 @@
-import { IonButton, IonCard, IonCardContent, IonIcon, IonTextarea, useIonLoading } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton } from "@ionic/react";
 import { useRef, useState } from "react";
 import { handleAddComment } from "../../utils/server";
 import { useContext } from "../../utils/my-context";
 import { HumspotCommentSubmit } from "../../utils/types";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { useToast } from "@agney/ir-toast";
-import { cameraOutline } from "ionicons/icons";
+import { cameraOutline, sendOutline } from "ionicons/icons";
 
 const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
   const id: string = props.id;
@@ -77,10 +77,20 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
 
   return (
     <>
-      <IonCard>
+      <IonCard style={{ padding: '10px' }}>
         <IonCardContent>
+          {/* Textarea for adding comment */}
           {context.humspotUser ? (
             <IonTextarea
+              style={{
+                borderColor: '#eee',
+                borderWidth: '1px',
+                borderRadius: '4px',
+                padding: '10px',
+                marginBottom: '10px',
+                color: '#666',
+                fontSize: '14px'
+              }}
               placeholder={
                 context.humspotUser
                   ? "Add a comment..."
@@ -98,25 +108,22 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
           ) : (
             <></>
           )}
+          {/* Photo preview */}
           {photo &&
-            <img src={photo} />
+            <img src={photo} style={{ marginTop: '10px', maxWidth: '100%', borderRadius: '4px' }} />
           }
-          <IonButton
-            color='secondary'
-            onClick={handleSubmitComment}
-            disabled={!context.humspotUser}
-          >
-            {context.humspotUser ? "Submit Comment" : "Log in to add comments."}
-          </IonButton>
-
+          {/* IonFab for submitting comment */}
           {context.humspotUser &&
-            <IonButton
-              color='secondary'
-              onClick={async () => await handleSelectImage()}
-            >
-              <IonIcon icon={cameraOutline} />
-            </IonButton>
+            <IonFab vertical="bottom" horizontal="end" slot="fixed" style={{ display: 'flex', alignItems: 'center' }}>
+              <IonFabButton color='secondary' onClick={handleSubmitComment} style={{ marginRight: '10px', width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
+                <IonIcon icon={sendOutline} style={{ margin: 0 }} />
+              </IonFabButton>
+              <IonFabButton color='secondary' onClick={handleSelectImage} style={{ width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
+                <IonIcon icon={cameraOutline} style={{ margin: 0 }} />
+              </IonFabButton>
+            </IonFab>
           }
+
         </IonCardContent>
       </IonCard>
     </>
