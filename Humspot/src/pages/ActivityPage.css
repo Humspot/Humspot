@@ -58,12 +58,12 @@
 }
 
 .locationlabel {
-  font-size: xx-large;
-  text-align: left;
+  /* font-size: xx-large;
+  text-align: left; */
   display: flex;
   gap: 10px;
-  /* margin-bottom: 20px; */
-  padding: 5px;
+  /* gap: 10px;
+  padding: 5px; */
 }
 
 h1 {

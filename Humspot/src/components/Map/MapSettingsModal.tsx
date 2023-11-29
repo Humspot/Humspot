@@ -1,9 +1,11 @@
-import { IonCheckbox, IonContent, IonDatetime, IonItem, IonLabel, IonList, IonModal } from "@ionic/react";
+import { IonCheckbox, IonContent, IonDatetime, IonItem, IonLabel, IonList, IonModal, IonTitle } from "@ionic/react";
 import { useState } from "react";
 
 type MapSettingsModalProps = {
   showThisWeeksEvents: boolean;
   setShowThisWeeksEvents: React.Dispatch<React.SetStateAction<boolean>>
+  showTopAttractions: boolean;
+  setShowTopAttractions: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MapSettingsModal = (props: MapSettingsModalProps) => {
@@ -17,8 +19,10 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
     <IonModal trigger="map-settings-modal" handle={false} breakpoints={[0, 0.85, 0.99]} initialBreakpoint={0.85}>
       <IonContent style={{ '--background': 'var(--ion-item-background' }}>
 
+        <IonTitle>Map Settings</IonTitle>
+
         <IonList lines="none">
-          <IonCheckbox>Top Attractions</IonCheckbox>
+          <IonCheckbox checked={props.showTopAttractions} onIonChange={(e) => { props.setShowTopAttractions(e.detail.checked) }}>Top Attractions</IonCheckbox>
         </IonList>
 
         <IonList lines="none">

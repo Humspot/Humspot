@@ -18,14 +18,17 @@ const ActivityDateTimeLocation = (props: { activity: HumspotActivity | null }) =
         <IonCardContent className="locationcard">
           <IonText color={"light"}>
             <div className="locationlabel">
-              <IonIcon icon={compass} size='small'></IonIcon>
+              {/* <IonIcon icon={compass} size='small'></IonIcon> */}
               <h2>{activity?.location ?? ""}</h2>
             </div>
             {activity?.date &&
-              <div className="locationlabel">
-                <IonIcon icon={time} size='small'></IonIcon>
-                <h2>{formatDate(activity?.date ?? "")}</h2>
-              </div>
+              <>
+                <br />
+                <div className="locationlabel">
+                  {/* <IonIcon icon={time} size='small'></IonIcon> */}
+                  <h2>{formatDate(activity?.date ?? "")}</h2>
+                </div>
+              </>
             }
           </IonText>
 
