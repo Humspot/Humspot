@@ -1,11 +1,13 @@
-import { IonPage, IonContent, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonIcon, IonDatetime, IonCard, IonCardContent, IonCardHeader, IonChip, IonAlert, IonModal, IonLoading, IonHeader, IonToolbar, IonButtons, IonTitle } from "@ionic/react";
+import { IonPage, IonContent, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonIcon, IonDatetime, IonCard, IonCardContent, IonCardHeader, IonChip, IonAlert, IonModal, IonLoading, IonHeader, IonToolbar, IonButtons, IonTitle, useIonRouter } from "@ionic/react";
 import { mapOutline, cameraOutline, addOutline, chevronDownOutline, chevronBackOutline } from "ionicons/icons";
 import { Map, Marker } from "pigeon-maps";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { useContext } from "../utils/my-context";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { handleGetSubmissionInfo } from "../utils/server";
+import { handleApproveActivitySubmission, handleGetSubmissionInfo } from "../utils/server";
+import { SubmissionInfo } from "../utils/types";
+import { useToast } from "@agney/ir-toast";
 
 async function canDismiss(data?: any, role?: string) {
   return role !== 'gesture';
@@ -15,39 +17,36 @@ type AdminApproveActivitySubmissionParams = {
   id: string;
 };
 
-type SubmissionInfo = {
-  activityType: "event" | "attraction" | "custom"
-  addedByUserID: string;
-  date: string | null;
-  description: string;
-  latitude: string | null;
-  longitude: string | null;
-  location: string;
-  name: string;
-  openTimes: string | null;
-  organizer: string;
-  photoUrls: string | null;
-  submissionDate: string | null;
-  submissionID: string;
-  tagNames: string | null;
-  time: string | null;
-  websiteURL: string | null;
-}
-
 const AdminApproveActivitySubmission = () => {
 
   const params = useParams<AdminApproveActivitySubmissionParams>();
   const id: string = params.id;
 
   const context = useContext();
+  const Toast = useToast();
+  const router = useIonRouter();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [submissionInfo, setSubmissionInfo] = useState<SubmissionInfo | null>(null);
 
   const mapModalRef = useRef<HTMLIonModalElement | null>(null);
 
-  const handleApprove = async () => {
+  const descRef = useRef<HTMLIonTextareaElement | null>(null);
 
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const handleApprove = async () => {
+    if (!context.humspotUser || !submissionInfo) return;
+    setIsSubmitting(true);
+    const res = await handleApproveActivitySubmission(context.humspotUser.userID, submissionInfo, descRef?.current?.value ?? '');
+    if (res.success) {
+      const t = Toast.create({ message: "Activity approved!", duration: 2000, color: "secondary" });
+      t.present();
+      router.goBack();
+    } else {
+      const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
+      t.present();
+    }
   };
 
   const handleDeny = async () => {
@@ -66,11 +65,14 @@ const AdminApproveActivitySubmission = () => {
 
   return (
     <IonPage>
+      <GoBackHeader title={submissionInfo?.activityType ? "Approve " + submissionInfo.activityType : ""} />
+
       <IonContent >
 
-        <GoBackHeader title={submissionInfo?.activityType ? "Approve " + submissionInfo.activityType : ""} />
 
         <IonLoading message={"Loading..."} isOpen={loading} />
+
+        <IonLoading message={"Submitting..."} isOpen={isSubmitting} />
 
         {context.humspotUser?.accountType !== 'user' ?
           <>
@@ -108,10 +110,17 @@ const AdminApproveActivitySubmission = () => {
                   </div>
                 </IonItem>
                 <br />
-                <IonItem className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
-                  <IonLabel position='stacked'>Date</IonLabel>
-                  <IonInput readonly aria-label="Website" style={{ marginTop: "5px" }} value={submissionInfo.date ?? "NO DATE PROVIDED"} />
-                </IonItem>
+                {submissionInfo.openTimes !== null ?
+                  <IonItem className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
+                    <IonLabel position='stacked'>Open Times</IonLabel>
+                    <IonInput readonly aria-label="Website" style={{ marginTop: "5px" }} value={submissionInfo.openTimes ?? "NO OPEN TIMES PROVIDED"} />
+                  </IonItem>
+                  :
+                  <IonItem className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
+                    <IonLabel position='stacked'>Date</IonLabel>
+                    <IonInput readonly aria-label="Website" style={{ marginTop: "5px" }} value={submissionInfo.date ?? "NO DATE PROVIDED"} />
+                  </IonItem>
+                }
                 <IonItem className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                   <IonLabel position='stacked'>Time</IonLabel>
                   <IonInput readonly aria-label="Website" style={{ marginTop: "5px" }} value={submissionInfo.time ?? "NO TIME PROVIDED"} />
@@ -148,6 +157,16 @@ const AdminApproveActivitySubmission = () => {
                       </IonChip>
                     ))}
                 </div>
+
+                <br />
+                <br />
+                <br />
+                <br />
+
+                <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='none'>
+                  <IonLabel position='stacked'>Message to Submitter (Optional)</IonLabel>
+                  <IonTextarea ref={descRef} rows={3} placeholder="Thanks for submitting! ..." />
+                </IonItem>
 
                 <IonButton color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleApprove()}>Approve</IonButton>
                 <IonButton color='danger' expand="block" style={{ padding: "10px" }} onClick={async () => await handleDeny()}>Deny</IonButton>
