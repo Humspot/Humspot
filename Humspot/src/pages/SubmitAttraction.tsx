@@ -24,12 +24,14 @@ import {
   IonCardContent,
   IonCardHeader,
   IonCardTitle,
+  IonAlert,
 } from "@ionic/react";
 import { HumspotAttraction } from "../utils/types";
 import { useContext } from "../utils/my-context";
 import { useToast } from "@agney/ir-toast";
 import { Map, Marker } from "pigeon-maps";
 import {
+  addOutline,
   cameraOutline,
   chevronBackOutline,
   chevronDownOutline,
@@ -121,6 +123,10 @@ const SubmitAttractionPage = () => {
       setSelectedTags([...selectedTags, tag]);
     }
   };
+
+  const addNewTag = (tag: string) => {
+    setVisibleTags([tag, ...visibleTags]);
+  }
 
   const showMoreTags = () => {
     const nextTags = attractionTags.slice(
@@ -331,7 +337,7 @@ const SubmitAttractionPage = () => {
       <IonContent>
         <GoBackHeader title="Submit Attraction" />
 
-        {context.humspotUser?.accountType !== "user" ? (
+        {context.humspotUser ? (
           <>
             <div
               style={{
@@ -490,7 +496,12 @@ const SubmitAttractionPage = () => {
               >
                 <IonLabel position="stacked">Tags</IonLabel>
               </IonItem>
-              <div style={{ paddingRight: "5px", paddingLeft: "5px" }}>
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', paddingRight: "5px", paddingLeft: "5px" }}>
+                <IonButton id='add-custom-tag' className='ion-no-padding' fill='clear'>
+                  <IonChip style={{ width: `60px` }} color='light'>
+                    <IonIcon icon={addOutline} style={{ marginRight: '5px' }} />
+                  </IonChip>
+                </IonButton>
                 {visibleTags.map((tag) => (
                   <IonChip
                     key={tag}
@@ -530,13 +541,38 @@ const SubmitAttractionPage = () => {
                 Submit
               </IonButton>
               <br />
+              <IonAlert
+                trigger="add-custom-tag"
+                header="Add custom tag"
+                buttons={[
+                  'Cancel',
+                  {
+                    text: 'Add',
+                    handler: (data) => {
+                      if (data.tag.length > 50) {
+                        const t = Toast.create({ message: "Custom tag must not exceed 50 characters", duration: 3000, color: "danger" });
+                        t.present();
+                        return;
+                      }
+                      if (data.tag.length > 0) {
+                        addNewTag(data.tag);
+                      }
+                    }
+                  }
+                ]}
+                inputs={[
+                  {
+                    name: 'tag',
+                    type: 'text',
+                    placeholder: 'House Party',
+                    max: '50'
+                  }
+                ]}
+              />
             </div>
           </>
         ) : (
-          <div className="ion-text-center access-denied-message">
-            You must be an admin or organizer to submit an event or
-            attraction!
-          </div>
+          <></>
         )}
 
         <IonModal
