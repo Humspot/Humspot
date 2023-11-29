@@ -7,7 +7,7 @@ import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { useToast } from "@agney/ir-toast";
 import { cameraOutline, sendOutline } from "ionicons/icons";
 
-const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
+const ActivityAddCommentBox = (props: { id: string, activityName: string; setComments: React.Dispatch<React.SetStateAction<any[]>>; }) => {
   const id: string = props.id;
   const Toast = useToast();
   const context = useContext();
@@ -68,6 +68,18 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
     if (res.success) {
       const t = Toast.create({ message: "Comment added", duration: 2000, color: 'success' });
       t.present();
+      const addToCommentsArray = {
+        commentText: commentRef.current.value as string,
+        userID: context.humspotUser.userID,
+        activityID: id,
+        photoUrl: photo ?? null,
+        profilePicURL: context.humspotUser.profilePicURL,
+        username: context.humspotUser.username,
+        commentDate: (new Date().toISOString()),
+      };
+      props.setComments((prev) => [addToCommentsArray, ...prev]);
+      commentRef.current.value = null;
+      setPhoto(undefined);
     } else {
       const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: 'danger' });
       t.present();
@@ -88,7 +100,6 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
                 borderRadius: '4px',
                 padding: '10px',
                 marginBottom: '10px',
-                color: '#666',
                 fontSize: '14px'
               }}
               placeholder={
@@ -114,7 +125,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
           }
           {/* IonFab for submitting comment */}
           {context.humspotUser &&
-            <IonFab vertical="bottom" horizontal="end" slot="fixed" style={{ display: 'flex', alignItems: 'center' }}>
+            <IonFab vertical="top" horizontal="end" slot="fixed" style={{ display: 'flex', alignItems: 'center', paddingTop: "27.5px" }}>
               <IonFabButton color='secondary' onClick={handleSubmitComment} style={{ marginRight: '10px', width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
                 <IonIcon icon={sendOutline} style={{ margin: 0 }} />
               </IonFabButton>

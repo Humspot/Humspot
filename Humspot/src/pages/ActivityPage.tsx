@@ -2,13 +2,15 @@
 // This page loads when you press an activity entry from any of the other pages
 
 import {
+  IonAvatar,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardTitle,
   IonChip,
   IonContent,
-  IonLoading,
+  IonImg,
+  IonNote,
   IonPage,
   IonSkeletonText,
   IonText,
@@ -20,6 +22,9 @@ import { useParams } from "react-router-dom";
 import "./ActivityPage.css";
 import { useCallback, useEffect, useState } from "react";
 import { handleAddRating, handleGetActivity } from "../utils/server";
+
+import avatar from "../assets/images/avatar.svg";
+
 
 import placeholder from "../assets/images/placeholder.png";
 import ActivityDateTimeLocation from "../components/Activity/ActivityDateTimeLocation";
@@ -38,6 +43,7 @@ import { Rating } from 'react-custom-rating-component'
 import ActivityHeaderTitle from "../components/Activity/ActivityHeaderTitle";
 import { Preferences } from "@capacitor/preferences";
 import { updateRecentlyViewed } from "../utils/updateRecentlyViewed";
+import { formatDate } from "../utils/formatDate";
 
 type ActivityPageParams = {
   id: string;
@@ -54,10 +60,12 @@ function ActivityPage() {
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
   const [activityLoading, setActivityLoading] = useState<boolean>(true);
 
+  const [comments, setComments] = useState<any[]>([]);
+
   const handleGetActivityCallback = useCallback(async (id: string) => {
     setActivityLoading(true);
     const res = await handleGetActivity(id);
-    if ("activity" in res && res.activity) setActivity(res.activity);
+    if ("activity" in res && res.activity) { setActivity(res.activity); setComments(res.activity.comments); }
     setActivityLoading(false);
     await updateRecentlyViewed(id, res.activity?.name ?? '', res.activity?.description ?? '', res.activity?.date ?? '', res.activity?.photoUrls ?? '');
     context.setRecentlyViewedUpdated(true);
@@ -159,11 +167,43 @@ function ActivityPage() {
           </IonCardContent>
         </IonCard>
 
-        {/* Comments Section */}
-        <ActivityCommentsSection activity={activity}></ActivityCommentsSection>
-        
+        <>
+          {comments ? (
+            <IonCard style={{ padding: '10px' }}>
+              <IonCardHeader>
+                <IonCardTitle>Comments</IonCardTitle>
+              </IonCardHeader>
+              {comments.map((comment: { profilePicURL: any; username: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; commentText: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; photoUrl: string | undefined; commentDate: string | null; }, index: React.Key | null | undefined) => (
+                <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
+                  <div style={{ width: "25%" }}>
+                    <IonAvatar style={{ marginRight: '15px' }}>
+                      <IonImg src={comment.profilePicURL || avatar} alt="Profile Picture" />
+                    </IonAvatar>
+                  </div>
+                  <div style={{ flexGrow: 1 }}>
+                    <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>{comment.username}</div>
+                    <IonText style={{ color: '#666', fontSize: '14px' }}>{comment.commentText}</IonText>
+                    {comment.photoUrl && <img src={comment.photoUrl} alt="Comment Attachment" style={{ marginTop: '10px', maxWidth: '100%', borderRadius: '4px' }} />}
+                    <IonNote style={{ display: 'block', marginTop: '5px', fontSize: '12px', color: '#999' }}>
+                      {formatDate(comment.commentDate)}
+                    </IonNote>
+                  </div>
+                </div>
+              ))}
+            </IonCard>
+          ) : (
+            <IonCard>
+              <IonCardContent>
+                <IonSkeletonText animated style={{ margin: '10px 0' }} />
+                <IonSkeletonText animated style={{ margin: '10px 0' }} />
+                <IonSkeletonText animated style={{ margin: '10px 0' }} />
+              </IonCardContent>
+            </IonCard>
+          )}
+        </>
+
         {/* Add a Comment Box */}
-        <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'}></ActivityAddCommentBox>
+        <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'} setComments={setComments}></ActivityAddCommentBox>
       </IonContent>
     </IonPage>
   );
