@@ -31,14 +31,14 @@ const transporter = nodemailer.createTransport({
 });
 
 
-async function sendEmail(activityType: string, submitterEmail: string, reason: string) {
+async function sendEmail(submitterEmail: string, reason: string, activityType: string, activityName: string) {
   const mailOptions = {
     from: `app.tellU@gmail.com`,
     to: `${submitterEmail}`,
-    subject: `Your ${activityType} submission was just approved on Humspot!`,
+    subject: `Your ${activityType} submission to Humspot has been approved!`,
     html: `
       <div style="font-family: Arial, sans-serif; color: #333;">
-        <p>Your ${activityType} submission was approved and is now being shown to the public on Humspot. Thanks for contributing to the app.</p>
+        <p>Your submission for ${activityName} was approved!</p>
         <p>Message from Admin: ${reason}</p>
       </div>
     `
@@ -52,6 +52,33 @@ async function sendEmail(activityType: string, submitterEmail: string, reason: s
   }
 };
 
+type Event = {
+  name: string;
+  description: string;
+  location: string;
+  addedByUserID: string;
+  date: string;
+  time: string;
+  latitude: number;
+  longitude: number;
+  organizer: string;
+  tags: string[];
+  photoUrls: string[];
+  websiteURL: string | null;
+};
+
+type Attraction = {
+  name: string;
+  description: string;
+  location: string;
+  addedByUserID: string;
+  websiteUrl: string;
+  latitude: number;
+  longitude: number;
+  openTimes: string;
+  tags: string[];
+  photoUrls: string[];
+};
 
 type SubmissionInfo = {
   activityType: "event" | "attraction" | "custom"
@@ -64,19 +91,20 @@ type SubmissionInfo = {
   name: string;
   openTimes: string | null;
   organizer: string;
-  photoUrls: string | null;
+  photoUrls: string | null; // comma delimited
   submissionDate: string | null;
   submissionID: string;
-  tagNames: string | null;
+  tagNames: string | null; // comma delimited
   time: string | null;
   websiteURL: string | null;
 };
 
 type info = {
-  approverID: string;
+  adminUserID: string;
   submissionInfo: SubmissionInfo;
   reason: string;
-}
+};
+
 
 export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   const conn = await pool.getConnection();
@@ -100,8 +128,8 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     await conn.beginTransaction();
 
-    // Check if the user is an admin
-    const userID: string = event.approverID;
+    // Check if the user is an admin or organizer
+    const userID: string = event.adminUserID;
     let query: string = 'SELECT accountStatus, accountType FROM Users WHERE userID = ?';
     let params: (string | number)[] = [userID];
     const [result]: any[] = await conn.query(query, params);
@@ -136,19 +164,98 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
       };
     }
 
-    // get email from Users table given submissionInfo.addedByUserID
+    let tags: string[] = [];
+    let photoUrls: string[] = [];
+
+    if (event.submissionInfo.tagNames && event.submissionInfo.tagNames.length > 1) {
+      tags = event.submissionInfo.tagNames.split(',');
+      photoUrls = event.submissionInfo.photoUrls.split(',');
+    }
+    let res = null;
+    if (event.submissionInfo.activityType === 'event') {
+      const e: Event = {
+        name: event.submissionInfo.name,
+        description: event.submissionInfo.description,
+        location: event.submissionInfo.location,
+        addedByUserID: event.submissionInfo.addedByUserID,
+        date: event.submissionInfo.date,
+        time: event.submissionInfo.time,
+        latitude: parseFloat(event.submissionInfo.latitude),
+        longitude: parseFloat(event.submissionInfo.longitude),
+        organizer: event.submissionInfo.organizer,
+        tags: tags,
+        photoUrls: photoUrls,
+        websiteURL: event.submissionInfo.websiteURL
+      };
+      res = await fetch(
+        process.env.AWS_API_GATEWAY_ADD_EVENT_URL,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(e),
+        }
+      );
+    } else if (event.submissionInfo.activityType === 'attraction') {
+      const a: Attraction = {
+        name: event.submissionInfo.name,
+        description: event.submissionInfo.description,
+        photoUrls: photoUrls,
+        tags: tags,
+        location: event.submissionInfo.location,
+        latitude: parseFloat(event.submissionInfo.latitude),
+        longitude: parseFloat(event.submissionInfo.longitude),
+        openTimes: event.submissionInfo.openTimes,
+        addedByUserID: event.submissionInfo.addedByUserID,
+        websiteUrl: event.submissionInfo.websiteURL
+      };
+      res = await fetch(
+        process.env.AWS_API_GATEWAY_ADD_ATTRACTION_URL,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(a),
+        }
+      );
+    } else {
+      return {
+        statusCode: 400,
+        headers: {
+          "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+          "Access-Control-Allow-Methods": '*',
+          "Access-Control-Allow-Origin": '*'
+        },
+        body: JSON.stringify({
+          message: 'Unable to approve custom activity (not an attraction or event)!',
+          success: false
+        }),
+      };
+    }
+
     query = `
-      SELECT email
-      FROM Users
+      DELETE FROM Submissions
+      WHERE submissionID = ?;
+    `;
+    params = [event.submissionInfo.submissionID];
+
+    await conn.query(query, params);
+
+    query = `
+      SELECT email 
+      FROM Users 
       WHERE userID = ?
     `;
     params = [event.submissionInfo.addedByUserID];
 
-    const [submitterEmail]: any[] = await conn.query(query, params);
+    const [rows]: any = await conn.query(query, params);
+    const email: string = rows[0].email;
 
     await conn.commit();
 
-    await sendEmail(event.submissionInfo.activityType, submitterEmail[0], event.reason)
+    await sendEmail(email, event.reason, event.submissionInfo.activityType, event.submissionInfo.name);
 
     return {
       statusCode: 200,
@@ -158,7 +265,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
         "Access-Control-Allow-Origin": '*'
       },
       body: JSON.stringify({
-        message: 'User is now an organizer!',
+        message: 'Activity approved!',
         success: true
       }),
     };
@@ -176,7 +283,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
         "Access-Control-Allow-Origin": '*'
       },
       body: JSON.stringify({
-        message: 'Internal Server/mySQL Error', success: false
+        message: 'Internal Server/mySQL Error!', success: false
       }),
     };
   } finally {
@@ -185,3 +292,5 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     }
   }
 };
+
+

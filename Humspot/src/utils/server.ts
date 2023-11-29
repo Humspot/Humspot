@@ -29,7 +29,8 @@ import {
   GetEventsBetweenTwoDatesStatusResponse,
   AddCommentImageResponse,
   GetSubmittedActivitiesResponse,
-  OrganizerRequestSubmission
+  OrganizerRequestSubmission,
+  SubmissionInfo
 } from "./types";
 
 
@@ -1106,37 +1107,6 @@ export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
   }
 };
 
-export const handleSubmitAttractionForApproval = async (event: HumspotAttraction) => {
-  try {
-    const currentUserSession = await Auth.currentSession();
-
-    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
-
-    const idToken = currentUserSession.getIdToken();
-    const jwtToken = idToken.getJwtToken();
-
-    const response = await fetch(
-      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_ATTRACTION_FOR_APPROVAL,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
-        },
-        body: JSON.stringify(event),
-      }
-    );
-
-    const responseData = await response.json();
-
-    console.log(responseData);
-    return responseData;
-  } catch (error) {
-    console.error("Error calling API Gateway", error);
-    return { message: "Error calling API Gateway" + error, success: false };
-  }
-};
-
 
 export const handleUploadSubmissionImages = async (blobs: Blob[] | null, folderName: string) => {
   if (!blobs) {
@@ -1231,6 +1201,7 @@ export const handleGetSubmittedActivities = async (userID: string, pageNum: numb
   }
 
 };
+
 
 
 export const handleSubmitRequestToBecomeOrganizer = async (data: OrganizerRequestSubmission) => {
@@ -1519,4 +1490,73 @@ export const handleGetSubmissionInfo = async (userID: string, submissionID: stri
   }
 
 
+}
+
+export const handleSubmitAttractionForApproval = async (event: HumspotAttraction) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_SUBMIT_ATTRACTION_FOR_APPROVAL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(event),
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
+};
+
+
+export const handleApproveActivitySubmission = async (adminUserID: string, info: SubmissionInfo, reason: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const event = {
+      adminUserID: adminUserID,
+      submissionInfo: info,
+      reason: reason
+    }
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_APPROVE_ACTIVITY,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(event),
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
 }

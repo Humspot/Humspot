@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   IonAvatar,
   IonCard,
@@ -17,48 +18,32 @@ const ActivityCommentsSection = (props: { activity: any }) => {
   return (
     <>
       {activity ? (
-        <IonCard className="commentlist">
+        <IonCard style={{ padding: '10px' }}>
           <IonCardHeader>
             <IonCardTitle>Comments</IonCardTitle>
           </IonCardHeader>
-          {activity.comments[0] &&
-            activity?.comments?.map((comment: any, index: any) => (
-              <IonCard className="commentbox" key={index}>
-                <IonAvatar className="commentavatar">
-                  <IonImg
-                    alt="Profile Picture"
-                    src={comment.profilePicURL || avatar}
-                  ></IonImg>
-                </IonAvatar>
-                <div>
-                  <IonCardTitle className="commentusername">
-                    {comment.username}
-                  </IonCardTitle>
-                  <IonCardContent className="commentcontents">
-                    <IonText>{comment.commentText}</IonText>
-                    {comment.photoUrl &&
-                      <img src={comment.photoUrl} />
-                    }
-                    <IonNote className="commentdate">
-                      {formatDate((comment.commentDate as string) ?? "")}
-                    </IonNote>
-                  </IonCardContent>
-                </div>
-              </IonCard>
-            ))}
+          {activity.comments.map((comment: { profilePicURL: any; username: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; commentText: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; photoUrl: string | undefined; commentDate: string | null; }, index: React.Key | null | undefined) => (
+            <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
+              <IonAvatar style={{ marginRight: '15px' }}>
+                <IonImg src={comment.profilePicURL || avatar} alt="Profile Picture" />
+              </IonAvatar>
+              <div style={{ flexGrow: 1 }}>
+                <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>{comment.username}</div>
+                <IonText style={{ color: '#666', fontSize: '14px' }}>{comment.commentText}</IonText>
+                {comment.photoUrl && <img src={comment.photoUrl} alt="Comment Attachment" style={{ marginTop: '10px', maxWidth: '100%', borderRadius: '4px' }} />}
+                <IonNote style={{ display: 'block', marginTop: '5px', fontSize: '12px', color: '#999' }}>
+                  {formatDate(comment.commentDate)}
+                </IonNote>
+              </div>
+            </div>
+          ))}
         </IonCard>
       ) : (
         <IonCard>
           <IonCardContent>
-            <p>
-              <IonSkeletonText animated></IonSkeletonText>
-            </p>
-            <p>
-              <IonSkeletonText animated></IonSkeletonText>
-            </p>
-            <p>
-              <IonSkeletonText animated></IonSkeletonText>
-            </p>
+            <IonSkeletonText animated style={{ margin: '10px 0' }} />
+            <IonSkeletonText animated style={{ margin: '10px 0' }} />
+            <IonSkeletonText animated style={{ margin: '10px 0' }} />
           </IonCardContent>
         </IonCard>
       )}

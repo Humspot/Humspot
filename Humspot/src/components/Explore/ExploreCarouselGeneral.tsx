@@ -6,7 +6,7 @@ import { IonCard, IonCardTitle, IonItemDivider, IonText, useIonRouter, useIonVie
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import { formatDate } from "../../utils/formatDate";
 
-import placeholder from '../../assets/images/placeholder.jpeg';
+import placeholder from '../../assets/images/school_placeholder.jpeg';
 import { handleGetActivitiesGivenTag } from "../../utils/server";
 
 type ExploreCarouselGeneralProps = {
@@ -45,9 +45,9 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
                   if ("activityID" in activity && activity.activityID) router.push("/activity/" + activity.activityID);
                 }}
               >
-                <div style={{ height: '175px', overflow: 'hidden', borderRadius: '10px' }}>
+                <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px' }}>
                   <img
-                    src={activity.photoUrl ? activity.photoUrl : placeholder}
+                    src={"photoUrls" in activity && activity.photoUrls ? activity.photoUrls.trim().split(',')[0] : "photoUrl" in activity && activity.photoUrl ? activity.photoUrl : placeholder}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </div>

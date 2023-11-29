@@ -244,3 +244,22 @@ export type OrganizerRequestSubmission = {
   email: string;
   description: string;
 };
+
+export type SubmissionInfo = {
+  activityType: "event" | "attraction" | "custom"
+  addedByUserID: string;
+  date: string | null;
+  description: string;
+  latitude: string | null;
+  longitude: string | null;
+  location: string;
+  name: string;
+  openTimes: string | null;
+  organizer: string;
+  photoUrls: string | null;
+  submissionDate: string | null;
+  submissionID: string;
+  tagNames: string | null;
+  time: string | null;
+  websiteURL: string | null;
+}

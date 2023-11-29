@@ -1,13 +1,13 @@
-import { IonButton, IonCard, IonCardContent, IonIcon, IonTextarea, useIonLoading } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton } from "@ionic/react";
 import { useRef, useState } from "react";
 import { handleAddComment } from "../../utils/server";
 import { useContext } from "../../utils/my-context";
 import { HumspotCommentSubmit } from "../../utils/types";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { Camera, CameraResultType } from "@capacitor/camera";
 import { useToast } from "@agney/ir-toast";
-import { cameraOutline } from "ionicons/icons";
+import { cameraOutline, sendOutline } from "ionicons/icons";
 
-const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
+const ActivityAddCommentBox = (props: { id: string, activityName: string; setComments: React.Dispatch<React.SetStateAction<any[]>>; }) => {
   const id: string = props.id;
   const Toast = useToast();
   const context = useContext();
@@ -69,6 +69,18 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
     if (res.success) {
       const t = Toast.create({ message: "Comment added", duration: 2000, color: 'success' });
       t.present();
+      const addToCommentsArray = {
+        commentText: commentRef.current.value as string,
+        userID: context.humspotUser.userID,
+        activityID: id,
+        photoUrl: photo ?? null,
+        profilePicURL: context.humspotUser.profilePicURL,
+        username: context.humspotUser.username,
+        commentDate: (new Date().toISOString()),
+      };
+      props.setComments((prev) => [addToCommentsArray, ...prev]);
+      commentRef.current.value = null;
+      setPhoto(undefined);
     } else {
       const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: 'danger' });
       t.present();
@@ -78,10 +90,20 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
 
   return (
     <>
-      <IonCard>
+      <IonCard style={{ padding: '10px' }}>
         <IonCardContent>
+          {/* Textarea for adding comment */}
           {context.humspotUser ? (
             <IonTextarea
+              style={{
+                borderColor: '#eee',
+                borderWidth: '1px',
+                borderRadius: '4px',
+                padding: '10px',
+                marginBottom: '10px',
+                fontSize: '14px',
+                width: "70%"
+              }}
               placeholder={
                 context.humspotUser
                   ? "Add a comment..."
@@ -99,24 +121,22 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string }) => {
           ) : (
             <></>
           )}
+          {/* Photo preview */}
           {photo &&
-            <img src={photo} />
+            <img src={photo} style={{ marginTop: '10px', maxWidth: '100%', borderRadius: '4px' }} />
           }
-          <IonButton
-            color='secondary'
-            onClick={handleSubmitComment}
-            disabled={!context.humspotUser}
-          >
-            {context.humspotUser ? "Submit Comment" : "Log in to add comments."}
-          </IonButton>
+          {/* IonFab for submitting comment */}
           {context.humspotUser &&
-            <IonButton
-              color='secondary'
-              onClick={async () => await handleSelectImage()}
-            >
-              <IonIcon icon={cameraOutline} />
-            </IonButton>
+            <IonFab vertical="top" horizontal="end" slot="fixed" style={{ display: 'flex', alignItems: 'center', paddingTop: "27.5px" }}>
+              <IonFabButton color='secondary' onClick={handleSubmitComment} style={{ marginRight: '10px', width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
+                <IonIcon icon={sendOutline} style={{ margin: 0 }} />
+              </IonFabButton>
+              <IonFabButton color='secondary' onClick={handleSelectImage} style={{ width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
+                <IonIcon icon={cameraOutline} style={{ margin: 0 }} />
+              </IonFabButton>
+            </IonFab>
           }
+
         </IonCardContent>
       </IonCard>
     </>

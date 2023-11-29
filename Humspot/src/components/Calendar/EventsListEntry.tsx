@@ -10,7 +10,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { formatDate } from "../../utils/formatDate";
-import placeholder from "../../assets/images/placeholder.png";
+import placeholder from "../../assets/images/school_placeholder.jpeg";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 
 const EventsListEntry = (props: { events: any }) => {

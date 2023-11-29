@@ -26,11 +26,11 @@ export type Attraction = {
   location: string;
   addedByUserID: string;
   websiteUrl: string;
-  latitude: number;
-  longitude: number;
-  openTimes: string;
+  latitude: number | null;
+  longitude: number | null;
+  openTimes: string | null;
   tags: string[];
-  photoUrls: string[];
+  photoUrls: string[] | null;
 };
 
 export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
@@ -39,10 +39,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     const attraction: Attraction = JSON.parse(gatewayEvent.body || '{}');
 
     // Ensure all data has bene passed through the event
-    if (!attraction|| typeof attraction.name !== 'string' || typeof attraction.description !== 'string' ||
-      typeof attraction.location !== 'string' || typeof attraction.addedByUserID !== 'string' ||
-      !Array.isArray(attraction.tags) || typeof attraction.openTimes !== 'string' || typeof attraction.websiteUrl !== 'string'
-      || typeof attraction.latitude !== 'number' || typeof attraction.longitude !== 'number' || !Array.isArray(attraction.photoUrls)) {
+    if (!attraction) {
       return {
         statusCode: 400,
         headers: {
@@ -59,65 +56,69 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     await conn.beginTransaction();
 
     // Check if the user is an admin or organizer
-    const userID: string = attraction.addedByUserID;
-    let query: string = 'SELECT accountType FROM Users WHERE userID = ?';
-    let params: (string | number)[] = [userID];
-    const [result]: any[] = await conn.query(query, params);
+    // const userID: string = attraction.addedByUserID;
+    // let query: string = 'SELECT accountType FROM Users WHERE userID = ?';
+    // let params: (string | number)[] = [userID];
+    // const [result]: any[] = await conn.query(query, params);
 
-    if (result.length > 0) { // The user exists, and we have the accountType.
-      const accountType: string = result[0].accountType;
-      if (accountType !== 'admin' && accountType !== 'organizer') {
-        return {
-          statusCode: 400,
-          headers: {
-            "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-            "Access-Control-Allow-Methods": '*',
-            "Access-Control-Allow-Origin": '*'
-          },
-          body: JSON.stringify({
-            message: `User with ID ${userID} is not approved to add an event!`,
-          }),
-        };
-      }
-    } else {  // No user found with the provided userID.
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-          "Access-Control-Allow-Methods": '*',
-          "Access-Control-Allow-Origin": '*'
-        },
-        body: JSON.stringify({
-          message: `No user found with ID: ${userID}`,
-        }),
-      };
-    }
+    // if (result.length > 0) { // The user exists, and we have the accountType.
+    //   const accountType: string = result[0].accountType;
+    //   if (accountType !== 'admin' && accountType !== 'organizer') {
+    //     return {
+    //       statusCode: 400,
+    //       headers: {
+    //         "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+    //         "Access-Control-Allow-Methods": '*',
+    //         "Access-Control-Allow-Origin": '*'
+    //       },
+    //       body: JSON.stringify({
+    //         message: `User with ID ${userID} is not approved to add an event!`,
+    //       }),
+    //     };
+    //   }
+    // } else {  // No user found with the provided userID.
+    //   return {
+    //     statusCode: 400,
+    //     headers: {
+    //       "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+    //       "Access-Control-Allow-Methods": '*',
+    //       "Access-Control-Allow-Origin": '*'
+    //     },
+    //     body: JSON.stringify({
+    //       message: `No user found with ID: ${userID}`,
+    //     }),
+    //   };
+    // }
 
     // Add to Activities table
     const activityID: string = crypto.randomBytes(16).toString('hex');
-    query = 'INSERT INTO Activities (activityID, name, description, location, addedByUserID, activityType) VALUES (?, ?, ?, ?, ?, ?)';
-    params = [activityID, attraction.name, attraction.description, attraction.location, attraction.addedByUserID, 'attraction'];
+    let query: string = 'INSERT INTO Activities (activityID, name, description, location, addedByUserID, activityType, websiteURL) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    let params: (string | number | null)[] = [activityID, attraction.name, attraction.description, attraction.location, attraction.addedByUserID, 'attraction', attraction.websiteUrl];
     await conn.query(query, params);
 
     // Add to Attractions table
     const attractionID: string = crypto.randomBytes(16).toString('hex');
-    query = 'INSERT INTO Attractions (attractionID, activityID, websiteUrl, latitude, longitude, openTimes) VALUES (?, ?, ?, ?, ?, ?)';
-    params = [attractionID, activityID, attraction.websiteUrl, attraction.latitude, attraction.longitude, attraction.openTimes];
+    query = 'INSERT INTO Attractions (attractionID, activityID, latitude, longitude, openTimes) VALUES (?, ?, ?, ?, ?)';
+    params = [attractionID, activityID, attraction.latitude, attraction.longitude, attraction.openTimes];
     await conn.query(query, params);
 
     // Add to Tags and ActivityTags tables
-    for (const tag of attraction.tags) {
-      const tagID: string = crypto.randomBytes(16).toString('hex');
-      await conn.query('INSERT IGNORE INTO Tags (tagID, tagName) VALUES (?, ?)', [tagID, tag]);
-      await conn.query('INSERT INTO ActivityTags (activityID, tagID) VALUES (?, ?)', [activityID, tagID]);
+    if (attraction.tags) {
+      for (const tag of attraction.tags) {
+        const tagID: string = crypto.randomBytes(16).toString('hex');
+        await conn.query('INSERT IGNORE INTO Tags (tagID, tagName) VALUES (?, ?)', [tagID, tag]);
+        await conn.query('INSERT INTO ActivityTags (activityID, tagID) VALUES (?, ?)', [activityID, tagID]);
+      }
     }
 
-    // Add photoUrls to ActivityPhotos table
-    for (const photoUrl of attraction.photoUrls) {
-      const photoID: string = crypto.randomBytes(16).toString('hex');
-      const query: string = 'INSERT INTO ActivityPhotos (photoID, activityID, photoUrl) VALUES (?, ?, ?)';
-      const params: string[] = [photoID, activityID, photoUrl];
-      await conn.query(query, params);
+    if (attraction.photoUrls) {
+      // Add photoUrls to ActivityPhotos table
+      for (const photoUrl of attraction.photoUrls) {
+        const photoID: string = crypto.randomBytes(16).toString('hex');
+        const query: string = 'INSERT INTO ActivityPhotos (photoID, activityID, photoUrl) VALUES (?, ?, ?)';
+        const params: string[] = [photoID, activityID, photoUrl];
+        await conn.query(query, params);
+      }
     }
 
     await conn.commit();

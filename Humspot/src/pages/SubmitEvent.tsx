@@ -478,8 +478,8 @@ export const EventForm = () => {
 
           </>
           :
-          <div style={{ display: "flex", height: "100%", padding: "50px", fontSize: "1.05rem" }}>
-            <p className="ion-text-center">You must be an admin or organizer to submit an event or attraction!</p>
+          <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
+            You must be an admin or organizer to submit an event!
           </div>
         }
 

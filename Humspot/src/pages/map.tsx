@@ -4,7 +4,7 @@ import { Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/my-context";
 import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/map-config";
 import { useCallback, useEffect, useState } from "react";
-import { handleGetEventsBetweenTwoDates, handleGetThisWeeksEvents } from "../utils/server";
+import { handleGetActivitiesGivenTag, handleGetEventsBetweenTwoDates, handleGetThisWeeksEvents } from "../utils/server";
 import { GetHumspotEventResponse } from "../utils/types";
 import { settingsOutline } from "ionicons/icons";
 import MapSettingsModal from "../components/Map/MapSettingsModal";
@@ -20,9 +20,14 @@ function MapPage() {
     40.87649434150835, -124.07918370203882,
   ]);
   const [overlayIndex, setOverlayIndex] = useState<number>(-1);
+  const [attrIndex, setAttrIndex] = useState<number>(-1);
 
   const [showThisWeeksEvents, setShowThisWeeksEvents] = useState<boolean>(true);
   const [events, setEvents] = useState<GetHumspotEventResponse[]>([]);
+
+  const [showTopAttractions, setShowTopAttractions] = useState<boolean>(false);
+  const [attractions, setAttractions] = useState<any[]>([]);
+
 
   useIonViewDidEnter(() => {
     context.setShowTabs(true);
@@ -42,12 +47,13 @@ function MapPage() {
     };
   }, [router]);
 
-  const fetchEventsBetweenTwoDates = useCallback(async (date1: string, date2: string) => {
-    const res = await handleGetEventsBetweenTwoDates(date1, date2);
-    if (res.success) {
-      // setEvents(res.events);
-    }
+  const fetchTopAttr  = useCallback(async () => {
+    const res = await handleGetActivitiesGivenTag(1, 'Highlight');
+    setEvents(res.activities);
   }, []);
+  useEffect(() => {
+    fetchTopAttr();
+  }, [fetchTopAttr]);
 
 
   const fetchThisWeeksEvents = useCallback(async () => {
@@ -186,7 +192,7 @@ function MapPage() {
 
         </Map>
 
-        <MapSettingsModal showThisWeeksEvents={showThisWeeksEvents} setShowThisWeeksEvents={setShowThisWeeksEvents} />
+        <MapSettingsModal showTopAttractions={showTopAttractions} setShowTopAttractions={setShowTopAttractions} showThisWeeksEvents={showThisWeeksEvents} setShowThisWeeksEvents={setShowThisWeeksEvents} />
 
       </IonContent>
     </IonPage>
