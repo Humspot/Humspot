@@ -7,7 +7,7 @@ import { useContext } from "../../utils/my-context";
 import { useToast } from "@agney/ir-toast";
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 
-import placeholder from '../../assets/images/placeholder.png';
+import placeholder from '../../assets/images/school_placeholder.jpeg';
 
 import './Profile.css';
 import { formatDate } from "../../utils/formatDate";

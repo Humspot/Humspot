@@ -26,7 +26,7 @@ import { handleAddRating, handleGetActivity } from "../utils/server";
 import avatar from "../assets/images/avatar.svg";
 
 
-import placeholder from "../assets/images/placeholder.png";
+import placeholder from "../assets/images/school_placeholder.jpeg";
 import ActivityDateTimeLocation from "../components/Activity/ActivityDateTimeLocation";
 import ActivityCommentsSection from "../components/Activity/ActivityCommentsSection";
 import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox";

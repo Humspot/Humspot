@@ -6,7 +6,7 @@ import { useState, useCallback, useEffect } from "react";
 import { handleGetActivitiesGivenTag } from "../../utils/server";
 
 import school_placeholder from '../../assets/images/school_placeholder.jpeg';
-import placeholder from '../../assets/images/placeholder.png';
+import placeholder from '../../assets/images/school_placeholder.jpeg';
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import { formatDate } from "../../utils/formatDate";
 import { useContext } from "../../utils/my-context";

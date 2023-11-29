@@ -6,7 +6,7 @@ import { IonCard, IonCardTitle, IonItemDivider, IonText, useIonRouter, useIonVie
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import { formatDate } from "../../utils/formatDate";
 
-import placeholder from '../../assets/images/placeholder.jpeg';
+import placeholder from '../../assets/images/school_placeholder.jpeg';
 import { handleGetActivitiesGivenTag } from "../../utils/server";
 
 type ExploreCarouselGeneralProps = {
