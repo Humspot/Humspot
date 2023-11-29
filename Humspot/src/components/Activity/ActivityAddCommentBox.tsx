@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { handleAddComment } from "../../utils/server";
 import { useContext } from "../../utils/my-context";
 import { HumspotCommentSubmit } from "../../utils/types";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { Camera, CameraResultType } from "@capacitor/camera";
 import { useToast } from "@agney/ir-toast";
 import { cameraOutline, sendOutline } from "ionicons/icons";
 
@@ -100,7 +100,8 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
                 borderRadius: '4px',
                 padding: '10px',
                 marginBottom: '10px',
-                fontSize: '14px'
+                fontSize: '14px',
+                width: "70%"
               }}
               placeholder={
                 context.humspotUser
