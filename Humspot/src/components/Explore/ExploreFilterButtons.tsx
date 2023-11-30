@@ -163,7 +163,7 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
                       <IonCard style={{ '--background': 'var(--ion-background-color)', paddingLeft: "5px", paddingRight: "5px" }} onClick={() => { if ("activityID" in activity && activity.activityID) router.push("/activity/" + activity.activityID) }}>
                         <div style={{ height: '175px', overflow: 'hidden', borderRadius: "5px" }}>
                           <img
-                            src={activity.photoUrl ? activity.photoUrl : (filter === "School" ? school_placeholder : placeholder)}
+                            src={activity.photoUrls ? activity.photoUrls.trim().split(',')[0] : (filter === "School" ? school_placeholder : placeholder)}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                         </div>

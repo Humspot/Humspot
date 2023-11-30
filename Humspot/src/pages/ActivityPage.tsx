@@ -35,7 +35,7 @@ import { HumspotActivity } from "../utils/types";
 import ActivityFavoriteVisitedRSVPButtons from "../components/Activity/ActivityFavoriteVisitedRSVPButton";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
+import { Autoplay, Navigation } from "swiper/modules";
 import { useContext } from "../utils/my-context";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
@@ -114,14 +114,14 @@ function ActivityPage() {
         {/* <IonLoading isOpen={activityLoading} message={"Loading..."} /> */}
 
         <div style={{ width: "100%", height: "30vh", position: "absolute", overflow: "hidden", zIndex: 0 }}>
-          <Swiper modules={[Autoplay]} autoplay={{ delay: 4000 }}>
+          <Swiper modules={[Autoplay, Navigation]} navigation autoplay={{ delay: 2500 }}>
             {activity?.photoUrls ?
               activity?.photoUrls?.split(",").map((url: any, index: any) => (
                 <SwiperSlide key={index} >
                   <IonCard className='ion-no-padding ion-no-margin' style={{ width: "100vw" }}>
                     <img
                       alt="Attraction Image"
-                      src={url || placeholder}
+                      src={url || ''}
                       style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
                   </IonCard>
@@ -129,11 +129,7 @@ function ActivityPage() {
               ))
               :
               <SwiperSlide>
-                <img
-                  alt="Attraction Image"
-                  src={placeholder}
-                  loading="lazy"
-                ></img>
+                <IonSkeletonText style={{height: "200px"}} animated />
               </SwiperSlide>
             }
           </Swiper>

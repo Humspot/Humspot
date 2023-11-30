@@ -71,7 +71,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
 
   return (
     <>
-      <IonCard color={"primary"} className="headercard">
+      <IonCard color={"primary"} className="headercard" style={{ marginLeft: "0", marginRight: "0" }}>
         <section style={{ padding: "10px" }}>
           {props.activity ? (
             <>
@@ -81,7 +81,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
               {props.activityType === 'attraction' &&
                 <>
                   {/* <br /> */}
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', paddingTop: "10px" }}>
                     <Rating
                       readOnly={true}
                       defaultValue={props.avgRating ?? 0}
@@ -96,7 +96,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
 
                   {context.humspotUser &&
                     <div>
-                      <IonButton className='ion-no-padding' slot='start' fill="clear" style={{ color: "#3D6876" }} id='add-rating-button'>
+                      <IonButton className='ion-no-padding ion-no-margin' slot='start' fill="clear" style={{ color: "#3D6876" }} id='add-rating-button'>
                         Add Rating
                       </IonButton>
                     </div>
