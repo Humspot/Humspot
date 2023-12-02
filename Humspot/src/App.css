@@ -2,3 +2,7 @@
   margin-top: constant(safe-area-inset-top);
   margin-top: env(safe-area-inset-top);
 }
+
+.no-ripple {
+  --ripple-color: transparent;
+}

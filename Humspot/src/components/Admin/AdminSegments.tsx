@@ -65,7 +65,7 @@ const AdminSegment: React.FC = () => {
 
   const fetchApprovedOrganizers = useCallback(async () => {
     if (!context.humspotUser) return;
-    setOrganizersLoading(true);
+    setApprovedOrganizersLoading(true);
     const res = await handleGetApprovedOrganizerSubmissions(1, context.humspotUser.userID);
     setApprovedOrganizers(res.organizerList);
     setApprovedOrganizersLoading(false);

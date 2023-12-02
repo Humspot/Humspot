@@ -158,10 +158,10 @@ function CalendarPage() {
     <>
       <IonPage className='ion-page-ios-notch'>
         <IonContent>
-          <FilterAccordion
+          {/* <FilterAccordion
             filterprop={filterVariable}
             setFilter={setFilter}
-          ></FilterAccordion>
+          ></FilterAccordion> */}
           <IonList style={{ paddingTop: "0", marginTop: "0" }}>
             <IonItemDivider color='light'>
               <IonLabel>

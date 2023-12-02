@@ -14,6 +14,8 @@ import { Camera, CameraResultType } from '@capacitor/camera';
 import GoBackHeader from '../components/Shared/GoBackHeader';
 import { navigateBack } from '../components/Shared/BackButtonNavigation';
 
+import '../App.css';
+
 
 const eventTags: string[] = [
   "Fun",
@@ -161,7 +163,7 @@ export const EventForm = () => {
   };
 
   const addNewTag = (tag: string) => {
-    if(!tag) return;
+    if (!tag) return;
     for (let i = 0; i < visibleTags.length; i++) {
       if (visibleTags[i].toLowerCase().trim() === tag.toLowerCase().trim()) {
         const t = Toast.create({ message: `${tag} already in list!`, duration: 2000, color: 'danger' });
@@ -360,9 +362,9 @@ export const EventForm = () => {
                 </div>
               </IonItem>
               <br />
-              <IonItem button={false} className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
+              <IonItem onClick={() => { }}  className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Date and Time</IonLabel>
-                <IonDatetime style={{ marginTop: "20px" }} ref={dateTimeRef} />
+                <IonDatetime mode='ios' yearValues="2023,2024,2025,2026,2027,2028,2029,2030" style={{ marginTop: "20px" }} ref={dateTimeRef} min={(new Date()).toISOString()} />
               </IonItem>
               <br />
               <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>

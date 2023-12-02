@@ -180,7 +180,7 @@ function ActivityPage() {
                     <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>{comment.username}</div>
                     <IonText style={{ color: '#666', fontSize: '14px' }}>{comment.commentText}</IonText>
                     {comment.photoUrl && <img src={comment.photoUrl} alt="Comment Attachment" style={{ marginTop: '10px', maxWidth: '100%', borderRadius: '4px' }} />}
-                    <IonNote style={{ display: 'block', marginTop: '5px', fontSize: '12px', color: '#999' }}>
+                    <IonNote style={{ display: 'block', marginTop: '15px', fontSize: '12px', color: '#999' }}>
                       {formatDate(comment.commentDate)}
                     </IonNote>
                   </div>

@@ -91,43 +91,42 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   return (
     <>
       <IonCard style={{ padding: '10px' }}>
-        <IonCardContent>
+        <IonCardContent className='ion-no-margin ion-no-padding' style={{padding: "2.5px"}}>
           {/* Textarea for adding comment */}
-          {context.humspotUser ? (
-            <IonTextarea
-              style={{
-                borderColor: '#eee',
-                borderWidth: '1px',
-                borderRadius: '4px',
-                padding: '10px',
-                marginBottom: '10px',
-                fontSize: '14px',
-                width: "70%"
-              }}
-              placeholder={
-                context.humspotUser
-                  ? "Add a comment..."
-                  : "Log in to add comments."
-              }
-              rows={3}
-              id="commenttextarea"
-              ref={commentRef}
-              debounce={50}
-              enterkeyhint="send"
-              inputMode="text"
-              spellcheck={true}
-              disabled={!context.humspotUser}
-            ></IonTextarea>
-          ) : (
-            <></>
-          )}
+          <IonTextarea
+            style={{
+              borderColor: '#eee',
+              borderWidth: '1px',
+              borderRadius: '4px',
+              marginBottom: '10px',
+              paddingRight: "5px",
+              paddingLeft: 0,
+              marginLeft: 0,
+              fontSize: '14px',
+              width: "70%"
+            }}
+            placeholder={
+              context.humspotUser
+                ? "Add a comment..."
+                : "Log in to add comments."
+            }
+            rows={3}
+            id="commenttextarea"
+            ref={commentRef}
+            debounce={50}
+            enterkeyhint="send"
+            inputMode="text"
+            spellcheck={true}
+            maxlength={200}
+            disabled={!context.humspotUser}
+          ></IonTextarea>
           {/* Photo preview */}
           {photo &&
             <img src={photo} style={{ marginTop: '10px', maxWidth: '100%', borderRadius: '4px' }} />
           }
           {/* IonFab for submitting comment */}
           {context.humspotUser &&
-            <IonFab vertical="top" horizontal="end" slot="fixed" style={{ display: 'flex', alignItems: 'center', paddingTop: "27.5px" }}>
+            <IonFab vertical="top" horizontal="end" slot="fixed" style={{ display: 'flex', alignItems: 'center', paddingTop: "2.5%"}}>
               <IonFabButton color='secondary' onClick={handleSubmitComment} style={{ marginRight: '10px', width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
                 <IonIcon icon={arrowUpOutline} />
               </IonFabButton>

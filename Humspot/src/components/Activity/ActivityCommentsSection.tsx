@@ -22,22 +22,22 @@ const ActivityCommentsSection = (props: { activity: any }) => {
           <IonCardHeader>
             <IonCardTitle>Comments</IonCardTitle>
           </IonCardHeader>
-          {activity.comments.map((comment: { profilePicURL: any; username: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; commentText: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; photoUrl: string | undefined; commentDate: string | null; }, index: React.Key | null | undefined) => (
+          {activity.comments.map((comment: any, index: number) => (
             <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
               <IonAvatar style={{ marginRight: '15px' }}>
                 <IonImg src={comment.profilePicURL || avatar} alt="Profile Picture" />
               </IonAvatar>
-              <div style={{ flexGrow: 1 }}>
+              <div>
                 <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>{comment.username}</div>
                 <IonText style={{ color: '#666', fontSize: '14px' }}>{comment.commentText}</IonText>
                 {comment.photoUrl && <img src={comment.photoUrl} alt="Comment Attachment" style={{ marginTop: '10px', maxWidth: '100%', borderRadius: '4px' }} />}
-                <IonNote style={{ display: 'block', marginTop: '5px', fontSize: '12px', color: '#999' }}>
+                <IonNote style={{ display: 'block', marginTop: '10px', fontSize: '12px', color: '#999' }}>
                   {formatDate(comment.commentDate)}
                 </IonNote>
               </div>
             </div>
           ))}
-        </IonCard>
+        </IonCard >
       ) : (
         <IonCard>
           <IonCardContent>
