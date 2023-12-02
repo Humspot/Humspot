@@ -20,7 +20,7 @@ const EventsListEntry = (props: { events: any }) => {
     <>
       {events && events.length > 0 ?
         events?.map((activity: any, index: number) => (
-          <FadeIn key={index} delay={index * 50}>
+          <FadeIn key={index} >
             <IonItem
               onClick={() => {
                 router.push("/activity/" + activity?.activityID);

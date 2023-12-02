@@ -10,7 +10,7 @@ import { useToast } from "@agney/ir-toast";
 import avatar from '../../assets/images/avatar.svg';
 import { useContext } from "../../utils/my-context";
 import { handleAddProfileImageToS3, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
-import { Camera, CameraResultType } from "@capacitor/camera";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 
 let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
 type ProfileEditModalProps = {
@@ -43,7 +43,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
-      // source: CameraSource.Prompt, uncomment when on iOS / Android
+      source: CameraSource.Prompt,
       resultType: CameraResultType.Uri,
     });
 

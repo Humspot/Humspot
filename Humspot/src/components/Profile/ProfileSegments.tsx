@@ -136,7 +136,7 @@ const ProfileSegments: React.FC = memo(() => {
         {selectedSegment === "favorites" ? (
           <>
             {!favoritesLoading && favorites.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Favorites</IonTitle>
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Favorites</IonTitle>
               :
               <>
                 <IonCard>
@@ -185,7 +185,7 @@ const ProfileSegments: React.FC = memo(() => {
         ) : selectedSegment === "visited" ? (
           <>
             {!visitedLoading && visited.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No Places Visited</IonTitle>
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Places Visited</IonTitle>
               :
               <>
                 <IonCard>
@@ -234,7 +234,7 @@ const ProfileSegments: React.FC = memo(() => {
         ) : (
           <>
             {!interactionsLoading && interactions.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "100%" }}>No interactions or Interactions</IonTitle>
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No interactions or Interactions</IonTitle>
               :
               <>
                 <IonCard>

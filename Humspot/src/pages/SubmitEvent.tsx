@@ -161,6 +161,14 @@ export const EventForm = () => {
   };
 
   const addNewTag = (tag: string) => {
+    if(!tag) return;
+    for (let i = 0; i < visibleTags.length; i++) {
+      if (visibleTags[i].toLowerCase().trim() === tag.toLowerCase().trim()) {
+        const t = Toast.create({ message: `${tag} already in list!`, duration: 2000, color: 'danger' });
+        t.present();
+        return;
+      }
+    }
     setVisibleTags([tag, ...visibleTags]);
   }
 
@@ -193,13 +201,13 @@ export const EventForm = () => {
   };
 
   const handleSelectImages = async () => {
-    present({ message: "Loading..." });
     const images = await Camera.pickImages({
       quality: 90,
       limit: 5,
     });
 
     if (!images || !images.photos) { dismiss(); return; }
+    present({ message: "Loading..." });
     setPhotos([]);
     setBlobs([]);
     let blobArr: Blob[] = [];
@@ -426,7 +434,7 @@ export const EventForm = () => {
                           return;
                         }
                         if (data.tag.length > 0) {
-                          addNewTag(data.tag);
+                          addNewTag(data.tag.trim());
                         }
                       }
                     }
@@ -445,35 +453,6 @@ export const EventForm = () => {
 
               <IonButton color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmit()}>Submit</IonButton>
               <br />
-
-              <IonAlert
-                trigger="add-custom-tag"
-                header="Add custom tag"
-                buttons={[
-                  'Cancel',
-                  {
-                    text: 'Add',
-                    handler: (data) => {
-                      if (data.tag.length > 50) {
-                        const t = Toast.create({ message: "Custom tag must not exceed 50 characters", duration: 3000, color: "danger" });
-                        t.present();
-                        return;
-                      }
-                      if (data.tag.length > 0) {
-                        addNewTag(data.tag);
-                      }
-                    }
-                  }
-                ]}
-                inputs={[
-                  {
-                    name: 'tag',
-                    type: 'text',
-                    placeholder: 'House Party',
-                    max: '50'
-                  }
-                ]}
-              />
             </div>
 
           </>

@@ -274,16 +274,13 @@ const SubmitAttractionPage = () => {
   };
 
   const handleSelectImages = async () => {
-    present({ message: "Loading..." });
     const images = await Camera.pickImages({
       quality: 90,
       limit: 5,
     });
 
-    if (!images || !images.photos) {
-      dismiss();
-      return;
-    }
+    if (!images || !images.photos) { return; }
+    present({ message: "Loading..." });
     setPhotos([]);
     setBlobs([]);
     let blobArr: Blob[] = [];

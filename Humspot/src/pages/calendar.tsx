@@ -34,6 +34,7 @@ function CalendarPage() {
   const [filterVariable, setFilter] = useState<string | null>(null);
   // FetchEventsToday
   const fetchEventsToday = useCallback(async () => {
+    setEventsTodayLoading(true);
     const response = await handleGetEventsBetweenTwoDates(
       getDateStrings().today,
       getDateStrings().today
@@ -50,14 +51,15 @@ function CalendarPage() {
     seteventsToday(response.events);
     setEventsTodayLoading(false);
   }, []);
-
   useEffect(() => {
     fetchEventsToday();
   }, [fetchEventsToday]);
+
   // FetchEventsWeek
   const [eventsWeek, seteventsWeek] = useState<any>([]);
   const [eventsWeekLoading, setEventsWeekLoading] = useState<boolean>(true);
   const fetchEventsWeek = useCallback(async () => {
+    setEventsWeekLoading(true);
     const response = await handleGetEventsBetweenTwoDates(
       getDateStrings().tomorrow,
       getDateStrings().sevenDaysFromNow
@@ -81,6 +83,7 @@ function CalendarPage() {
   const [eventsMonth, seteventsMonth] = useState<any>([]);
   const [eventsMonthLoading, setEventsMonthLoading] = useState<boolean>(true);
   const fetchEventsMonth = useCallback(async () => {
+    setEventsMonthLoading(true);
     const response = await handleGetEventsBetweenTwoDates(
       getDateStrings().eightDaysFromNow,
       getDateStrings().thirtyDaysFromNow
@@ -150,22 +153,6 @@ function CalendarPage() {
     eventsWeekLoading,
     eventsMonthLoading,
   ]);
-
-  const router = useIonRouter();
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(10, () => {
-        navigateBack(router);
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [router]);
 
   return (
     <>

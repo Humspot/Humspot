@@ -3,9 +3,9 @@ import { useRef, useState } from "react";
 import { handleAddComment } from "../../utils/server";
 import { useContext } from "../../utils/my-context";
 import { HumspotCommentSubmit } from "../../utils/types";
-import { Camera, CameraResultType } from "@capacitor/camera";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { useToast } from "@agney/ir-toast";
-import { cameraOutline, sendOutline } from "ionicons/icons";
+import { arrowUpOutline, cameraOutline, paperPlaneOutline, sendOutline, sendSharp } from "ionicons/icons";
 
 const ActivityAddCommentBox = (props: { id: string, activityName: string; setComments: React.Dispatch<React.SetStateAction<any[]>>; }) => {
   const id: string = props.id;
@@ -20,7 +20,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
-      // source: CameraSource.Prompt, uncomment when on iOS / Android
+      source: CameraSource.Prompt,
       resultType: CameraResultType.Uri,
     });
 
@@ -30,7 +30,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       toast.present();
     }
 
-    present({ message: "Loading..." });
+    // present({ message: "Loading..." });
 
     const res = await fetch(image.webPath!);
     const blobRes = await res.blob();
@@ -129,7 +129,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
           {context.humspotUser &&
             <IonFab vertical="top" horizontal="end" slot="fixed" style={{ display: 'flex', alignItems: 'center', paddingTop: "27.5px" }}>
               <IonFabButton color='secondary' onClick={handleSubmitComment} style={{ marginRight: '10px', width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
-                <IonIcon icon={sendOutline} style={{ margin: 0 }} />
+                <IonIcon icon={arrowUpOutline} />
               </IonFabButton>
               <IonFabButton color='secondary' onClick={handleSelectImage} style={{ width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
                 <IonIcon icon={cameraOutline} style={{ margin: 0 }} />

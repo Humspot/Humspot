@@ -90,7 +90,7 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
 
   return (
     <>
-      <div style={filter && !loadingFiltersActivities ? { position: 'sticky', top: 0, zIndex: 1000, padding: "10px 0", background: "var(--ion-background-color)" } : { padding: "10px 0" }}>
+      <div style={filter && !loadingFiltersActivities ? { position: 'sticky', top: 0, zIndex: 1000, padding: "0 0", marginTop: "0", background: "var(--ion-background-color)" } : { marginTop: "0", padding: "0 0" }}>
         <Swiper slidesPerView={5.5} spaceBetween={-20}>
           {MAIN_FILTERS.map((entry, idx) => {
             return (
@@ -109,7 +109,7 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
                       color={filter === entry.name ? "secondary" : "dark"}
                       size="large"
                     ></IonIcon>
-                    <IonLabel style={{ fontSize: "0.7rem" }} color={filter === entry.name ? "secondary" : ""}>{entry.name}</IonLabel>
+                    <IonLabel style={{ fontSize: "0.7rem" }} color={filter === entry.name ? "secondary" : "dark"}>{entry.name}</IonLabel>
                   </div>
                 </IonButton>
               </SwiperSlide>

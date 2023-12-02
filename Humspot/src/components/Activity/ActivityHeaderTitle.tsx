@@ -71,7 +71,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
 
   return (
     <>
-      <IonCard color={"primary"} className="headercard" style={{ marginLeft: "0", marginRight: "0" }}>
+      <IonCard color={"primary"} className="headercard" style={{ marginLeft: "10px", marginRight: "10px" }}>
         <section style={{ padding: "10px" }}>
           {props.activity ? (
             <>

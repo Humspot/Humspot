@@ -26,7 +26,7 @@ import { handleAddRating, handleGetActivity } from "../utils/server";
 import avatar from "../assets/images/avatar.svg";
 
 
-import placeholder from "../assets/images/school_placeholder.jpeg";
+import placeholder from "../assets/images/placeholder.jpeg"
 import ActivityDateTimeLocation from "../components/Activity/ActivityDateTimeLocation";
 import ActivityCommentsSection from "../components/Activity/ActivityCommentsSection";
 import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox";
@@ -81,22 +81,7 @@ function ActivityPage() {
 
   useIonViewDidEnter(() => {
     setHasSwipedIn(true);
-  }, [])
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, () => {
-        navigateBack(router, false);
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [router]);
-
+  }, []);
 
   return (
     <IonPage ref={page}>
@@ -111,34 +96,42 @@ function ActivityPage() {
           <GoBackHeader title={''} />
         }
 
-        {/* <IonLoading isOpen={activityLoading} message={"Loading..."} /> */}
-
         <div style={{ width: "100%", height: "30vh", position: "absolute", overflow: "hidden", zIndex: 0 }}>
           <Swiper modules={[Autoplay, Navigation]} navigation autoplay={{ delay: 2500 }}>
-            {activity?.photoUrls ?
-              activity?.photoUrls?.split(",").map((url: any, index: any) => (
-                <SwiperSlide key={index} >
+            {activityLoading ?
+              <SwiperSlide>
+                <IonSkeletonText style={{ height: "200px" }} animated />
+              </SwiperSlide>
+              :
+              activity?.photoUrls ?
+                activity?.photoUrls?.split(",").map((url: any, index: any) => (
+                  <SwiperSlide key={index} >
+                    <IonCard className='ion-no-padding ion-no-margin' style={{ width: "100vw", marginRight: "5px", marginLeft: "5px" }}>
+                      <img
+                        alt="Attraction Image"
+                        src={url || ''}
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      />
+                    </IonCard>
+                  </SwiperSlide>
+                ))
+                :
+                <SwiperSlide>
                   <IonCard className='ion-no-padding ion-no-margin' style={{ width: "100vw" }}>
                     <img
                       alt="Attraction Image"
-                      src={url || ''}
+                      src={placeholder}
                       style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
                   </IonCard>
                 </SwiperSlide>
-              ))
-              :
-              <SwiperSlide>
-                <IonSkeletonText style={{height: "200px"}} animated />
-              </SwiperSlide>
             }
           </Swiper>
         </div>
 
-        {/* Header Title */}
         <ActivityHeaderTitle page={page.current} id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name} />
-        {/* Tags */}
-        <div style={{ paddingLeft: "10px" }}> {/* why is the padding different on iOS it makes no sense please help */}
+
+        <div style={{ paddingLeft: "10px" }}>
           {activity &&
             "tags" in activity &&
             activity.tags &&
@@ -151,16 +144,13 @@ function ActivityPage() {
             })}
         </div>
 
-        {/* Date Time Location */}
-        <ActivityDateTimeLocation
-          activity={activity}
-        ></ActivityDateTimeLocation>
+        <ActivityDateTimeLocation activity={activity} />
 
-        {/* Description */}
         <IonCard>
           <IonCardContent>
             <IonText>
               <p>{activity?.description ?? ""}</p>
+              <br />
               <p>
                 <a
                   href={activity?.websiteURL ?? ""}
@@ -174,12 +164,12 @@ function ActivityPage() {
         </IonCard>
 
         <>
-          {comments ? (
+          {comments && comments.length > 0 && (
             <IonCard style={{ padding: '10px' }}>
-              <IonCardHeader>
-                <IonCardTitle>Comments</IonCardTitle>
+              <IonCardHeader className='ion-no-padding ion-no-margin' style={{ paddingTop: "5px", paddingBottom: "15px" }}>
+                <IonCardTitle style={{ fontSize: "1.25rem" }} className='ion-no-padding ion-no-margin'>Comments</IonCardTitle>
               </IonCardHeader>
-              {comments.map((comment: { profilePicURL: any; username: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; commentText: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; photoUrl: string | undefined; commentDate: string | null; }, index: React.Key | null | undefined) => (
+              {comments.map((comment: any, index: number) => (
                 <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
                   <div style={{ width: "25%" }}>
                     <IonAvatar style={{ marginRight: '15px' }}>
@@ -197,19 +187,12 @@ function ActivityPage() {
                 </div>
               ))}
             </IonCard>
-          ) : (
-            <IonCard>
-              <IonCardContent>
-                <IonSkeletonText animated style={{ margin: '10px 0' }} />
-                <IonSkeletonText animated style={{ margin: '10px 0' }} />
-                <IonSkeletonText animated style={{ margin: '10px 0' }} />
-              </IonCardContent>
-            </IonCard>
-          )}
+          )
+          }
         </>
 
-        {/* Add a Comment Box */}
-        <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'} setComments={setComments}></ActivityAddCommentBox>
+        <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'} setComments={setComments} />
+
       </IonContent>
     </IonPage>
   );
