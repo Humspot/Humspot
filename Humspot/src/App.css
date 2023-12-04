@@ -6,3 +6,14 @@
 .no-ripple {
   --ripple-color: transparent;
 }
+
+.tab-bar-visible #main-tab-bar {
+  transform: translateY(0);
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.tab-bar-hidden #main-tab-bar {
+  transform: translateY(100%);
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+

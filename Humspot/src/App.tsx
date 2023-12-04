@@ -71,7 +71,6 @@ const keyStyleOptionsDark: KeyboardStyleOptions = {
 
 const App: React.FC = () => {
   const context = useContext();
-  const tabBarStyle = context.showTabs;
 
   useEffect(() => {
     const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
@@ -149,28 +148,26 @@ const App: React.FC = () => {
     handleDarkMode();
   }, [handleDarkMode]);
 
-  // const darkModeListener = useCallback(async () => {
-  //   if (Capacitor.getPlatform() === 'ios') {
-  //     if (context.darkMode) {
-  //       await Keyboard.setStyle(keyStyleOptionsDark);
-  //       await StatusBar.setStyle({ style: Style.Dark });
-  //     } else {
-  //       await Keyboard.setStyle(keyStyleOptionsLight);
-  //       await StatusBar.setStyle({ style: Style.Light });
-  //     }
-  //   }
-  // }, [context.darkMode]);
+  const [tabBarDisplay, setTabBarDisplay] = useState('flex');
+  const [tabBarOpacity, setTabBarOpacity] = useState(1);
 
-  // useEffect(() => {
-  //   darkModeListener();
-  // }, [darkModeListener])
+  useEffect(() => {
+    if (context.showTabs) {
+      setTabBarDisplay('flex');
+      setTimeout(() => setTabBarOpacity(1), 25); // small delay to allow display change to take effect
+    } else {
+      setTabBarOpacity(0);
+      setTimeout(() => setTabBarDisplay('none'), 500); // match this with your CSS transition duration
+    }
+  }, [context.showTabs]);
+
 
 
   return (
     <IonApp>
       <ToastProvider>
         <IonReactRouter>
-          <IonTabs>
+          <IonTabs className={context.showTabs ? 'tab-bar-visible' : 'tab-bar-hidden'}>
             <IonRouterOutlet>
               <Route exact path="/" render={() => <Redirect to="/explore" />} />
               <Route exact path="/explore" component={ExplorePage} />
@@ -198,9 +195,10 @@ const App: React.FC = () => {
             </IonRouterOutlet>
 
             <IonTabBar
+              id='main-tab-bar'
               slot="bottom"
               onIonTabsWillChange={handleTabChange}
-              style={tabBarStyle ? {} : { display: "none" }}
+              style={{ display: tabBarDisplay, opacity: tabBarOpacity.toString() }}
             >
               <IonTabButton tab="tab1" href="/explore">
                 <IonIcon

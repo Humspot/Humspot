@@ -68,7 +68,7 @@ function MapPage() {
     <IonPage>
       {/* <FilterButton></FilterButton> */}
 
-      <IonContent fullscreen>
+      <IonContent>
         <Map
           provider={(x, y, z, dpr) =>
             mapTiler(context.darkMode, x, y, z, dpr)
