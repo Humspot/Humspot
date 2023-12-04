@@ -1,7 +1,6 @@
-import { IonButton, IonCard, IonCardTitle, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonItemDivider, IonLabel, IonList, IonSkeletonText, IonText, IonTitle, useIonRouter } from "@ionic/react";
+import { IonButton, IonCard, IonCardTitle, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonSkeletonText, IonText, IonTitle, useIonRouter } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { colorPalette, colorPaletteOutline, fastFood, fastFoodOutline, fitness, fitnessOutline, football, footballOutline, globe, globeOutline, laptop, laptopOutline, musicalNotes, partlySunny, partlySunnyOutline, school, schoolOutline } from "ionicons/icons";
-import { musicalNotesOutline } from "ionicons/icons";
+import { football, globe, laptop } from "ionicons/icons";
 import { useState, useCallback, useEffect } from "react";
 import { handleGetActivitiesGivenTag } from "../../utils/server";
 
@@ -11,52 +10,68 @@ import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import { formatDate } from "../../utils/formatDate";
 import { useContext } from "../../utils/my-context";
 
+import school_icon from '../../assets/icons/school_icon.png';
+import food_icon_unselected from '../../assets/icons/food_icon.png';
+import music_icon from '../../assets/icons/music_icon.gif';
+import music_icon_unselected from '../../assets/icons/music_icon.png';
+import outdoor_icon from '../../assets/icons/outdoor_icon.gif';
+import outdoor_icon_unselected from '../../assets/icons/outdoor_icon.png';
+import fitness_icon from '../../assets/icons/fitness_icon.gif';
+import fitness_icon_unselected from '../../assets/icons/fitness_icon.png';
+import art_icon from '../../assets/icons/art_icon.gif';
+import art_icon_unselected from '../../assets/icons/art_icon.png';
+import tech_icon from '../../assets/icons/tech_icon.gif';
+import tech_icon_unselected from '../../assets/icons/tech_icon.png';
+import culture_icon from '../../assets/icons/culture_icon.gif';
+import culture_icon_unselected from '../../assets/icons/culture_icon.png';
+import sports_icon from '../../assets/icons/sports_icon.gif';
+import sports_icon_unselected from '../../assets/icons/sports_icon.png';
 
-const MAIN_FILTERS = [
+const MAIN_FILTERS: { name: string; icon: string; iconUnselected: string; }[] = [
   {
     name: "School",
-    icon: school,
-    iconOutline: schoolOutline
+    icon: school_icon,
+    iconUnselected: school_icon
   },
   {
     name: "Music",
-    icon: musicalNotes,
-    iconOutline: musicalNotesOutline
+    icon: music_icon,
+    iconUnselected: music_icon_unselected
   },
   {
     name: "Food",
-    icon: fastFood,
-    iconOutline: fastFoodOutline
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Foods_-_Idil_Keysan_-_Wikimedia_Giphy_stickers_2019.gif',
+    iconUnselected: food_icon_unselected
   },
   {
     name: "Outdoor",
-    icon: partlySunny,
-    iconOutline: partlySunnyOutline,
+    icon: outdoor_icon,
+    iconUnselected: outdoor_icon_unselected
   },
   {
     name: "Fitness",
-    icon: fitness,
-    iconOutline: fitnessOutline
+    icon: fitness_icon,
+    iconUnselected: fitness_icon_unselected
   },
   {
     name: "Art",
-    icon: colorPalette,
-    iconOutline: colorPaletteOutline,
+    icon: art_icon,
+    iconUnselected: art_icon_unselected
   },
   {
     name: "Tech",
-    icon: laptop,
-    iconOutline: laptopOutline,
+    icon: tech_icon,
+    iconUnselected: tech_icon_unselected
   },
   {
     name: "Culture",
-    icon: globe,
-    iconOutline: globeOutline,
+    icon: culture_icon,
+    iconUnselected: culture_icon_unselected
   },
   {
     name: "Sports",
-    icon: football,
-    iconOutline: footballOutline
+    icon: sports_icon,
+    iconUnselected: sports_icon_unselected
   },
 ];
 
@@ -104,11 +119,7 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
                   }}
                 >
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <IonIcon
-                      icon={filter === entry.name ? entry.icon : entry.iconOutline}
-                      color={filter === entry.name ? "secondary" : "dark"}
-                      size="large"
-                    ></IonIcon>
+                    <img src={filter === entry.name ? entry.icon : entry.iconUnselected ?? ''} />
                     <IonLabel style={{ fontSize: "0.7rem" }} color={filter === entry.name ? "secondary" : "dark"}>{entry.name}</IonLabel>
                   </div>
                 </IonButton>

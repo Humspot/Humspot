@@ -106,6 +106,9 @@ const PrivacyPolicy: React.FC = () => {
                 encourage you to review this Privacy Policy periodically for any
                 changes. </p>
 
+              <p>Thanks to <a href='https://icons8.com/'>icons8.com</a> for the icons!</p>
+              <p>Thanks to Wikimedia Commons for the food icon! <a href="https://commons.wikimedia.org/wiki/File:Foods_-_Idil_Keysan_-_Wikimedia_Giphy_stickers_2019.gif">Idil Keysan for the Wikimedia Foundation</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons</p>
+
               <li><strong>Contact Us</strong></li>
               <p>If you have any questions about this Privacy
                 Policy, please contact us at support@humspotapp.com </p>
