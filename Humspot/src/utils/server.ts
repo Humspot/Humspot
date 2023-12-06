@@ -1,6 +1,6 @@
 /**
  * @file server.ts
- * @filetype contains the code used to access backend services like Google and AWS.
+ * @fileoverview contains the code used to access backend services like Google and AWS.
  */
 
 import { nanoid } from "nanoid";

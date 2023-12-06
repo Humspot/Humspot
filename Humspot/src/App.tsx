@@ -51,7 +51,6 @@ import { LoginResponse } from "./utils/types";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { Capacitor } from "@capacitor/core";
-import { App as CapacitorApp } from "@capacitor/app";
 import SubmittedActivities from "./pages/SubmittedActivities";
 import { Keyboard, KeyboardStyle, KeyboardStyleOptions } from "@capacitor/keyboard";
 import { StatusBar, Style } from "@capacitor/status-bar";
@@ -154,10 +153,10 @@ const App: React.FC = () => {
   useEffect(() => {
     if (context.showTabs) {
       setTabBarDisplay('flex');
-      setTimeout(() => setTabBarOpacity(1), 25); // small delay to allow display change to take effect
+      setTimeout(() => setTabBarOpacity(1), 25);
     } else {
       setTabBarOpacity(0);
-      setTimeout(() => setTabBarDisplay('none'), 500); // match this with your CSS transition duration
+      setTimeout(() => setTabBarDisplay('none'), 500);
     }
   }, [context.showTabs]);
 

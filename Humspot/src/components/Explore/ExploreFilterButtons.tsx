@@ -109,14 +109,13 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
         <Swiper slidesPerView={5.5} spaceBetween={-20}>
           {MAIN_FILTERS.map((entry, idx) => {
             return (
-              <SwiperSlide key={idx}>
+              <SwiperSlide key={idx} onClick={() => {
+                setFilter((prev) => prev === entry.name ? '' : entry.name);
+              }}>
                 <IonButton
                   style={{ '--ripple-color': 'transparent' }}
                   fill="clear"
                   color="light"
-                  onClick={() => {
-                    setFilter((prev) => prev === entry.name ? '' : entry.name);
-                  }}
                 >
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <img src={filter === entry.name ? entry.icon : entry.iconUnselected ?? ''} />
