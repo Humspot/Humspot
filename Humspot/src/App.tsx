@@ -51,7 +51,6 @@ import { LoginResponse } from "./utils/types";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { Capacitor } from "@capacitor/core";
-import { App as CapacitorApp } from "@capacitor/app";
 import SubmittedActivities from "./pages/SubmittedActivities";
 import { Keyboard, KeyboardStyle, KeyboardStyleOptions } from "@capacitor/keyboard";
 import { StatusBar, Style } from "@capacitor/status-bar";
