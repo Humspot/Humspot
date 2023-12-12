@@ -17,3 +17,9 @@
   transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
+/* This removes the animation when changing buttons ... ? */
+ion-segment-button {
+  --background-checked: var(--ion-color-primary);
+  --color-checked: var(--ion-color-primary-contrast);
+  --indicator-color: transparent;
+}

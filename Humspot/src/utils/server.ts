@@ -328,7 +328,7 @@ export const handleAddAttraction = async (newAttraction: HumspotAttraction): Pro
  * @param {number} pageNum the page number which corresponds to the offset when selecting rows in the table
  * @param {string} tag the event tag
  *
- * @returns {Promise<message: string; activities: any[]; success: boolean;>} a status message and a success flag along with an array of activities.
+ * @returns {Promise<{message: string; activities: any[]; success: boolean;}>} a status message and a success flag along with an array of activities.
  */
 export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string): Promise<{ message: string; activities: any[]; success: boolean; }> => {
   try {

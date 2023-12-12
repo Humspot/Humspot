@@ -1,31 +1,30 @@
-import { Preferences } from "@capacitor/preferences";
-import { useState, useEffect, useRef, useCallback } from "react";
+/**
+ * 
+ */
+
+import { useRef } from "react";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
-import { useContext } from "../../utils/hooks/useContext";
-import { IonCard, IonCardTitle, IonItemDivider, IonSkeletonText, IonText, useIonRouter, useIonViewWillEnter } from "@ionic/react";
+import { IonCard, IonCardTitle, IonItemDivider, IonSkeletonText, IonText, useIonRouter } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import { formatDate } from "../../utils/functions/formatDate";
 
 import placeholder from '../../assets/images/school_placeholder.jpeg';
-import { handleGetActivitiesGivenTag } from "../../utils/server";
 import { CarouselLoadingSlides } from "./CarouselLoadingSlides";
 
 type ExploreCarouselGeneralProps = {
   title: string;
   loading: boolean;
-  activities: any[];
-}
+  activities: any[] | null;
+};
 
 const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
 
-  const context = useContext();
   const router = useIonRouter();
-
   const swiperRef = useRef<SwiperRef | null>(null);
 
   return (
     <>
-      {props.activities.length > 0 && !props.loading ?
+      {props.activities && props.activities.length > 0 && !props.loading ?
         <IonItemDivider style={{ background: "var(--ion-background-color)", fontSize: "1.50rem" }}><IonText color='primary'>{props.title}</IonText></IonItemDivider>
         :
         props.loading &&
