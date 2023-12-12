@@ -16,7 +16,6 @@ import {
   AddToFavoritesResponse,
   AddToVisitedResponse,
   GetInteractionsResponse,
-  GetEventsGivenTagResponse,
   GetFavoritesResponse,
   LoginResponse,
   HumspotAttraction,
@@ -32,7 +31,6 @@ import {
   OrganizerRequestSubmission,
   SubmissionInfo
 } from "./types";
-
 
 
 
@@ -134,7 +132,7 @@ export const handleSignIn = async (email: string, password: string): Promise<boo
 
 /**
  * @function handleLogout
- * @description logs the user out of the application
+ * @description logs the user out of the application.
  *
  * @returns {Promise<boolean>} true if the user successfully logged out, false otherwise
  */
@@ -239,6 +237,8 @@ export const handleUserLogin = async (email: string | null, username: string | n
 /**
  * @function handleAddEvent
  * @description Calls the AWS API gateway /add-event. This will add a new event to the database.
+ * @note This function is for testing purposes only. The /add-event function should be called internally,
+ * as all events must be approved by an admin. 
  *
  * @param {HumspotEvent} newEvent the event to be added.
  *
@@ -278,8 +278,10 @@ export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AddEventRe
 
 
 /**
- * @function handleAddEvent
+ * @function handleAddEAttraction
  * @description Calls the AWS API gateway /add-attraction. This will add a new attraction to the database
+ * @note This function is for testing purposes only. The /add-attraction function should be called internally,
+ * as all attractions must be approved by an admin. 
  *
  * @param {HumspotAttraction} newAttraction the attraction to be added.
  *
@@ -326,7 +328,7 @@ export const handleAddAttraction = async (newAttraction: HumspotAttraction): Pro
  * @param {number} pageNum the page number which corresponds to the offset when selecting rows in the table
  * @param {string} tag the event tag
  *
- * @returns {Promise<GetActivitiesGivenTagResponse>} a status message along with an array of events that have a certain tag associated with it.
+ * @returns {Promise<message: string; activities: any[]; success: boolean;>} a status message and a success flag along with an array of activities.
  */
 export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string): Promise<{ message: string; activities: any[]; success: boolean; }> => {
   try {
@@ -358,8 +360,7 @@ export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string):
 /**
  * @function handleAddToFavorites
  * @description Adds the activity (event or attraction) to the User's favorites list.
- * 
- * NOTE: List in this context refers a row entry in the Favorites table.
+ * @note List in this context refers a row entry in the Favorites table.
  *
  * @param {string} userID the ID of the currently logged in user
  * @param {string} activityID the ID of the activity (primary key of Activities table)
@@ -406,8 +407,7 @@ export const handleAddToFavorites = async (userID: string, activityID: string): 
 /**
  * @function handleAddToVisited
  * @description Adds an activity to a User's visited list.
- * 
- * NOTE: List in this context refers to a row entry in the Visited table.
+ * @note List in this context refers to a row entry in the Visited table.
  *
  * @param {string} userID the ID of the logged in user.
  * @param {string} activityID the If of the activity (primary key of the Activities table).
@@ -453,8 +453,7 @@ export const handleAddToVisited = async (userID: string, activityID: string, vis
 /**
  * @function handleAddToRSVP
  * @description Adds an activity to a User's RSVP list.
- * 
- * NOTE: List in this context refers to a row entry in the RSVP table.
+ * @note List in this context refers to a row entry in the RSVP table.
  *
  * @param {string} userID the ID of the logged in user.
  * @param {string} activityID the If of the activity (primary key of the Activities table).
@@ -497,6 +496,16 @@ export const handleAddToRSVP = async (userID: string, activityID: string, rsvpDa
   }
 };
 
+
+/**
+ * @function handleAddProfileImageToS3
+ * @description Uploads an image to profile-pictures/profile--photos/`${userID}-profile-photo`.
+ * Any existing profile photo will be overwritten.
+ * 
+ * @param {string} userID the user's ID
+ * @param {Blob} blob the photo data
+ * @returns {Promise<AddImageResponse>} a status message, a success flag, and a photo URL corresponding to the uploaded image.
+ */
 export const handleAddProfileImageToS3 = async (userID: string, blob: Blob): Promise<AddImageResponse> => {
   try {
     let photoUrl: string = '';
@@ -551,8 +560,6 @@ export const handleAddProfileImageToS3 = async (userID: string, blob: Blob): Pro
  * @description calls the AWS API gateway /add-comment. This will add a row to the Comments table.
  *
  * @param {HumspotCommentSubmit} comment the user comment data.
- *
- * @returns
  */
 export const handleAddComment = async (comment: HumspotCommentSubmit, blob: Blob | null, activityName: string) => {
   try {
@@ -636,7 +643,7 @@ export const handleAddComment = async (comment: HumspotCommentSubmit, blob: Blob
  * @param {number} pageNum
  * @param {string} userID
  *
- * @returns {Promise<GetCommentsResponse>} a status message, and, if successful, an array of 20 comments and/or RSVP'd events of type GetCommentsResponse
+ * @returns {Promise<GetInteractionsResponse>} a status message, a success flag, and an array of at most 20 comments and/or RSVP'd events of type GetCommentsResponse
  */
 export const handleGetInteractionsGivenUserID = async (pageNum: number, userID: string): Promise<GetInteractionsResponse> => {
   try {

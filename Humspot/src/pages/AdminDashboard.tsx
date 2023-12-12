@@ -1,5 +1,5 @@
 import { useIonRouter, useIonViewDidEnter, IonPage, IonContent, IonHeader, IonToolbar, IonCardTitle, IonSkeletonText, IonButton, IonButtons, IonIcon } from "@ionic/react";
-import { useContext } from '../utils/my-context';
+import { useContext } from '../utils/hooks/useContext';
 import AdminSegments from "../components/Admin/AdminSegments";
 import { chevronBackOutline } from "ionicons/icons";
 import GoBackHeader from "../components/Shared/GoBackHeader";

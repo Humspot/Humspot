@@ -4,7 +4,7 @@ import {
   useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, useIonRouter, IonCardContent, IonCardHeader, IonCardTitle, IonAlert
 } from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
-import { useContext } from '../utils/my-context';
+import { useContext } from '../utils/hooks/useContext';
 import { useToast } from '@agney/ir-toast';
 import { handleSubmitEventForApproval, handleUploadSubmissionImages } from '../utils/server';
 // import './EventForm.css';

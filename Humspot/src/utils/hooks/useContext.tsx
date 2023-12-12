@@ -1,10 +1,11 @@
 /**
- * @file my-context.txt 
+ * @file useContext.txt 
  * @fileoverview contains the global variables used throughout the application.
+ * Context value will be null if loading, undefined if not logged in, or of type HumspotUser.
  */
 
 import React from "react";
-import { HumspotUser } from "./types";
+import { HumspotUser } from "../types";
 
 type Props = {
   children: React.ReactNode;

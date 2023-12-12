@@ -3,7 +3,7 @@
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle, IonHeader, IonToolbar, IonButton, IonButtons } from "@ionic/react";
 import { calendarOutline, compassOutline, clipboardOutline, listCircleOutline } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
-import { useContext } from "../../utils/my-context";
+import { useContext } from "../../utils/hooks/useContext";
 
 type ProfileActivitiesModalProps = {
   page: HTMLElement | undefined;

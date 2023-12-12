@@ -3,7 +3,7 @@ import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage, useIonLoad
 import { useRef } from "react";
 import { handleForgotPassword } from "../utils/server";
 import GoBackHeader from "../components/Shared/GoBackHeader";
-import { dynamicNavigate } from "../utils/dynamicNavigate";
+import { dynamicNavigate } from "../utils/functions/dynamicNavigate";
 
 const ForgotPassword = () => {
 

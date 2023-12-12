@@ -2,7 +2,7 @@ import { useToast } from "@agney/ir-toast";
 import { IonList, IonSkeletonText, IonItem, IonLabel, IonModal, IonContent, IonTitle, IonButton, IonFab, IonTextarea, IonLoading } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import { useRef, useState } from "react";
-import { useContext } from "../../utils/my-context";
+import { useContext } from "../../utils/hooks/useContext";
 import { handleApproveOrganizer, handleDenyOrganizer } from "../../utils/server";
 
 type Organizer = {

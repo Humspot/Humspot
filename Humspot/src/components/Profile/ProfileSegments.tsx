@@ -3,14 +3,14 @@ import { people, star, walk } from "ionicons/icons";
 import { memo, useCallback, useEffect, useState } from "react";
 import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
 import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse } from "../../utils/types";
-import { useContext } from "../../utils/my-context";
+import { useContext } from "../../utils/hooks/useContext";
 import { useToast } from "@agney/ir-toast";
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 
 import placeholder from '../../assets/images/school_placeholder.jpeg';
 
 import './Profile.css';
-import { formatDate } from "../../utils/formatDate";
+import { formatDate } from "../../utils/functions/formatDate";
 import SkeletonLoading from "../Shared/SkeletonLoading";
 
 

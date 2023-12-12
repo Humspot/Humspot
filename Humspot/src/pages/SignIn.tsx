@@ -5,7 +5,7 @@ import {
 } from "@ionic/react";
 import { eyeOffOutline, eyeOutline } from "ionicons/icons";
 
-import { useContext } from "../utils/my-context";
+import { useContext } from "../utils/hooks/useContext";
 import { handleSignIn } from "../utils/server";
 
 import { useToast } from "@agney/ir-toast";
@@ -14,7 +14,7 @@ import GoBackHeader from "../components/Shared/GoBackHeader";
 import GoogleLoginButton from "../components/Login/GoogleLoginButton";
 
 import '../components/Login/AuthPages.css';
-import { dynamicNavigate } from "../utils/dynamicNavigate";
+import { dynamicNavigate } from "../utils/functions/dynamicNavigate";
 
 const inputNote: React.CSSProperties = {
   fontSize: "0.85em",

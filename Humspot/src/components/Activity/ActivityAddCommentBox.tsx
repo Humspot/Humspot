@@ -1,7 +1,7 @@
 import { IonButton, IonCard, IonCardContent, IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton } from "@ionic/react";
 import { useRef, useState } from "react";
 import { handleAddComment } from "../../utils/server";
-import { useContext } from "../../utils/my-context";
+import { useContext } from "../../utils/hooks/useContext";
 import { HumspotCommentSubmit } from "../../utils/types";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { useToast } from "@agney/ir-toast";

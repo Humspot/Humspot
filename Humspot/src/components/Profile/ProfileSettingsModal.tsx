@@ -26,7 +26,7 @@ import {
 } from "ionicons/icons";
 import { Dialog } from "@capacitor/dialog";
 
-import { useContext } from "../../utils/my-context";
+import { useContext } from "../../utils/hooks/useContext";
 import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../../utils/server";
 import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardStyle, KeyboardStyleOptions } from "@capacitor/keyboard";

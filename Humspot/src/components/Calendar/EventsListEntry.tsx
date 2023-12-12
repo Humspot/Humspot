@@ -9,7 +9,7 @@ import {
   IonTitle,
   useIonRouter,
 } from "@ionic/react";
-import { formatDate } from "../../utils/formatDate";
+import { formatDate } from "../../utils/functions/formatDate";
 import placeholder from "../../assets/images/school_placeholder.jpeg";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 

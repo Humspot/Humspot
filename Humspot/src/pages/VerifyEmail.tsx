@@ -16,11 +16,11 @@ import {
 import { useToast } from "@agney/ir-toast";
 
 import { confirmSignUp, handleResetPassword } from "../utils/server";
-import { useContext } from "../utils/my-context";
+import { useContext } from "../utils/hooks/useContext";
 
 import '../components/Login/AuthPages.css';
 import { eyeOutline, eyeOffOutline } from "ionicons/icons";
-import { dynamicNavigate } from "../utils/dynamicNavigate";
+import { dynamicNavigate } from "../utils/functions/dynamicNavigate";
 
 
 type VerifyEmailParams = {

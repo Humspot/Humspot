@@ -16,7 +16,7 @@ import {
   personAddOutline
 } from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
-import { useContext } from "../../utils/my-context";
+import { useContext } from "../../utils/hooks/useContext";
 import { handleGetApprovedOrganizerSubmissions, handleGetPendingActivitySubmissions, handleGetPendingOrganizerSubmissions } from "../../utils/server";
 import AdminSubmissionsList from "./AdminSubmissionsList";
 import AdminPendingOrganizersList from "./AdminPendingOrganizersList";

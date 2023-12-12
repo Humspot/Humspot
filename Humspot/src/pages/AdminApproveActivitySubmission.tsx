@@ -2,7 +2,7 @@ import { IonPage, IonContent, IonItem, IonLabel, IonInput, IonTextarea, IonButto
 import { mapOutline, cameraOutline, addOutline, chevronDownOutline, chevronBackOutline } from "ionicons/icons";
 import { Map, Marker } from "pigeon-maps";
 import GoBackHeader from "../components/Shared/GoBackHeader";
-import { useContext } from "../utils/my-context";
+import { useContext } from "../utils/hooks/useContext";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { handleApproveActivitySubmission, handleGetSubmissionInfo } from "../utils/server";

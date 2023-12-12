@@ -1,7 +1,7 @@
 import { IonToolbar, IonButtons, IonButton, IonIcon, IonHeader, IonCardTitle, IonSkeletonText } from "@ionic/react";
 import { addCircleOutline, pencilOutline, settingsOutline } from "ionicons/icons";
 
-import { useContext } from "../../utils/my-context";
+import { useContext } from "../../utils/hooks/useContext";
 
 const ProfileHeader: React.FC = () => {
 

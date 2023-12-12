@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { IonPage, IonContent, IonText, useIonViewWillEnter, useIonRouter } from "@ionic/react";
 
 import GoBackHeader from "../components/Shared/GoBackHeader";
-import { useContext } from "../utils/my-context";
+import { useContext } from "../utils/hooks/useContext";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
 const PrivacyPolicy: React.FC = () => {

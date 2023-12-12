@@ -1,10 +1,10 @@
 import { Preferences } from "@capacitor/preferences";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
-import { useContext } from "../../utils/my-context";
+import { useContext } from "../../utils/hooks/useContext";
 import { IonCard, IonCardTitle, IonItemDivider, IonSkeletonText, IonText, useIonRouter, useIonViewWillEnter } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
-import { formatDate } from "../../utils/formatDate";
+import { formatDate } from "../../utils/functions/formatDate";
 
 import placeholder from '../../assets/images/school_placeholder.jpeg';
 import { handleGetActivitiesGivenTag } from "../../utils/server";

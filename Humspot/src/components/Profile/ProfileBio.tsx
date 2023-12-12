@@ -3,7 +3,7 @@ import {
   IonChip, IonRow, IonSkeletonText
 } from "@ionic/react";
 
-import { useContext } from "../../utils/my-context";
+import { useContext } from "../../utils/hooks/useContext";
 import avatar from '../../assets/images/avatar.svg';
 
 import './Profile.css';

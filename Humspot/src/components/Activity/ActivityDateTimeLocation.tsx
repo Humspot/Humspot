@@ -6,7 +6,7 @@ import {
   IonText,
 } from "@ionic/react";
 import { compass, time } from "ionicons/icons";
-import { formatDate } from "../../utils/formatDate";
+import { formatDate } from "../../utils/functions/formatDate";
 import { ActivityLocationMap } from "./ActivityLocationMap";
 import { HumspotActivity } from "../../utils/types";
 

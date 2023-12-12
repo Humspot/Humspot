@@ -1,11 +1,11 @@
 import { IonContent, IonItem, IonLabel, IonList, IonPage, IonTitle, useIonRouter, useIonViewWillEnter } from "@ionic/react";
-import { useContext } from "../utils/my-context";
+import { useContext } from "../utils/hooks/useContext";
 import { useCallback, useEffect, useState } from "react";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
 import { handleGetSubmittedActivities } from "../utils/server";
 import { SubmittedActivities } from "../utils/types";
 import GoBackHeader from "../components/Shared/GoBackHeader";
-import { extractDateFromSqlDatetime } from "../utils/formatDate";
+import { extractDateFromSqlDatetime } from "../utils/functions/formatDate";
 import SkeletonLoading from "../components/Shared/SkeletonLoading";
 
 
