@@ -1,16 +1,20 @@
+/**
+ * @file ProfileActivitiesModal.tsx
+ * @fileoverview the modal component that displays when clicking the add icon on the profile page.
+ * It contains buttons to 'Submit an Event', 'Submit an Attraction', 'See Pending Submissions', and 'Request to Become an Organizer'.
+ */
 
-
+import { useEffect, useRef, useState } from "react";
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle, IonHeader, IonToolbar, IonButton, IonButtons } from "@ionic/react";
 import { calendarOutline, compassOutline, clipboardOutline, listCircleOutline } from "ionicons/icons";
-import { useEffect, useRef, useState } from "react";
+
 import { useContext } from "../../utils/hooks/useContext";
+import { canDismiss } from "../../utils/functions/canDismiss";
+
+import './Profile.css';
 
 type ProfileActivitiesModalProps = {
   page: HTMLElement | undefined;
-};
-
-async function canDismiss(data?: any, role?: string) {
-  return role !== 'gesture';
 };
 
 const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: ProfileActivitiesModalProps) => {
@@ -24,15 +28,14 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
     setPresentingElement(props.page);
   }, [props.page])
 
-
   return (
     <IonModal ref={modalRef} trigger="open-add-activity-modal" presentingElement={presentingElement} canDismiss={canDismiss}>
-      <IonContent style={{ '--background': 'var(--ion-item-background' }}>
+      <IonContent className='profile-modal-content'>
         <IonHeader className='ion-no-border'>
-          <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
-            <IonTitle style={{ fontSize: "1.25rem" }}>Activities</IonTitle>
-            <IonButtons style={{ height: "5vh" }}>
-              <IonButton style={{ fontSize: '1.15em', }} onClick={() => { modalRef.current?.dismiss() }}>
+          <IonToolbar className='profile-modal-toolbar'>
+            <IonTitle className='profile-modal-title'>Activities</IonTitle>
+            <IonButtons>
+              <IonButton className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss() }}>
                 <p>Close</p>
               </IonButton>
             </IonButtons>

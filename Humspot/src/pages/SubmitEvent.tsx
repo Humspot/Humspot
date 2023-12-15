@@ -15,6 +15,7 @@ import GoBackHeader from '../components/Shared/GoBackHeader';
 import { navigateBack } from '../components/Shared/BackButtonNavigation';
 
 import '../App.css';
+import { canDismiss } from '../utils/functions/canDismiss';
 
 
 const eventTags: string[] = [
@@ -115,10 +116,6 @@ const eventTags: string[] = [
   "Cycling",
   "Running",
 ];
-
-async function canDismiss(data?: any, role?: string) {
-  return role !== 'gesture';
-}
 
 const PHOTO_UPLOAD_LIMIT: number = 5;
 
@@ -362,7 +359,7 @@ export const EventForm = () => {
                 </div>
               </IonItem>
               <br />
-              <IonItem onClick={() => { }}  className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
+              <IonItem onClick={() => { }} className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Date and Time</IonLabel>
                 <IonDatetime mode='ios' yearValues="2023,2024,2025,2026,2027,2028,2029,2030" style={{ marginTop: "20px" }} ref={dateTimeRef} min={(new Date()).toISOString()} />
               </IonItem>

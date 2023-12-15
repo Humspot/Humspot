@@ -1,24 +1,31 @@
+/**
+ * @file ProfileEditModal.tsx
+ * @fileoverview the modal component that displays when clicking the pencil icon on the profile page.
+ * It contains options to update the user's profile photo, username, and bio.
+ */
+
 import { useEffect, useRef, useState } from "react";
 import {
   IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel,
   IonList, IonLoading, IonModal, IonTextarea, IonTitle, IonToolbar, useIonLoading
 } from "@ionic/react";
 import { cameraReverseOutline, chevronBackOutline } from "ionicons/icons";
-
-import { useToast } from "@agney/ir-toast";
-
-import avatar from '../../assets/images/avatar.svg';
-import { useContext } from "../../utils/hooks/useContext";
-import { handleAddProfileImageToS3, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 
+import { useToast } from "@agney/ir-toast";
+import avatar from '../../assets/images/avatar.svg';
+
+import { useContext } from "../../utils/hooks/useContext";
+import { canDismiss } from "../../utils/functions/canDismiss";
+import { handleAddProfileImageToS3, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
+
+import './Profile.css';
+
+
 let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
+
 type ProfileEditModalProps = {
   page: HTMLElement | undefined;
-};
-
-async function canDismiss(data?: any, role?: string) {
-  return role !== 'gesture';
 };
 
 const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
@@ -116,26 +123,27 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
     <IonModal ref={modalRef} trigger="open-edit-profile-modal" presentingElement={presentingElement} canDismiss={canDismiss}>
       {!context.humspotUser ? // loading
         <>
-          <IonLoading message={"Loading Profile..."} />
+          <IonLoading message={"Loading Profile Info..."} />
         </>
         :
         <>
           <IonHeader className='ion-no-border'>
-            <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
-              <IonTitle style={{ fontSize: "1.25rem" }}>Edit Profile</IonTitle>
-              <IonButtons style={{ height: "5vh" }}>
-                <IonButton style={{ fontSize: '1.15em', marginLeft: "-2.5%" }} onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
+            <IonToolbar className='profile-modal-content'>
+              <IonTitle className='profile-modal-title'>Edit Profile</IonTitle>
+              <IonButtons>
+                <IonButton id='profile-edit-modal-close-button' className='profile-modal-close-button' onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
                   <IonIcon icon={chevronBackOutline} /> <p>Back</p>
                 </IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
 
-          <IonContent style={{ '--background': 'var(--ion-item-background' }}>
+          <IonContent className='profile-modal-content'>
+
             <br />
 
-            <section className='avatar-wrapper-center'>
-              <IonAvatar className="user-avatar-settings">
+            <section className='profile-edit-modal-avatar-wrapper-center'>
+              <IonAvatar className="profile-edit-modal-user-avatar">
                 <img
                   style={{ opacity: "0.5" }}
                   src={`${context.humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
@@ -146,10 +154,9 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
               </IonAvatar>
             </section>
 
-
             <br />
 
-            <section id="update-profile-inputs">
+            <section >
               <IonList lines='none'>
                 <IonItem>
                   <IonLabel position="fixed">Username</IonLabel>
@@ -157,14 +164,14 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
                 </IonItem>
                 <IonItem>
                   <IonLabel position="fixed" style={{ alignSelf: 'flex-start' }}>About</IonLabel>
-                  <IonTextarea aria-label="About" ref={bioRef} maxlength={250} rows={3} value={context.humspotUser.bio} />
+                  <IonTextarea aria-label="About" ref={bioRef} maxlength={250} rows={4} value={context.humspotUser.bio} />
                 </IonItem>
               </IonList>
             </section>
 
             <br />
 
-            <IonButton color='secondary' className="edit-modal-button" onClick={async () => { await clickUpdateProfile() }}  expand="block" id="submit-profile-edit-changes">Update</IonButton>
+            <IonButton color='secondary' className="profile-edit-modal-button" onClick={async () => { await clickUpdateProfile() }} expand="block">Update</IonButton>
 
           </IonContent>
 

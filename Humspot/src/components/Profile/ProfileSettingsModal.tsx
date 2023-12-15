@@ -31,20 +31,10 @@ import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../../utils/ser
 import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardStyle, KeyboardStyleOptions } from "@capacitor/keyboard";
 import { Preferences } from "@capacitor/preferences";
-import { StatusBar, Style } from "@capacitor/status-bar";
+import { canDismiss } from "../../utils/functions/canDismiss";
 
-const keyStyleOptionsDark: KeyboardStyleOptions = {
-  style: KeyboardStyle.Dark
-};
-const keyStyleOptionsLight: KeyboardStyleOptions = {
-  style: KeyboardStyle.Light
-};
 type ProfileSettingsModalProps = {
   page: HTMLElement | undefined;
-};
-
-async function canDismiss(data?: any, role?: string) {
-  return role !== 'gesture';
 };
 
 const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {

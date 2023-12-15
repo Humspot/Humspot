@@ -1,17 +1,26 @@
+/**
+ * @file ProfileSegments.tsx
+ * @fileoverview the 3 segments buttons on the profile page. Contains the user's favorites, places visited, and the user's interactions
+ * (comments and RSVPs). Users can swipe down to pull the latest data from all three segments' info.
+ */
+
+import { memo, useCallback, useEffect, useState } from "react";
 import { IonSegment, IonSegmentButton, IonIcon, IonLabel, IonCard, IonCardContent, IonList, IonItem, IonThumbnail, useIonRouter, IonContent, IonTitle, IonRefresher, RefresherEventDetail, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/react";
 import { people, star, walk } from "ionicons/icons";
-import { memo, useCallback, useEffect, useState } from "react";
-import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
-import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse } from "../../utils/types";
-import { useContext } from "../../utils/hooks/useContext";
+
 import { useToast } from "@agney/ir-toast";
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 
 import placeholder from '../../assets/images/school_placeholder.jpeg';
 
-import './Profile.css';
+import { useContext } from "../../utils/hooks/useContext";
 import { formatDate } from "../../utils/functions/formatDate";
+import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse } from "../../utils/types";
+import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
+
 import SkeletonLoading from "../Shared/SkeletonLoading";
+
+import './Profile.css';
 
 
 const ProfileSegments: React.FC = memo(() => {

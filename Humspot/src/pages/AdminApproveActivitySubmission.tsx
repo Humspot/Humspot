@@ -1,5 +1,5 @@
-import { IonPage, IonContent, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonIcon, IonDatetime, IonCard, IonCardContent, IonCardHeader, IonChip, IonAlert, IonModal, IonLoading, IonHeader, IonToolbar, IonButtons, IonTitle, useIonRouter, IonItemDivider } from "@ionic/react";
-import { mapOutline, cameraOutline, addOutline, chevronDownOutline, chevronBackOutline } from "ionicons/icons";
+import { IonPage, IonContent, IonItem, IonLabel, IonInput, IonTextarea, IonButton, IonIcon, IonCard, IonChip, IonModal, IonLoading, IonHeader, IonToolbar, IonButtons, IonTitle, useIonRouter, IonItemDivider } from "@ionic/react";
+import { mapOutline, chevronBackOutline } from "ionicons/icons";
 import { Map, Marker } from "pigeon-maps";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { useContext } from "../utils/hooks/useContext";
@@ -8,10 +8,7 @@ import { useParams } from "react-router-dom";
 import { handleApproveActivitySubmission, handleGetSubmissionInfo } from "../utils/server";
 import { SubmissionInfo } from "../utils/types";
 import { useToast } from "@agney/ir-toast";
-
-async function canDismiss(data?: any, role?: string) {
-  return role !== 'gesture';
-};
+import { canDismiss } from "../utils/functions/canDismiss";
 
 type AdminApproveActivitySubmissionParams = {
   id: string;
@@ -52,6 +49,7 @@ const AdminApproveActivitySubmission = () => {
   const handleDeny = async () => {
 
   };
+
   const fetchSubmissionInfo = useCallback(async () => {
     if (!context.humspotUser) return;
     setLoading(true);

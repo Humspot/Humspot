@@ -44,6 +44,7 @@ import {
 import { Camera, CameraResultType } from "@capacitor/camera";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { navigateBack } from "../components/Shared/BackButtonNavigation";
+import { canDismiss } from "../utils/functions/canDismiss";
 
 const attractionTags: string[] = [
   "Beach",
@@ -169,10 +170,6 @@ const attractionTags: string[] = [
   "Cycling",
   "Running",
 ];
-
-async function canDismiss(data?: any, role?: string) {
-  return role !== "gesture";
-}
 
 const PHOTO_UPLOAD_LIMIT: number = 5;
 

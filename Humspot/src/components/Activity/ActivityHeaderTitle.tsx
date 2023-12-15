@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { chevronBackOutline } from "ionicons/icons";
 
 import { getUserRatingGivenUserID } from "../../utils/server";
+import { canDismiss } from "../../utils/functions/canDismiss";
 
 type ActivityHeaderTitleProps = {
   activity: boolean;
@@ -15,10 +16,6 @@ type ActivityHeaderTitleProps = {
   name: string | undefined;
   avgRating: number | undefined;
   page: HTMLElement | undefined;
-};
-
-async function canDismiss(data?: any, role?: string) {
-  return role !== 'gesture';
 };
 
 const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {

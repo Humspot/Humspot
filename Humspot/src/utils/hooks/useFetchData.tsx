@@ -1,3 +1,8 @@
+/**
+ * @file useFetchData.tsx
+ * @fileoverview generic implementation of fetching data that handles loading and error state.
+ */
+
 import { useState, useEffect, useCallback } from "react";
 
 type FetchFunction<T> = () => Promise<T>;
