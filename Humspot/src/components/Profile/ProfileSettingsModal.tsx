@@ -1,3 +1,9 @@
+/**
+ * @file ProfileSettingsModal.tsx
+ * @fileoverview the modal component that displays when clicking on the settings icon on the Profile page.
+ * The modal contains several settings, like Notifications, Dark Mode, etc.
+ */
+
 import { useEffect, useRef, useState } from "react";
 import {
   IonModal,
@@ -24,14 +30,15 @@ import {
   logInOutline,
   constructOutline
 } from "ionicons/icons";
+
 import { Dialog } from "@capacitor/dialog";
+import { Preferences } from "@capacitor/preferences";
 
 import { useContext } from "../../utils/hooks/useContext";
-import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../../utils/server";
-import { Capacitor } from "@capacitor/core";
-import { Keyboard, KeyboardStyle, KeyboardStyleOptions } from "@capacitor/keyboard";
-import { Preferences } from "@capacitor/preferences";
 import { canDismiss } from "../../utils/functions/canDismiss";
+import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../../utils/server";
+
+import './Profile.css';
 
 type ProfileSettingsModalProps = {
   page: HTMLElement | undefined;
@@ -43,6 +50,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   const router = useIonRouter();
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
+  const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
   const toggleDarkMode = async (isChecked: boolean) => {
     if (isChecked) {
@@ -54,20 +62,6 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
     await Preferences.set({ key: "darkMode", value: JSON.stringify(isChecked) });
   }
 
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, async () => {
-        await modalRef?.current?.dismiss();
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [modalRef]);
-
   const clickOnLogout = async () => {
     const { value } = await Dialog.confirm({
       title: 'Logout',
@@ -78,7 +72,6 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
     await handleLogout();
   };
 
-  const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
   useEffect(() => {
     setPresentingElement(props.page);
@@ -87,19 +80,20 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
 
   return (
     <IonModal ref={modalRef} trigger="open-profile-page-modal" presentingElement={presentingElement} canDismiss={canDismiss}>
-      <IonContent style={{ '--background': 'var(--ion-item-background' }}>
+      <IonContent className='profile-modal-content'>
         <IonHeader className='ion-no-border'>
-          <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
-            <IonTitle style={{ fontSize: "1.25rem" }}>Settings</IonTitle>
-            <IonButtons style={{ height: "5vh" }}>
-              <IonButton style={{ fontSize: '1.15em', }} onClick={() => { modalRef.current?.dismiss(); }}>
+          <IonToolbar className='profile-modal-toolbar'>
+            <IonTitle className='profile-modal-title'>Settings</IonTitle>
+            <IonButtons>
+              <IonButton className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss(); }}>
                 <p>Close</p>
               </IonButton>
             </IonButtons>
           </IonToolbar>
         </IonHeader>
+
         <br />
-        <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Settings</IonTitle>
+
         <IonList lines='full'>
           <IonItem disabled={!context.humspotUser} style={{}}>
             <IonIcon aria-hidden="true" icon={notificationsOutline} slot="start" color='medium'></IonIcon>
@@ -158,7 +152,6 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
 
           <br />
         </IonList>
-        {/* <p className='ion-text-center'>v.1.0.0 - Humspot</p> */}
       </IonContent>
     </IonModal >
   )

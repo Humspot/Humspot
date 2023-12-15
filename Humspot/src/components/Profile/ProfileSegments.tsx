@@ -88,7 +88,7 @@ const ProfileSegments: React.FC = memo(() => {
     fetchInteractions();
   }, [fetchInteractions]);
 
-  const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
+  const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => { // called when user swipes down on page
     await fetchFavorites();
     await fetchInteractions();
     await fetchVisited();
