@@ -1,6 +1,6 @@
 /**
  * @file map-config.ts
- * @fileoverview contains the configuration for the pigeon maps component.
+ * @fileoverview contains the configuration for the pigeon maps component (Maps page, or tab 2).
  */
 
 export const MAP_TILER_KEY: string = 'c9MoaJaVglEims9riUks';

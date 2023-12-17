@@ -97,7 +97,7 @@ const ProfileSegments: React.FC = memo(() => {
 
   return (
     <>
-      <IonSegment style={{ marginLeft: "2.5%", width: "95%" }} value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
+      <IonSegment id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
 
         <IonSegmentButton value="favorites">
           <div className="segment-button" style={{ fontSize: "0.8rem" }}>
@@ -134,7 +134,6 @@ const ProfileSegments: React.FC = memo(() => {
 
       </IonSegment>
 
-      {/* <div style={{ height: "0.75vh" }} /> */}
 
       <IonContent>
 

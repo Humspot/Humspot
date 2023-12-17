@@ -41,7 +41,7 @@
   transform: scale(1.25);
 }
 
-.profile-user-bio {
+.profile-bio-text {
   font-size: 0.95rem;
   padding: 10px;
 }
@@ -81,7 +81,7 @@
   z-index: 1000;
 }
 
-.profile-edit-modal-button {
+.profile-edit-modal-update-button {
   width: 92.5%;
   margin: auto;
   margin-top: 1vh;
@@ -110,25 +110,37 @@
 
 
 /** ProfileSegments.tsx **/
-ion-segment-button {
+#profile-segment {
+  margin-left: 2.5%;
+  width: 95%;
+}
+
+#profile-segment ion-segment-button {
   --color: gray;
 }
 
-ion-segment-button.segment-button-checked {
+#profile-segment ion-segment-button.segment-button-checked {
   --color: var(--ion-color-primary);
 }
 
-.segment-button {
+/* This removes the animation when changing buttons ... ? */
+#profile-segment ion-segment-button {
+  --background-checked: var(--ion-color-primary);
+  --color-checked: var(--ion-color-primary-contrast);
+  --indicator-color: transparent;
+}
+
+#profile-segment .segment-button {
   display: flex;
   align-items: center;
 }
 
 @media (max-width: 389px) {
-  .segment-button {
+  #profile-segment .segment-button {
     font-size: 0.6rem;
   }
 
-  .segment-button ion-icon {
+  #profile-segment .segment-button ion-icon {
     margin: 2%;
     display: flex;
     align-items: center;

@@ -1,5 +1,6 @@
 /**
- * 
+ * @file ExploreCarouselGeneral.tsx
+ * @fileoverview Carousel that takes in an array of activities and renders them in a Swiper list.
  */
 
 import { useRef } from "react";
@@ -9,7 +10,9 @@ import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import { formatDate } from "../../utils/functions/formatDate";
 
 import placeholder from '../../assets/images/school_placeholder.jpeg';
-import { CarouselLoadingSlides } from "./CarouselLoadingSlides";
+import { ExploreCarouselLoadingSlides } from "./ExploreCarouselLoadingSlides";
+
+import './Explore.css';
 
 type ExploreCarouselGeneralProps = {
   title: string;
@@ -31,7 +34,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
         <IonItemDivider style={{ background: "var(--ion-background-color)" }}><IonSkeletonText style={{ height: "1.5rem", width: "50vw" }} animated /></IonItemDivider>
       }
       {props.loading ?
-        <CarouselLoadingSlides amount={4} />
+        <ExploreCarouselLoadingSlides amount={4} />
         :
         <Swiper
           ref={swiperRef}
@@ -61,18 +64,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
                   <IonCardTitle style={{ textAlign: 'left', paddingTop: "5px", fontSize: "1.35rem" }}>
                     {activity.name}
                   </IonCardTitle>
-                  <p style={{
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    marginTop: '2.5px',
-                    marginBottom: '2.5px',
-                    fontSize: '0.9rem',
-                    textAlign: 'left',
-                    paddingTop: "5px"
-                  }}>
+                  <p className='explore-carousel-activity-description'>
                     {activity.description && activity.description.length > 1 ? activity.description : "No description available"}
                   </p>
                   {"eventDate" in activity && (

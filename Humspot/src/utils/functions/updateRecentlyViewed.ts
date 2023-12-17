@@ -1,3 +1,9 @@
+/**
+ * @file updateRecentlyViewed.tsx
+ * @fileoverview appends the "recentlyViewed" array in Capacitor Preferences whenever a user visits an activity.
+ * The array will store the last 10 recently viewed activities id, name, description, date, and photoUrl.
+ */
+
 import { Preferences } from "@capacitor/preferences";
 
 type RecentlyViewed = {

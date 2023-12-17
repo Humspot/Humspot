@@ -971,17 +971,16 @@ export const handleGetFavoritesAndVisitedAndRSVPStatus = async (userID: string, 
 };
 
 
-
+/**
+ * @function handleGetEventsBetweenTwoDates
+ * @description it is in the name lol
+ * 
+ * @param {string} date1 
+ * @param {string} date2 
+ * @returns 
+ */
 export const handleGetEventsBetweenTwoDates = async (date1: string, date2: string): Promise<GetEventsBetweenTwoDatesStatusResponse> => {
-
   try {
-    // const currentUserSession = await Auth.currentSession();
-
-    // if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
-
-    // const idToken = currentUserSession.getIdToken();
-    // const jwtToken = idToken.getJwtToken();
-
     const response = await fetch(
 
       import.meta.env.VITE_AWS_API_GATEWAY_GET_EVENTS_BETWEEN_TWO_DATES + "/" + date1 + "/" + date2,
@@ -989,7 +988,6 @@ export const handleGetEventsBetweenTwoDates = async (date1: string, date2: strin
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          // Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
@@ -1055,20 +1053,12 @@ export const handleGetPendingActivitySubmissions = async (pageNum: number, userI
  */
 export const handleGetThisWeeksEvents = async (): Promise<{ message: string; success: boolean; events: GetHumspotEventResponse[] }> => {
   try {
-    // const currentUserSession = await Auth.currentSession();
-
-    // if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
-
-    // const idToken = currentUserSession.getIdToken();
-    // const jwtToken = idToken.getJwtToken();
-
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_THIS_WEEKS_EVENTS,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          // Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
@@ -1083,6 +1073,12 @@ export const handleGetThisWeeksEvents = async (): Promise<{ message: string; suc
   }
 };
 
+/**
+ * @function handleSubmitEventForApproval
+ * 
+ * @param {HumspotEvent} event 
+ * @returns 
+ */
 export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1113,6 +1109,7 @@ export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
     return { message: "Error calling API Gateway" + error, success: false };
   }
 };
+
 
 
 export const handleUploadSubmissionImages = async (blobs: Blob[] | null, folderName: string) => {
@@ -1171,6 +1168,7 @@ export const handleUploadSubmissionImages = async (blobs: Blob[] | null, folderN
     }
   }
 };
+
 
 
 export const handleGetSubmittedActivities = async (userID: string, pageNum: number): Promise<GetSubmittedActivitiesResponse> => {
@@ -1313,7 +1311,8 @@ export const getUserRatingGivenUserID = async (userID: string, activityID: strin
     console.error("Error calling API Gateway", error);
     return { message: "Error calling API Gateway" + error, success: false };
   }
-}
+};
+
 
 export const handleGetPendingOrganizerSubmissions = async (pageNum: number, userID: string) => {
   try {
@@ -1348,6 +1347,8 @@ export const handleGetPendingOrganizerSubmissions = async (pageNum: number, user
     return { message: "Error calling API Gateway" + error, success: false, pendingSubmissions: [] };
   }
 };
+
+
 
 export const handleApproveOrganizer = async (approverID: string, submitterID: string, submitterEmail: string, submissionID: string, reason: string) => {
   try {
@@ -1389,6 +1390,8 @@ export const handleApproveOrganizer = async (approverID: string, submitterID: st
   }
 };
 
+
+
 export const handleDenyOrganizer = async (approverID: string, submitterID: string, submitterEmail: string, submissionID: string, reason: string) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1429,6 +1432,8 @@ export const handleDenyOrganizer = async (approverID: string, submitterID: strin
   }
 };
 
+
+
 export const handleGetApprovedOrganizerSubmissions = async (pageNum: number, userID: string) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1462,6 +1467,8 @@ export const handleGetApprovedOrganizerSubmissions = async (pageNum: number, use
     return { message: "Error calling API Gateway" + error, success: false, pendingSubmissions: [] };
   }
 };
+
+
 
 export const handleGetSubmissionInfo = async (userID: string, submissionID: string) => {
   try {
@@ -1497,7 +1504,9 @@ export const handleGetSubmissionInfo = async (userID: string, submissionID: stri
   }
 
 
-}
+};
+
+
 
 export const handleSubmitAttractionForApproval = async (event: HumspotAttraction) => {
   try {
@@ -1529,6 +1538,7 @@ export const handleSubmitAttractionForApproval = async (event: HumspotAttraction
     return { message: "Error calling API Gateway" + error, success: false };
   }
 };
+
 
 
 export const handleApproveActivitySubmission = async (adminUserID: string, info: SubmissionInfo, reason: string) => {
@@ -1566,4 +1576,4 @@ export const handleApproveActivitySubmission = async (adminUserID: string, info:
     console.error("Error calling API Gateway", error);
     return { message: "Error calling API Gateway" + error, success: false };
   }
-}
+};

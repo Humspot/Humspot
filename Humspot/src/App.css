@@ -1,3 +1,6 @@
+/** App.css **/
+/** Shared styles throughout entire application **/
+
 .ion-page-ios-notch {
   margin-top: constant(safe-area-inset-top);
   margin-top: env(safe-area-inset-top);
@@ -15,11 +18,4 @@
 .tab-bar-hidden #main-tab-bar {
   transform: translateY(100%);
   transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-
-/* This removes the animation when changing buttons ... ? */
-ion-segment-button {
-  --background-checked: var(--ion-color-primary);
-  --color-checked: var(--ion-color-primary-contrast);
-  --indicator-color: transparent;
 }

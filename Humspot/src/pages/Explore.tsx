@@ -18,9 +18,7 @@ import { handleGetActivitiesGivenTag, handleGetThisWeeksEvents } from "../utils/
 
 import "swiper/css";
 
-/**
- * Fetch functions for the swipers
- */
+
 const fetchHighlights = async (): Promise<any[] | null> => {
   const res = await handleGetActivitiesGivenTag(1, 'highlight');
   return res.activities ?? null;
@@ -58,15 +56,22 @@ const ExplorePage = () => {
       <IonSearchbar onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)} />
 
       <IonContent ref={contentRef}>
-
         <ExploreFilterButtons setShowFilterList={setShowFilterList} />
         {!showFilterList &&
           <>
             <ExploreCarouselRecentlyViewed />
-            <ExploreCarouselGeneral title='Highlights' activities={highlights} loading={highlightsLoading} />
-            <ExploreCarouselGeneral title='Upcoming Events' activities={upcomingEvents} loading={upcomingEventsLoading} />
-            <ExploreCarouselGeneral title='Chill Places' activities={chill} loading={chillLoading} />
-            <ExploreCarouselGeneral title='Adventure' activities={adventure} loading={adventureLoading} />
+            {!highlightsLoading && !highlightsError &&
+              <ExploreCarouselGeneral title='Highlights' activities={highlights} loading={highlightsLoading} />
+            }
+            {!upcomingEventsLoading && !upcomingEventsError &&
+              <ExploreCarouselGeneral title='Upcoming Events' activities={upcomingEvents} loading={upcomingEventsLoading} />
+            }
+            {!adventureLoading && !adventureError &&
+              <ExploreCarouselGeneral title='Adventure' activities={adventure} loading={adventureLoading} />
+            }
+            {!chillLoading && !chillError &&
+              <ExploreCarouselGeneral title='Chill Places' activities={chill} loading={chillLoading} />
+            }
           </>
         }
       </IonContent>

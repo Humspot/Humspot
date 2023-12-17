@@ -54,7 +54,7 @@ const ProfileBio: React.FC = () => {
       </section>
 
       <section id='bottom-bio'>
-        <p className='profile-user-bio'>
+        <p className='profile-bio-text'>
           {!context.humspotUser ?
             <>
               <IonSkeletonText animated style={{ height: "1.1rem" }} />

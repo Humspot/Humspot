@@ -1,0 +1,18 @@
+.explore-filter-icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.explore-carousel-activity-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2.5px;
+  margin-bottom: 2.5px;
+  font-size: 0.9rem;
+  text-align: left;
+  padding-top: 5px;
+}

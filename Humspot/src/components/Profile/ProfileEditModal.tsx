@@ -131,7 +131,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
             <IonToolbar className='profile-modal-content'>
               <IonTitle className='profile-modal-title'>Edit Profile</IonTitle>
               <IonButtons>
-                <IonButton id='profile-edit-modal-close-button' className='profile-modal-close-button' onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
+                <IonButton className='profile-modal-close-button' onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
                   <IonIcon icon={chevronBackOutline} /> <p>Back</p>
                 </IonButton>
               </IonButtons>
@@ -171,7 +171,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
 
             <br />
 
-            <IonButton color='secondary' className="profile-edit-modal-button" onClick={async () => { await clickUpdateProfile() }} expand="block">Update</IonButton>
+            <IonButton color='secondary' className="profile-edit-modal-update-button" onClick={async () => { await clickUpdateProfile() }} expand="block">Update</IonButton>
 
           </IonContent>
 

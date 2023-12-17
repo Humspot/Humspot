@@ -1,6 +1,6 @@
 /**
  * @file App.tsx
- * @fileoverview Define routes and main application components here.
+ * @fileoverview Routes and main application components.
  */
 
 import { useState } from "react";
@@ -38,11 +38,12 @@ import SubmittedActivities from "./pages/SubmittedActivities";
 import BecomeACoordinator from "./pages/BecomeACoordinator";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminApproveActivitySubmission from "./pages/AdminApproveActivitySubmission";
+
 import useAWSAuth from "./utils/hooks/useAWSAuth";
 import useDarkMode from "./utils/hooks/useDarkMode";
 import useTabBarVisibility from "./utils/hooks/useTabBarVisibility";
-
 import { useContext } from "./utils/hooks/useContext";
+
 import { ToastProvider } from "@agney/ir-toast";
 
 
@@ -56,7 +57,7 @@ const App: React.FC = () => {
   useDarkMode(context);
   const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context);
 
-  const [currentTab, setCurrentTab] = useState("tab1");
+  const [currentTab, setCurrentTab] = useState("explore");
 
   return (
     <IonApp>
@@ -91,35 +92,35 @@ const App: React.FC = () => {
               onIonTabsWillChange={(e) => { setCurrentTab(e.detail.tab); }}
               style={{ display: tabBarDisplay, opacity: tabBarOpacity.toString() }}
             >
-              <IonTabButton tab="tab1" href="/explore">
+              <IonTabButton tab="explore" href="/explore">
                 <IonIcon
                   aria-hidden="true"
                   icon={compass}
-                  color={currentTab == "tab1" ? "primary" : ""}
+                  color={currentTab == "explore" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>
-              <IonTabButton tab="tab2" href="/map">
+              <IonTabButton tab="map" href="/map">
                 <IonIcon
                   aria-hidden="true"
                   icon={map}
-                  color={currentTab == "tab2" ? "primary" : ""}
+                  color={currentTab == "map" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>
-              <IonTabButton tab="tab3" href="/calendar">
+              <IonTabButton tab="calendar" href="/calendar">
                 <IonIcon
                   aria-hidden="true"
                   icon={calendar}
-                  color={currentTab == "tab3" ? "primary" : ""}
+                  color={currentTab == "calendar" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>
-              <IonTabButton tab="tab4" href="/profile">
+              <IonTabButton tab="profile" href="/profile">
                 <IonIcon
                   aria-hidden="true"
                   icon={person}
-                  color={currentTab == "tab4" ? "primary" : ""}
+                  color={currentTab == "profile" ? "primary" : ""}
                   size="large"
                 />
               </IonTabButton>

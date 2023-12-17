@@ -1,15 +1,19 @@
-import { IonButton, IonCard, IonCardTitle, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonSkeletonText, IonText, IonTitle, useIonRouter } from "@ionic/react";
+/**
+ * @file ExploreFilterButtons.tsx
+ * @fileoverview the buttons that appear at the top of the Explore page. Used for seeing a vertical list of filtered activities.
+ */
+
+import { IonButton, IonCard, IonCardTitle, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonSkeletonText, IonText, IonTitle, useIonRouter } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { football, globe, laptop } from "ionicons/icons";
 import { useState, useCallback, useEffect } from "react";
+
+import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
+
+import { formatDate } from "../../utils/functions/formatDate";
 import { handleGetActivitiesGivenTag } from "../../utils/server";
 
 import school_placeholder from '../../assets/images/school_placeholder.jpeg';
 import placeholder from '../../assets/images/school_placeholder.jpeg';
-import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
-import { formatDate } from "../../utils/functions/formatDate";
-import { useContext } from "../../utils/hooks/useContext";
-
 import school_icon from '../../assets/icons/school_icon.png';
 import food_icon_unselected from '../../assets/icons/food_icon.png';
 import music_icon from '../../assets/icons/music_icon.gif';
@@ -24,10 +28,11 @@ import tech_icon from '../../assets/icons/tech_icon.gif';
 import tech_icon_unselected from '../../assets/icons/tech_icon.png';
 import culture_icon from '../../assets/icons/culture_icon.gif';
 import culture_icon_unselected from '../../assets/icons/culture_icon.png';
-import sports_icon from '../../assets/icons/sports_icon.gif';
 import sports_icon_unselected from '../../assets/icons/sports_icon.png';
 
-const MAIN_FILTERS: { name: string; icon: string; iconUnselected: string; }[] = [
+import './Explore.css';
+
+const MAIN_FILTERS: { name: string; icon: string; iconUnselected: string; style?: any }[] = [
   {
     name: "School",
     icon: school_icon,
@@ -70,14 +75,13 @@ const MAIN_FILTERS: { name: string; icon: string; iconUnselected: string; }[] = 
   },
   {
     name: "Sports",
-    icon: sports_icon,
-    iconUnselected: sports_icon_unselected
+    icon: 'https://media.baamboozle.com/uploads/images/79665/1594252249_16200',
+    iconUnselected: sports_icon_unselected,
   },
 ];
 
 const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.SetStateAction<boolean>> }) => {
 
-  const context = useContext();
   const router = useIonRouter();
 
   const [filter, setFilter] = useState<string>('');
@@ -105,7 +109,7 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
 
   return (
     <>
-      <div style={filter && !loadingFiltersActivities ? { position: 'sticky', top: 0, zIndex: 1000, padding: "0 0", marginTop: "0", background: "var(--ion-background-color)" } : { marginTop: "0", padding: "0 0" }}>
+      <div style={filter && !loadingFiltersActivities ? { position: 'sticky', top: 0, zIndex: 1000, padding: "0", margin: "0", background: "var(--ion-background-color)" } : { margin: "0", padding: "0" }}>
         <Swiper slidesPerView={5.5} spaceBetween={-20}>
           {MAIN_FILTERS.map((entry, idx) => {
             return (
@@ -117,9 +121,9 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
                   fill="clear"
                   color="light"
                 >
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <img src={filter === entry.name ? entry.icon : entry.iconUnselected ?? ''} />
-                    <IonLabel style={{ fontSize: "0.7rem" }} color={filter === entry.name ? "secondary" : "dark"}>{entry.name}</IonLabel>
+                  <div style={{ ...entry.style, height: '75px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={filter === entry.name ? entry.icon : entry.iconUnselected ?? ''} style={{ maxHeight: '65%', maxWidth: '100%' }} />
+                    <IonLabel style={{ fontSize: "0.7rem", marginTop: '5px' }} color={filter === entry.name ? "secondary" : "dark"}>{entry.name}</IonLabel>
                   </div>
                 </IonButton>
               </SwiperSlide>
@@ -127,100 +131,102 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
           })}
         </Swiper>
       </div>
-      {filter ?
-        <>
-          {loadingFiltersActivities ?
-            <>
-              <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
-                <div style={{ padding: "5px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
-                  {/* <br /> */}
-                  <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
-                  <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
-                </div>
-              </IonCard>
-              <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
-                <div style={{ padding: "5px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
-                  {/* <br /> */}
-                  <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
-                  <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
-                </div>
-              </IonCard>
-              <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
-                <div style={{ padding: "5px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
-                  {/* <br /> */}
-                  <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
-                  <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
-                </div>
-              </IonCard>
-              <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
-                <div style={{ padding: "5px" }}>
-                  <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
-                  {/* <br /> */}
-                  <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
-                  <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
-                </div>
-              </IonCard>
-            </>
-            :
-            filteredActivities && filteredActivities.length > 0 ?
-              <>
-                {filteredActivities.map((activity, idx: number) => {
-                  return (
-                    <FadeIn key={idx} delay={(idx % 20) * 50}>
-                      <IonCard style={{ '--background': 'var(--ion-background-color)', paddingLeft: "5px", paddingRight: "5px" }} onClick={() => { if ("activityID" in activity && activity.activityID) router.push("/activity/" + activity.activityID) }}>
-                        <div style={{ height: '175px', overflow: 'hidden', borderRadius: "5px" }}>
-                          <img
-                            src={activity.photoUrls ? activity.photoUrls.trim().split(',')[0] : (filter === "School" ? school_placeholder : placeholder)}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                          />
-                        </div>
-                        <IonCardTitle style={{ marginTop: "5px", fontSize: "1.35rem" }}>{activity.name}</IonCardTitle>
-                        <p style={{
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          marginTop: '2.5px',
-                          marginBottom: '2.5px',
-                          fontSize: "0.9rem"
-                        }}>
-                          {activity.description}
-                        </p>
-                        {"eventDate" in activity &&
-                          <p style={{ marginTop: 0, marginBottom: "5px", fontSize: "0.8rem" }}><i>{formatDate(activity.eventDate)}</i></p>
-                        }
-                      </IonCard>
-                    </FadeIn>
-                  )
-                })}
-                <IonInfiniteScroll
-                  onIonInfinite={async (ev) => {
-                    const response = await handleGetActivitiesGivenTag(filterPageNum, filter);
-                    if (response.success) {
-                      setFilterPageNum((prev) => prev + 1);
-                      setFilteredActivities((prev) => [...(prev as any[]), ...(response.activities as any[])]);
-                    }
-                    ev.target.complete();
-                  }}
-                >
-                  <IonInfiniteScrollContent></IonInfiniteScrollContent>
-                </IonInfiniteScroll>
-              </>
-              :
-              !loadingFiltersActivities ?
-                <div style={{ paddingTop: "25px", paddingBottom: "25px" }}>
-                  <IonTitle className="ion-text-center" style={{ display: "flex", height: "110%", background: "var(--ion-background-color)" }}><IonText color='dark'>No Events Matching Filter</IonText></IonTitle>
-                </div>
+      {
+        filter ?
+          <>
+            {
+              loadingFiltersActivities ?
+                <>
+                  <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
+                    <div style={{ padding: "5px" }}>
+                      <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                      {/* <br /> */}
+                      <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
+                      <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
+                    </div>
+                  </IonCard>
+                  <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
+                    <div style={{ padding: "5px" }}>
+                      <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                      {/* <br /> */}
+                      <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
+                      <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
+                    </div>
+                  </IonCard>
+                  <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
+                    <div style={{ padding: "5px" }}>
+                      <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                      {/* <br /> */}
+                      <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
+                      <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
+                    </div>
+                  </IonCard>
+                  <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
+                    <div style={{ padding: "5px" }}>
+                      <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                      {/* <br /> */}
+                      <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
+                      <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
+                    </div>
+                  </IonCard>
+                </>
                 :
-                <></>
-          }
-        </>
-        :
-        <></>
+                filteredActivities && filteredActivities.length > 0 ?
+                  <>
+                    {filteredActivities.map((activity, idx: number) => {
+                      return (
+                        <FadeIn key={idx} delay={(idx % 20) * 50}>
+                          <IonCard style={{ '--background': 'var(--ion-background-color)', paddingLeft: "5px", paddingRight: "5px" }} onClick={() => { if ("activityID" in activity && activity.activityID) router.push("/activity/" + activity.activityID) }}>
+                            <div style={{ height: '175px', overflow: 'hidden', borderRadius: "5px" }}>
+                              <img
+                                src={activity.photoUrls ? activity.photoUrls.trim().split(',')[0] : (filter === "School" ? school_placeholder : placeholder)}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                              />
+                            </div>
+                            <IonCardTitle style={{ marginTop: "5px", fontSize: "1.35rem" }}>{activity.name}</IonCardTitle>
+                            <p style={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              marginTop: '2.5px',
+                              marginBottom: '2.5px',
+                              fontSize: "0.9rem"
+                            }}>
+                              {activity.description}
+                            </p>
+                            {"eventDate" in activity &&
+                              <p style={{ marginTop: 0, marginBottom: "5px", fontSize: "0.8rem" }}><i>{formatDate(activity.eventDate)}</i></p>
+                            }
+                          </IonCard>
+                        </FadeIn>
+                      )
+                    })}
+                    <IonInfiniteScroll
+                      onIonInfinite={async (ev) => {
+                        const response = await handleGetActivitiesGivenTag(filterPageNum, filter);
+                        if (response.success) {
+                          setFilterPageNum((prev) => prev + 1);
+                          setFilteredActivities((prev) => [...(prev as any[]), ...(response.activities as any[])]);
+                        }
+                        ev.target.complete();
+                      }}
+                    >
+                      <IonInfiniteScrollContent></IonInfiniteScrollContent>
+                    </IonInfiniteScroll>
+                  </>
+                  :
+                  !loadingFiltersActivities ?
+                    <div style={{ paddingTop: "25px", paddingBottom: "25px" }}>
+                      <IonTitle className="ion-text-center" style={{ display: "flex", height: "110%", background: "var(--ion-background-color)" }}><IonText color='dark'>No Events Matching Filter</IonText></IonTitle>
+                    </div>
+                    :
+                    <></>
+            }
+          </>
+          :
+          <></>
       }
     </>
   )

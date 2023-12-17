@@ -2,6 +2,7 @@
  * @file Profile.tsx
  * @fileoverview The Profile page (4th tab) that displays information about the current user.
  * If not logged in, it will prompt the user to do so.
+ * @see /src/components/Profile for the components / CSS used on this page.
  */
 
 import { IonContent, IonPage, useIonRouter, useIonViewDidEnter } from "@ionic/react";
@@ -48,13 +49,13 @@ const Profile: React.FC = () => {
           <ProfileSegments />
         </IonContent>
 
-        {/* Modal that pops in at the bottom of the page where a user can request to submit events/attractions */}
+        {/* Modal where users can request to submit events/attractions */}
         <ProfileAddActivityModal page={page.current} />
 
-        {/* Modal that pops in at the bottom of the page where a user can edit their profile */}
+        {/* Modal where users can edit their profile */}
         <ProfileEditModal page={page.current} />
 
-        {/* Modal that pops in at the bottom of the page where users can tinker with app settings */}
+        {/* Modal where users can tinker with app settings */}
         <ProfileSettingsModal page={page.current} />
 
       </IonPage>

@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, IonList,
+  IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, 
   useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, useIonRouter, IonCardContent, IonCardHeader, IonCardTitle, IonAlert
 } from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/hooks/useContext';
 import { useToast } from '@agney/ir-toast';
 import { handleSubmitEventForApproval, handleUploadSubmissionImages } from '../utils/server';
-// import './EventForm.css';
 import { Map, Marker } from "pigeon-maps";
 import { addOutline, cameraOutline, chevronBackOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
 import { Camera, CameraResultType } from '@capacitor/camera';

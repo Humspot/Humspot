@@ -1,13 +1,22 @@
+/**
+ * @file ExploreCarouselRecentlyViewed.tsx
+ * @fileoverview use Capacitor Preferences (local storage) to show users recently viewed activities on the Explore page.
+ * This will update with the most recently viewed activities every time the user visits the Explore page.
+ * @see /src/utils/updateRecentlyViewed.ts
+ */
+
 import { Preferences } from "@capacitor/preferences";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
-import { useContext } from "../../utils/hooks/useContext";
 import { IonCard, IonCardTitle, IonItemDivider, IonText, useIonRouter, useIonViewWillEnter } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
+
+import { useContext } from "../../utils/hooks/useContext";
 import { formatDate } from "../../utils/functions/formatDate";
 
 import placeholder from '../../assets/images/school_placeholder.jpeg';
 
+import './Explore.css';
 
 const ExploreCarouselRecentlyViewed = () => {
 
@@ -72,18 +81,7 @@ const ExploreCarouselRecentlyViewed = () => {
                 <IonCardTitle style={{ textAlign: 'left', paddingTop: "5px", fontSize: "1.35rem" }}>
                   {activity.name}
                 </IonCardTitle>
-                <p style={{
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  marginTop: '2.5px',
-                  marginBottom: '2.5px',
-                  fontSize: '0.9rem',
-                  textAlign: 'left',
-                  paddingTop: "5px"
-                }}>
+                <p className='explore-carousel-activity-description'>
                   {activity.description && activity.description.length > 1 ? activity.description : "No description available"}
                 </p>
                 {"eventDate" in activity && (
