@@ -6,7 +6,7 @@ import { useToast } from "@agney/ir-toast";
 import { OrganizerRequestSubmission } from "../utils/types";
 import { handleSubmitRequestToBecomeOrganizer } from "../utils/server";
 
-const BecomeACoodinator: React.FC = () => {
+const BecomeACoordinator: React.FC = () => {
 
   const context = useContext();
   const Toast = useToast();
@@ -88,4 +88,4 @@ const BecomeACoodinator: React.FC = () => {
 
 };
 
-export default BecomeACoodinator;
+export default BecomeACoordinator;

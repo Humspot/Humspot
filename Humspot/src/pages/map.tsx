@@ -8,7 +8,6 @@ import { handleGetActivitiesGivenTag, handleGetEventsBetweenTwoDates, handleGetT
 import { GetHumspotEventResponse } from "../utils/types";
 import { settingsOutline } from "ionicons/icons";
 import MapSettingsModal from "../components/Map/MapSettingsModal";
-import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
 
 function MapPage() {
@@ -33,20 +32,6 @@ function MapPage() {
     context.setShowTabs(true);
   }, []);
 
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(10, () => {
-        navigateBack(router);
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [router]);
-
   const fetchTopAttr = useCallback(async () => {
     const res = await handleGetActivitiesGivenTag(1, 'Highlight');
     setEvents(res.activities);
@@ -66,8 +51,6 @@ function MapPage() {
 
   return (
     <IonPage>
-      {/* <FilterButton></FilterButton> */}
-
       <IonContent>
         <Map
           provider={(x, y, z, dpr) =>

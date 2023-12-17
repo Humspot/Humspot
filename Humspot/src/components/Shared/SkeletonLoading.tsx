@@ -1,11 +1,10 @@
 import { IonSkeletonText } from "@ionic/react";
 
-
 type SkeletonLoadingProps = {
   count: number;
   height: string;
   animated: boolean;
-}
+};
 
 const SkeletonLoading = (props: SkeletonLoadingProps) => {
   return (

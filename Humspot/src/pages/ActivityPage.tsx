@@ -37,11 +37,8 @@ import GoBackHeader from "../components/Shared/GoBackHeader";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import { useContext } from "../utils/hooks/useContext";
-import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
-import { Rating } from 'react-custom-rating-component'
 import ActivityHeaderTitle from "../components/Activity/ActivityHeaderTitle";
-import { Preferences } from "@capacitor/preferences";
 import { updateRecentlyViewed } from "../utils/functions/updateRecentlyViewed";
 import { formatDate } from "../utils/functions/formatDate";
 

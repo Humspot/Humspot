@@ -3,7 +3,6 @@ import { IonPage, IonContent, IonText, useIonViewWillEnter, useIonRouter } from 
 
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { useContext } from "../utils/hooks/useContext";
-import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
 const TermsAndConditions: React.FC = () => {
 
@@ -13,20 +12,6 @@ const TermsAndConditions: React.FC = () => {
   useIonViewWillEnter(() => {
     context.setShowTabs(false);
   }, []);
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, () => {
-        navigateBack(router, false);
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [router]);
 
   return (
     <IonPage>

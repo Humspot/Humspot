@@ -1,15 +1,13 @@
-import { useIonRouter, useIonViewDidEnter, IonPage, IonContent, IonHeader, IonToolbar, IonCardTitle, IonSkeletonText, IonButton, IonButtons, IonIcon } from "@ionic/react";
+
+
+import { useIonViewDidEnter, IonPage, IonContent } from "@ionic/react";
 import { useContext } from '../utils/hooks/useContext';
 import AdminSegments from "../components/Admin/AdminSegments";
-import { chevronBackOutline } from "ionicons/icons";
 import GoBackHeader from "../components/Shared/GoBackHeader";
-import { handleAddAttraction } from "../utils/server";
-import { HumspotAttraction } from "../utils/types";
 
 
 const AdminDashboard = () => {
   const context = useContext();
-  const router = useIonRouter();
 
   useIonViewDidEnter(() => {
     context.setShowTabs(false);

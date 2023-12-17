@@ -5,11 +5,9 @@ import {
   IonInput,
   IonButton,
   IonLabel,
-  IonDatetime,
   IonTextarea,
   IonTitle,
   IonItem,
-  IonList,
   useIonLoading,
   IonChip,
   IonIcon,
@@ -23,7 +21,6 @@ import {
   useIonRouter,
   IonCardContent,
   IonCardHeader,
-  IonCardTitle,
   IonAlert,
 } from "@ionic/react";
 import { HumspotAttraction } from "../utils/types";
@@ -33,7 +30,6 @@ import { Map, Marker } from "pigeon-maps";
 import {
   addOutline,
   cameraOutline,
-  chevronBackOutline,
   chevronDownOutline,
   mapOutline,
 } from "ionicons/icons";
@@ -43,7 +39,6 @@ import {
 } from "../utils/server";
 import { Camera, CameraResultType } from "@capacitor/camera";
 import GoBackHeader from "../components/Shared/GoBackHeader";
-import { navigateBack } from "../components/Shared/BackButtonNavigation";
 import { canDismiss } from "../utils/functions/canDismiss";
 
 const attractionTags: string[] = [
@@ -404,20 +399,6 @@ const SubmitAttractionPage = () => {
   useIonViewWillEnter(() => {
     context.setShowTabs(false);
   }, []);
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, () => {
-        navigateBack(router, false);
-      });
-    };
-
-    document.addEventListener("ionBackButton", eventListener);
-
-    return () => {
-      document.removeEventListener("ionBackButton", eventListener);
-    };
-  }, [router]);
 
   return (
     <IonPage>

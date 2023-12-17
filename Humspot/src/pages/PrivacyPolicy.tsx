@@ -1,32 +1,16 @@
-import React, { useEffect } from "react";
-import { IonPage, IonContent, IonText, useIonViewWillEnter, useIonRouter } from "@ionic/react";
+import React from "react";
+import { IonPage, IonContent, IonText, useIonViewWillEnter } from "@ionic/react";
 
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { useContext } from "../utils/hooks/useContext";
-import { navigateBack } from "../components/Shared/BackButtonNavigation";
 
 const PrivacyPolicy: React.FC = () => {
 
   const context = useContext();
-  const router = useIonRouter();
 
   useIonViewWillEnter(() => {
     context.setShowTabs(false);
   }, []);
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, () => {
-        navigateBack(router, false);
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [router]);
 
   return (
     <IonPage>

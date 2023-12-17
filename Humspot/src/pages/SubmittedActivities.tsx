@@ -1,7 +1,6 @@
-import { IonContent, IonItem, IonLabel, IonList, IonPage, IonTitle, useIonRouter, useIonViewWillEnter } from "@ionic/react";
+import { IonContent, IonItem, IonLabel, IonList, IonPage, IonTitle, useIonViewWillEnter } from "@ionic/react";
 import { useContext } from "../utils/hooks/useContext";
 import { useCallback, useEffect, useState } from "react";
-import { navigateBack } from "../components/Shared/BackButtonNavigation";
 import { handleGetSubmittedActivities } from "../utils/server";
 import { SubmittedActivities } from "../utils/types";
 import GoBackHeader from "../components/Shared/GoBackHeader";
@@ -13,7 +12,6 @@ import SkeletonLoading from "../components/Shared/SkeletonLoading";
 const SubmittedActivitiesPage = () => {
 
   const context = useContext();
-  const router = useIonRouter();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [submittedActivities, setSubmittedActivities] = useState<SubmittedActivities[]>([]);
@@ -21,20 +19,6 @@ const SubmittedActivitiesPage = () => {
   useIonViewWillEnter(() => {
     context.setShowTabs(false);
   }, []);
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, () => {
-        navigateBack(router, false);
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [router]);
 
   const fetchSubmittedActivities = useCallback(async () => {
     if (!context.humspotUser || !context.humspotUser.userID) return;
