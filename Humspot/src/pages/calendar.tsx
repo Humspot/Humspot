@@ -4,7 +4,6 @@ import {
   IonPage,
   IonProgressBar,
   IonSkeletonText,
-  useIonRouter,
   useIonViewDidEnter,
   IonList,
   IonItemDivider,

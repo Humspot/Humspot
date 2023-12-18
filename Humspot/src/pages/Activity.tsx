@@ -1,6 +1,7 @@
-// Activity Page
-// This page loads when you press an activity entry from any of the other pages
-
+/**
+ * @file Activity.tsx
+ * @fileoverview the information page that displays when clicking on an activity (event / attraction).
+ */
 import {
   IonAvatar,
   IonCard,
@@ -14,21 +15,17 @@ import {
   IonPage,
   IonSkeletonText,
   IonText,
-  useIonRouter,
   useIonViewDidEnter,
   useIonViewWillEnter,
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
-import "./ActivityPage.css";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { handleAddRating, handleGetActivity } from "../utils/server";
+import { handleGetActivity } from "../utils/server";
 
 import avatar from "../assets/images/avatar.svg";
 
-
 import placeholder from "../assets/images/placeholder.jpeg"
 import ActivityDateTimeLocation from "../components/Activity/ActivityDateTimeLocation";
-import ActivityCommentsSection from "../components/Activity/ActivityCommentsSection";
 import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox";
 import "swiper/css/autoplay";
 import { HumspotActivity } from "../utils/types";
@@ -42,17 +39,19 @@ import ActivityHeaderTitle from "../components/Activity/ActivityHeaderTitle";
 import { updateRecentlyViewed } from "../utils/functions/updateRecentlyViewed";
 import { formatDate } from "../utils/functions/formatDate";
 
+import '../components/Activity/Activity.css';
+
 type ActivityPageParams = {
   id: string;
 };
 
-function ActivityPage() {
+const Activity = () => {
   const params = useParams<ActivityPageParams>();
   const id: string = params.id;
   const context = useContext();
-  const router = useIonRouter();
 
   const page = useRef();
+
   const [hasSwipedIn, setHasSwipedIn] = useState<boolean>(false);
 
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
@@ -60,16 +59,18 @@ function ActivityPage() {
 
   const [comments, setComments] = useState<any[]>([]);
 
-  const handleGetActivityCallback = useCallback(async (id: string) => {
+  const fetchActivity = useCallback(async (id: string) => {
     setActivityLoading(true);
     const res = await handleGetActivity(id);
-    if ("activity" in res && res.activity) { setActivity(res.activity); setComments(res.activity.comments); }
+    if ("activity" in res && res.activity) {
+      setActivity(res.activity); setComments(res.activity.comments);
+      await updateRecentlyViewed(id, res.activity?.name ?? '', res.activity?.description ?? '', res.activity?.date ?? '', res.activity?.photoUrls ?? '');
+      context.setRecentlyViewedUpdated(true);
+    }
     setActivityLoading(false);
-    await updateRecentlyViewed(id, res.activity?.name ?? '', res.activity?.description ?? '', res.activity?.date ?? '', res.activity?.photoUrls ?? '');
-    context.setRecentlyViewedUpdated(true);
   }, [id]);
   useEffect(() => {
-    if (id) handleGetActivityCallback(id);
+    if (id) fetchActivity(id);
   }, [id]);
 
   useIonViewWillEnter(() => {
@@ -195,4 +196,4 @@ function ActivityPage() {
   );
 }
 
-export default ActivityPage;
+export default Activity;

@@ -1,7 +1,6 @@
 /**
  * @file useContext.txt 
- * @fileoverview contains the global variables used throughout the application.
- * Context value will be null if loading, undefined if not logged in, or of type HumspotUser.
+ * @fileoverview contains the global variables and setters used throughout the application.
  */
 
 import React from "react";

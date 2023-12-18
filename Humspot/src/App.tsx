@@ -21,13 +21,13 @@ import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
-import ExplorePage from "./pages/Explore";
-import CalendarPage from "./pages/Calendar";
-import MapPage from "./pages/Map";
-import ProfilePage from "./pages/Profile";
-import ActivityPage from "./pages/ActivityPage";
-import SubmitEventPage from "./pages/SubmitEvent";
-import SubmitAttractionPage from "./pages/SubmitAttraction";
+import Explore from "./pages/Explore";
+import Calendar from "./pages/Calendar";
+import Map from "./pages/Map";
+import Profile from "./pages/Profile";
+import Activity from "./pages/Activity";
+import SubmitEvent from "./pages/SubmitEvent";
+import SubmitAttraction from "./pages/SubmitAttraction";
 import SignUp from "./pages/SignUp";
 import VerifyEmail from "./pages/VerifyEmail";
 import SignIn from "./pages/SignIn";
@@ -66,10 +66,10 @@ const App: React.FC = () => {
           <IonTabs className={context.showTabs ? 'tab-bar-visible' : 'tab-bar-hidden'}>
             <IonRouterOutlet>
               <Route exact path="/" render={() => <Redirect to="/explore" />} />
-              <Route exact path="/explore" component={ExplorePage} />
-              <Route exact path="/calendar" component={CalendarPage} />
-              <Route exact path="/map" component={MapPage} />
-              <Route exact path="/profile" component={ProfilePage} />
+              <Route exact path="/explore" component={Explore} />
+              <Route exact path="/calendar" component={Calendar} />
+              <Route exact path="/map" component={Map} />
+              <Route exact path="/profile" component={Profile} />
               <Route exact path="/sign-up" component={SignUp} />
               <Route exact path="/sign-in" component={SignIn} />
               <Route exact path="/forgot-password" component={ForgotPassword} />
@@ -80,10 +80,10 @@ const App: React.FC = () => {
               <Route exact path="/admin-dashboard" component={AdminDashboard} />
               <Route exact path="/admin-dashboard/submission/:id" component={AdminApproveActivitySubmission} />
               <Route exact path="/verify-email/:email/:toVerify" component={VerifyEmail} />
-              <Route exact path="/submit-event" component={SubmitEventPage} />
-              <Route exact path="/submit-attraction" component={SubmitAttractionPage} />
+              <Route exact path="/submit-event" component={SubmitEvent} />
+              <Route exact path="/submit-attraction" component={SubmitAttraction} />
               <Route exact path="/submitted-activities" component={SubmittedActivities} />
-              <Route exact path="/activity/:id" component={ActivityPage} />
+              <Route exact path="/activity/:id" component={Activity} />
             </IonRouterOutlet>
 
             <IonTabBar

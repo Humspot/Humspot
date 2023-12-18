@@ -1,6 +1,6 @@
 
 import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, useIonRouter, useIonViewDidEnter } from "@ionic/react";
-import { Map, Marker, Overlay, ZoomControl } from "pigeon-maps";
+import { Map as PigeonMap, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/hooks/useContext";
 import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/functions/map-config";
 import { useCallback, useEffect, useState } from "react";
@@ -9,8 +9,7 @@ import { GetHumspotEventResponse } from "../utils/types";
 import { settingsOutline } from "ionicons/icons";
 import MapSettingsModal from "../components/Map/MapSettingsModal";
 
-
-function MapPage() {
+const Map = () => {
   const context = useContext();
   const router = useIonRouter();
 
@@ -34,7 +33,7 @@ function MapPage() {
 
   const fetchTopAttr = useCallback(async () => {
     const res = await handleGetActivitiesGivenTag(1, 'Highlight');
-    setEvents(res.activities);
+    // setEvents(res.activities);
   }, []);
   useEffect(() => {
     fetchTopAttr();
@@ -52,7 +51,7 @@ function MapPage() {
   return (
     <IonPage>
       <IonContent>
-        <Map
+        <PigeonMap
           provider={(x, y, z, dpr) =>
             mapTiler(context.darkMode, x, y, z, dpr)
           }
@@ -173,7 +172,7 @@ function MapPage() {
             </IonButton>
           </IonFab>
 
-        </Map>
+        </PigeonMap>
 
         <MapSettingsModal showTopAttractions={showTopAttractions} setShowTopAttractions={setShowTopAttractions} showThisWeeksEvents={showThisWeeksEvents} setShowThisWeeksEvents={setShowThisWeeksEvents} />
 
@@ -182,4 +181,4 @@ function MapPage() {
   );
 }
 
-export default MapPage;
+export default Map;

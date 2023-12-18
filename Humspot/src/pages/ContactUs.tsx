@@ -1,8 +1,7 @@
 import { IonContent, IonPage } from "@ionic/react";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 
-
-const ContactUsPage = () => {
+const ContactUs = () => {
   return (
     <IonPage className='ion-page-ios-notch'>
 
@@ -15,4 +14,4 @@ const ContactUsPage = () => {
   )
 };
 
-export default ContactUsPage;
+export default ContactUs;

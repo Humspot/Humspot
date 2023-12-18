@@ -1,3 +1,8 @@
+/**
+ * @file ForgotPassword.tsx
+ * @fileoverview the page where users can submit a forgot password request. This will send an email to the user with an OTP.
+ */
+
 import { useToast } from "@agney/ir-toast";
 import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage, useIonLoading, useIonRouter } from "@ionic/react";
 import { useRef } from "react";

@@ -1,3 +1,8 @@
+/**
+ * @file BecomeACoordinator.tsx
+ * @fileoverview Form where users can request to become a Humspot Event Coordinator (allowing them to submit events to the app).
+ */
+
 import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage, IonTextarea, useIonLoading, useIonViewWillEnter } from "@ionic/react";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { useRef } from "react";
@@ -42,8 +47,6 @@ const BecomeACoordinator: React.FC = () => {
     if (res.success) {
       let tempUser = { ...context.humspotUser, requestForCoordinatorSubmitted: 1 };
       context.setHumspotUser(tempUser);
-    } else {
-
     }
     dismiss();
 
