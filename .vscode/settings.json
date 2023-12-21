@@ -1,10 +1,13 @@
 {
-  "cSpell.words": ["humspot"],
+  "cSpell.words": [
+    "humspot",
+    "swipers"
+  ],
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "vscode.typescript-language-features",
     "editor.formatOnSave": true
   }
 }
