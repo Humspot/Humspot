@@ -5,7 +5,7 @@
 
 import { useRef } from "react";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
-import { IonCard, IonCardTitle, IonItemDivider, IonSkeletonText, IonText, useIonRouter } from "@ionic/react";
+import { IonButton, IonCard, IonCardTitle, IonIcon, IonItemDivider, IonSkeletonText, IonText, useIonRouter } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import { formatDate } from "../../utils/functions/formatDate";
 
@@ -13,9 +13,11 @@ import placeholder from '../../assets/images/school_placeholder.jpeg';
 import { ExploreCarouselLoadingSlides } from "./ExploreCarouselLoadingSlides";
 
 import './Explore.css';
+import { arrowForward } from "ionicons/icons";
 
 type ExploreCarouselGeneralProps = {
   title: string;
+  hasTag?: boolean;
   loading: boolean;
   activities: any[] | null;
 };
@@ -25,10 +27,21 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
   const router = useIonRouter();
   const swiperRef = useRef<SwiperRef | null>(null);
 
+  const handleClickArrow = (): void => {
+    if (props.hasTag) {
+      router.push('/more-results/' + props.title);
+    } else {
+
+    }
+  }
+
   return (
     <>
       {props.activities && props.activities.length > 0 && !props.loading ?
-        <IonItemDivider style={{ background: "var(--ion-background-color)", fontSize: "1.50rem" }}><IonText color='primary'>{props.title}</IonText></IonItemDivider>
+        <div style={{ display: 'flex', justifyContent: 'right' }}>
+          <IonItemDivider style={{ background: "var(--ion-background-color)", fontSize: "1.50rem" }}><IonText color='primary'>{props.title}</IonText></IonItemDivider>
+          <IonButton fill='clear' onClick={handleClickArrow}><IonIcon color='primary' icon={arrowForward}></IonIcon></IonButton>
+        </div>
         :
         props.loading &&
         <IonItemDivider style={{ background: "var(--ion-background-color)" }}><IonSkeletonText style={{ height: "1.5rem", width: "50vw" }} animated /></IonItemDivider>

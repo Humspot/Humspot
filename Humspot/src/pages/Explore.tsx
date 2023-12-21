@@ -5,7 +5,7 @@
  */
 
 import { useRef, useState } from "react";
-import { IonContent, IonPage, IonSearchbar, useIonViewDidEnter } from "@ionic/react";
+import { IonContent, IonItemDivider, IonPage, IonSearchbar, useIonViewDidEnter } from "@ionic/react";
 
 import ExploreFilterButtons from "../components/Explore/ExploreFilterButtons";
 import ExploreCarouselRecentlyViewed from "../components/Explore/ExploreCarouselRecentlyViewed";
@@ -53,24 +53,37 @@ const ExplorePage = () => {
 
   return (
     <IonPage className='ion-page-ios-notch'>
-      <IonSearchbar onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)} />
+      <IonSearchbar placeholder="Search for Events" animated onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)} />
 
       <IonContent ref={contentRef}>
         <ExploreFilterButtons setShowFilterList={setShowFilterList} />
         {!showFilterList &&
           <>
             <ExploreCarouselRecentlyViewed />
+            <div className='carousel-divider'></div>
             {!highlightsLoading && !highlightsError &&
-              <ExploreCarouselGeneral title='Highlights' activities={highlights} loading={highlightsLoading} />
+              <section>
+                <ExploreCarouselGeneral title='Highlights' hasTag activities={highlights} loading={highlightsLoading} />
+                <div className='carousel-divider'></div>
+              </section>
             }
             {!upcomingEventsLoading && !upcomingEventsError &&
-              <ExploreCarouselGeneral title='Upcoming Events' activities={upcomingEvents} loading={upcomingEventsLoading} />
+              <section>
+                <ExploreCarouselGeneral title='Upcoming Events' activities={upcomingEvents} loading={upcomingEventsLoading} />
+                <div className='carousel-divider'></div>
+              </section>
             }
             {!adventureLoading && !adventureError &&
-              <ExploreCarouselGeneral title='Adventure' activities={adventure} loading={adventureLoading} />
+              <section>
+                <ExploreCarouselGeneral title='Adventure' hasTag activities={adventure} loading={adventureLoading} />
+                <div className='carousel-divider'></div>
+              </section>
             }
             {!chillLoading && !chillError &&
-              <ExploreCarouselGeneral title='Chill Places' activities={chill} loading={chillLoading} />
+              <section>
+                <ExploreCarouselGeneral title='Chill Places' hasTag activities={chill} loading={chillLoading} />
+                <div className='carousel-divider'></div>
+              </section>
             }
           </>
         }

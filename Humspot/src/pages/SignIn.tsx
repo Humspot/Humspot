@@ -21,7 +21,7 @@ const inputNote: React.CSSProperties = {
   textAlign: "right",
   color: "gray",
   fontFamily: "Arial",
-}
+};
 
 const SignIn = () => {
 

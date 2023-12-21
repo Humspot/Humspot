@@ -91,7 +91,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   return (
     <>
       <IonCard style={{ padding: '10px' }}>
-        <IonCardContent className='ion-no-margin ion-no-padding' style={{padding: "2.5px"}}>
+        <IonCardContent className='ion-no-margin ion-no-padding' style={{ padding: "2.5px" }}>
           {/* Textarea for adding comment */}
           <IonTextarea
             style={{
@@ -126,12 +126,12 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
           }
           {/* IonFab for submitting comment */}
           {context.humspotUser &&
-            <IonFab vertical="top" horizontal="end" slot="fixed" style={{ display: 'flex', alignItems: 'center', paddingTop: "2.5%"}}>
-              <IonFabButton color='secondary' onClick={handleSubmitComment} style={{ marginRight: '10px', width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
+            <IonFab vertical="top" horizontal="end" slot="fixed" style={{ display: 'flex', alignItems: 'center', paddingTop: "2.5%" }}>
+              <IonFabButton color='secondary' size='small' onClick={handleSubmitComment} style={{ marginRight: '10px', width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
                 <IonIcon icon={arrowUpOutline} />
               </IonFabButton>
               <IonFabButton color='secondary' onClick={handleSelectImage} style={{ width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
-                <IonIcon icon={cameraOutline} style={{ margin: 0 }} />
+                <IonIcon icon={cameraOutline} size='small' style={{ margin: 0 }} />
               </IonFabButton>
             </IonFab>
           }

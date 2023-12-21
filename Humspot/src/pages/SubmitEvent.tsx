@@ -1,3 +1,5 @@
+
+
 import { useRef, useState } from 'react';
 import {
   IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, 
@@ -12,7 +14,6 @@ import { addOutline, cameraOutline, chevronDownOutline, mapOutline } from 'ionic
 import { Camera, CameraResultType } from '@capacitor/camera';
 import GoBackHeader from '../components/Shared/GoBackHeader';
 
-import '../App.css';
 import { canDismiss } from '../utils/functions/canDismiss';
 
 

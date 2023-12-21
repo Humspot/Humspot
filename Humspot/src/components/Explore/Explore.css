@@ -16,3 +16,9 @@
   text-align: left;
   padding-top: 5px;
 }
+
+.carousel-divider {
+  height: 0.75vh;
+  background-color: var(--ion-tab-bar-background);
+  width: 100vw;
+}

@@ -8,7 +8,6 @@ import { extractDateFromSqlDatetime } from "../utils/functions/formatDate";
 import SkeletonLoading from "../components/Shared/SkeletonLoading";
 
 
-
 const SubmittedActivitiesPage = () => {
 
   const context = useContext();

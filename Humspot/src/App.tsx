@@ -45,6 +45,7 @@ import useTabBarVisibility from "./utils/hooks/useTabBarVisibility";
 import { useContext } from "./utils/hooks/useContext";
 
 import { ToastProvider } from "@agney/ir-toast";
+import MoreResults from "./pages/MoreResults";
 
 
 setupIonicReact({ mode: "ios" });
@@ -52,7 +53,6 @@ setupIonicReact({ mode: "ios" });
 const App: React.FC = () => {
 
   const context = useContext();
-
   useAWSAuth(context);
   useDarkMode(context);
   const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context);
@@ -84,6 +84,7 @@ const App: React.FC = () => {
               <Route exact path="/submit-attraction" component={SubmitAttraction} />
               <Route exact path="/submitted-activities" component={SubmittedActivities} />
               <Route exact path="/activity/:id" component={Activity} />
+              <Route exact path="/more-results/:tagName" component={MoreResults} />
             </IonRouterOutlet>
 
             <IonTabBar
