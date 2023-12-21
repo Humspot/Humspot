@@ -53,7 +53,7 @@ const ExplorePage = () => {
 
   return (
     <IonPage className='ion-page-ios-notch'>
-      <IonSearchbar placeholder="Search for Events" animated onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)} />
+      <IonSearchbar placeholder="Search for Events" showCancelButton="focus" animated onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)} />
 
       <IonContent ref={contentRef}>
         <ExploreFilterButtons setShowFilterList={setShowFilterList} />

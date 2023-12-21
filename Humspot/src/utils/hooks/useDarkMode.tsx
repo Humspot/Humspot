@@ -5,7 +5,6 @@
 
 import { useCallback, useEffect } from "react";
 
-import { Capacitor } from "@capacitor/core";
 import { Keyboard, KeyboardStyle, KeyboardStyleOptions } from "@capacitor/keyboard";
 import { Preferences } from "@capacitor/preferences";
 import { StatusBar, Style } from "@capacitor/status-bar";
@@ -21,21 +20,20 @@ const keyStyleOptionsDark: KeyboardStyleOptions = {
 };
 
 const useDarkMode = (context: ContextType) => {
+
   const handleDarkMode = useCallback(async () => {
     const isChecked = await Preferences.get({ key: "darkMode" });
     if (isChecked.value === "false") {
       context.setDarkMode(false);
-      if (Capacitor.getPlatform() === 'ios') {
-        Keyboard.setStyle(keyStyleOptionsLight);
-        StatusBar.setStyle({ style: Style.Light });
-      }
+      await StatusBar.setStyle({ style: Style.Light });
+      await Keyboard.setStyle(keyStyleOptionsLight);
+      // if (Capacitor.getPlatform() === 'ios') {}
     } else if (!isChecked || !isChecked.value || isChecked.value === 'true') {
       document.body.classList.toggle("dark");
       context.setDarkMode(true);
-      if (Capacitor.getPlatform() === 'ios') {
-        Keyboard.setStyle(keyStyleOptionsDark);
-        StatusBar.setStyle({ style: Style.Dark });
-      }
+      await StatusBar.setStyle({ style: Style.Dark });
+      await Keyboard.setStyle(keyStyleOptionsDark);
+      // if (Capacitor.getPlatform() === 'ios') {}
     }
   }, []);
 

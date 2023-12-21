@@ -39,9 +39,18 @@ import { canDismiss } from "../../utils/functions/canDismiss";
 import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from "../../utils/server";
 
 import './Profile.css';
+import { Keyboard, KeyboardStyleOptions, KeyboardStyle } from "@capacitor/keyboard";
+import { StatusBar, Style } from "@capacitor/status-bar";
 
 type ProfileSettingsModalProps = {
   page: HTMLElement | undefined;
+};
+
+const keyStyleOptionsLight: KeyboardStyleOptions = {
+  style: KeyboardStyle.Light
+};
+const keyStyleOptionsDark: KeyboardStyleOptions = {
+  style: KeyboardStyle.Dark
 };
 
 const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
@@ -55,11 +64,15 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   const toggleDarkMode = async (isChecked: boolean) => {
     if (isChecked) {
       document.body.classList.add("dark");
+      await StatusBar.setStyle({ style: Style.Dark });
+      await Keyboard.setStyle(keyStyleOptionsDark);
     } else {
       document.body.classList.remove("dark");
+      await StatusBar.setStyle({ style: Style.Light });
+      await Keyboard.setStyle(keyStyleOptionsLight);
     }
-    context.setDarkMode(isChecked);
     await Preferences.set({ key: "darkMode", value: JSON.stringify(isChecked) });
+    context.setDarkMode(isChecked);
   }
 
   const clickOnLogout = async () => {
@@ -85,7 +98,15 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
           <IonToolbar className='profile-modal-toolbar'>
             <IonTitle className='profile-modal-title'>Settings</IonTitle>
             <IonButtons>
-              <IonButton className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss(); }}>
+              <IonButton className='profile-modal-close-button' onClick={() => {
+                modalRef.current?.dismiss().then(async () => {
+                  if (context.darkMode) {
+                    await StatusBar.setStyle({ style: Style.Dark });
+                  } else {
+                    await StatusBar.setStyle({ style: Style.Light });
+                  }
+                })
+              }}>
                 <p>Close</p>
               </IonButton>
             </IonButtons>
