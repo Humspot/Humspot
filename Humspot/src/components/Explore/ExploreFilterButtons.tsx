@@ -95,6 +95,12 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
 
   const [filterPageNum, setFilterPageNum] = useState<number>(2);
 
+  const handleTagClick = (tag: string) => {
+    if (tag) {
+      router.push(`/more-results/${tag}`);
+    }
+  }
+
   const handleGetFilteredActivities = useCallback(async () => {
     if (!filter) {
       props.setShowFilterList(false);
@@ -181,7 +187,7 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
                     <div style={{ paddingLeft: '10px', paddingRight: '10px' }}>
                       {filter in filterTagsList && filterTagsList[filter].map((tag: string, idx: number) => {
                         return (
-                          <IonChip key={tag + idx} color={"secondary"}>
+                          <IonChip key={tag + idx} color={"secondary"} onClick={() => handleTagClick(tag)}>
                             <IonLabel>{tag}</IonLabel>
                           </IonChip>
                         )

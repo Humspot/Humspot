@@ -27,7 +27,8 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
   const router = useIonRouter();
   const swiperRef = useRef<SwiperRef | null>(null);
 
-  const handleClickArrow = (): void => {
+  const handleClickArrow = (e: any): void => {
+    e.preventDefault();
     if (props.hasTag) {
       router.push(`/more-results/${props.title.trim()}`);
     }
@@ -37,7 +38,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
     <>
       {props.activities && props.activities.length > 0 && !props.loading ?
         <div style={{ display: 'flex', justifyContent: 'right' }}>
-          <IonItemDivider style={{ background: "var(--ion-background-color)", fontSize: "1.50rem" }}><IonText color='primary'>{props.title}</IonText></IonItemDivider>
+          <IonItemDivider style={{ background: "var(--ion-background-color)", fontSize: "1.50rem" }}><IonText onClick={handleClickArrow} color='primary'>{props.title}</IonText></IonItemDivider>
           <IonButton fill='clear' onClick={handleClickArrow}><IonIcon color='primary' icon={arrowForward}></IonIcon></IonButton>
         </div>
         :

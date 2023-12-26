@@ -36,7 +36,6 @@
     "react-rating-stars-component": "^2.2.0",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
-    "serpapi": "^2.0.0",
     "swiper": "^10.3.1"
   },
   "devDependencies": {

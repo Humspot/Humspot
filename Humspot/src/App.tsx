@@ -46,6 +46,7 @@ import { useContext } from "./utils/hooks/useContext";
 
 import { ToastProvider } from "@agney/ir-toast";
 import MoreResults from "./pages/MoreResults";
+import ContactUs from "./pages/ContactUs";
 
 
 setupIonicReact({ mode: "ios" });
@@ -72,6 +73,7 @@ const App: React.FC = () => {
               <Route exact path="/profile" component={Profile} />
               <Route exact path="/sign-up" component={SignUp} />
               <Route exact path="/sign-in" component={SignIn} />
+              <Route exact path="/contact-us" component={ContactUs} />
               <Route exact path="/forgot-password" component={ForgotPassword} />
               <Route exact path="/terms-and-conditions" component={TermsAndConditions} />
               <Route exact path="/privacy-policy" component={PrivacyPolicy} />
