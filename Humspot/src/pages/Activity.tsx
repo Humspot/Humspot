@@ -15,6 +15,7 @@ import {
   IonPage,
   IonSkeletonText,
   IonText,
+  useIonRouter,
   useIonViewDidEnter,
   useIonViewWillEnter,
 } from "@ionic/react";
@@ -49,6 +50,7 @@ const Activity = () => {
   const params = useParams<ActivityPageParams>();
   const id: string = params.id;
   const context = useContext();
+  const router = useIonRouter();
 
   const page = useRef();
 
@@ -85,7 +87,7 @@ const Activity = () => {
     <IonPage ref={page}>
 
       {hasSwipedIn &&
-        <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
+        <GoBackHeader title={''} buttons={context.humspotUser && <ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
       }
 
       <IonContent>
@@ -135,7 +137,7 @@ const Activity = () => {
             activity.tags &&
             activity.tags.split(",").map((tag: string, index: number) => {
               return (
-                <IonChip key={tag + index} color={"secondary"}>
+                <IonChip key={tag + index} color={"secondary"} onClick={() => { router.push(`/more-results/${tag.trim()}`) }}>
                   {tag}
                 </IonChip>
               );

@@ -35,7 +35,8 @@ const titleToTagName: Record<string, string> = {
 const MoreResults = () => {
 
   const params = useParams<MoreResultsParams>();
-  const tagName: string = titleToTagName[params.tagName] ?? '';
+  const tagName: string = titleToTagName[params.tagName] ?? params.tagName ?? '';
+  console.log(tagName);
 
   const Toast = useToast();
   const router = useIonRouter();

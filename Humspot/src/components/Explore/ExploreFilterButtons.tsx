@@ -3,7 +3,7 @@
  * @fileoverview the buttons that appear at the top of the Explore page. Used for seeing a vertical list of filtered activities.
  */
 
-import { IonButton, IonCard, IonCardTitle, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonSkeletonText, IonText, IonTitle, useIonRouter } from "@ionic/react";
+import { IonButton, IonCard, IonCardTitle, IonChip, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonSkeletonText, IonText, IonTitle, useIonRouter } from "@ionic/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useState, useCallback, useEffect } from "react";
 
@@ -79,6 +79,11 @@ const MAIN_FILTERS: { name: string; icon: string; iconUnselected: string; style?
     iconUnselected: sports_icon_unselected,
   },
 ];
+
+const filterTagsList: Record<string, string[]> = {
+  "School": ["School", "HSU", "Cal Poly Humboldt", "CR", "College of the Redwoods"],
+  "": [""]
+}
 
 const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.SetStateAction<boolean>> }) => {
 
@@ -173,6 +178,15 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
                 :
                 filteredActivities && filteredActivities.length > 0 ?
                   <>
+                    <div style={{ paddingLeft: '10px', paddingRight: '10px' }}>
+                      {filter in filterTagsList && filterTagsList[filter].map((tag: string, idx: number) => {
+                        return (
+                          <IonChip key={tag + idx} color={"secondary"}>
+                            <IonLabel>{tag}</IonLabel>
+                          </IonChip>
+                        )
+                      })}
+                    </div>
                     {filteredActivities.map((activity, idx: number) => {
                       return (
                         <FadeIn key={idx} delay={(idx % 20) * 50}>

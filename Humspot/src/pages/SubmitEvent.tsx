@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import {
   IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, 
-  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, useIonRouter, IonCardContent, IonCardHeader, IonCardTitle, IonAlert
+  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, IonCardContent, IonCardHeader, IonAlert
 } from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/hooks/useContext';
@@ -122,7 +122,6 @@ export const EventForm = () => {
 
   const context = useContext();
   const Toast = useToast();
-  const router = useIonRouter();
   const [present, dismiss] = useIonLoading();
 
   const mapModalRef = useRef<HTMLIonModalElement | null>(null);
@@ -202,6 +201,7 @@ export const EventForm = () => {
     const images = await Camera.pickImages({
       quality: 90,
       limit: 5,
+      presentationStyle: 'popover'
     });
 
     if (!images || !images.photos) { dismiss(); return; }

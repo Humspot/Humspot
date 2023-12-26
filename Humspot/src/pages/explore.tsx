@@ -61,25 +61,25 @@ const ExplorePage = () => {
           <>
             <ExploreCarouselRecentlyViewed />
             <div className='carousel-divider'></div>
-            {!highlightsLoading && !highlightsError &&
+            {!highlightsError &&
               <section>
                 <ExploreCarouselGeneral title='Highlights' hasTag activities={highlights} loading={highlightsLoading} />
                 <div className='carousel-divider'></div>
               </section>
             }
-            {!upcomingEventsLoading && !upcomingEventsError &&
+            {!upcomingEventsError &&
               <section>
                 <ExploreCarouselGeneral title='Upcoming Events' activities={upcomingEvents} loading={upcomingEventsLoading} />
                 <div className='carousel-divider'></div>
               </section>
             }
-            {!adventureLoading && !adventureError &&
+            {!adventureError &&
               <section>
                 <ExploreCarouselGeneral title='Adventure' hasTag activities={adventure} loading={adventureLoading} />
                 <div className='carousel-divider'></div>
               </section>
             }
-            {!chillLoading && !chillError &&
+            {!chillError &&
               <section>
                 <ExploreCarouselGeneral title='Chill Places' hasTag activities={chill} loading={chillLoading} />
                 <div className='carousel-divider'></div>

@@ -1,11 +1,11 @@
-import { IonButton, IonCard, IonCardContent, IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton } from "@ionic/react";
+import { IonCard, IonCardContent, IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton } from "@ionic/react";
 import { useRef, useState } from "react";
 import { handleAddComment } from "../../utils/server";
 import { useContext } from "../../utils/hooks/useContext";
 import { HumspotCommentSubmit } from "../../utils/types";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { useToast } from "@agney/ir-toast";
-import { arrowUpOutline, cameraOutline, paperPlaneOutline, sendOutline, sendSharp } from "ionicons/icons";
+import { arrowUpOutline, cameraOutline } from "ionicons/icons";
 
 const ActivityAddCommentBox = (props: { id: string, activityName: string; setComments: React.Dispatch<React.SetStateAction<any[]>>; }) => {
   const id: string = props.id;

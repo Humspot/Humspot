@@ -11,7 +11,7 @@ export const ExploreCarouselLoadingSlides = (props: { amount: number }) => (
   <>
     <Swiper
       slidesPerView={1.25}
-      spaceBetween={-10}
+      spaceBetween={20}
       style={{ width: '100%', height: 'auto' }}
     >
       {Array.from({ length: props.amount }, (_, index) => (

@@ -266,6 +266,7 @@ const SubmitAttractionPage = () => {
     const images = await Camera.pickImages({
       quality: 90,
       limit: 5,
+      presentationStyle: 'popover'
     });
 
     if (!images || !images.photos) { return; }
