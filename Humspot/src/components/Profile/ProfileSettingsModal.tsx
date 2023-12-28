@@ -62,6 +62,8 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
   const toggleDarkMode = async (isChecked: boolean) => {
+    context.setDarkMode(isChecked);
+    await Preferences.set({ key: "darkMode", value: JSON.stringify(isChecked) });
     if (isChecked) {
       document.body.classList.add("dark");
       await StatusBar.setStyle({ style: Style.Dark });
@@ -71,8 +73,6 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
       await StatusBar.setStyle({ style: Style.Light });
       await Keyboard.setStyle(keyStyleOptionsLight);
     }
-    await Preferences.set({ key: "darkMode", value: JSON.stringify(isChecked) });
-    context.setDarkMode(isChecked);
   }
 
   const clickOnLogout = async () => {

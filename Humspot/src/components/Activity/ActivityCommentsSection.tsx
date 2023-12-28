@@ -18,7 +18,7 @@ const ActivityCommentsSection = (props: { activity: any }) => {
   return (
     <>
       {activity ? (
-        <IonCard style={{ padding: '10px' }}>
+        <IonCard style={{ padding: '10px' }} className='activity-card'>
           <IonCardHeader>
             <IonCardTitle>Comments</IonCardTitle>
           </IonCardHeader>

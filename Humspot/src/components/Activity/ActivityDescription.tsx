@@ -11,7 +11,7 @@ const ActivityDescription = (props: ActivityDescriptionProps) => {
   const websiteURL: string = props.websiteURL || '';
 
   return (
-    <IonCard>
+    <IonCard className='activity-card'>
       <IonCardContent>
         <IonText>
           <p>{description ?? ''}</p>

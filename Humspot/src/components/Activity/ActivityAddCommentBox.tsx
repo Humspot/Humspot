@@ -88,7 +88,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
 
   return (
     <>
-      <IonCard style={{ padding: '10px' }}>
+      <IonCard style={{ padding: '10px' }} className='activity-card'>
         <IonCardContent className='ion-no-margin ion-no-padding' style={{ padding: "2.5px" }}>
           <IonTextarea
             style={{

@@ -15,7 +15,7 @@ export const zoomControlButtonsStyleDark = {
   height: '50px',
   borderRadius: '5px',
   boxShadow: '0 1px 4px -1px rgba(0,0,0,.3)',
-  background: 'black',
+  background: '#1f1f1f',
   lineHeight: '25px',
   fontSize: '20px',
   fontWeight: '500',

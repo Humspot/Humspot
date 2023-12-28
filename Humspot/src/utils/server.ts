@@ -33,7 +33,6 @@ import {
 } from "./types";
 
 
-
 /* Allows for AWS Authentication */
 // awsconfig.oauth.redirectSignIn = `${window.location.origin}/`;
 // awsconfig.oauth.redirectSignOut = `${window.location.origin}/`;

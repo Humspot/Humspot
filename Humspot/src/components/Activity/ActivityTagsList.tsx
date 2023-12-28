@@ -11,7 +11,7 @@ const ActivityTagsList = (props: ActivityTagsListProps) => {
   const router = useIonRouter();
 
   return (
-    <section style={{ paddingLeft: '10px' }}>
+    <section style={{ paddingLeft: '5px' }}>
       {tags &&
         tags.split(',').map((tag: string, index: number) => {
           return (

@@ -3,7 +3,7 @@ import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, I
 import { Map as PigeonMap, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/hooks/useContext";
 import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/functions/map-config";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { handleGetActivitiesGivenTag, handleGetEventsBetweenTwoDates, handleGetThisWeeksEvents } from "../utils/server";
 import { GetHumspotEventResponse } from "../utils/types";
 import { settingsOutline } from "ionicons/icons";
@@ -12,6 +12,7 @@ import MapSettingsModal from "../components/Map/MapSettingsModal";
 const Map = () => {
   const context = useContext();
   const router = useIonRouter();
+  const pageRef = useRef();
 
   const [mapZoom, setZoom] = useState<number>(15);
   const [center, setCenter] = useState<[number, number]>([
@@ -49,7 +50,7 @@ const Map = () => {
   }, [fetchThisWeeksEvents]);
 
   return (
-    <IonPage>
+    <IonPage ref={pageRef}>
       <IonContent>
         <PigeonMap
           provider={(x, y, z, dpr) =>
@@ -120,11 +121,7 @@ const Map = () => {
               offset={[125, 19.5]}
             >
               <IonCard
-                style={
-                  !context.darkMode
-                    ? { width: "55vw", opacity: "90%" }
-                    : { width: "55vw", opacity: "95%" }
-                }
+                style={{ width: "55vw", opacity: "95%" }}
                 mode="ios"
                 onClick={() => router.push("/activity/" + events[overlayIndex].activityID)}
               >
@@ -174,7 +171,7 @@ const Map = () => {
 
         </PigeonMap>
 
-        <MapSettingsModal showTopAttractions={showTopAttractions} setShowTopAttractions={setShowTopAttractions} showThisWeeksEvents={showThisWeeksEvents} setShowThisWeeksEvents={setShowThisWeeksEvents} />
+        <MapSettingsModal page={pageRef.current} showTopAttractions={showTopAttractions} setShowTopAttractions={setShowTopAttractions} showThisWeeksEvents={showThisWeeksEvents} setShowThisWeeksEvents={setShowThisWeeksEvents} />
 
       </IonContent>
     </IonPage>

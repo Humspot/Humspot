@@ -11,7 +11,7 @@ const ActivityCommentsList = (props: ActivityCommentsList) => {
   const comments = props.comments;
 
   return (
-    <IonCard style={{ padding: '10px' }}>
+    <IonCard style={{ padding: '10px' }} className='activity-card'>
       <IonCardHeader className='ion-no-padding ion-no-margin' style={{ paddingTop: "5px", paddingBottom: "15px" }}>
         <IonCardTitle style={{ fontSize: "1.25rem" }} className='ion-no-padding ion-no-margin'>Comments</IonCardTitle>
       </IonCardHeader>

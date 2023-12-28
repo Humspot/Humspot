@@ -33,7 +33,7 @@ const ActivityHeader = (props: ActivityHeaderProps) => {
           photoUrls ?
             photoUrls?.split(",").map((url: any, index: any) => (
               <SwiperSlide key={index} >
-                <IonCard className='ion-no-padding ion-no-margin' style={{ width: "100vw", marginRight: "5px", marginLeft: "5px" }}>
+                <IonCard className='ion-no-padding ion-no-margin' style={{ width: "97.5vw", marginRight: "5px", marginLeft: "5px" }}>
                   <img
                     alt="Attraction Image"
                     src={url || ''}
@@ -44,7 +44,7 @@ const ActivityHeader = (props: ActivityHeaderProps) => {
             ))
             :
             <SwiperSlide>
-              <IonCard className='ion-no-padding ion-no-margin' style={{ width: "100vw" }}>
+              <IonCard className='ion-no-padding ion-no-margin' style={{ width: "97.5vw" }}>
                 <img
                   alt="Attraction Image"
                   src={placeholder}
