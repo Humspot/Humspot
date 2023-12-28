@@ -78,7 +78,6 @@ export type AddAttractionResponse = {
   attractionID?: string;
 };
 
-
 export type GetEventsGivenTagResponse = {
   message: string;
   events:
@@ -262,4 +261,4 @@ export type SubmissionInfo = {
   tagNames: string | null;
   time: string | null;
   websiteURL: string | null;
-}
+};

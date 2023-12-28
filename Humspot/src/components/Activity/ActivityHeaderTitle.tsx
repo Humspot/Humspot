@@ -1,17 +1,16 @@
-import { IonButton, IonButtons, IonCard, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonIcon, IonModal, IonNote, IonRow, IonSkeletonText, IonTitle, IonToolbar } from "@ionic/react"
-import { Rating } from "react-custom-rating-component"
-import { useContext } from "../../utils/hooks/useContext";
-import { handleAddRating } from "../../utils/server";
-import { useToast } from "@agney/ir-toast";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { chevronBackOutline } from "ionicons/icons";
+import { IonButton, IonButtons, IonCard, IonCardTitle, IonContent, IonHeader, IonModal, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/react'
+import { Rating } from 'react-custom-rating-component'
+import { useContext } from '../../utils/hooks/useContext';
+import { handleAddRating } from '../../utils/server';
+import { useToast } from '@agney/ir-toast';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { getUserRatingGivenUserID } from "../../utils/server";
-import { canDismiss } from "../../utils/functions/canDismiss";
+import { getUserRatingGivenUserID } from '../../utils/server';
+import { canDismiss } from '../../utils/functions/canDismiss';
 
 type ActivityHeaderTitleProps = {
   activity: boolean;
-  activityType: "event" | "attraction" | "custom" | undefined;
+  activityType: 'event' | 'attraction' | 'custom' | undefined;
   id: string;
   name: string | undefined;
   avgRating: number | undefined;
@@ -37,10 +36,10 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
     setRatingLoading(true);
     const res = await handleAddRating(context.humspotUser.userID, props.id, newUserRating);
     if (res.success) {
-      const t = Toast.create({ message: "Rating added!", duration: 2000, color: 'secondary' });
+      const t = Toast.create({ message: 'Rating added!', duration: 2000, color: 'secondary' });
       t.present();
     } else {
-      const t = Toast.create({ message: "Something went wrong", duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: 'Something went wrong', duration: 2000, color: 'danger' });
       t.present();
     }
     setOriginalUserRating(newUserRating);
@@ -55,7 +54,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
       setOriginalUserRating(res.ratingInfo?.rating ?? 0);
       setRatingLoading(false);
     } else {
-      const t = Toast.create({ message: "Unable to get user rating, unable to rate at this time", color: "danger", duration: 2000 });
+      const t = Toast.create({ message: 'Unable to get user rating, unable to rate at this time', color: 'danger', duration: 2000 });
       t.present();
     }
     setRatingLoading(false);
@@ -68,17 +67,14 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
 
   return (
     <>
-      <IonCard color={"primary"} className="headercard" style={{ marginLeft: "10px", marginRight: "10px" }}>
-        <section style={{ padding: "10px" }}>
+      <IonCard color='primary' className='activity-header-card activity-card'>
+        <section style={{ padding: '10px' }}>
           {props.activity ? (
             <>
-              {/* <IonCardTitle> */}
               {<h1>{props.name}</h1>}
-              {/* </IonCardTitle> */}
               {props.activityType === 'attraction' &&
                 <>
-                  {/* <br /> */}
-                  <div style={{ display: 'flex', alignItems: 'center', paddingTop: "10px" }}>
+                  <div style={{ display: 'flex', alignItems: 'center', paddingTop: '10px' }}>
                     <Rating
                       readOnly={true}
                       defaultValue={props.avgRating ?? 0}
@@ -86,14 +82,11 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                       activeColor='#F6D075'
                       precision={0.5}
                     />
-                    {/* <p style={{ paddingLeft: "15px", fontSize: "1.15rem", paddingTop: "1px" }}>
-                      {props.avgRating ? `(${props.avgRating})` : ''}
-                    </p> */}
                   </div>
 
                   {context.humspotUser &&
                     <div>
-                      <IonButton className='ion-no-padding ion-no-margin' slot='start' fill="clear" style={{ color: "#3D6876" }} id='add-rating-button'>
+                      <IonButton className='ion-no-padding ion-no-margin' slot='start' fill='clear' style={{ color: '#3D6876' }} id='add-rating-button'>
                         Add Rating
                       </IonButton>
                     </div>
@@ -114,21 +107,21 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
           <IonContent style={{ '--background': 'var(--ion-item-background' }}>
             <IonHeader className='ion-no-border'>
               <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
-                <IonTitle style={{ fontSize: "1.25rem" }}>Rate Attraction</IonTitle>
-                <IonButtons style={{ height: "5vh" }}>
+                <IonTitle style={{ fontSize: '1.25rem' }}>Rate Attraction</IonTitle>
+                <IonButtons style={{ height: '5vh' }}>
                   <IonButton style={{ fontSize: '1.15em', }} onClick={() => { modalRef.current?.dismiss().then(() => { setNewUserRating(originalUserRating); setHasUpdated(false); }) }}>
                     <p>Back</p>
                   </IonButton>
                 </IonButtons>
               </IonToolbar>
             </IonHeader>
-            <b><p className='ion-text-center' style={{ padding: "10px" }}>Been here before? Give it a rating to let Humspot users know what you thought!</p></b>
+            <b><p className='ion-text-center' style={{ padding: '10px' }}>Been here before? Give it a rating to let Humspot users know what you thought!</p></b>
             <section style={{
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              height: "50px",
-              ...ratingLoading ? { opacity: "0.5" } : { opacity: "1" }
+              height: '50px',
+              ...ratingLoading ? { opacity: '0.5' } : { opacity: '1' }
             }}>
               {hasLoadedInitial ?
                 <Rating
@@ -142,14 +135,14 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                 />
                 :
                 <>
-                  <IonSkeletonText style={{ height: "30px", width: "75vw" }} animated />
+                  <IonSkeletonText style={{ height: '30px', width: '75vw' }} animated />
                 </>
               }
             </section>
             {!!originalUserRating && !hasUpdated &&
               <p className='ion-text-center'>You previously gave this a {originalUserRating} / 5</p>
             }
-            <IonButton disabled={!hasUpdated} color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await submitRating()}>Submit</IonButton>
+            <IonButton disabled={!hasUpdated} color='secondary' expand='block' style={{ padding: '10px' }} onClick={async () => await submitRating()}>Submit</IonButton>
           </IonContent>
         </IonModal>
       }

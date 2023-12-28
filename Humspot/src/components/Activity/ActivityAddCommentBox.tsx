@@ -8,6 +8,7 @@ import { useToast } from "@agney/ir-toast";
 import { arrowUpOutline, cameraOutline } from "ionicons/icons";
 
 const ActivityAddCommentBox = (props: { id: string, activityName: string; setComments: React.Dispatch<React.SetStateAction<any[]>>; }) => {
+  
   const id: string = props.id;
   const Toast = useToast();
   const context = useContext();
@@ -30,8 +31,6 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       toast.present();
     }
 
-    // present({ message: "Loading..." });
-
     const res = await fetch(image.webPath!);
     const blobRes = await res.blob();
     if (blobRes) {
@@ -48,7 +47,6 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     dismiss();
   }
 
-  // handSubmitComment Function
   const handleSubmitComment = async () => {
     if (!context.humspotUser) return;
     if (!commentRef || !commentRef.current || !commentRef.current.value?.trim()) {
@@ -57,7 +55,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       return;
     }
 
-    present({ message: "Uploading comment..." });
+    await present({ message: "Uploading comment..." });
 
     const humspotComment: HumspotCommentSubmit = {
       commentText: commentRef.current.value as string,
@@ -85,14 +83,13 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: 'danger' });
       t.present();
     }
-    dismiss();
+    await dismiss();
   };
 
   return (
     <>
       <IonCard style={{ padding: '10px' }}>
         <IonCardContent className='ion-no-margin ion-no-padding' style={{ padding: "2.5px" }}>
-          {/* Textarea for adding comment */}
           <IonTextarea
             style={{
               borderColor: '#eee',
@@ -120,15 +117,13 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
             maxlength={200}
             disabled={!context.humspotUser}
           ></IonTextarea>
-          {/* Photo preview */}
           {photo &&
             <img src={photo} style={{ marginTop: '10px', maxWidth: '100%', borderRadius: '4px' }} />
           }
-          {/* IonFab for submitting comment */}
           {context.humspotUser &&
             <IonFab vertical="top" horizontal="end" slot="fixed" style={{ display: 'flex', alignItems: 'center', paddingTop: "2.5%" }}>
-              <IonFabButton color='secondary' size='small' onClick={handleSubmitComment} style={{ marginRight: '10px', width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
-                <IonIcon icon={arrowUpOutline} />
+              <IonFabButton color='secondary' onClick={handleSubmitComment} style={{ marginRight: '10px', width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
+                <IonIcon icon={arrowUpOutline} size='small' />
               </IonFabButton>
               <IonFabButton color='secondary' onClick={handleSelectImage} style={{ width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
                 <IonIcon icon={cameraOutline} size='small' style={{ margin: 0 }} />

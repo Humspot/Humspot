@@ -150,7 +150,6 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
                 <IonIcon aria-hidden="true" icon={logInOutline} slot="start" ></IonIcon>
                 <IonLabel>Sign Up / Sign In</IonLabel>
               </IonItem>
-              <br />
               <IonItem style={{ marginTop: "10px", marginBottom: "10px" }} role='button' onClick={async () => { modalRef?.current?.dismiss(); await handleGoogleLoginAndVerifyAWSUser() }}>
                 <IonIcon aria-hidden="true" icon={logOutOutline} slot="start" ></IonIcon>
                 <IonLabel>Google Sign In</IonLabel>

@@ -4,23 +4,23 @@
  * They are sent a verification email after entering their information.
  */
 
-import { useRef, useState } from "react";
+import { useRef, useState } from 'react';
 import {
   IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonText,
   useIonLoading, useIonRouter, useIonViewWillEnter
-} from "@ionic/react";
-import { eyeOffOutline, eyeOutline } from "ionicons/icons";
+} from '@ionic/react';
+import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 
-import { useToast } from "@agney/ir-toast";
+import { useToast } from '@agney/ir-toast';
 
-import { useContext } from "../utils/hooks/useContext";
-import { handleSignUp } from "../utils/server";
-import GoBackHeader from "../components/Shared/GoBackHeader";
-import GoogleLoginButton from "../components/Login/GoogleLoginButton";
+import { useContext } from '../utils/hooks/useContext';
+import { handleSignUp } from '../utils/server';
+import GoBackHeader from '../components/Shared/GoBackHeader';
+import GoogleLoginButton from '../components/Login/GoogleLoginButton';
 
 
 import '../components/Login/AuthPages.css';
-import { dynamicNavigate } from "../utils/functions/dynamicNavigate";
+import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
 
 
 const SignUp: React.FC = () => {
@@ -47,17 +47,17 @@ const SignUp: React.FC = () => {
 
   const clickOnSignUp = async () => {
     if (!passwordRef || !emailRef) return;
-    await present({ message: "Please Wait..." });
+    await present({ message: 'Please Wait...' });
     const success: boolean = await handleSignUp(
       emailRef.current?.value as string ?? '',
       passwordRef.current?.value as string ?? '',
     );
     if (success) { // route to verify page, on success email is sent with code
-      const t = Toast.create({ message: "Success! Check your email for a verification code.", duration: 2000, color: "success" });
+      const t = Toast.create({ message: 'Success! Check your email for a verification code.', duration: 2000, color: 'success' });
       t.present();
-      dynamicNavigate(router, "/verify-email/" + encodeURIComponent(emailRef.current?.value as string) + "/sign-up-verify", 'root')
+      dynamicNavigate(router, '/verify-email/' + encodeURIComponent(emailRef.current?.value as string) + '/sign-up-verify', 'root')
     } else {
-      const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: 'Something went wrong!', duration: 2000, color: 'danger' });
       t.present();
     }
     await dismiss();
@@ -65,29 +65,29 @@ const SignUp: React.FC = () => {
 
   return (
     <IonPage>
-      <GoBackHeader title="Sign Up" />
+      <GoBackHeader title='Sign Up' />
       <IonContent>
-        <div className="center-content">
-          <section className="center-container">
+        <div className='center-content'>
+          <section className='center-container'>
 
-            <IonLabel id="email-label" className="login-label">Email</IonLabel>
-            <IonItem className='login-input'>
-              <IonInput aria-labelledby="email-label" type="email" ref={emailRef} placeholder="email@email.com" />
+            <IonLabel id='email-label' className='login-label'>Email</IonLabel>
+            <IonItem lines='none' className='login-input'>
+              <IonInput aria-labelledby='email-label' type='email' ref={emailRef} placeholder='email@email.com' />
             </IonItem>
 
-            <IonLabel id="password-label" className="login-label">Password</IonLabel>
-            <IonItem className='login-input'>
-              <IonInput aria-labelledby='password-label' clearOnEdit={false} type={showPassword ? "text" : "password"} ref={passwordRef} placeholder="••••••••" />
-              <IonButton slot="end" fill="clear" onClick={() => { setShowPassword(!showPassword) }}>
-                <IonIcon color="medium" icon={showPassword ? eyeOutline : eyeOffOutline} />
+            <IonLabel id='password-label' className='login-label'>Password</IonLabel>
+            <IonItem lines='none' className='login-input'>
+              <IonInput aria-labelledby='password-label' clearOnEdit={false} type={showPassword ? 'text' : 'password'} ref={passwordRef} placeholder='••••••••' />
+              <IonButton slot='end' fill='clear' onClick={() => { setShowPassword(!showPassword) }}>
+                <IonIcon color='medium' icon={showPassword ? eyeOutline : eyeOffOutline} />
               </IonButton>
             </IonItem>
             <br />
 
-            <div style={{ height: "5%" }} />
+            <div style={{ height: '5%' }} />
 
-            <IonButton className="login-button" onClick={async () => { await clickOnSignUp() }} fill="clear" expand="block" id="signUpButton" >Sign Up</IonButton>
-            <p style={{ fontSize: "0.9rem" }}><IonText color='primary'><span onClick={() => { router.push("/sign-in") }}>Sign In to an Existing Account</span></IonText></p>
+            <IonButton className='login-button' onClick={async () => { await clickOnSignUp() }} fill='clear' expand='block' id='signUpButton' >Sign Up</IonButton>
+            <p style={{ fontSize: '0.9rem' }}><IonText color='primary'><span onClick={() => { router.push('/sign-in') }}>Sign In to an Existing Account</span></IonText></p>
 
             <p>OR</p>
 

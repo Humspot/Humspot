@@ -1,12 +1,25 @@
+.activity-image-swiper-container {
+  width: 100%;
+  height: 30vh;
+  position: absolute;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.activity-header-card {
+  margin-top: 25vh;
+}
+
+.activity-card {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 .locationcard {
   display: flex;
   padding: 20px;
   justify-content: space-between;
   gap: 20px;
-}
-
-.headercard {
-  margin-top: 25vh;
 }
 
 .commentbox {

@@ -14,7 +14,7 @@ export const ExploreCarouselLoadingSlides = (props: { amount: number }) => (
       spaceBetween={20}
       style={{ width: '100%', height: 'auto' }}
     >
-      {Array.from({ length: props.amount }, (_, index) => (
+      {Array.from({ length: props.amount }, (_: unknown, index: number) => (
         <SwiperSlide key={index} style={{ width: 'auto', height: '100%' }}>
           <IonCard
             style={{

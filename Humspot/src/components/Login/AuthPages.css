@@ -28,7 +28,7 @@
 
 
 .login-button {
-  width: 92.5%;
+  width: 100%;
   margin: auto;
   margin-top: 1vh;
   margin-bottom: 1vh;
@@ -60,7 +60,7 @@
 }
 
 ion-item.login-input {
-  width: 92.5%;
+  width: 100%;
   margin: auto;
   margin-top: 1vh;
   margin-bottom: 1vh;

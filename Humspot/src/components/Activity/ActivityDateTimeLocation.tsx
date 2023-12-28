@@ -13,7 +13,7 @@ import { HumspotActivity } from "../../utils/types";
 const ActivityDateTimeLocation = (props: { activity: HumspotActivity | null }) => {
   const { activity } = props;
   return (
-    <IonCard>
+    <IonCard className='activity-card'>
       {activity ? (
         <IonCardContent className="locationcard">
           <IonText>
