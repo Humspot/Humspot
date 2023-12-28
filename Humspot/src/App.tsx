@@ -8,6 +8,7 @@ import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonIcon, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { calendar, compass, map, person } from "ionicons/icons";
+import { SplashScreen } from '@capacitor/splash-screen';
 
 import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
@@ -53,6 +54,13 @@ names.sort();
 
 
 setupIonicReact({ mode: "ios" });
+
+SplashScreen.show({
+  showDuration: 2000,
+  autoHide: true,
+  fadeInDuration: 300,
+  fadeOutDuration: 300
+});
 
 const App: React.FC = () => {
 

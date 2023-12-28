@@ -4,7 +4,7 @@
  * Contains swipers for different kinds of activities, as well as a search bar and a way to filter the activities.
  */
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IonContent, IonItemDivider, IonPage, IonSearchbar, useIonViewDidEnter } from "@ionic/react";
 
 import ExploreFilterButtons from "../components/Explore/ExploreFilterButtons";
@@ -15,6 +15,8 @@ import { useContext } from "../utils/hooks/useContext";
 import useFetchData from "../utils/hooks/useFetchData";
 import { GetHumspotEventResponse } from "../utils/types";
 import { handleGetActivitiesGivenTag, handleGetThisWeeksEvents } from "../utils/server";
+
+import { SplashScreen } from "@capacitor/splash-screen";
 
 import "swiper/css";
 
@@ -50,6 +52,10 @@ const ExplorePage = () => {
   useIonViewDidEnter(() => {
     context.setShowTabs(true);
   }, []);
+
+  useEffect(() => {
+    // SplashScreen.hide();
+  }, [])
 
   return (
     <IonPage className='ion-page-ios-notch'>

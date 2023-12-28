@@ -21,6 +21,7 @@
     "@capacitor/ios": "^5.5.1",
     "@capacitor/keyboard": "5.0.6",
     "@capacitor/preferences": "^5.0.6",
+    "@capacitor/splash-screen": "^5.0.6",
     "@capacitor/status-bar": "5.0.6",
     "@ionic/react": "^7.5.0",
     "@ionic/react-router": "^7.5.0",
@@ -39,6 +40,7 @@
     "swiper": "^10.3.1"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.4",
     "@capacitor/cli": "5.4.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
