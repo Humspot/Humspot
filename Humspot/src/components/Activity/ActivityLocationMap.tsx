@@ -43,6 +43,7 @@ export const ActivityLocationMap = memo((props: ActivityLocationMapProps) => {
       onClick={() => { handleClickOnMap() }}
     >
       <Marker
+        color={'var(--ion-color-secondary)'}
         width={30}
         height={30}
         anchor={[parseFloat(latitude ?? ''), parseFloat(longitude ?? '')]}

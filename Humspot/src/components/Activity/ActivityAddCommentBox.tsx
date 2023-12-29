@@ -1,14 +1,24 @@
-import { IonCard, IonCardContent, IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton } from "@ionic/react";
-import { useRef, useState } from "react";
+import { IonCard, IonCardContent, IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton, IonCardHeader, IonCardTitle, IonCol, IonRow } from "@ionic/react";
+import { useEffect, useRef, useState } from "react";
 import { handleAddComment } from "../../utils/server";
 import { useContext } from "../../utils/hooks/useContext";
 import { HumspotCommentSubmit } from "../../utils/types";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { useToast } from "@agney/ir-toast";
-import { arrowUpOutline, cameraOutline } from "ionicons/icons";
+import { arrowUpOutline, banOutline, cameraOutline } from "ionicons/icons";
+import { Keyboard, KeyboardResize, KeyboardResizeOptions } from "@capacitor/keyboard";
+import { timeout } from "../../utils/functions/timeout";
+
+const resizeOptions: KeyboardResizeOptions = {
+  mode: KeyboardResize.None,
+}
+
+const defaultResizeOptions: KeyboardResizeOptions = {
+  mode: KeyboardResize.Body,
+}
 
 const ActivityAddCommentBox = (props: { id: string, activityName: string; setComments: React.Dispatch<React.SetStateAction<any[]>>; }) => {
-  
+
   const id: string = props.id;
   const Toast = useToast();
   const context = useContext();
@@ -16,6 +26,17 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   const commentRef = useRef<HTMLIonTextareaElement | null>(null);
   const [photo, setPhoto] = useState<string | undefined>(undefined);
   const [blob, setBlob] = useState<Blob | null>(null);
+
+  const [kbHeight, setKbHeight] = useState<number>(0);
+
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
+  const scrollToElement = (elementId: string) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 
   const handleSelectImage = async () => {
     const image = await Camera.getPhoto({
@@ -50,7 +71,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   const handleSubmitComment = async () => {
     if (!context.humspotUser) return;
     if (!commentRef || !commentRef.current || !commentRef.current.value?.trim()) {
-      const toast = Toast.create({ message: "Please enter a comment", duration: 2000, color: 'danger' });
+      const toast = Toast.create({ message: "Please enter a comment", position: 'top', duration: 2000, color: 'danger' });
       toast.present();
       return;
     }
@@ -77,6 +98,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
         commentDate: (new Date().toISOString()),
       };
       props.setComments((prev) => [addToCommentsArray, ...prev]);
+      scrollToElement('top-of-comments-list');
       commentRef.current.value = null;
       setPhoto(undefined);
     } else {
@@ -86,54 +108,89 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     await dismiss();
   };
 
-  return (
-    <>
-      <IonCard style={{ padding: '10px' }} className='activity-card'>
-        <IonCardContent className='ion-no-margin ion-no-padding' style={{ padding: "2.5px" }}>
-          <IonTextarea
-            style={{
-              borderColor: '#eee',
-              borderWidth: '1px',
-              borderRadius: '4px',
-              marginBottom: '10px',
-              paddingRight: "5px",
-              paddingLeft: 0,
-              marginLeft: 0,
-              fontSize: '14px',
-              width: "70%"
-            }}
-            placeholder={
-              context.humspotUser
-                ? "Add a comment..."
-                : "Log in to add comments."
-            }
-            rows={3}
-            id="commenttextarea"
-            ref={commentRef}
-            debounce={50}
-            enterkeyhint="send"
-            inputMode="text"
-            spellcheck={true}
-            maxlength={200}
-            disabled={!context.humspotUser}
-          ></IonTextarea>
-          {photo &&
-            <img src={photo} style={{ marginTop: '10px', maxWidth: '100%', borderRadius: '4px' }} />
-          }
-          {context.humspotUser &&
-            <IonFab vertical="top" horizontal="end" slot="fixed" style={{ display: 'flex', alignItems: 'center', paddingTop: "2.5%" }}>
-              <IonFabButton color='secondary' onClick={handleSubmitComment} style={{ marginRight: '10px', width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
-                <IonIcon icon={arrowUpOutline} size='small' />
-              </IonFabButton>
-              <IonFabButton color='secondary' onClick={handleSelectImage} style={{ width: '40px', height: '40px', '--padding-start': 0, '--padding-end': 0 }}>
-                <IonIcon icon={cameraOutline} size='small' style={{ margin: 0 }} />
-              </IonFabButton>
-            </IonFab>
-          }
+  useEffect(() => {
+    timeout(500).then(() => {
+      setIsVisible(true);
+    })
+    Keyboard.addListener('keyboardWillShow', info => {
+      Keyboard.setResizeMode(resizeOptions);
+      setKbHeight(info.keyboardHeight);
+    });
 
-        </IonCardContent>
-      </IonCard>
-    </>
+    Keyboard.addListener('keyboardWillHide', () => {
+      Keyboard.setResizeMode(defaultResizeOptions);
+      setKbHeight(0);
+    });
+    return () => {
+      Keyboard.removeAllListeners();
+    };
+  }, []);
+
+  return (
+    <IonFab className='activity-comment-textarea'
+      style={context.darkMode ?
+        { opacity: isVisible ? 1 : 0, bottom: `${kbHeight}px`, border: '2px solid #282828' }
+        : { opacity: isVisible ? 1 : 0, bottom: `${kbHeight}px`, border: '2px solid #e6e6e6' }}
+      slot="fixed"
+      vertical="bottom"
+      edge
+    >
+      {context.humspotUser &&
+        <IonFab horizontal="end" vertical="top">
+          <IonRow>
+            <IonCol>
+              {photo &&
+                <img className="comment-img-submit" src={photo} />
+              }
+            </IonCol>
+            <IonFabButton size="small" onClick={handleSubmitComment} style={{ transform: "translateY(-25%)" }}>
+              <IonIcon icon={arrowUpOutline} size="small" />
+            </IonFabButton>
+          </IonRow>
+          <IonRow>
+            <IonCol></IonCol>
+            {!photo ?
+              <IonFabButton size="small" onClick={handleSelectImage} style={{ transform: "translateY(-25%)" }}>
+                <IonIcon icon={cameraOutline} size="small" />
+              </IonFabButton>
+              :
+              <IonFabButton onClick={() => { setPhoto(undefined); setBlob(null) }} size="small" style={{ transform: "translateY(-45%)" }}>
+                <IonIcon size="small" icon={banOutline} />
+              </IonFabButton>
+            }
+          </IonRow>
+        </IonFab>
+
+      }
+      <IonTextarea
+        color='primary'
+        style={{
+          borderColor: '#eee',
+          borderWidth: '1px',
+          borderRadius: '4px',
+          marginBottom: '10px',
+          paddingRight: "10px",
+          paddingLeft: '10px',
+          marginLeft: 0,
+          fontSize: '14px',
+          width: "70%",
+          color: "var(--ion-color-dark)"
+        }}
+        placeholder={
+          context.humspotUser
+            ? "Add a comment..."
+            : "Log in to add comments."
+        }
+        rows={5}
+        ref={commentRef}
+        debounce={50}
+        enterkeyhint="send"
+        inputMode="text"
+        spellcheck={true}
+        maxlength={200}
+      />
+
+    </IonFab>
   );
 };
 

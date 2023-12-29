@@ -45,19 +45,11 @@
 
 .commentavatar {
   width: 50px;
-  /* Adjust the width to your desired size */
   height: 50px;
-  /* Adjust the height to your desired size */
   flex-shrink: 0;
-  /* Prevents the avatar from shrinking */
   margin-right: 10px;
-  /* Adds spacing between the avatar and content */
   margin-left: 5px;
   margin-top: 5px;
-}
-
-.commentdate {
-  font-style: italic;
 }
 
 .FavoritesButton {
@@ -70,25 +62,8 @@
   right: 80px;
 }
 
-.locationlabel {
-  /* font-size: xx-large;
-  text-align: left; */
-  display: flex;
-  gap: 10px;
-  /* gap: 10px;
-  padding: 5px; */
-}
-
 h1 {
   margin: 0px;
-}
-
-.headerDiv {
-  width: 100%;
-  height: 30vh;
-  position: absolute;
-  overflow: hidden;
-  z-index: 0;
 }
 
 .fill-frame-image {
@@ -98,9 +73,16 @@ h1 {
   z-index: 0;
 }
 
-.headerImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+.comment-img-submit {
+  aspect-ratio: 1;
+  border-color: transparent;
+  width: 50px;
+}
+
+.activity-comment-textarea {
+  height: 125px;
+  width: 100vw;
+  border-radius: 10px;
+  background-color: var(--ion-background-color);
+  transition: bottom 0.35s, opacity 500ms ease-in-out;
 }

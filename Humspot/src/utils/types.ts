@@ -175,6 +175,17 @@ export type GetActivityResponse = {
   activity?: HumspotActivity;
 };
 
+export type HumspotCommentResponse = {
+  activityID: string;
+  commentDate: string;
+  commentID: string;
+  commentText: string | null;
+  photoUrl: string | null;
+  profilePicURL: string | null;
+  userID: string;
+  username: string;
+}
+
 export type HumspotActivity = {
   name: string;
   description: string;
@@ -189,7 +200,7 @@ export type HumspotActivity = {
   photoUrls: string; // comma delimited list
   organizer: string;
   openTimes: string | null;
-  comments: any[];
+  comments: HumspotCommentResponse[];
   avgRating: number;
 }
 

@@ -84,7 +84,7 @@ const Map = () => {
             if (!marker.latitude || !marker.longitude) return;
             return (
               <Marker
-                color={"var(--ion-color-event-marker)"}
+                color={"var(--ion-color-secondary)"}
                 style={{ opacity: "85%" }}
                 key={marker.name + index.toString()}
                 anchor={[parseFloat(marker.latitude), parseFloat(marker.longitude)]}

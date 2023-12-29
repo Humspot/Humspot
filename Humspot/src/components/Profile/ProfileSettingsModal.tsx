@@ -28,7 +28,8 @@ import {
   shieldOutline,
   readerOutline,
   logInOutline,
-  constructOutline
+  constructOutline,
+  logoGoogle
 } from "ionicons/icons";
 
 import { Dialog } from "@capacitor/dialog";
@@ -151,7 +152,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
                 <IonLabel>Sign Up / Sign In</IonLabel>
               </IonItem>
               <IonItem style={{ marginTop: "10px", marginBottom: "10px" }} role='button' onClick={async () => { modalRef?.current?.dismiss(); await handleGoogleLoginAndVerifyAWSUser() }}>
-                <IonIcon aria-hidden="true" icon={logOutOutline} slot="start" ></IonIcon>
+                <IonIcon aria-hidden="true" icon={logoGoogle} slot="start" ></IonIcon>
                 <IonLabel>Google Sign In</IonLabel>
               </IonItem>
             </>

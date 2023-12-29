@@ -55,12 +55,7 @@ names.sort();
 
 setupIonicReact({ mode: "ios" });
 
-SplashScreen.show({
-  showDuration: 2000,
-  autoHide: true,
-  fadeInDuration: 300,
-  fadeOutDuration: 300
-});
+SplashScreen.show();
 
 const App: React.FC = () => {
 

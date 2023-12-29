@@ -1,47 +1,61 @@
-import {
-  IonCard,
-  IonCardContent,
-  IonIcon,
-  IonSkeletonText,
-  IonText,
-} from "@ionic/react";
-import { compass, time } from "ionicons/icons";
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonRow } from "@ionic/react";
 import { formatDate } from "../../utils/functions/formatDate";
 import { ActivityLocationMap } from "./ActivityLocationMap";
-import { HumspotActivity } from "../../utils/types";
+import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 
-const ActivityDateTimeLocation = (props: { activity: HumspotActivity | null }) => {
-  const { activity } = props;
+type ActivityDateTimeLocationProps = {
+  location: string;
+  date: string;
+  name: string;
+  latitude: string | null;
+  longitude: string | null;
+}
+
+const ActivityDateTimeLocation = (props: ActivityDateTimeLocationProps) => {
+
+  const { location, date, latitude, longitude, name } = props;
+
+
   return (
-    <IonCard className='activity-card'>
-      {activity && (
-        <IonCardContent className="locationcard">
-          <IonText>
-            <div className="locationlabel">
-              <h2>{activity?.location ?? ""}</h2>
-            </div>
-            {activity?.date &&
-              <>
-                <br />
-                <div className="locationlabel">
-                  <h2>{formatDate(activity?.date ?? "")}</h2>
-                </div>
-              </>
-            }
-          </IonText>
+    <FadeIn>
+      <IonCard className='activity-card'>
+        <IonCardContent>
+          <IonRow style={{ paddingBottom: "10px" }}>
+            <IonCardHeader className='ion-no-padding ion-no-margin'>
+              <IonCardTitle style={{ fontSize: "1.25rem" }}>Location</IonCardTitle>
+            </IonCardHeader>
+          </IonRow>
+          <IonRow>
+            <IonCol size='7' className='ion-no-padding ion-no-margin'>
+              <div >
+                <h2>{location ?? ""}</h2>
+              </div>
+              {date &&
+                <>
+                  <br />
+                  <div>
+                    <h2>{formatDate(date ?? "")}</h2>
+                  </div>
+                </>
+              }
+            </IonCol>
+            <IonCol></IonCol>
+            <IonCol className='ion-no-padding ion-no-margin'>
+              <div>
+                {latitude && longitude && name && (
+                  <ActivityLocationMap
+                    latitude={latitude}
+                    longitude={longitude}
+                    activityName={name}
+                  />
+                )}
+              </div>
+            </IonCol>
+          </IonRow>
 
-          <div className="locationmap">
-            {activity && (
-              <ActivityLocationMap
-                latitude={activity.latitude}
-                longitude={activity.longitude}
-                activityName={activity.name}
-              />
-            )}
-          </div>
         </IonCardContent>
-      )}
-    </IonCard>
+      </IonCard>
+    </FadeIn>
   );
 };
 

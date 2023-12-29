@@ -1,4 +1,4 @@
-import { IonCard, IonCardContent, IonText } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
 
 type ActivityDescriptionProps = {
   description: string;
@@ -13,18 +13,11 @@ const ActivityDescription = (props: ActivityDescriptionProps) => {
   return (
     <IonCard className='activity-card'>
       <IonCardContent>
-        <IonText>
-          <p>{description ?? ''}</p>
-          <br />
-          <p>
-            <a
-              href={websiteURL ?? ''}
-              rel='noopener noreferrer'
-            >
-              Visit Site
-            </a>
-          </p>
-        </IonText>
+        <IonCardHeader className='ion-no-padding ion-no-margin' style={{ paddingBottom: "10px" }}>
+          <IonCardTitle style={{ fontSize: "1.25rem" }}>Description</IonCardTitle>
+        </IonCardHeader>
+        {description && <p>{description}</p>}
+        {websiteURL && <p> <a href={websiteURL ?? ''} target='_blank' rel='noopener noreferrer'> Visit Site </a> </p>}
       </IonCardContent>
     </IonCard>
   );

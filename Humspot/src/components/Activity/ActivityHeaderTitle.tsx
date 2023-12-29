@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getUserRatingGivenUserID } from '../../utils/server';
 import { canDismiss } from '../../utils/functions/canDismiss';
+import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 
 type ActivityHeaderTitleProps = {
   activity: boolean;
@@ -66,7 +67,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
   }, [getUserRating])
 
   return (
-    <>
+    <FadeIn>
       <IonCard color='primary' className='activity-header-card activity-card'>
         <section style={{ padding: '10px' }}>
           {props.activity ? (
@@ -147,7 +148,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
         </IonModal>
       }
 
-    </>
+    </FadeIn>
   )
 };
 

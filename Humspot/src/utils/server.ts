@@ -29,7 +29,8 @@ import {
   AddCommentImageResponse,
   GetSubmittedActivitiesResponse,
   OrganizerRequestSubmission,
-  SubmissionInfo
+  SubmissionInfo,
+  HumspotCommentResponse
 } from "./types";
 
 
@@ -1576,3 +1577,36 @@ export const handleApproveActivitySubmission = async (adminUserID: string, info:
     return { message: "Error calling API Gateway" + error, success: false };
   }
 };
+
+
+/**
+ * @function handleGetCommentsGivenActivityID
+ * @description Gets the comments from a given activity in batches of 10.
+ * 
+ * @param {string} activityID 
+ * @param {number} pageNum 
+ * 
+ * @returns {Promise<{ message: string; comments?: HumspotCommentResponse[], success: boolean }>} an array of comments
+ */
+export const handleGetCommentsGivenActivityID = async (activityID: string, pageNum: number): Promise<{ message: string; comments?: HumspotCommentResponse[], success: boolean }> => {
+  try {
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_COMMENTS_GIVEN_ACTIVITYID_URL + "/" + activityID + "/" + pageNum,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (err) {
+    console.log(err);
+    return { message: "Something went wrong", success: false };
+  }
+};
+

@@ -4,13 +4,15 @@
  */
 import {
   IonContent,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonPage,
   useIonViewDidEnter,
   useIonViewWillEnter,
 } from "@ionic/react";
 import { useParams } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { handleGetActivity } from "../utils/server";
+import { handleGetActivity, handleGetCommentsGivenActivityID } from "../utils/server";
 
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import ActivityHeaderTitle from "../components/Activity/ActivityHeaderTitle";
@@ -18,7 +20,7 @@ import ActivityAddCommentBox from "../components/Activity/ActivityAddCommentBox"
 import ActivityDateTimeLocation from "../components/Activity/ActivityDateTimeLocation";
 import ActivityFavoriteVisitedRSVPButtons from "../components/Activity/ActivityFavoriteVisitedRSVPButton";
 
-import { HumspotActivity } from "../utils/types";
+import { HumspotActivity, HumspotCommentResponse } from "../utils/types";
 import { useContext } from "../utils/hooks/useContext";
 import { updateRecentlyViewed } from "../utils/functions/updateRecentlyViewed";
 
@@ -44,7 +46,9 @@ const Activity = () => {
   const [activity, setActivity] = useState<HumspotActivity | null>(null);
   const [activityLoading, setActivityLoading] = useState<boolean>(true);
 
-  const [comments, setComments] = useState<any[]>([]);
+  const [comments, setComments] = useState<HumspotCommentResponse[]>([]);
+
+  const [pageNum, setPageNum] = useState<number>(2);
 
   const fetchActivity = useCallback(async (id: string) => {
     setActivityLoading(true);
@@ -78,29 +82,49 @@ const Activity = () => {
           <GoBackHeader title={''} />
         }
 
-        {activity &&
-          <ActivityHeader activityLoading={activityLoading} photoUrls={activity.photoUrls} />
-        }
+        <ActivityHeader activityLoading={activityLoading} photoUrls={activity?.photoUrls || ''} />
+
         <ActivityHeaderTitle page={page.current} id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name} />
 
         {activity && "tags" in activity &&
           <ActivityTagsList tags={activity.tags} />
         }
 
-        <ActivityDateTimeLocation activity={activity} />
+        {activity &&
+          <ActivityDateTimeLocation name={activity.name} date={activity.date} location={activity.location} latitude={activity.latitude} longitude={activity.longitude} />
+        }
 
         {activity &&
           <ActivityDescription description={activity.description} websiteURL={activity.websiteURL} />
         }
 
+        <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'} setComments={setComments} />
+
         {comments && comments.length > 0 &&
           <ActivityCommentsList comments={comments} />
         }
 
-        <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'} setComments={setComments} />
+        {pageNum > 0 &&
+          <IonInfiniteScroll
+            onIonInfinite={async (ev) => {
+              const response = await handleGetCommentsGivenActivityID(id, pageNum);
+              if (response.success && response.comments && response.comments.length > 0) {
+                setPageNum((prev) => prev + 1);
+                setComments((prev) => [...(prev), ...(response.comments as HumspotCommentResponse[])]);
+              } else {
+                setPageNum(-1);
+              }
+              ev.target.complete();
+            }}
+          >
+            <IonInfiniteScrollContent></IonInfiniteScrollContent>
+          </IonInfiniteScroll>
+        }
+
+        <div style={{ height: "15vh" }} />
 
       </IonContent>
-    </IonPage>
+    </IonPage >
   );
 }
 

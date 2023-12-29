@@ -1,9 +1,6 @@
 /**
  * AWS lambda function to retrieve an Activity's (event or attraction) comments from the database given the page number.
  * Each page pulls 10 comments at a time.
- * 
- * @todo THIS FUNCTION IS NOT IMPLEMENTED YET, SQL QUERY IS TBD!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * .!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
 import { Context, APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
@@ -25,8 +22,8 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   context.callbackWaitsForEmptyEventLoop = false;
   const conn = await pool.getConnection();
   try {
-    const page = event.pathParameters && event.pathParameters["page"];
-    const activityID = event.pathParameters && event.pathParameters["activityID"];
+    const page: string = event.pathParameters && event.pathParameters["page"];
+    const activityID: string = event.pathParameters && event.pathParameters["activityID"];
 
     if (!page || !activityID) {
       return {
@@ -38,7 +35,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     const pageNum: number = Number(page);
     const offset: number = (pageNum - 1) * 10;
 
-    if (isNaN(pageNum) || pageNum < 1 || !activityID) {
+    if (isNaN(pageNum) || pageNum < 1 || !activityID || offset < 0) {
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
@@ -46,16 +43,22 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       };
     }
 
-    const query: string = `
-      
+    const queryComments: string = `
+      SELECT Comments.*, Users.username, Users.profilePicURL 
+      FROM Comments 
+      JOIN Users ON Comments.userID = Users.userID 
+      WHERE Comments.activityID = ?
+      ORDER BY Comments.commentDate DESC
+      LIMIT 10 
+      OFFSET ?;
     `;
 
-    const [rows] = await conn.query(query, [activityID, offset]);
+    const [commentRows] = await conn.execute(queryComments, [activityID as string, offset.toString()]);
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: "Success", comments: rows }),
+      body: JSON.stringify({ message: "Success", comments: commentRows, success: true }),
     };
 
   } catch (error) {
@@ -63,7 +66,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'Internal Server Error, query execution error' }),
+      body: JSON.stringify({ message: 'Internal Server Error, query execution error', success: false }),
     };
   } finally {
     if (conn) {
@@ -71,4 +74,3 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
   }
 };
-
