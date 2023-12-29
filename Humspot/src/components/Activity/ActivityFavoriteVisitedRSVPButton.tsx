@@ -3,7 +3,7 @@ import { useContext } from "../../utils/hooks/useContext";
 import { handleAddToFavorites, handleAddToRSVP, handleAddToVisited, handleGetFavoritesAndVisitedAndRSVPStatus } from "../../utils/server";
 import { useToast } from "@agney/ir-toast";
 import { IonButton, IonIcon } from "@ionic/react";
-import { calendar, calendarOutline, heart, heartOutline, star, starOutline, walk, walkOutline } from "ionicons/icons";
+import { calendar, calendarOutline, heart, heartOutline, walk, walkOutline } from "ionicons/icons";
 
 
 const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'event' | 'attraction' | 'custom' | undefined }) => {
@@ -27,14 +27,14 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setFavorited(true);
-      const t = Toast.create({ message: "Added to favorites!", duration: 2000, color: "secondary" });
+      const t = Toast.create({ message: "Added to favorites!", position: 'top', duration: 2000, color: "secondary" });
       t.present();
     } else if (res && res.removed) {
       setFavorited(false);
-      const t = Toast.create({ message: "Removed from favorites", duration: 2000, color: "dark" });
+      const t = Toast.create({ message: "Removed from favorites", position: 'top', duration: 2000, color: "dark" });
       t.present();
     } else {
-      const t = Toast.create({ message: "Something went wrong...", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Something went wrong...", position: 'top', duration: 2000, color: "danger" });
       t.present();
     }
   }
@@ -49,14 +49,14 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setVisited(true);
-      const t = Toast.create({ message: "Added to visited!", duration: 2000, color: "secondary" });
+      const t = Toast.create({ message: "Added to visited!", position: 'top', duration: 2000, color: "secondary" });
       t.present();
     } else if (res && res.removed) {
       setVisited(false);
-      const t = Toast.create({ message: "Removed from visited", duration: 2000, color: "dark" });
+      const t = Toast.create({ message: "Removed from visited", position: 'top', duration: 2000, color: "dark" });
       t.present();
     } else {
-      const t = Toast.create({ message: "Something went wrong...", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Something went wrong...", position: 'top', duration: 2000, color: "danger" });
       t.present();
     }
   }
@@ -71,14 +71,14 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setRsvp(true);
-      const t = Toast.create({ message: "RSVP'd for event!", duration: 2000, color: "secondary" });
+      const t = Toast.create({ message: "RSVP'd for event!", position: 'top', duration: 2000, color: "secondary" });
       t.present();
     } else if (res && res.removed) {
       setRsvp(false);
-      const t = Toast.create({ message: "Removed RSVP from event.", duration: 2000, color: "dark" });
+      const t = Toast.create({ message: "Removed RSVP from event.", position: 'top', duration: 2000, color: "dark" });
       t.present();
     } else {
-      const t = Toast.create({ message: "Something went wrong...", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Something went wrong...", position: 'top', duration: 2000, color: "danger" });
       t.present();
     }
   }

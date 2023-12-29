@@ -1589,6 +1589,7 @@ export const handleApproveActivitySubmission = async (adminUserID: string, info:
  * @returns {Promise<{ message: string; comments?: HumspotCommentResponse[], success: boolean }>} an array of comments
  */
 export const handleGetCommentsGivenActivityID = async (activityID: string, pageNum: number): Promise<{ message: string; comments?: HumspotCommentResponse[], success: boolean }> => {
+  if (!activityID || pageNum < 1) return { message: "No more comments to load", success: true, comments: [] };
   try {
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_COMMENTS_GIVEN_ACTIVITYID_URL + "/" + activityID + "/" + pageNum,

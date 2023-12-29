@@ -231,7 +231,7 @@ body.dark {
 }
 
 .ios body {
-  --ion-background-color: #fafafa;
+  --ion-background-color: #f5fff7;
   --ion-background-color-rgb: 250, 250, 250;
 
   --ion-text-color: #000000;
@@ -257,12 +257,12 @@ body.dark {
   --ion-color-step-900: #191919;
   --ion-color-step-950: #0d0d0d;
 
-  --ion-toolbar-background: #f2f1f1;
+  --ion-toolbar-background: #edf2ed;
 
-  --ion-item-background: #f2f1f1;
-  --ion-tab-bar-background: #f2f1f1;
+  --ion-item-background: #edf2ed;
+  --ion-tab-bar-background: #edf2ed;
 
-  --ion-card-background: #f2f1f1;
+  --ion-card-background: #edf2ed;
 }
 
 .ios ion-modal {

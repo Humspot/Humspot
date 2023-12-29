@@ -82,7 +82,8 @@ h1 {
 .activity-comment-textarea {
   height: 125px;
   width: 100vw;
-  border-radius: 10px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
   background-color: var(--ion-background-color);
-  transition: bottom 0.35s, opacity 500ms ease-in-out;
+  transition: bottom 0.35s, opacity 300ms ease-in-out, border-radius 0.5s ease;
 }

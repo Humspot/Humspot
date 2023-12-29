@@ -104,22 +104,18 @@ const Activity = () => {
           <ActivityCommentsList comments={comments} />
         }
 
-        {pageNum > 0 &&
-          <IonInfiniteScroll
-            onIonInfinite={async (ev) => {
-              const response = await handleGetCommentsGivenActivityID(id, pageNum);
-              if (response.success && response.comments && response.comments.length > 0) {
-                setPageNum((prev) => prev + 1);
-                setComments((prev) => [...(prev), ...(response.comments as HumspotCommentResponse[])]);
-              } else {
-                setPageNum(-1);
-              }
-              ev.target.complete();
-            }}
-          >
-            <IonInfiniteScrollContent></IonInfiniteScrollContent>
-          </IonInfiniteScroll>
-        }
+        <IonInfiniteScroll
+          onIonInfinite={async (ev) => {
+            const response = await handleGetCommentsGivenActivityID(id, pageNum);
+            if (response.success && response.comments && response.comments.length > 0) {
+              setPageNum((prev) => prev + 1);
+              setComments((prev) => [...(prev), ...(response.comments as HumspotCommentResponse[])]);
+            }
+            ev.target.complete();
+          }}
+        >
+          <IonInfiniteScrollContent></IonInfiniteScrollContent>
+        </IonInfiniteScroll>
 
         <div style={{ height: "15vh" }} />
 

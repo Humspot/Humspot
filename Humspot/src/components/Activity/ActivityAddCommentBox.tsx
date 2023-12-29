@@ -11,11 +11,28 @@ import { timeout } from "../../utils/functions/timeout";
 
 const resizeOptions: KeyboardResizeOptions = {
   mode: KeyboardResize.None,
-}
+};
 
 const defaultResizeOptions: KeyboardResizeOptions = {
   mode: KeyboardResize.Body,
-}
+};
+
+function getBorderRadius(): string {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const hasTallScreen = window.screen.height / window.screen.width > 2 || window.screen.width / window.screen.height > 2;
+
+  const hasSafeAreaInset = () => {
+    const div = document.createElement('div');
+    div.style.paddingTop = 'constant(safe-area-inset-top)';
+    div.style.paddingTop = 'env(safe-area-inset-top)';
+    document.body.appendChild(div);
+    const calculatedPadding = getComputedStyle(div).paddingTop;
+    document.body.removeChild(div);
+    return parseFloat(calculatedPadding) > 0;
+  };
+
+  return (isIOS && hasTallScreen && hasSafeAreaInset()) ? "50px" : "10px";
+};
 
 const ActivityAddCommentBox = (props: { id: string, activityName: string; setComments: React.Dispatch<React.SetStateAction<any[]>>; }) => {
 
@@ -27,9 +44,11 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   const [photo, setPhoto] = useState<string | undefined>(undefined);
   const [blob, setBlob] = useState<Blob | null>(null);
 
-  const [kbHeight, setKbHeight] = useState<number>(0);
+  const [kbHeight, setKbHeight] = useState<number>(1);
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
+
+  const [borderRadius, setBorderRadius] = useState<string>(getBorderRadius());
 
   const scrollToElement = (elementId: string) => {
     const element = document.getElementById(elementId);
@@ -113,13 +132,15 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       setIsVisible(true);
     })
     Keyboard.addListener('keyboardWillShow', info => {
+      setBorderRadius("0px");
       Keyboard.setResizeMode(resizeOptions);
       setKbHeight(info.keyboardHeight);
     });
 
     Keyboard.addListener('keyboardWillHide', () => {
+      setBorderRadius(getBorderRadius());
       Keyboard.setResizeMode(defaultResizeOptions);
-      setKbHeight(0);
+      setKbHeight(1);
     });
     return () => {
       Keyboard.removeAllListeners();
@@ -129,8 +150,8 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   return (
     <IonFab className='activity-comment-textarea'
       style={context.darkMode ?
-        { opacity: isVisible ? 1 : 0, bottom: `${kbHeight}px`, border: '2px solid #282828' }
-        : { opacity: isVisible ? 1 : 0, bottom: `${kbHeight}px`, border: '2px solid #e6e6e6' }}
+        { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '2px solid #282828' }
+        : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '2px solid #e6e6e6' }}
       slot="fixed"
       vertical="bottom"
       edge
@@ -167,7 +188,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
         style={{
           borderColor: '#eee',
           borderWidth: '1px',
-          borderRadius: '4px',
+          borderRadius: '1px',
           marginBottom: '10px',
           paddingRight: "10px",
           paddingLeft: '10px',
