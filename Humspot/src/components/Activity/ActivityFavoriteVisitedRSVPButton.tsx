@@ -1,9 +1,10 @@
-import { memo, useCallback, useEffect, useState } from "react";
-import { useContext } from "../../utils/hooks/useContext";
-import { handleAddToFavorites, handleAddToRSVP, handleAddToVisited, handleGetFavoritesAndVisitedAndRSVPStatus } from "../../utils/server";
-import { useToast } from "@agney/ir-toast";
-import { IonButton, IonIcon } from "@ionic/react";
-import { calendar, calendarOutline, heart, heartOutline, walk, walkOutline } from "ionicons/icons";
+import { memo, useCallback, useEffect, useState } from 'react';
+import { useContext } from '../../utils/hooks/useContext';
+import { handleAddToFavorites, handleAddToRSVP, handleAddToVisited, handleGetFavoritesAndVisitedAndRSVPStatus } from '../../utils/server';
+import { useToast } from '@agney/ir-toast';
+import { IonButton, IonIcon } from '@ionic/react';
+import { calendar, calendarOutline, heart, heartOutline, shareOutline, walk, walkOutline } from 'ionicons/icons';
+import { Share } from '@capacitor/share';
 
 
 const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'event' | 'attraction' | 'custom' | undefined }) => {
@@ -27,14 +28,14 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setFavorited(true);
-      const t = Toast.create({ message: "Added to favorites!", position: 'top', duration: 2000, color: "secondary" });
+      const t = Toast.create({ message: 'Added to favorites!', position: 'top', duration: 2000, color: 'secondary' });
       t.present();
     } else if (res && res.removed) {
       setFavorited(false);
-      const t = Toast.create({ message: "Removed from favorites", position: 'top', duration: 2000, color: "dark" });
+      const t = Toast.create({ message: 'Removed from favorites', position: 'top', duration: 2000, color: 'dark' });
       t.present();
     } else {
-      const t = Toast.create({ message: "Something went wrong...", position: 'top', duration: 2000, color: "danger" });
+      const t = Toast.create({ message: 'Something went wrong...', position: 'top', duration: 2000, color: 'danger' });
       t.present();
     }
   }
@@ -49,14 +50,14 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setVisited(true);
-      const t = Toast.create({ message: "Added to visited!", position: 'top', duration: 2000, color: "secondary" });
+      const t = Toast.create({ message: 'Added to visited!', position: 'top', duration: 2000, color: 'secondary' });
       t.present();
     } else if (res && res.removed) {
       setVisited(false);
-      const t = Toast.create({ message: "Removed from visited", position: 'top', duration: 2000, color: "dark" });
+      const t = Toast.create({ message: 'Removed from visited', position: 'top', duration: 2000, color: 'dark' });
       t.present();
     } else {
-      const t = Toast.create({ message: "Something went wrong...", position: 'top', duration: 2000, color: "danger" });
+      const t = Toast.create({ message: 'Something went wrong...', position: 'top', duration: 2000, color: 'danger' });
       t.present();
     }
   }
@@ -71,17 +72,26 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setRsvp(true);
-      const t = Toast.create({ message: "RSVP'd for event!", position: 'top', duration: 2000, color: "secondary" });
+      const t = Toast.create({ message: "RSVP'd for event!", position: 'top', duration: 2000, color: 'secondary' });
       t.present();
     } else if (res && res.removed) {
       setRsvp(false);
-      const t = Toast.create({ message: "Removed RSVP from event.", position: 'top', duration: 2000, color: "dark" });
+      const t = Toast.create({ message: 'Removed RSVP from event.', position: 'top', duration: 2000, color: 'dark' });
       t.present();
     } else {
-      const t = Toast.create({ message: "Something went wrong...", position: 'top', duration: 2000, color: "danger" });
+      const t = Toast.create({ message: 'Something went wrong...', position: 'top', duration: 2000, color: 'danger' });
       t.present();
     }
   }
+
+  const handleShare = async () => {
+    const activityTypeUpper: string = activityType ? activityType[0].toUpperCase() + activityType?.slice(1) : 'Activity';
+    await Share.share({
+      "text": `Check out this ${activityTypeUpper} on Humspot!`,
+      "title": "Check out this ${activityTypeUpper} on Humspot!",
+      "url": "https://humspotapp.com" + window.location.pathname
+    });
+  };
 
   const getButtonStatus = useCallback(async () => {
     if (!context.humspotUser || !id) return;
@@ -96,50 +106,57 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   }, [getButtonStatus])
 
   return (
-    <div style={{ zIndex: "1000" }}>
+    <div style={{ zIndex: '1000' }}>
 
       <IonButton
-        className="FavoritesButton"
-        fill="clear"
-        color={"secondary"}
-        size="large"
-        id="FavoritesButton"
+        className=''
+        fill='clear'
+        color='secondary'
+        size='large'
+        onClick={handleShare}
+      >
+        <IonIcon style={{ transform: 'scale(1.1)' }} icon={shareOutline} />
+      </IonButton>
+
+      <IonButton
+        className='FavoritesButton'
+        fill='clear'
+        color={'secondary'}
+        size='large'
         onClick={clickOnFavorite}
         disabled={favorited === null}
       >
         <IonIcon
-          slot="icon-only"
+          slot='icon-only'
           icon={favorited === true ? heart : heartOutline}
         />
       </IonButton>
 
-      {activityType == "event" ?
+      {activityType == 'event' ?
         <IonButton
-          className="VisitedButton"
-          fill="clear"
-          color={"secondary"}
-          size="large"
-          id="RSVPButton"
+          className='VisitedButton'
+          fill='clear'
+          color={'secondary'}
+          size='large'
           disabled={rsvp === null}
           onClick={clickOnRsvp}
         >
           <IonIcon
-            slot="icon-only"
+            slot='icon-only'
             icon={rsvp === true ? calendar : calendarOutline}
           ></IonIcon>
         </IonButton>
         :
-        activityType == "attraction" ?
+        activityType == 'attraction' ?
           <IonButton
-            className="VisitedButton"
-            fill="clear"
-            color={"secondary"}
-            size="large"
-            id="VisitedButton"
+            className='VisitedButton'
+            fill='clear'
+            color={'secondary'}
+            size='large'
             disabled={visited === null}
             onClick={clickOnVisited}
           >
-            <IonIcon slot="icon-only" icon={visited === true ? walk : walkOutline}></IonIcon>
+            <IonIcon slot='icon-only' icon={visited === true ? walk : walkOutline}></IonIcon>
           </IonButton>
           :
           <></>

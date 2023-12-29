@@ -48,6 +48,7 @@ import { useContext } from "./utils/hooks/useContext";
 import { ToastProvider } from "@agney/ir-toast";
 import MoreResults from "./pages/MoreResults";
 import ContactUs from "./pages/ContactUs";
+import AppUrlRouter from "./AppUrlRouter";
 
 var names: string[] = ['Hi', 'John', 'Hello'];
 names.sort();
@@ -69,6 +70,9 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <ToastProvider>
+
+      <AppUrlRouter></AppUrlRouter>
+
         <IonReactRouter>
           <IonTabs className={context.showTabs ? 'tab-bar-visible' : 'tab-bar-hidden'}>
             <IonRouterOutlet>
