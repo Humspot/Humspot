@@ -161,7 +161,7 @@ export const EventForm = () => {
     if (!tag) return;
     for (let i = 0; i < visibleTags.length; i++) {
       if (visibleTags[i].toLowerCase().trim() === tag.toLowerCase().trim()) {
-        const t = Toast.create({ message: `${tag} already in list!`, duration: 2000, color: 'danger' });
+        const t = Toast.create({ message: `${tag} already in list!`, position: 'bottom', duration: 2000, color: 'danger' });
         t.present();
         return;
       }
@@ -175,7 +175,7 @@ export const EventForm = () => {
 
   const getLatLong = async (address: string): Promise<{ latitude: number; longitude: number; } | undefined> => {
     if (address.length <= 0) {
-      const t = Toast.create({ message: 'Please provide a location', duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: 'Please provide a location', position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
       throw new Error("No Address found!")
     };
@@ -215,14 +215,14 @@ export const EventForm = () => {
       const image = images.photos[i];
       console.log(image);
       if (!image.webPath) {
-        const toast = Toast.create({ message: 'Something went wrong with one or more of the photos', duration: 2000, color: 'danger' });
+        const toast = Toast.create({ message: 'Something went wrong with one or more of the photos', position: 'bottom', duration: 2000, color: 'danger' });
         toast.present();
       }
       const res = await fetch(image.webPath!);
       const blobRes = await res.blob();
       if (blobRes) {
         if (blobRes.size > 15_000_000) { // 15 MB
-          const toast = Toast.create({ message: 'Image ' + (i + 1) + ' too large', duration: 2000, color: 'danger' });
+          const toast = Toast.create({ message: 'Image ' + (i + 1) + ' too large', position: 'bottom', duration: 2000, color: 'danger' });
           toast.present();
         } else {
           blobArr.push(blobRes);
@@ -238,7 +238,7 @@ export const EventForm = () => {
   const handleSubmit = async () => {
     if (!context.humspotUser || !context.humspotUser.userID) return;
     if (!isFormValid()) {
-      const t = Toast.create({ message: 'Please fill out all input fields!', duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: 'Please fill out all input fields!', position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
       return;
     }
@@ -249,7 +249,7 @@ export const EventForm = () => {
     if (blobs) {
       const res = await handleUploadSubmissionImages(blobs, 'event-photos');
       if (!res.success) {
-        const t = Toast.create({ message: "Photos failed to upload, reload the page to try again", duration: 2000, color: 'danger' });
+        const t = Toast.create({ message: "Photos failed to upload, reload the page to try again", position: 'bottom', duration: 2000, color: 'danger' });
         t.present();
       } else {
         uploadedPhotoUrls = res.photoUrls;
@@ -279,7 +279,7 @@ export const EventForm = () => {
     if (response.success) {
       color = "success";
     }
-    const t = Toast.create({ message: response.message, duration: 2000, color: color });
+    const t = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: color });
     t.present();
 
     dismiss();
@@ -290,10 +290,10 @@ export const EventForm = () => {
     setAddressValidating(true);
     let latLong = await getLatLong(locationRef.current.value as string);
     if (!latLong) {
-      const t = Toast.create({ message: 'Address not found, place pin on map', duration: 2000, color: 'warning' });
+      const t = Toast.create({ message: 'Address not found, place pin on map', position: 'bottom', duration: 2000, color: 'warning' });
       t.present();
     } else {
-      const t = Toast.create({ message: 'Address found, validate location on map', duration: 2000, color: 'success' });
+      const t = Toast.create({ message: 'Address found, validate location on map', position: 'bottom', duration: 2000, color: 'success' });
       t.present();
       setCenter([latLong.latitude, latLong.longitude]);
       setMapPinLatLong([latLong.latitude, latLong.longitude]);
@@ -413,7 +413,7 @@ export const EventForm = () => {
                       text: 'Add',
                       handler: (data) => {
                         if (data.tag.length > 50) {
-                          const t = Toast.create({ message: "Custom tag must not exceed 50 characters", duration: 3000, color: "danger" });
+                          const t = Toast.create({ message: "Custom tag must not exceed 50 characters", position: 'bottom', duration: 3000, color: "danger" });
                           t.present();
                           return;
                         }

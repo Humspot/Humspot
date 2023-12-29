@@ -53,11 +53,11 @@ const SignUp: React.FC = () => {
       passwordRef.current?.value as string ?? '',
     );
     if (success) { // route to verify page, on success email is sent with code
-      const t = Toast.create({ message: 'Success! Check your email for a verification code.', duration: 2000, color: 'success' });
+      const t = Toast.create({ message: 'Success! Check your email for a verification code', position: 'bottom', duration: 2000, color: 'success' });
       t.present();
       dynamicNavigate(router, '/verify-email/' + encodeURIComponent(emailRef.current?.value as string) + '/sign-up-verify', 'root')
     } else {
-      const t = Toast.create({ message: 'Something went wrong!', duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: 'Something went wrong!', position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
     }
     await dismiss();

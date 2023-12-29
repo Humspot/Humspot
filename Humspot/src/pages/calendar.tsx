@@ -37,6 +37,7 @@ function CalendarPage() {
     if (!response.success) {
       const toast = Toast.create({
         message: response.message,
+        position: 'bottom',
         duration: 2000,
         color: "danger",
       });
@@ -62,6 +63,7 @@ function CalendarPage() {
     if (!response.success) {
       const toast = Toast.create({
         message: response.message,
+        position: 'bottom',
         duration: 2000,
         color: "danger",
       });
@@ -86,6 +88,7 @@ function CalendarPage() {
     if (!response.success) {
       const toast = Toast.create({
         message: response.message,
+        position: 'bottom',
         duration: 2000,
         color: "danger",
       });

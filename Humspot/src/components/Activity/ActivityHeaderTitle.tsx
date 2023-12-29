@@ -37,10 +37,10 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
     setRatingLoading(true);
     const res = await handleAddRating(context.humspotUser.userID, props.id, newUserRating);
     if (res.success) {
-      const t = Toast.create({ message: 'Rating added!', duration: 2000, color: 'secondary' });
+      const t = Toast.create({ message: 'Rating added!', position: 'top', duration: 2000, color: 'secondary' });
       t.present();
     } else {
-      const t = Toast.create({ message: 'Something went wrong', duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: 'Something went wrong', position: 'top', duration: 2000, color: 'danger' });
       t.present();
     }
     setOriginalUserRating(newUserRating);
@@ -55,7 +55,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
       setOriginalUserRating(res.ratingInfo?.rating ?? 0);
       setRatingLoading(false);
     } else {
-      const t = Toast.create({ message: 'Unable to get user rating, unable to rate at this time', color: 'danger', duration: 2000 });
+      const t = Toast.create({ message: 'Unable to get user rating, unable to rate at this time', position: 'top', color: 'danger', duration: 2000 });
       t.present();
     }
     setRatingLoading(false);

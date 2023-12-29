@@ -31,7 +31,7 @@ const BecomeACoordinator: React.FC = () => {
   const handleSubmitRequest = async () => {
     if (!context.humspotUser) return;
     if (!isFormValid()) {
-      const t = Toast.create({ message: "Please enter a name and an email", duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: "Please enter a name and an email", position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
       return;
     }

@@ -37,11 +37,11 @@ const AdminApproveActivitySubmission = () => {
     setIsSubmitting(true);
     const res = await handleApproveActivitySubmission(context.humspotUser.userID, submissionInfo, descRef?.current?.value ?? '');
     if (res.success) {
-      const t = Toast.create({ message: "Activity approved!", duration: 2000, color: "secondary" });
+      const t = Toast.create({ message: "Activity approved!", position: 'bottom', duration: 2000, color: "secondary" });
       t.present();
       router.goBack();
     } else {
-      const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
     }
   };

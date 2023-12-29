@@ -52,10 +52,10 @@ const VerifyEmail = () => {
     await present({ message: "Updating password..." });
     const res: boolean = await handleResetPassword(decodedEmail, codeRef.current?.value as string ?? '', passwordRef.current?.value as string ?? '');
     if (!res) {
-      const t = Toast.create({ message: "Incorrect code!", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Incorrect code!", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
     } else {
-      const t = Toast.create({ message: "Success! Redirecting to sign in...", duration: 2000, color: "success" });
+      const t = Toast.create({ message: "Success! Redirecting to sign in...", position: 'bottom', duration: 2000, color: "success" });
       t.present();
       dynamicNavigate(router, '/sign-in', 'root');
     }
@@ -67,10 +67,10 @@ const VerifyEmail = () => {
     await present({ message: "Verifying..." });
     const res: boolean = await confirmSignUp(decodedEmail, codeRef.current?.value as string ?? '');
     if (!res) {
-      const t = Toast.create({ message: "Incorrect code!", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Incorrect code!", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
     } else {
-      const t = Toast.create({ message: "Success! Redirecting to sign in...", duration: 2000, color: "success" });
+      const t = Toast.create({ message: "Success! Redirecting to sign in...", position: 'bottom', duration: 2000, color: "success" });
       t.present();
       dynamicNavigate(router, '/sign-in', 'root');
     }

@@ -58,7 +58,7 @@ const SignIn = () => {
       passwordRef.current?.value as string ?? '',
     );
     if (!success) {
-      const t = Toast.create({ message: 'Something went wrong!', duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: 'Something went wrong!', position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
     } else {
       dynamicNavigate(router, '/profile', 'root');

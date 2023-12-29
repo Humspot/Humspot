@@ -50,7 +50,7 @@ const MoreResults = () => {
   const handleGetFilteredActivities = useCallback(async () => {
     if (!tagName) {
       setFilterPageNum(2);
-      const t = Toast.create({ message: "No events for " + tagName, duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "No events for " + tagName, position: 'bottom', duration: 2000, color: "danger" });
       t.present();
       return;
     }

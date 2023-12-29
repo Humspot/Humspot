@@ -33,10 +33,10 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
     if (res.success) {
       const updatedOrganizers = props.organizers.filter((_, index) => index !== organizerInfo.index);
       props.setOrganizers(updatedOrganizers);
-      const t = Toast.create({ message: "You've denied this user's request.", duration: 2000, color: "secondary" });
+      const t = Toast.create({ message: "You've denied this user's request", position: 'bottom', duration: 2000, color: "secondary" });
       t.present();
     } else {
-      const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
     }
     setLoading(false);
@@ -50,10 +50,10 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
     if (res.success) {
       const updatedOrganizers = props.organizers.filter((_, index) => index !== organizerInfo.index);
       props.setOrganizers(updatedOrganizers);
-      const t = Toast.create({ message: "Approved!", duration: 2000, color: "secondary" });
+      const t = Toast.create({ message: "Approved!", position: 'bottom', duration: 2000, color: "secondary" });
       t.present();
     } else {
-      const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
     }
     setLoading(false);

@@ -236,6 +236,7 @@ const SubmitAttractionPage = () => {
     if (address.length <= 0) {
       const t = Toast.create({
         message: "Please provide a location",
+        position: 'bottom',
         duration: 2000,
         color: "danger",
       });
@@ -285,6 +286,7 @@ const SubmitAttractionPage = () => {
       if (!image.webPath) {
         const toast = Toast.create({
           message: "Something went wrong with one or more of the photos",
+          position: 'bottom',
           duration: 2000,
           color: "danger",
         });
@@ -297,6 +299,7 @@ const SubmitAttractionPage = () => {
           // 15 MB
           const toast = Toast.create({
             message: "Image " + (i + 1) + " too large",
+            position: 'bottom',
             duration: 2000,
             color: "danger",
           });
@@ -317,6 +320,7 @@ const SubmitAttractionPage = () => {
     if (!isFormValid()) {
       const t = Toast.create({
         message: "Please fill out all input fields!",
+        position: 'bottom',
         duration: 2000,
         color: "danger",
       });
@@ -332,6 +336,7 @@ const SubmitAttractionPage = () => {
       if (!res.success) {
         const t = Toast.create({
           message: "Photos failed to upload, reload the page to try again",
+          position: 'bottom',
           duration: 2000,
           color: "danger",
         });
@@ -364,6 +369,7 @@ const SubmitAttractionPage = () => {
     }
     const t = Toast.create({
       message: response.message,
+      position: 'bottom',
       duration: 2000,
       color: color,
     });
@@ -380,6 +386,7 @@ const SubmitAttractionPage = () => {
     if (!latLong) {
       const t = Toast.create({
         message: "Address not found, place pin on map",
+        position: 'bottom',
         duration: 2000,
         color: "warning",
       });
@@ -387,6 +394,7 @@ const SubmitAttractionPage = () => {
     } else {
       const t = Toast.create({
         message: "Address found, validate location on map",
+        position: 'bottom',
         duration: 2000,
         color: "success",
       });
@@ -619,7 +627,7 @@ const SubmitAttractionPage = () => {
                     text: 'Add',
                     handler: (data) => {
                       if (data.tag.length > 50) {
-                        const t = Toast.create({ message: "Custom tag must not exceed 50 characters", duration: 3000, color: "danger" });
+                        const t = Toast.create({ message: "Custom tag must not exceed 50 characters", position: 'bottom', duration: 3000, color: "danger" });
                         t.present();
                         return;
                       }

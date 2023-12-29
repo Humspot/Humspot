@@ -67,7 +67,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
 
     if (!image) return;
     if (!image.webPath) {
-      const toast = Toast.create({ message: 'Something went wrong', duration: 2000, color: 'danger' });
+      const toast = Toast.create({ message: 'Something went wrong', position: 'top', duration: 2000, color: 'danger' });
       toast.present();
     }
 
@@ -75,7 +75,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     const blobRes = await res.blob();
     if (blobRes) {
       if (blobRes.size > 15_000_000) { // 15 MB
-        const toast = Toast.create({ message: 'Image too large', duration: 2000, color: 'danger' });
+        const toast = Toast.create({ message: 'Image too large', position: 'top', duration: 2000, color: 'danger' });
         toast.present();
         dismiss();
       } else {
@@ -105,7 +105,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     };
     const res = await handleAddComment(humspotComment, blob, props.activityName);
     if (res.success) {
-      const t = Toast.create({ message: "Comment added", duration: 2000, color: 'success' });
+      const t = Toast.create({ message: "Comment added", position: 'top', duration: 2000, color: 'success' });
       t.present();
       const addToCommentsArray = {
         commentText: commentRef.current.value as string,
@@ -121,7 +121,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       commentRef.current.value = null;
       setPhoto(undefined);
     } else {
-      const t = Toast.create({ message: "Something went wrong!", duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: "Something went wrong!", position: 'top', duration: 2000, color: 'danger' });
       t.present();
     }
     await dismiss();

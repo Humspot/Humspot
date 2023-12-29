@@ -47,7 +47,7 @@ const ProfileSegments: React.FC = memo(() => {
     if (!context.humspotUser) return;
     const response = await handleGetFavoritesGivenUserID(1, context.humspotUser.userID);
     if (!response.success) {
-      const toast = Toast.create({ message: response.message, duration: 2000, color: 'danger' });
+      const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
     }
     setFavorites(response.favorites);
@@ -62,7 +62,7 @@ const ProfileSegments: React.FC = memo(() => {
     if (!context.humspotUser) return;
     const response = await handleGetVisitedGivenUserID(1, context.humspotUser.userID);
     if (!response.success) {
-      const toast = Toast.create({ message: response.message, duration: 2000, color: 'danger' });
+      const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
     }
     setVisited(response.visited);
@@ -77,7 +77,7 @@ const ProfileSegments: React.FC = memo(() => {
     if (!context.humspotUser) return;
     const response = await handleGetInteractionsGivenUserID(1, context.humspotUser.userID);
     if (!response.success) {
-      const toast = Toast.create({ message: response.message, duration: 2000, color: 'danger' });
+      const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
     }
     setInteractions(response.interactions);
@@ -176,7 +176,7 @@ const ProfileSegments: React.FC = memo(() => {
                     if (!context.humspotUser) return;
                     const response = await handleGetFavoritesGivenUserID(favoritesPageCount, context.humspotUser.userID);
                     if (!response.success) {
-                      const toast = Toast.create({ message: response.message, duration: 2000, color: 'danger' });
+                      const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
                       toast.present();
                     } else {
                       setFavoritesPageCount((prev) => prev + 1);
@@ -225,7 +225,7 @@ const ProfileSegments: React.FC = memo(() => {
                     if (!context.humspotUser) return;
                     const response = await handleGetVisitedGivenUserID(visitedPageCount, context.humspotUser.userID);
                     if (!response.success) {
-                      const toast = Toast.create({ message: response.message, duration: 2000, color: 'danger' });
+                      const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
                       toast.present();
                     } else {
                       setVisitedPageCount((prev) => prev + 1);
@@ -278,7 +278,7 @@ const ProfileSegments: React.FC = memo(() => {
                     if (!context.humspotUser) return;
                     const response = await handleGetInteractionsGivenUserID(interactionsPageCount, context.humspotUser.userID);
                     if (!response.success) {
-                      const toast = Toast.create({ message: response.message, duration: 2000, color: 'danger' });
+                      const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
                       toast.present();
                     } else {
                       setInteractionsPageCount((prev) => prev + 1);

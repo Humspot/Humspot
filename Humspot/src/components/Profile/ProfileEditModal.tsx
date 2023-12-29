@@ -42,7 +42,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
 
   const clickUpdateProfilePhoto = async () => {
     if (!context.humspotUser) {
-      const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
       return;
     }
@@ -56,7 +56,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
 
     if (!image) return;
     if (!image.webPath) {
-      const toast = Toast.create({ message: 'Something went wrong', duration: 2000, color: 'danger' });
+      const toast = Toast.create({ message: 'Something went wrong', position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
       return;
     }
@@ -64,19 +64,19 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
     const blobRes = await path.blob();
     if (blobRes) {
       if (blobRes.size > 15_000_000) { // 15 MB
-        const toast = Toast.create({ message: 'Image too large', duration: 2000, color: 'danger' });
+        const toast = Toast.create({ message: 'Image too large', position: 'bottom', duration: 2000, color: 'danger' });
         toast.present();
         return;
       } else {
         const res = await handleAddProfileImageToS3(context.humspotUser.userID, blobRes);
         const added = await handleUpdateProfilePhoto(context.humspotUser.userID, res.photoUrl);
         if (!added.success) {
-          const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
+          const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
           t.present();
         }
         let tempUser = { ...context.humspotUser, profilePicURL: `${res.photoUrl}?${uniqueString}` };
         context.setHumspotUser(tempUser);
-        const t = Toast.create({ message: "File uploaded successfully", duration: 2000, color: "success" });
+        const t = Toast.create({ message: "File uploaded successfully", position: 'bottom', duration: 2000, color: "success" });
         t.present();
       }
     }
@@ -85,18 +85,18 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
 
   const clickUpdateProfile = async () => {
     if (!context.humspotUser || !usernameRef.current || !bioRef.current) {
-      const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
       return;
     }
     if (!usernameRef.current.value || usernameRef.current.value.toString().trim().length <= 0) {
-      const t = Toast.create({ message: "Username cannot be empty!", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Username cannot be empty!", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
       return;
     }
     if (usernameRef.current.value === context.humspotUser.username
       && bioRef.current.value === context.humspotUser.bio) {
-      const t = Toast.create({ message: "Nothing to update", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Nothing to update", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
       return;
     }
@@ -105,11 +105,11 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
     if (res.success) {
       let tempUser = { ...context.humspotUser, username: (usernameRef.current.value as string).replace(/\s/g, ""), bio: bioRef.current.value as string };
       context.setHumspotUser(tempUser);
-      const t = Toast.create({ message: "Updated profile successfully", duration: 2000, color: "success" });
+      const t = Toast.create({ message: "Updated profile successfully", position: 'bottom', duration: 2000, color: "success" });
       t.present();
       modalRef.current && modalRef.current.dismiss();
     } else {
-      const t = Toast.create({ message: "Something went wrong", duration: 2000, color: "danger" });
+      const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
     }
     dismiss();

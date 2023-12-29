@@ -51,6 +51,7 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
       Toast.create({
         message: "Invalid date selection. Dates must be within two weeks and correctly ordered.",
         duration: 3000,
+        position: 'bottom',
         color: 'danger'
       }).present();
     }
