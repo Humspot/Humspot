@@ -46,7 +46,6 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
       t.present();
       return;
     }
-    present({ message: "Loading..." });
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
@@ -60,6 +59,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
       toast.present();
       return;
     }
+    present({ message: "Loading..." });
     const path = await fetch(image.webPath!);
     const blobRes = await path.blob();
     if (blobRes) {

@@ -11,15 +11,19 @@ import placeholder from "../../assets/images/placeholder.jpeg"
 
 import "swiper/css/autoplay";
 import './Activity.css';
+import IonPhotoViewer from "@codesyntax/ionic-react-photo-viewer";
 
 type ActivityHeaderProps = {
-  activityLoading: boolean;
   photoUrls: string;
+  activityType: string;
+  activityLoading: boolean;
 };
 
 const ActivityHeader = (props: ActivityHeaderProps) => {
 
   const photoUrls: string = props.photoUrls || '';
+  const activityType: string = props.activityType || 'Activity';
+  const activityTypeUpper = activityType[0].toUpperCase() + activityType.slice(1);
   const activityLoading: boolean = props.activityLoading || false;
 
   return (
@@ -34,11 +38,16 @@ const ActivityHeader = (props: ActivityHeaderProps) => {
             photoUrls?.split(",").map((url: any, index: any) => (
               <SwiperSlide key={index} >
                 <IonCard className='ion-no-padding ion-no-margin' style={{ width: "97.5vw", marginRight: "5px", marginLeft: "5px" }}>
-                  <img
-                    alt="Attraction Image"
-                    src={url || ''}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
+                  <IonPhotoViewer
+                    title={`${activityTypeUpper} Image`}
+                    src={url}
+                  >
+                    <img
+                      alt="Attraction Image"
+                      src={url || ''}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </IonPhotoViewer>
                 </IonCard>
               </SwiperSlide>
             ))

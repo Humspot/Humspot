@@ -83,7 +83,7 @@ const Activity = () => {
           <GoBackHeader title={''} />
         }
 
-        <ActivityHeader activityLoading={activityLoading} photoUrls={activity?.photoUrls || ''} />
+        <ActivityHeader activityType={activity?.activityType ?? ''} activityLoading={activityLoading} photoUrls={activity?.photoUrls || ''} />
 
         <ActivityHeaderTitle page={page.current} id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name} />
 
@@ -103,6 +103,7 @@ const Activity = () => {
 
         {comments && comments.length > 0 &&
           <>
+            <div id='top-of-comments-list'></div>
             <br />
             <ActivityCommentsList comments={comments} />
           </>

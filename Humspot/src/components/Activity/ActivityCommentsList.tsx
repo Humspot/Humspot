@@ -1,5 +1,4 @@
 import { IonAvatar, IonNote, IonList, IonItem, IonLabel, IonRow, IonFab } from "@ionic/react";
-import { useToast } from "@agney/ir-toast";
 import avatar from "../../assets/images/avatar.svg";
 
 import { HumspotCommentResponse } from "../../utils/types";
@@ -11,8 +10,6 @@ type ActivityCommentsList = {
 }
 
 const ActivityCommentsList = (props: ActivityCommentsList) => {
-
-  const Toast = useToast();
 
   const comments: HumspotCommentResponse[] = props.comments;
   console.log(comments);
@@ -26,10 +23,15 @@ const ActivityCommentsList = (props: ActivityCommentsList) => {
             <IonItem lines="none">
               <IonLabel class="ion-text-wrap">
                 <IonRow>
-                  <IonAvatar class="activity-comment-avatar"
+                  <IonPhotoViewer
+                    title={`${comment.username}'s Avatar`}
+                    src={comment.profilePicURL ?? avatar}
                   >
-                    <img src={comment.profilePicURL ?? avatar} />
-                  </IonAvatar>
+                    <IonAvatar class="activity-comment-avatar"
+                    >
+                      <img src={comment.profilePicURL ?? avatar} />
+                    </IonAvatar>
+                  </IonPhotoViewer>
                   <p className='activity-comment-username'> {comment.username} </p>
                 </IonRow>
                 <div className='activity-comment-text'>
