@@ -118,48 +118,52 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
         <IonIcon style={{ transform: 'scale(1.1)' }} icon={shareOutline} />
       </IonButton>
 
-      <IonButton
-        className='FavoritesButton'
-        fill='clear'
-        color={'secondary'}
-        size='large'
-        onClick={clickOnFavorite}
-        disabled={favorited === null}
-      >
-        <IonIcon
-          slot='icon-only'
-          icon={favorited === true ? heart : heartOutline}
-        />
-      </IonButton>
-
-      {activityType == 'event' ?
-        <IonButton
-          className='VisitedButton'
-          fill='clear'
-          color={'secondary'}
-          size='large'
-          disabled={rsvp === null}
-          onClick={clickOnRsvp}
-        >
-          <IonIcon
-            slot='icon-only'
-            icon={rsvp === true ? calendar : calendarOutline}
-          ></IonIcon>
-        </IonButton>
-        :
-        activityType == 'attraction' ?
+      {context.humspotUser &&
+        <>
           <IonButton
-            className='VisitedButton'
+            className='FavoritesButton'
             fill='clear'
             color={'secondary'}
             size='large'
-            disabled={visited === null}
-            onClick={clickOnVisited}
+            onClick={clickOnFavorite}
+            disabled={favorited === null}
           >
-            <IonIcon slot='icon-only' icon={visited === true ? walk : walkOutline}></IonIcon>
+            <IonIcon
+              slot='icon-only'
+              icon={favorited === true ? heart : heartOutline}
+            />
           </IonButton>
-          :
-          <></>
+
+          {activityType == 'event' ?
+            <IonButton
+              className='VisitedButton'
+              fill='clear'
+              color={'secondary'}
+              size='large'
+              disabled={rsvp === null}
+              onClick={clickOnRsvp}
+            >
+              <IonIcon
+                slot='icon-only'
+                icon={rsvp === true ? calendar : calendarOutline}
+              ></IonIcon>
+            </IonButton>
+            :
+            activityType == 'attraction' ?
+              <IonButton
+                className='VisitedButton'
+                fill='clear'
+                color={'secondary'}
+                size='large'
+                disabled={visited === null}
+                onClick={clickOnVisited}
+              >
+                <IonIcon slot='icon-only' icon={visited === true ? walk : walkOutline}></IonIcon>
+              </IonButton>
+              :
+              <></>
+          }
+        </>
       }
     </div>
   );

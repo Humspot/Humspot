@@ -76,7 +76,7 @@ const Activity = () => {
   return (
     <IonPage ref={page}>
       {hasSwipedIn &&
-        <GoBackHeader title={''} buttons={context.humspotUser && <ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
+        <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
       }
       <IonContent>
         {!hasSwipedIn &&
