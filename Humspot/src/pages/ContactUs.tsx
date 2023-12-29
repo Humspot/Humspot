@@ -11,7 +11,7 @@ const ContactUs = () => {
   }, [])
 
   return (
-    <IonPage className='ion-page-ios-notch'>
+    <IonPage>
 
       <GoBackHeader title="Contact Us" />
 

@@ -44,7 +44,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   const [photo, setPhoto] = useState<string | undefined>(undefined);
   const [blob, setBlob] = useState<Blob | null>(null);
 
-  const [kbHeight, setKbHeight] = useState<number>(1);
+  const [kbHeight, setKbHeight] = useState<number>(0.75);
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
@@ -140,7 +140,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     Keyboard.addListener('keyboardWillHide', () => {
       setBorderRadius(getBorderRadius());
       Keyboard.setResizeMode(defaultResizeOptions);
-      setKbHeight(1);
+      setKbHeight(0.75);
     });
     return () => {
       Keyboard.removeAllListeners();
@@ -208,7 +208,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
         enterkeyhint="send"
         inputMode="text"
         spellcheck={true}
-        maxlength={200}
+        maxlength={500}
       />
 
     </IonFab>

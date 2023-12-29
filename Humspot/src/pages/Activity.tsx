@@ -6,6 +6,7 @@ import {
   IonContent,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonNote,
   IonPage,
   useIonViewDidEnter,
   useIonViewWillEnter,
@@ -101,7 +102,10 @@ const Activity = () => {
         <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'} setComments={setComments} />
 
         {comments && comments.length > 0 &&
-          <ActivityCommentsList comments={comments} />
+          <>
+            <br />
+            <ActivityCommentsList comments={comments} />
+          </>
         }
 
         <IonInfiniteScroll

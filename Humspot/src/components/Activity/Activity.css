@@ -85,5 +85,52 @@ h1 {
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
   background-color: var(--ion-background-color);
-  transition: bottom 0.35s, opacity 300ms ease-in-out, border-radius 0.5s ease;
+  transition: bottom 0.385s, opacity 300ms ease-in-out, border-radius 0.5s ease;
+}
+
+.activity-comment-avatar {
+  border: 1px solid rgb(119, 119, 119);
+  overflow: hidden;
+  zoom: 0.75;
+  margin-top: 10px;
+  margin-right: 12.5px;
+}
+
+.activity-comment-username {
+  padding-top: 17.5px;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-left: 2.5px;
+}
+
+.activity-comment-text {
+  white-space: pre-line;
+  font-weight: 350;
+  padding-top: 2.5%;
+  padding-left: 1%;
+}
+
+.activity-comment-image {
+  background-size: cover;
+  background-position: center;
+  height: 25vh;
+  -webkit-transform: translate3d(0, 0, 1px);
+  -webkit-backface-visibility: hidden;
+  image-rendering: pixelated;
+  background-size: contain;
+  border-radius: 10px;
+}
+
+.activity-comment-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.activity-comment-card {
+  border-radius: 10px;
+
 }
