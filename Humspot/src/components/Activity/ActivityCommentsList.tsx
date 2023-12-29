@@ -1,10 +1,10 @@
 import { IonAvatar, IonNote, IonList, IonItem, IonLabel, IonRow, IonFab } from "@ionic/react";
-import { PhotoViewer as CapacitorPhotoViewer, Image as CapacitorImage } from '@capacitor-community/photoviewer';
 import { useToast } from "@agney/ir-toast";
 import avatar from "../../assets/images/avatar.svg";
 
 import { HumspotCommentResponse } from "../../utils/types";
 import { formatDate } from "../../utils/functions/formatDate";
+import IonPhotoViewer from "@codesyntax/ionic-react-photo-viewer";
 
 type ActivityCommentsList = {
   comments: HumspotCommentResponse[]
@@ -41,25 +41,33 @@ const ActivityCommentsList = (props: ActivityCommentsList) => {
                     <div
                       className="activity-comment-image"
                       style={{ borderRadius: '10px' }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const img: CapacitorImage = {
-                          url: comment.photoUrl ?? '',
-                          title: `${comment.username}'s comment`
-                        };
-                        CapacitorPhotoViewer.show({
-                          options: {
-                            title: true
-                          },
-                          images: [img],
-                          mode: 'one',
-                        }).catch((err) => {
-                          const toast = Toast.create({ message: 'Unable to open image', position: 'top', duration: 2000, color: 'danger' });
-                          toast.present();
-                        });
-                      }}
+                    // onClick={(e) => {
+                    //   e.stopPropagation();
+                    //   if(!comment.photoUrl) return;
+                    //   console.log(encodeURIComponent(comment.photoUrl));
+                    //   const img: CapacitorImage = {
+                    //     url: encodeURIComponent(comment.photoUrl),
+                    //     title: `${comment.username}'s comment`
+                    //   };
+                    //   console.log(img);
+                    //   CapacitorPhotoViewer.show({
+                    //     options: {
+                    //       title: true
+                    //     },
+                    //     images: [img],
+                    //     mode: 'one',
+                    //   }).catch((err) => {
+                    //     const toast = Toast.create({ message: 'Unable to open image', position: 'top', duration: 2000, color: 'danger' });
+                    //     toast.present();
+                    //   });
+                    // }}
                     >
-                      <img src={comment.photoUrl} alt={`comment.username}'s photo`} />
+                      <IonPhotoViewer
+                        title={`${comment.username}'s Photo`}
+                        src={comment.photoUrl}
+                      >
+                        <img src={comment.photoUrl} alt={`${comment.username}'s photo`} />
+                      </IonPhotoViewer>
                     </div>
                   </>
                 }
