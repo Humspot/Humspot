@@ -6,11 +6,12 @@
 import { useCallback, useEffect } from "react"
 import { App, URLOpenListenerEvent } from "@capacitor/app";
 import { useHistory } from "react-router";
+import { useIonRouter } from "@ionic/react";
 
 
 const AppUrlRouter = () => {
 
-  const history = useHistory();
+  const router = useIonRouter();
 
   const checkRoute = useCallback(() => {
     App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
@@ -19,7 +20,13 @@ const AppUrlRouter = () => {
       const path: string | undefined = slug.pop();
       if (path) {
         const decodedPath: string = decodeURIComponent(path);
-        history.push(decodedPath);
+        if (router.routeInfo.pathname !== decodedPath) {
+          router.push(decodedPath);
+        } else {
+          console.log("Already on the same page, no need to push to router.");
+        }
+      } else {
+        console.error("Path is not valid");
       }
     });
   }, []);

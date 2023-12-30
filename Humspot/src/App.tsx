@@ -70,10 +70,10 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <ToastProvider>
-
-      <AppUrlRouter></AppUrlRouter>
-
         <IonReactRouter>
+
+          <AppUrlRouter></AppUrlRouter>
+
           <IonTabs className={context.showTabs ? 'tab-bar-visible' : 'tab-bar-hidden'}>
             <IonRouterOutlet>
               <Route exact path="/" render={() => <Redirect to="/explore" />} />
@@ -87,7 +87,6 @@ const App: React.FC = () => {
               <Route exact path="/forgot-password" component={ForgotPassword} />
               <Route exact path="/terms-and-conditions" component={TermsAndConditions} />
               <Route exact path="/privacy-policy" component={PrivacyPolicy} />
-              <Route exact path="/forgot-password" component={ForgotPassword} />
               <Route exact path="/become-a-coordinator" component={BecomeACoordinator} />
               <Route exact path="/admin-dashboard" component={AdminDashboard} />
               <Route exact path="/admin-dashboard/submission/:id" component={AdminApproveActivitySubmission} />
