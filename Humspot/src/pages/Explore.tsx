@@ -71,7 +71,7 @@ const ExplorePage = () => {
       <IonSearchbar
         ref={searchRef}
         onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)}
-        placeholder="Search for Events" spellcheck={true}
+        placeholder="Search for Activities" spellcheck={true}
         type="search" enterkeyhint="search"
         autocorrect="off" showCancelButton="focus" animated={true}
         onKeyDown={e => handleSearch(e)}

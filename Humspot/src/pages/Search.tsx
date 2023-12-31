@@ -1,7 +1,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { IonButton, IonButtons, IonCard, IonCardTitle,IonContent, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonPage, IonSearchbar, IonSkeletonText, IonText, IonTitle, IonToolbar, useIonRouter } from "@ionic/react";
+import {
+  IonButton, IonButtons, IonCard, IonCardTitle, IonContent, IonHeader, IonIcon,
+  IonInfiniteScroll, IonInfiniteScrollContent, IonPage, IonSearchbar,
+  IonSkeletonText, IonText, IonTitle, IonToolbar, useIonRouter
+} from "@ionic/react";
 import { useParams } from "react-router-dom";
 import { chevronBackOutline, shareOutline } from "ionicons/icons";
 import { Share } from "@capacitor/share";
@@ -77,11 +81,13 @@ const Search = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          {query &&
+            <IonTitle>{query[0].toUpperCase() + query.slice(1)}</IonTitle>
+          }
           <IonButtons>
             <IonButton style={{ fontSize: '1.15em', marginLeft: '-2.5px' }} onClick={() => { router.push('/explore', 'back', 'pop'); }}>
               <IonIcon icon={chevronBackOutline} /> <p>Back</p>
             </IonButton>
-            <IonTitle>Search</IonTitle>
           </IonButtons>
           <IonButtons slot="end">
             <IonButton onClick={handleShare}>
@@ -93,7 +99,7 @@ const Search = () => {
           <IonSearchbar
             ref={searchRef}
             // onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)}
-            placeholder="Search for Events" spellcheck={true}
+            placeholder="Search for Activities" spellcheck={true}
             type="search" enterkeyhint="search"
             autocorrect="off" showCancelButton="focus" animated={true}
             onKeyDown={e => isEnterPressed(e.key)}
