@@ -150,8 +150,8 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   return (
     <IonFab className='activity-comment-textarea'
       style={context.darkMode ?
-        { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '2px solid #282828' }
-        : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '2px solid #e6e6e6' }}
+        { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '2.5px solid #282828' }
+        : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '2.5px solid #e6e6e6' }}
       slot="fixed"
       vertical="bottom"
       edge

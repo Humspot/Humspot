@@ -108,16 +108,6 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   return (
     <div style={{ zIndex: '1000' }}>
 
-      <IonButton
-        className=''
-        fill='clear'
-        color='secondary'
-        size='large'
-        onClick={handleShare}
-      >
-        <IonIcon style={{ transform: 'scale(1.1)' }} icon={shareOutline} />
-      </IonButton>
-
       {context.humspotUser &&
         <>
           <IonButton
@@ -165,6 +155,16 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
           }
         </>
       }
+
+      <IonButton
+        fill='clear'
+        color='secondary'
+        size='large'
+        onClick={handleShare}
+      >
+        <IonIcon style={{ transform: 'scale(1.1)' }} icon={shareOutline} />
+      </IonButton>
+      
     </div>
   );
 

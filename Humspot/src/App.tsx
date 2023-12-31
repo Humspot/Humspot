@@ -50,10 +50,6 @@ import MoreResults from "./pages/MoreResults";
 import ContactUs from "./pages/ContactUs";
 import AppUrlRouter from "./AppUrlRouter";
 
-var names: string[] = ['Hi', 'John', 'Hello'];
-names.sort();
-
-
 setupIonicReact({ mode: "ios" });
 
 SplashScreen.show();
@@ -61,8 +57,8 @@ SplashScreen.show();
 const App: React.FC = () => {
 
   const context = useContext();
-  const auth = useAWSAuth(context);
-  const darkMode = useDarkMode(context);
+  useAWSAuth(context); useDarkMode(context);
+  
   const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context);
 
   const [currentTab, setCurrentTab] = useState("explore");

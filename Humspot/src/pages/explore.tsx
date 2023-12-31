@@ -4,8 +4,8 @@
  * Contains swipers for different kinds of activities, as well as a search bar and a way to filter the activities.
  */
 
-import { useEffect, useRef, useState } from "react";
-import { IonContent, IonItemDivider, IonPage, IonSearchbar, useIonViewDidEnter } from "@ionic/react";
+import { useRef, useState } from "react";
+import { IonContent, IonPage, IonSearchbar, useIonViewDidEnter } from "@ionic/react";
 
 import ExploreFilterButtons from "../components/Explore/ExploreFilterButtons";
 import ExploreCarouselRecentlyViewed from "../components/Explore/ExploreCarouselRecentlyViewed";
@@ -15,8 +15,6 @@ import { useContext } from "../utils/hooks/useContext";
 import useFetchData from "../utils/hooks/useFetchData";
 import { GetHumspotEventResponse } from "../utils/types";
 import { handleGetActivitiesGivenTag, handleGetThisWeeksEvents } from "../utils/server";
-
-import { SplashScreen } from "@capacitor/splash-screen";
 
 import "swiper/css";
 
@@ -53,13 +51,9 @@ const ExplorePage = () => {
     context.setShowTabs(true);
   }, []);
 
-  useEffect(() => {
-    // SplashScreen.hide();
-  }, [])
-
   return (
     <IonPage className='ion-page-ios-notch'>
-      <IonSearchbar placeholder="Search for Events" showCancelButton="focus" animated onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)} />
+      <IonSearchbar disabled={true} placeholder="Search for Events" showCancelButton="focus" animated onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)} />
 
       <IonContent ref={contentRef}>
         <ExploreFilterButtons setShowFilterList={setShowFilterList} />
