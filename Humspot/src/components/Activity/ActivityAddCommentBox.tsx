@@ -44,7 +44,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   const [photo, setPhoto] = useState<string | undefined>(undefined);
   const [blob, setBlob] = useState<Blob | null>(null);
 
-  const [kbHeight, setKbHeight] = useState<number>(0.75);
+  const [kbHeight, setKbHeight] = useState<number>(0.5);
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
@@ -131,27 +131,44 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     timeout(500).then(() => {
       setIsVisible(true);
     })
-    Keyboard.addListener('keyboardWillShow', info => {
+    const keyboardShowListener = Keyboard.addListener('keyboardWillShow', info => {
       setBorderRadius("0px");
       Keyboard.setResizeMode(resizeOptions);
       setKbHeight(info.keyboardHeight);
+
+      const element: Element | null = document.querySelector('.activity-comment-textarea');
+      if (element) {
+        element.classList.remove('hide-keyboard');
+      }
     });
 
-    Keyboard.addListener('keyboardWillHide', () => {
+    const keyboardHideListener = Keyboard.addListener('keyboardWillHide', () => {
       setBorderRadius(getBorderRadius());
       Keyboard.setResizeMode(defaultResizeOptions);
-      setKbHeight(0.75);
+      setKbHeight(0.5);
+
+      const element: Element | null = document.querySelector('.activity-comment-textarea');
+      if (element) {
+        element.classList.add('hide-keyboard');
+      }
     });
+
     return () => {
-      Keyboard.removeAllListeners();
+      const element: Element | null = document.querySelector('.activity-comment-textarea');
+      if (element) {
+        element.classList.remove('hide-keyboard');
+      }
+
+      keyboardShowListener.remove();
+      keyboardHideListener.remove();
     };
   }, []);
 
   return (
     <IonFab className='activity-comment-textarea'
       style={context.darkMode ?
-        { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '2.5px solid #282828' }
-        : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '2.5px solid #e6e6e6' }}
+        { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '3px solid #282828' }
+        : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '3px solid #e6e6e6' }}
       slot="fixed"
       vertical="bottom"
       edge
