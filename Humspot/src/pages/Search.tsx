@@ -10,6 +10,8 @@ import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import placeholder from '../assets/images/school_placeholder.jpeg';
 import { handleGetSearchResults } from "../utils/server";
 import { formatDate } from "../utils/functions/formatDate";
+import { Keyboard } from "@capacitor/keyboard";
+import { timeout } from "../utils/functions/timeout";
 
 type SearchParams = {
   query: string;
@@ -41,16 +43,18 @@ const Search = () => {
 
   const handleShare = async () => {
     await Share.share({
-      text: `Check out these activities on Humspot!`,
-      title: `Check out these activities on Humspot!`,
+      text: "Check out these activities on Humspot!",
+      title: "Check out these activities on Humspot!",
       url: "https://humspotapp.com" + window.location.pathname
     });
   };
 
-  const isEnterPressed = (key: string) => {
+  const isEnterPressed = async (key: string) => {
     if (key === 'Enter' || key === 'search') {
       if (searchRef.current) {
         setLoading(true);
+        await Keyboard.hide();
+        await timeout(300);
         const newQuery: string = searchRef.current.value as string;
         router.push('/search/' + encodeURIComponent(newQuery), 'none');
       }
@@ -155,7 +159,7 @@ const Search = () => {
               :
               !loading ?
                 <div style={{ paddingTop: '25px', paddingBottom: '25px' }}>
-                  <IonTitle className='ion-text-center' style={{ display: 'flex', height: '110%', background: 'var(--ion-background-color)' }}><IonText color='dark'>No Events Matching Filter</IonText></IonTitle>
+                  <IonTitle className='ion-text-center' style={{ display: 'flex', height: '110%', background: 'var(--ion-background-color)' }}><IonText color='dark'>No Results</IonText></IonTitle>
                 </div>
                 :
                 <></>

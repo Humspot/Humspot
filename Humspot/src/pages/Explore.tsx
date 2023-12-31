@@ -17,6 +17,8 @@ import { GetHumspotEventResponse } from "../utils/types";
 import { handleGetActivitiesGivenTag, handleGetThisWeeksEvents } from "../utils/server";
 
 import "swiper/css";
+import { Keyboard } from "@capacitor/keyboard";
+import { timeout } from "../utils/functions/timeout";
 
 
 const fetchHighlights = async (): Promise<any[] | null> => {
@@ -52,7 +54,9 @@ const ExplorePage = () => {
 
   const handleSearch = async (event: React.KeyboardEvent<HTMLIonSearchbarElement>) => {
     if (event.key === 'Enter' || event.key === 'search') {
-      if (searchRef && searchRef.current) {
+      if (searchRef && searchRef.current && searchRef.current.value) {
+        await Keyboard.hide();
+        await timeout(300);
         router.push('/search/' + searchRef.current.value as string);
       }
     }
