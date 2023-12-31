@@ -49,6 +49,7 @@ import { ToastProvider } from "@agney/ir-toast";
 import MoreResults from "./pages/MoreResults";
 import ContactUs from "./pages/ContactUs";
 import AppUrlRouter from "./AppUrlRouter";
+import Search from "./pages/Search";
 
 setupIonicReact({ mode: "ios" });
 
@@ -91,6 +92,7 @@ const App: React.FC = () => {
               <Route exact path="/submit-attraction" component={SubmitAttraction} />
               <Route exact path="/submitted-activities" component={SubmittedActivities} />
               <Route exact path="/activity/:id" component={Activity} />
+              <Route exact path="/search/:query" component={Search} />
               <Route exact path="/more-results/:tagName" component={MoreResults} />
             </IonRouterOutlet>
 

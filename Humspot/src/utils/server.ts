@@ -1611,3 +1611,32 @@ export const handleGetCommentsGivenActivityID = async (activityID: string, pageN
   }
 };
 
+
+/**
+ * 
+ * @param {string} queryString 
+ * @param {number} pageNum 
+ * @returns 
+ */
+export const handleGetSearchResults = async (queryString: string, pageNum: number) => {
+  if (!queryString || pageNum < 1) return { message: "No results", success: true, results: [] };
+  try {
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_SEARCH_RESULTS + "/" + queryString + "/" + pageNum,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (err) {
+    console.log(err);
+    return { message: "Something went wrong", success: false };
+  }
+}

@@ -5,7 +5,7 @@
  */
 
 import { useRef, useState } from "react";
-import { IonContent, IonPage, IonSearchbar, useIonViewDidEnter } from "@ionic/react";
+import { IonContent, IonPage, IonSearchbar, useIonRouter, useIonViewDidEnter } from "@ionic/react";
 
 import ExploreFilterButtons from "../components/Explore/ExploreFilterButtons";
 import ExploreCarouselRecentlyViewed from "../components/Explore/ExploreCarouselRecentlyViewed";
@@ -39,6 +39,9 @@ const fetchChill = async (): Promise<any[] | null> => {
 const ExplorePage = () => {
   const context = useContext();
   const contentRef = useRef<HTMLIonContentElement | null>(null);
+  const searchRef = useRef<HTMLIonSearchbarElement | null>(null);
+
+  const router = useIonRouter();
 
   const [showFilterList, setShowFilterList] = useState<boolean>(false);
 
@@ -47,13 +50,28 @@ const ExplorePage = () => {
   const { data: adventure, loading: adventureLoading, error: adventureError } = useFetchData<any[] | null>(fetchAdventure);
   const { data: chill, loading: chillLoading, error: chillError } = useFetchData<any[] | null>(fetchChill);
 
+  const handleSearch = async (event: React.KeyboardEvent<HTMLIonSearchbarElement>) => {
+    if (event.key === 'Enter' || event.key === 'search') {
+      if (searchRef && searchRef.current) {
+        router.push('/search/' + searchRef.current.value as string);
+      }
+    }
+  }
+
   useIonViewDidEnter(() => {
     context.setShowTabs(true);
   }, []);
 
   return (
     <IonPage className='ion-page-ios-notch'>
-      <IonSearchbar disabled={true} placeholder="Search for Events" showCancelButton="focus" animated onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)} />
+      <IonSearchbar
+        ref={searchRef}
+        onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)}
+        placeholder="Search for Events" spellcheck={true}
+        type="search" enterkeyhint="search"
+        autocorrect="off" showCancelButton="focus" animated={true}
+        onKeyDown={e => handleSearch(e)}
+      />
 
       <IonContent ref={contentRef}>
         <ExploreFilterButtons setShowFilterList={setShowFilterList} />
