@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
   "auth": {
-    "humspotamplify2dc5d094": {
+    "humspot10c8e693": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "HostedUIDomain": "string",
@@ -13,7 +13,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
-    "humspotamplify2dc5d094PostConfirmation": {
+    "humspot10c8e693PostConfirmation": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

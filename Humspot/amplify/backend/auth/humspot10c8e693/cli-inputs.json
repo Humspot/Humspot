@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "humspotamplify2dc5d094_identitypool_2dc5d094",
+    "identityPoolName": "humspot10c8e693_identitypool_10c8e693",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "humspo2dc5d094",
-    "userPoolName": "humspotamplify2dc5d094_userpool_2dc5d094",
+    "resourceNameTruncated": "humspo10c8e693",
+    "userPoolName": "humspot10c8e693_userpool_10c8e693",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,10 +31,10 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "humspo2dc5d094_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "humspo10c8e693_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "2dc5d094",
-    "resourceName": "humspotamplify2dc5d094",
+    "sharedId": "10c8e693",
+    "resourceName": "humspot10c8e693",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "defaultSocial",
     "hostedUI": true,
@@ -46,12 +46,12 @@
         "add-to-group"
       ]
     },
-    "hostedUIDomainName": "humspotamplify2dc5d094-2dc5d094",
+    "hostedUIDomainName": "humspot10c8e693-10c8e693",
     "authProvidersUserPool": [
       "Google"
     ],
     "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:5173/\"],\"LogoutURLs\":[\"http://localhost:5173/\"]}",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://humspotapp.com/\",\"http://localhost:5173/\"],\"LogoutURLs\":[\"http://localhost:5173/\",\"https://humspotapp.com/\"]}",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,

@@ -67,12 +67,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "humspotamplify2dc5d094PostConfirmation",
+            "humspot10c8e693PostConfirmation",
             {
               "Fn::Join": [
                 "",
                 [
-                  "humspotamplify2dc5d094PostConfirmation",
+                  "humspot10c8e693PostConfirmation",
                   "-",
                   {
                     "Ref": "env"
@@ -122,12 +122,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "humspotamplify2dc5d094PostConfirmation",
+            "humspot10c8e693PostConfirmation",
             {
               "Fn::Join": [
                 "",
                 [
-                  "humspotamplify2dc5d094PostConfirmation",
+                  "humspot10c8e693PostConfirmation",
                   "-",
                   {
                     "Ref": "env"

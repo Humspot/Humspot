@@ -1,26 +1,26 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-humspotamplify-dev-174018-authRole",
-      "UnauthRoleArn": "arn:aws:iam::225731418643:role/amplify-humspotamplify-dev-174018-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::225731418643:role/amplify-humspotamplify-dev-174018-authRole",
+      "AuthRoleName": "amplify-humspot-dev-222826-authRole",
+      "UnauthRoleArn": "arn:aws:iam::225731418643:role/amplify-humspot-dev-222826-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::225731418643:role/amplify-humspot-dev-222826-authRole",
       "Region": "us-west-1",
-      "DeploymentBucketName": "amplify-humspotamplify-dev-174018-deployment",
-      "UnauthRoleName": "amplify-humspotamplify-dev-174018-unauthRole",
-      "StackName": "amplify-humspotamplify-dev-174018",
-      "StackId": "arn:aws:cloudformation:us-west-1:225731418643:stack/amplify-humspotamplify-dev-174018/409d10b0-6a2a-11ee-871a-0214903ddc13",
-      "AmplifyAppId": "dr53ojczlxvpa",
-      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-humspotamplify-dev-174018-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+      "DeploymentBucketName": "amplify-humspot-dev-222826-deployment",
+      "UnauthRoleName": "amplify-humspot-dev-222826-unauthRole",
+      "StackName": "amplify-humspot-dev-222826",
+      "StackId": "arn:aws:cloudformation:us-west-1:225731418643:stack/amplify-humspot-dev-222826/f94fce90-a86e-11ee-8a23-069317bca28b",
+      "AmplifyAppId": "d3trixbmqsal83",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-humspot-dev-222826-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "humspotamplify2dc5d094": {}
+        "humspot10c8e693": {}
       },
       "function": {
-        "humspotamplify2dc5d094PostConfirmation": {
-          "GROUP": "HumspotUserPool",
-          "deploymentBucketName": "amplify-humspotamplify-dev-174018-deployment",
-          "s3Key": "amplify-builds/humspotamplify2dc5d094PostConfirmation-56644366466d53617858-build.zip"
+        "humspot10c8e693PostConfirmation": {
+          "GROUP": "HumspotNewUserGroup",
+          "deploymentBucketName": "amplify-humspot-dev-222826-deployment",
+          "s3Key": "amplify-builds/humspot10c8e693PostConfirmation-644371676c6635417962-build.zip"
         }
       }
     }

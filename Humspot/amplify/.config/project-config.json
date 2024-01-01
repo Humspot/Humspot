@@ -1,14 +1,14 @@
 {
-  "projectName": "HumspotAmplify",
+  "projectName": "Humspot",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
     "framework": "react",
     "config": {
       "SourceDir": "src",
-      "DistributionDir": "dist",
-      "BuildCommand": "npm run build",
-      "StartCommand": "npm run dev"
+      "DistributionDir": "build",
+      "BuildCommand": "npm run-script build",
+      "StartCommand": "npm run-script start"
     }
   },
   "providers": [

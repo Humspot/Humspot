@@ -2,8 +2,8 @@
  * @file Search.tsx
  * @fileoverview Search results page for when users run a query using the searchbar on the Explore page.
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   IonButton, IonButtons, IonCard, IonCardTitle, IonChip, IonContent, IonHeader, IonIcon,
   IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonPage, IonSearchbar,
@@ -12,18 +12,22 @@ import {
 import { useParams } from 'react-router-dom';
 import { chevronBackOutline, shareOutline } from 'ionicons/icons';
 import { Share } from '@capacitor/share';
+import { Keyboard } from '@capacitor/keyboard';
+
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 
-import placeholder from '../assets/images/school_placeholder.jpeg';
 import { handleGetSearchResults } from '../utils/server';
 import { formatDate } from '../utils/functions/formatDate';
-import { Keyboard } from '@capacitor/keyboard';
 import { timeout } from '../utils/functions/timeout';
 import { useContext } from '../utils/hooks/useContext';
+
+import placeholder from '../assets/images/school_placeholder.jpeg';
+
 
 type SearchParams = {
   query: string;
 };
+
 const tags: string[] = [
   'Camping',
   'Chill',

@@ -1,6 +1,6 @@
 {
   "auth": {
-    "humspotamplify2dc5d094": {
+    "humspot10c8e693": {
       "customAuth": false,
       "dependsOn": [
         {
@@ -9,7 +9,7 @@
             "Name"
           ],
           "category": "function",
-          "resourceName": "humspotamplify2dc5d094PostConfirmation",
+          "resourceName": "humspot10c8e693PostConfirmation",
           "triggerProvider": "Cognito"
         }
       ],
@@ -40,34 +40,34 @@
     }
   },
   "function": {
-    "humspotamplify2dc5d094PostConfirmation": {
+    "humspot10c8e693PostConfirmation": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
   "parameters": {
-    "AMPLIFY_function_humspotamplify2dc5d094PostConfirmation_GROUP": {
+    "AMPLIFY_function_humspot10c8e693PostConfirmation_GROUP": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "humspotamplify2dc5d094PostConfirmation"
+          "resourceName": "humspot10c8e693PostConfirmation"
         }
       ]
     },
-    "AMPLIFY_function_humspotamplify2dc5d094PostConfirmation_deploymentBucketName": {
+    "AMPLIFY_function_humspot10c8e693PostConfirmation_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "humspotamplify2dc5d094PostConfirmation"
+          "resourceName": "humspot10c8e693PostConfirmation"
         }
       ]
     },
-    "AMPLIFY_function_humspotamplify2dc5d094PostConfirmation_s3Key": {
+    "AMPLIFY_function_humspot10c8e693PostConfirmation_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "humspotamplify2dc5d094PostConfirmation"
+          "resourceName": "humspot10c8e693PostConfirmation"
         }
       ]
     }
