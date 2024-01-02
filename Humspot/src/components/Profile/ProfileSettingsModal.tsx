@@ -84,6 +84,8 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
     });
     if (!value) { return; }
     await handleLogout();
+    // localStorage.clear();
+    // sessionStorage.clear();
   };
 
 
@@ -151,7 +153,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
                 <IonIcon aria-hidden="true" icon={logInOutline} slot="start" ></IonIcon>
                 <IonLabel>Sign Up / Sign In</IonLabel>
               </IonItem>
-              <IonItem style={{ marginTop: "10px", marginBottom: "10px" }} role='button' onClick={async () => { modalRef?.current?.dismiss(); await handleGoogleLoginAndVerifyAWSUser() }}>
+              <IonItem style={{ marginTop: "10px", marginBottom: "10px" }} role='button' onClick={async () => { modalRef?.current?.dismiss(); router.push("/explore", "root", "replace"); await handleGoogleLoginAndVerifyAWSUser() }}>
                 <IonIcon aria-hidden="true" icon={logoGoogle} slot="start" ></IonIcon>
                 <IonLabel>Google Sign In</IonLabel>
               </IonItem>

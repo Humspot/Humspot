@@ -14,6 +14,7 @@
   "dependencies": {
     "@agney/ir-toast": "^0.3.0",
     "@capacitor/app": "5.0.6",
+    "@capacitor/browser": "^5.1.0",
     "@capacitor/camera": "^5.0.7",
     "@capacitor/core": "5.5.0",
     "@capacitor/dialog": "^5.0.6",

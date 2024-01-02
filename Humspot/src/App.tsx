@@ -59,7 +59,7 @@ const App: React.FC = () => {
 
   const context = useContext();
   useAWSAuth(context); useDarkMode(context);
-  
+
   const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context);
 
   const [currentTab, setCurrentTab] = useState("explore");
@@ -74,6 +74,7 @@ const App: React.FC = () => {
           <IonTabs className={context.showTabs ? 'tab-bar-visible' : 'tab-bar-hidden'}>
             <IonRouterOutlet>
               <Route exact path="/" render={() => <Redirect to="/explore" />} />
+              <Route exact path="/redirect-sign-in" render={() => <Redirect to="/explore" />} />
               <Route exact path="/explore" component={Explore} />
               <Route exact path="/calendar" component={Calendar} />
               <Route exact path="/map" component={Map} />

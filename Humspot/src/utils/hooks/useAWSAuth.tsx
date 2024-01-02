@@ -15,23 +15,24 @@ const useAWSAuth = (context: ContextType) => {
   const getUser = async (): Promise<void> => {
     try {
       const currentUser = await Auth.currentAuthenticatedUser();
-      const email: string | null =
-        currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
-      const awsUsername: string | null = currentUser?.username ?? null;
-      console.log(currentUser);
-      handleUserLogin(
-        email,
-        awsUsername,
-        "identities" in currentUser?.attributes
-      )
-        .then((res: LoginResponse) => {
-          console.log(res);
-          if (!res.user) throw new Error(res.message);
-          context.setHumspotUser(res.user);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (currentUser) {
+        const email: string | null =
+          currentUser?.signInUserSession?.idToken?.payload?.email ?? null;
+        const awsUsername: string | null = currentUser?.username ?? null;
+        handleUserLogin(
+          email,
+          awsUsername,
+          ("attributes" in currentUser && "identities" in currentUser) || ("idToken" in currentUser && "payload" in currentUser.idToken && "identities" in currentUser.idToken.payload)
+        )
+          .then((res: LoginResponse) => {
+            console.log(res);
+            if (!res.user) throw new Error(res.message);
+            context.setHumspotUser(res.user);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     } catch (error) {
       console.error("Not signed in: " + error);
       context.setHumspotUser(undefined);
@@ -42,10 +43,11 @@ const useAWSAuth = (context: ContextType) => {
     const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
       switch (event) {
         case "signIn":
+          console.log("SIGN IN!");
           getUser();
           break;
         case "signOut":
-          console.log("signed out!");
+          console.log("SIGNED OUT!");
           context.setHumspotUser(null);
           window.location.href = "/";
           window.location.reload();
@@ -63,3 +65,5 @@ const useAWSAuth = (context: ContextType) => {
 };
 
 export default useAWSAuth;
+
+// aws cognito-idp describe-user-pool --user-pool-id <your-user-pool-id>

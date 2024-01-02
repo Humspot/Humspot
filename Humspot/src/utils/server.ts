@@ -33,13 +33,34 @@ import {
   HumspotCommentResponse
 } from "./types";
 
-// aws.cognito.signin.user.admin
-/* Allows for AWS Authentication */
-// awsconfig.oauth.redirectSignIn = `${window.location.origin}/`;
-// awsconfig.oauth.redirectSignOut = `${window.location.origin}/`;
+import { Capacitor } from '@capacitor/core';
+import { Browser } from '@capacitor/browser';
 
-// awsconfig.oauth.urlOpener = urlOpener;
-Amplify.configure(awsconfig);
+// Determine if the app is running on web or as a native app
+const isWebPlatform = !Capacitor.isNativePlatform();
+
+const redirectSignIn = isWebPlatform
+  ? 'http://localhost:5173/'
+  : 'https://humspotapp.com/redirect-sign-in/';
+const redirectSignOut = isWebPlatform
+  ? 'http://localhost:5173/'
+  : 'https://humspotapp.com/redirect-sign-in/';
+
+const updatedAwsConfig = {
+  ...awsconfig,
+  oauth: {
+    ...awsconfig.oauth,
+    redirectSignIn,
+    redirectSignOut,
+    // urlOpener: async (url: string, redirectUrl: string) => {
+    //   await Browser.open({ url, windowName: isWebPlatform ? '_self' : '_blank' });
+    // },
+  },
+};
+
+// Configure Amplify
+Amplify.configure(updatedAwsConfig);
+
 
 /**
  * @function handleGoogleLoginAndVerifyAWSUser
