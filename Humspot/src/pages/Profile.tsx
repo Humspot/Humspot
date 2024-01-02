@@ -30,7 +30,7 @@ const Profile: React.FC = () => {
       context.setShowTabs(false);
       timeout(750).then(() => {
         context.setShowTabs(false);
-        timeout(300).then(() => {
+        timeout(500).then(() => {
           router.push("/sign-up");
         })
       })
