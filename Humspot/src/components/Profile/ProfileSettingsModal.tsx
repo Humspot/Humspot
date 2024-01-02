@@ -149,7 +149,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
           }
           {context.humspotUser === undefined ?
             <>
-              <IonItem style={{ marginTop: "10px", marginBottom: "10px" }} role='button' onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/sign-up") }) }}>
+              <IonItem style={{ marginTop: "10px", marginBottom: "10px" }} role='button' onClick={() => { context.setShowTabs(false); modalRef?.current?.dismiss().then(() => { router.push("/sign-up") }) }}>
                 <IonIcon aria-hidden="true" icon={logInOutline} slot="start" ></IonIcon>
                 <IonLabel>Sign Up / Sign In</IonLabel>
               </IonItem>
