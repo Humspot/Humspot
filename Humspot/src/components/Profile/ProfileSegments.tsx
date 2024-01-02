@@ -242,7 +242,7 @@ const ProfileSegments: React.FC = memo(() => {
         ) : (
           <>
             {!interactionsLoading && interactions.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No interactions or Interactions</IonTitle>
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Interactions</IonTitle>
               :
               <>
                 <IonCard>

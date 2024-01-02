@@ -21,15 +21,11 @@ const AppUrlRouter = () => {
       const domain: string = 'humspotapp.com'
       const slug: string[] = event.url.split(domain);
       const path: string | undefined = slug.pop();
-      console.log({ event });
       if (event.url.includes('/redirect-sign-in')) {
-        console.log("1");
         (Auth as any)._handleAuthResponse(event.url);
-        await timeout(5000);
+        await timeout(2500);
         window.location.reload();
-        console.log("2");
       } else {
-        console.log("ELSE....");
         if (path) {
           const decodedPath: string = decodeURIComponent(path);
           if (router.routeInfo.pathname !== decodedPath) {

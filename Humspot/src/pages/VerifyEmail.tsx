@@ -85,15 +85,15 @@ const VerifyEmail = () => {
           <section className="center-container">
             <IonCardTitle style={{ fontSize: "2em", textAlign: "center", marginBottom: "50px" }}>Verify Email</IonCardTitle>
 
-            <IonLabel id="email-label" className="login-label">Email</IonLabel>
-            <IonItem className='login-input-verify'>
+            <IonLabel className='login-label'>Email</IonLabel>
+            <IonItem lines="none" className='login-input'>
               <IonInput aria-labelledby="email-label" type="email" value={decodedEmail} disabled />
             </IonItem>
 
             {toVerify === "password-verify" &&
               <>
                 <IonLabel id="new-password-label" className="login-label">New Password</IonLabel>
-                <IonItem className='login-input-verify'>
+                <IonItem lines="none" className='login-input'>
                   <IonInput aria-labelledby='new-password-label' clearOnEdit={false} type={showPassword ? "text" : "password"} ref={passwordRef} placeholder="••••••••" />
                   <IonButton slot="end" fill="clear" onClick={() => { setShowPassword(!showPassword) }}>
                     <IonIcon color="medium" icon={showPassword ? eyeOutline : eyeOffOutline} />
@@ -103,7 +103,7 @@ const VerifyEmail = () => {
             }
 
             <IonLabel id="code-label" className="login-label">Verification Code</IonLabel>
-            <IonItem className='login-input-verify'>
+            <IonItem lines='none' className='login-input' style={{ width: "70vw" }}>
               <IonInput aria-labelledby="code-label" type="email" ref={codeRef} />
             </IonItem>
 
