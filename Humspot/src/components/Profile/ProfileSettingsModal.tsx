@@ -18,7 +18,8 @@ import {
   IonHeader,
   IonToolbar,
   IonButton,
-  IonButtons
+  IonButtons,
+  useIonLoading
 } from "@ionic/react";
 import {
   notificationsOutline,
@@ -58,6 +59,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
 
   const context = useContext();
   const router = useIonRouter();
+  const [present, dismiss] = useIonLoading();
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
@@ -83,7 +85,9 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
       okButtonTitle: 'Logout'
     });
     if (!value) { return; }
+    await present({ message: "Logging Out..." })
     await handleLogout();
+    await dismiss();
     // localStorage.clear();
     // sessionStorage.clear();
   };
