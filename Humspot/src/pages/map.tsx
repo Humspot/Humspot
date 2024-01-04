@@ -4,7 +4,7 @@ import { Map as PigeonMap, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/hooks/useContext";
 import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/functions/map-config";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { handleGetActivitiesGivenTag, handleGetEventsBetweenTwoDates, handleGetThisWeeksEvents } from "../utils/server";
+import { handleGetActivitiesGivenTag, handleGetThisWeeksEvents } from "../utils/server";
 import { GetEventsBetweenTwoDatesStatusResponse, GetHumspotEventResponse } from "../utils/types";
 import { settingsOutline } from "ionicons/icons";
 import MapSettingsModal from "../components/Map/MapSettingsModal";
@@ -328,8 +328,8 @@ const Map = () => {
           )}
 
           <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateX(15%) translateY(-15%)' }}>
-            <IonButton id="map-settings-modal" mode='ios' style={{ borderRadius: '7.5px' }}>
-              <IonIcon icon={settingsOutline} />
+            <IonButton id="map-settings-modal" color='light'>
+              <IonIcon icon={settingsOutline} color='secondary' />
             </IonButton>
           </IonFab>
 
@@ -340,10 +340,6 @@ const Map = () => {
           showThisWeeksEvents={showThisWeeksEvents} setShowThisWeeksEvents={setShowThisWeeksEvents}
           setShowEventsBetweenTwoDates={setShowEventsBetweenTwoDates} setEventsBetweenTwoDates={setEventsBetweenTwoDates}
         />
-
-        <IonFab horizontal="center" vertical="top">
-          <IonCardTitle color={'dark'} style={{ fontSize: "1rem" }}>Event Pins</IonCardTitle>
-        </IonFab>
 
       </IonContent>
     </IonPage>

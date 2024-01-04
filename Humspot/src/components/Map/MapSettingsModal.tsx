@@ -102,7 +102,7 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
             <IonLabel>End Date</IonLabel>
             <IonInput style={context.darkMode ? { '--background': '#2d2d2d' } : { '--background': '#e1e1e1' }} type='date' value={endDate} onIonChange={e => setEndDate(e.detail.value!)} />
           </div>
-
+          <br />
           <IonButton
             disabled={!startDate || !endDate}
             color="secondary"
