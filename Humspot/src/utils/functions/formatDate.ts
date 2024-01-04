@@ -46,3 +46,26 @@ export const extractDateFromSqlDatetime = (datetimeStr: string): string => {
   // Construct and return the date string in 'YYYY-MM-DD' format
   return `${year}-${formattedMonth}-${formattedDay}`;
 };
+
+
+export function checkEventDate(dateString: string): string {
+  // Create date objects for the event date and the current date
+  const eventDate = new Date(dateString);
+  const currentDate = new Date();
+
+  // Set both dates to start of the day for accurate comparison
+  eventDate.setUTCHours(0, 0, 0, 0);
+  currentDate.setUTCHours(0, 0, 0, 0);
+
+  // Compare the dates to determine the time relation
+  if (eventDate.getTime() === currentDate.getTime()) {
+      return 'is today';
+  } else if (eventDate < currentDate) {
+      return 'already happened';
+  } else {
+      // Format the date as "Month Day, Year" for the return string
+      const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+      const futureDate = eventDate.toLocaleDateString(undefined, options);
+      return `happening on ${futureDate}`;
+  }
+}

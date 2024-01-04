@@ -92,33 +92,33 @@ const AdminSegment: React.FC = () => {
         >
           <IonSegmentButton value="pendingActivities">
             <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-              <IonIcon
+              {/* <IonIcon
                 icon={addCircleOutline}
                 style={{ margin: "5%" }}
                 size="large">
-              </IonIcon>
+              </IonIcon> */}
               <IonLabel>Pending Activities</IonLabel>
             </div>
           </IonSegmentButton>
 
           <IonSegmentButton value="pendingOrganizer">
             <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-              <IonIcon
+              {/* <IonIcon
                 icon={personAddOutline}
                 style={{ margin: "5%" }}
                 size="large">
-              </IonIcon>
+              </IonIcon> */}
               <IonLabel>Pending Organizers</IonLabel>
             </div>
           </IonSegmentButton>
 
           <IonSegmentButton value="approvedOrganizer">
             <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-              <IonIcon
+              {/* <IonIcon
                 icon={personOutline}
                 style={{ margin: "5%" }}
                 size="large">
-              </IonIcon>
+              </IonIcon> */}
               <IonLabel>Approved Organizers</IonLabel>
             </div>
           </IonSegmentButton>
@@ -132,15 +132,15 @@ const AdminSegment: React.FC = () => {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
         {selectedSegment === "pendingActivities" ? (
-          <IonCard>
+          <IonCard style={{ marginBottom: '15vh' }}>
             <AdminSubmissionsList submissions={submissions} loading={submissionsLoading} />
           </IonCard>
         ) : selectedSegment === "pendingOrganizer" ? (
-          <IonCard>
+          <IonCard style={{ marginBottom: '15vh' }}>
             <AdminPendingOrganizersList organizers={organizers} setOrganizers={setOrganizers} loading={organizersLoading} />
           </IonCard>
         ) : selectedSegment === "approvedOrganizer" ? (
-          <IonCard>
+          <IonCard style={{ marginBottom: '15vh' }}>
             <AdminApprovedOrganizersList approvedOrganizers={approvedOrganizers} loading={approvedOrganizersLoading} />
           </IonCard>
         ) : (

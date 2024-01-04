@@ -1,4 +1,4 @@
-import { IonCard, IonCardContent, IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton, IonCardHeader, IonCardTitle, IonCol, IonRow } from "@ionic/react";
+import { IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton, IonCol, IonRow } from "@ionic/react";
 import { useEffect, useRef, useState } from "react";
 import { handleAddComment } from "../../utils/server";
 import { useContext } from "../../utils/hooks/useContext";
@@ -167,7 +167,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   return (
     <IonFab className='activity-comment-textarea'
       style={context.darkMode ?
-        { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '3px solid #282828' }
+        { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '3px solid #AFAFAF' }
         : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '3px solid #e6e6e6' }}
       slot="fixed"
       vertical="bottom"

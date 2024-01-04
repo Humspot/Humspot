@@ -1,9 +1,10 @@
 import { useToast } from "@agney/ir-toast";
-import { IonList, IonSkeletonText, IonItem, IonLabel, IonModal, IonContent, IonTitle, IonButton, IonFab, IonTextarea, IonLoading } from "@ionic/react";
+import { IonList, IonSkeletonText, IonItem, IonLabel, IonModal, IonContent, IonTitle, IonButton, IonFab, IonTextarea, IonLoading, IonCardTitle, IonButtons, IonHeader, IonToolbar } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import { useRef, useState } from "react";
 import { useContext } from "../../utils/hooks/useContext";
 import { handleApproveOrganizer, handleDenyOrganizer } from "../../utils/server";
+import { canDismiss } from "../../utils/functions/canDismiss";
 
 type Organizer = {
   name: string;
@@ -59,6 +60,12 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
     setLoading(false);
     modalRef.current?.dismiss();
   };
+
+  if (!props.loading && props.organizers.length <= 0) {
+    return (
+      <IonCardTitle className="ion-text-center" style={{ fontSize: '1.25rem' }}>No Pending Organizers</IonCardTitle>
+    )
+  }
 
   return (
     <>
@@ -134,15 +141,22 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
         }
       </IonList>
 
-      <IonModal ref={modalRef} trigger="open-add-activity-modal" handle breakpoints={[0, 0.99]} initialBreakpoint={0.99}>
+      <IonModal ref={modalRef} canDismiss={canDismiss} trigger="open-add-activity-modal" handle={false} breakpoints={[0, 0.99]} initialBreakpoint={0.99}>
         <IonContent style={{ '--background': 'var(--ion-item-background' }}>
-          <br />
+          <IonHeader className='ion-no-border'>
+            <IonToolbar className='profile-modal-toolbar'>
+              <IonTitle className='profile-modal-title'>Submission Info</IonTitle>
+              <IonButtons>
+                <IonButton className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss() }}>
+                  <p>Close</p>
+                </IonButton>
+              </IonButtons>
+            </IonToolbar>
+          </IonHeader>
           <IonLoading isOpen={loading} message={"Submitting..."} />
-          <IonTitle className='ion-text-center' style={{ padding: "5%", fontSize: "1.5rem" }}>Submission Info</IonTitle>
           {organizerInfo &&
             <>
-              <br />
-              <h1 style={{ paddingLeft: "15px", paddingRight: "10px", paddingTop: "0", paddingBottom: "0", fontSize: "1.25rem" }}><b>Name: </b>{organizerInfo.name}</h1>
+              <h1 style={{ paddingLeft: "15px", paddingRight: "10px", paddingTop: "0", paddingBottom: "0", fontSize: "1.05rem" }}><b>Name: </b>{organizerInfo.name}</h1>
               <h2 style={{ paddingLeft: "15px", paddingRight: "10px", paddingTop: "0", paddingBottom: "0", fontSize: "1.05rem" }}><b>Email:</b> {organizerInfo.email}</h2>
               <p style={{ paddingLeft: "15px", paddingRight: "10px", paddingTop: "5px", paddingBottom: "0", fontSize: "0.9rem" }}>{organizerInfo.description}</p>
 

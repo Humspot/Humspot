@@ -79,11 +79,17 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
                   <p className='explore-carousel-activity-description'>
                     {activity.description && activity.description.length > 1 ? activity.description : "No description available"}
                   </p>
-                  {"eventDate" in activity && (
+                  {"eventDate" in activity ? (
                     <p style={{ marginTop: 0, marginBottom: '5px', fontSize: '0.8rem', textAlign: 'left' }}>
                       <i>{formatDate(activity.eventDate)}</i>
                     </p>
-                  )}
+                  ) :
+                    "date" in activity && (
+                      <p style={{ marginTop: '5px', fontSize: '0.8rem', textAlign: 'left' }}>
+                        <i>{formatDate(activity.date)}</i>
+                      </p>
+                    )
+                  }
                 </IonCard>
               </FadeIn>
             </SwiperSlide>

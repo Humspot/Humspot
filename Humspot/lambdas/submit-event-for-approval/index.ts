@@ -55,7 +55,7 @@ async function sendEmail(e: Event) {
 
   const mailOptions = {
     from: `app.tellU@gmail.com`,
-    to: `dy45@humboldt.edu,np157@humboldt.edu,sr407@humboldt.edu,dvn8@humboldt.edu,app.tellu@gmail.com,kodiak0823@gmail.com`,
+    to: `dev@humspotapp.com`,
     subject: 'An event for Humspot was submitted and is now pending approval from an admin.',
     html: `
       <div style="font-family: Arial, sans-serif; color: #333;">
@@ -230,3 +230,4 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     }
   }
 };
+

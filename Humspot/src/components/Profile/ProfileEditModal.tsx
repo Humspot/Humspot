@@ -132,7 +132,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
               <IonTitle className='profile-modal-title'>Edit Profile</IonTitle>
               <IonButtons>
                 <IonButton className='profile-modal-close-button' onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
-                  <IonIcon icon={chevronBackOutline} /> <p>Back</p>
+                  <p>Close</p>
                 </IonButton>
               </IonButtons>
             </IonToolbar>

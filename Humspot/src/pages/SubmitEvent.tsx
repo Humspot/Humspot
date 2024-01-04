@@ -2,8 +2,8 @@
 
 import { useRef, useState } from 'react';
 import {
-  IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem, 
-  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, IonCardContent, IonCardHeader, IonAlert
+  IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem,
+  useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, IonCardContent, IonCardHeader, IonAlert, useIonRouter
 } from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/hooks/useContext';
@@ -121,9 +121,11 @@ const PHOTO_UPLOAD_LIMIT: number = 5;
 export const EventForm = () => {
 
   const context = useContext();
+  const router = useIonRouter();
   const Toast = useToast();
   const [present, dismiss] = useIonLoading();
 
+  const pageRef = useRef(null);
   const mapModalRef = useRef<HTMLIonModalElement | null>(null);
 
   const nameRef = useRef<HTMLIonInputElement | null>(null);
@@ -282,7 +284,8 @@ export const EventForm = () => {
     const t = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: color });
     t.present();
 
-    dismiss();
+    await dismiss();
+    router.goBack();
   }
 
   const handleAddressValidation = async () => {
@@ -306,7 +309,7 @@ export const EventForm = () => {
   }, []);
 
   return (
-    <IonPage>
+    <IonPage ref={pageRef}>
       <GoBackHeader title="Submit Event" />
       <IonContent >
 
@@ -321,11 +324,6 @@ export const EventForm = () => {
               <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Description</IonLabel>
                 <IonTextarea maxlength={500} rows={3} ref={descRef} placeholder="This event will be super fun! Graduates + family are invited to this special event. Visit our site for more info." />
-              </IonItem>
-              <br />
-              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
-                <IonLabel position='stacked'>Website</IonLabel>
-                <IonInput aria-label="Website" style={{ marginTop: "5px" }} ref={websiteUrlRef} placeholder="https://www.google.com" />
               </IonItem>
               <br />
               <IonItem lines="full" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', '--background': 'var(--ion-background-color)' }}>
@@ -350,7 +348,12 @@ export const EventForm = () => {
               </IonItem>
               <br />
               <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
-                <IonLabel position='stacked'>Photos</IonLabel>
+                <IonLabel position='stacked'>Website <i>(Optional)</i></IonLabel>
+                <IonInput aria-label="Website" style={{ marginTop: "5px" }} ref={websiteUrlRef} placeholder="https://www.google.com" />
+              </IonItem>
+              <br />
+              <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
+                <IonLabel position='stacked'>Photos <i>(Optional)</i></IonLabel>
                 <div style={{ height: "1vh" }} />
                 {photos && photos.length > 0 &&
                   photos.map((url: string, index: number) => {
@@ -381,7 +384,7 @@ export const EventForm = () => {
               </IonItem>
               <br />
               <IonItem style={{ '--background': 'var(--ion-background-color)', '--min-height': "50px" }} lines='none'>
-                <IonLabel position='stacked'>Tags</IonLabel>
+                <IonLabel position='stacked'>Tags <i>(Optional)</i></IonLabel>
               </IonItem>
               <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', paddingRight: "5px", paddingLeft: "5px" }}>
                 <IonButton id='add-custom-tag' className='ion-no-padding' fill='clear'>
@@ -447,7 +450,7 @@ export const EventForm = () => {
         }
 
         {context.humspotUser?.accountType !== 'user' &&
-          <IonModal ref={mapModalRef} canDismiss={canDismiss} onIonModalWillPresent={handleAddressValidation} trigger='address-verification' handle={false}>
+          <IonModal ref={mapModalRef} canDismiss={canDismiss} onIonModalWillPresent={handleAddressValidation} trigger='address-verification' handle={false} presentingElement={pageRef?.current!}>
             <IonContent fullscreen>
               <IonLoading isOpen={addressValidating} />
               <IonHeader className='ion-no-border'>

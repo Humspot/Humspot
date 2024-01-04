@@ -96,7 +96,7 @@ const Activity = () => {
         }
 
         {activity &&
-          <ActivityDescription description={activity.description} websiteURL={activity.websiteURL} />
+          <ActivityDescription description={activity.description} websiteURL={activity.websiteURL} openTimes={activity.openTimes} />
         }
 
         <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'} setComments={setComments} />

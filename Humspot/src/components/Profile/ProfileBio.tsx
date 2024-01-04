@@ -28,7 +28,7 @@ const ProfileBio: React.FC = () => {
               />
             }
           </IonAvatar>
-          {context.humspotUser && (
+          {/* {context.humspotUser && (
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flex: 0.9 }}>
               <div className="" style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '1.15rem', fontWeight: 'bold' }}>
@@ -49,7 +49,7 @@ const ProfileBio: React.FC = () => {
                 <div style={{ fontSize: '0.95rem' }}>Stuffs</div>
               </div>
             </div>
-          )}
+          )} */}
         </IonRow>
       </section>
 

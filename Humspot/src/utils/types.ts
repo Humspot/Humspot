@@ -214,7 +214,20 @@ export type GetFavoritesAndVisitedAndRSVPStatusResponse = {
 
 export type GetEventsBetweenTwoDatesStatusResponse = {
   message: string;
-  events: (HumspotEvent & {
+  events: ({
+    name: string;
+    description: string;
+    location: string;
+    addedByUserID: string;
+    date: string;
+    time: string;
+    latitude: string | null;
+    longitude: string | null;
+    websiteURL: string;
+    organizer: string;
+    tags: string[];
+    photoUrls: string[];
+  } & {
     eventID: string;
     activityID: string;
     activityType: string;

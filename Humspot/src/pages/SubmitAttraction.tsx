@@ -174,6 +174,7 @@ const SubmitAttractionPage = () => {
   const router = useIonRouter();
   const [present, dismiss] = useIonLoading();
 
+  const pageRef = useRef(null);
   const mapModalRef = useRef<HTMLIonModalElement | null>(null);
 
   const nameRef = useRef<HTMLIonInputElement | null>(null);
@@ -328,7 +329,7 @@ const SubmitAttractionPage = () => {
       return;
     }
 
-    present({ message: "Submitting attraction..." });
+    await present({ message: "Submitting..." });
 
     let uploadedPhotoUrls: string[] = [];
     if (blobs) {
@@ -375,7 +376,8 @@ const SubmitAttractionPage = () => {
     });
     t.present();
 
-    dismiss();
+    await dismiss();
+    router.goBack();
   }
 
   const handleAddressValidation = async () => {
@@ -410,7 +412,7 @@ const SubmitAttractionPage = () => {
   }, []);
 
   return (
-    <IonPage>
+    <IonPage ref={pageRef}>
       <GoBackHeader title="Submit Attraction" />
       <IonContent>
 
@@ -445,19 +447,6 @@ const SubmitAttractionPage = () => {
                   rows={3}
                   ref={descRef}
                   placeholder="Humboldt Redwoods State Park is a state park of California"
-                />
-              </IonItem>
-              <br />
-              <IonItem
-                style={{ "--background": "var(--ion-background-color)" }}
-                lines="full"
-              >
-                <IonLabel position="stacked">Website</IonLabel>
-                <IonInput
-                  aria-label="Website"
-                  style={{ marginTop: "5px" }}
-                  ref={websiteUrlRef}
-                  placeholder="https://www.parks.ca.gov/?page_id=425"
                 />
               </IonItem>
               <br />
@@ -505,7 +494,20 @@ const SubmitAttractionPage = () => {
                 style={{ "--background": "var(--ion-background-color)" }}
                 lines="full"
               >
-                <IonLabel position="stacked">Open Times</IonLabel>
+                <IonLabel position="stacked">Website <i>(Optional)</i></IonLabel>
+                <IonInput
+                  aria-label="Website"
+                  style={{ marginTop: "5px" }}
+                  ref={websiteUrlRef}
+                  placeholder="https://www.parks.ca.gov/?page_id=425"
+                />
+              </IonItem>
+              <br />
+              <IonItem
+                style={{ "--background": "var(--ion-background-color)" }}
+                lines="full"
+              >
+                <IonLabel position="stacked">Open Times <i>(Optional)</i></IonLabel>
                 <IonInput
                   aria-label="Open Time"
                   style={{ marginTop: "5px" }}
@@ -518,7 +520,7 @@ const SubmitAttractionPage = () => {
                 style={{ "--background": "var(--ion-background-color)" }}
                 lines="full"
               >
-                <IonLabel position="stacked">Photos</IonLabel>
+                <IonLabel position="stacked">Photos <i>(Optional)</i></IonLabel>
                 <div style={{ height: "1vh" }} />
                 {photos &&
                   photos.length > 0 &&
@@ -567,11 +569,8 @@ const SubmitAttractionPage = () => {
                 </IonCard>
               </IonItem>
               <br />
-              <IonItem
-                style={{ "--background": "var(--ion-background-color)" }}
-                lines="full"
-              >
-                <IonLabel position="stacked">Tags</IonLabel>
+              <IonItem style={{ '--background': 'var(--ion-background-color)', '--min-height': "50px" }} lines='none'>
+                <IonLabel position='stacked'>Tags <i>(Optional)</i></IonLabel>
               </IonItem>
               <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', paddingRight: "5px", paddingLeft: "5px" }}>
                 <IonButton id='add-custom-tag' className='ion-no-padding' fill='clear'>
@@ -654,12 +653,13 @@ const SubmitAttractionPage = () => {
 
         <IonModal
           ref={mapModalRef}
+          presentingElement={pageRef?.current!}
           canDismiss={canDismiss}
           onIonModalWillPresent={handleAddressValidation}
           trigger="address-verification"
           handle={false}
         >
-          <IonContent fullscreen>
+          <IonContent >
             <IonLoading isOpen={addressValidating} />
             <IonHeader className="ion-no-border">
               <IonToolbar>
@@ -719,30 +719,30 @@ const SubmitAttractionPage = () => {
                   }}
                 >
                   <p style={{ fontSize: "16px", fontWeight: "500" }}>
-                    Address Entered: {locationRef.current.value}
+                    Address Entered: <br /> {locationRef.current.value}
                   </p>
                 </div>
               )}
-              <IonButton
-                expand="block"
-                color="danger"
-                style={{ padding: "5px" }}
-                onClick={() => {
-                  setMapPinLatLong(null);
-                  mapModalRef?.current?.dismiss();
-                }}
-              >
-                Do Not Use Precise Location
-              </IonButton>
-              <IonButton
-                expand="block"
-                style={{ padding: "5px" }}
-                onClick={() => {
-                  mapModalRef?.current?.dismiss();
-                }}
-              >
-                Save Location
-              </IonButton>
+              <div style={{ paddingLeft: '10px', paddingRight: '10px' }}>
+                <IonButton
+                  expand="block"
+                  color="danger"
+                  onClick={() => {
+                    setMapPinLatLong(null);
+                    mapModalRef?.current?.dismiss();
+                  }}
+                >
+                  Do Not Use Precise Location
+                </IonButton>
+                <IonButton
+                  expand="block"
+                  onClick={() => {
+                    mapModalRef?.current?.dismiss();
+                  }}
+                >
+                  Save Location
+                </IonButton>
+              </div>
             </div>
           </IonContent>
         </IonModal>

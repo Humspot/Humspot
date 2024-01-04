@@ -126,6 +126,15 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     await conn.query(query, params);
 
+    // Update user submitted flag
+    query = `
+      UPDATE User
+      SET requestForCoordinatorSubmitted = 0
+      WHERE userID = ?;
+    `;
+    params = [event.submitterID];
+    await conn.query(query, params);
+
     await conn.commit();
 
     await sendEmail(event.submitterEmail, event.reason)

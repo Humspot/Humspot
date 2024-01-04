@@ -37,7 +37,7 @@ const SubmittedActivitiesPage = () => {
 
       <IonContent>
 
-        <IonList className='ion-no-padding'>
+        <IonList className='ion-no-padding' lines="full">
           {loading ?
             <SkeletonLoading count={6} height={"5rem"} animated={true} />
             :
@@ -57,7 +57,7 @@ const SubmittedActivitiesPage = () => {
           }
         </IonList>
 
-        {!loading && !submittedActivities &&
+        {!loading && (!submittedActivities || submittedActivities.length <= 0) &&
           <IonTitle className="ion-text-center" style={{ display: "flex", height: "90%" }}>No Submitted Activities</IonTitle>
         }
 

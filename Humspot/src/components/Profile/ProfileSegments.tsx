@@ -14,7 +14,7 @@ import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 import placeholder from '../../assets/images/school_placeholder.jpeg';
 
 import { useContext } from "../../utils/hooks/useContext";
-import { formatDate } from "../../utils/functions/formatDate";
+import { checkEventDate, formatDate } from "../../utils/functions/formatDate";
 import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse } from "../../utils/types";
 import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
 
@@ -257,11 +257,13 @@ const ProfileSegments: React.FC = memo(() => {
                                 <IonLabel style={{ paddingLeft: "10px" }}>
                                   <h2>{interaction.name}</h2>
                                   {interaction.interactionType === 'comment' ?
-                                    <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {interaction.interactionText}</p>
+                                    <>
+                                      <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {interaction.interactionText}</p>
+                                      <p style={{ fontSize: "0.8rem" }}>{formatDate(interaction.interactionDate as string)}</p>
+                                    </>
                                     :
                                     <p style={{ fontSize: "0.9rem" }}><b>You RSVP'd</b> for this event</p>
                                   }
-                                  <p style={{ fontSize: "0.8rem" }}>{formatDate(interaction.interactionDate as string)}</p>
                                 </IonLabel>
                               </IonItem>
                             </FadeIn>
