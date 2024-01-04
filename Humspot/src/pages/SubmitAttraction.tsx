@@ -79,7 +79,6 @@ const attractionTags: string[] = [
   "Food",
   "School",
   "Educational",
-  "Cultural",
   "Art",
   "Dance",
   "Nature",
@@ -135,7 +134,6 @@ const attractionTags: string[] = [
   "Poetry",
   "Writing",
   "Journalism",
-  "Photography",
   "Film",
   "Animation",
   "VideoGames",
@@ -148,7 +146,6 @@ const attractionTags: string[] = [
   "Makeup",
   "Skincare",
   "Haircare",
-  "Shopping",
   "Auction",
   "Sale",
   "Fundraising",
@@ -618,10 +615,15 @@ const SubmitAttractionPage = () => {
               </IonButton>
               <br />
               <IonAlert
+                style={{ '--background': 'var(--ion-background-color)' }}
                 trigger="add-custom-tag"
                 header="Add custom tag"
+                cssClass='ion-alert-custom-tag'
                 buttons={[
-                  'Cancel',
+                  {
+                    text: 'Cancel',
+                    cssClass: 'alert-cancel-button'
+                  },
                   {
                     text: 'Add',
                     handler: (data) => {
@@ -653,7 +655,7 @@ const SubmitAttractionPage = () => {
 
         <IonModal
           ref={mapModalRef}
-          presentingElement={pageRef?.current!}
+          // presentingElement={pageRef?.current!}
           canDismiss={canDismiss}
           onIonModalWillPresent={handleAddressValidation}
           trigger="address-verification"
@@ -665,7 +667,7 @@ const SubmitAttractionPage = () => {
               <IonToolbar>
                 <IonButtons>
                   <IonButton
-                    style={{ fontSize: "1.05em", marginLeft: "-7.5px" }}
+                    style={{ fontSize: "1.05em", marginLeft: "5px" }}
                     onClick={() => {
                       mapModalRef &&
                         mapModalRef.current &&
@@ -704,6 +706,7 @@ const SubmitAttractionPage = () => {
                 >
                   {mapPinLatLong && (
                     <Marker
+                      color='var(--ion-color-secondary)'
                       width={40}
                       anchor={[mapPinLatLong[0], mapPinLatLong[1]]}
                     ></Marker>

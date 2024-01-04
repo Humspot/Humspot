@@ -408,10 +408,15 @@ export const EventForm = () => {
                 )}
 
                 <IonAlert
+                  style={{ '--background': 'var(--ion-background-color)' }}
                   trigger="add-custom-tag"
                   header="Add custom tag"
+                  cssClass='ion-alert-custom-tag'
                   buttons={[
-                    'Cancel',
+                    {
+                      text: 'Cancel',
+                      cssClass: 'alert-cancel-button'
+                    },
                     {
                       text: 'Add',
                       handler: (data) => {
@@ -450,13 +455,13 @@ export const EventForm = () => {
         }
 
         {context.humspotUser?.accountType !== 'user' &&
-          <IonModal ref={mapModalRef} canDismiss={canDismiss} onIonModalWillPresent={handleAddressValidation} trigger='address-verification' handle={false} presentingElement={pageRef?.current!}>
+          <IonModal ref={mapModalRef} canDismiss={canDismiss} onIonModalWillPresent={handleAddressValidation} trigger='address-verification' handle={false} /* presentingElement={pageRef?.current!} */>
             <IonContent fullscreen>
               <IonLoading isOpen={addressValidating} />
               <IonHeader className='ion-no-border'>
                 <IonToolbar>
                   <IonButtons >
-                    <IonButton style={{ fontSize: '1.05em', marginLeft: '-7.5px' }} onClick={() => { mapModalRef && mapModalRef.current && mapModalRef.current.dismiss() }}>
+                    <IonButton style={{ fontSize: '1.05em', marginLeft: '5px' }} onClick={() => { mapModalRef && mapModalRef.current && mapModalRef.current.dismiss() }}>
                       Close
                     </IonButton>
                     <IonTitle>Map Pin Selection</IonTitle>
@@ -481,30 +486,37 @@ export const EventForm = () => {
                     }}
                   >
                     {mapPinLatLong &&
-                      <Marker width={40} anchor={[mapPinLatLong[0], mapPinLatLong[1]]}></Marker>
+                      <Marker color='var(--ion-color-secondary)' width={40} anchor={[mapPinLatLong[0], mapPinLatLong[1]]}></Marker>
                     }
                   </Map>
                 </div>
                 {!addressValidating && locationRef?.current?.value &&
                   <div style={{ margin: '10px', width: '100%', textAlign: 'center' }}>
-                    <p style={{ fontSize: '16px', fontWeight: '500' }}>Address Entered: {locationRef.current.value}</p>
+                    <p style={{ fontSize: "16px", fontWeight: "500" }}>
+                      Address Entered: <br /> {locationRef.current.value}
+                    </p>
                   </div>
                 }
-                <IonButton expand="block" color='danger' style={{ padding: "5px" }}
-                  onClick={() => {
-                    setMapPinLatLong(null);
-                    mapModalRef?.current?.dismiss();
-                  }}
-                >
-                  Do Not Use Precise Location
-                </IonButton>
-                <IonButton expand="block" style={{ padding: "5px" }}
-                  onClick={() => {
-                    mapModalRef?.current?.dismiss();
-                  }}
-                >
-                  Save Location
-                </IonButton>
+                <div style={{ paddingLeft: '10px', paddingRight: '10px' }}>
+                  <IonButton
+                    expand="block"
+                    color="danger"
+                    onClick={() => {
+                      setMapPinLatLong(null);
+                      mapModalRef?.current?.dismiss();
+                    }}
+                  >
+                    Do Not Use Precise Location
+                  </IonButton>
+                  <IonButton
+                    expand="block"
+                    onClick={() => {
+                      mapModalRef?.current?.dismiss();
+                    }}
+                  >
+                    Save Location
+                  </IonButton>
+                </div>
               </div>
             </IonContent>
           </IonModal>

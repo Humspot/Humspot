@@ -174,7 +174,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
           }
         </IonList>
         {context.humspotUser &&
-          <IonFab vertical='bottom' horizontal='center' style={{ paddingBottom: "10px" }}>
+          <IonFab vertical='bottom' horizontal='center' style={{ paddingBottom: "15px" }}>
             <IonCardTitle style={{ fontSize: '0.8rem', fontWeight: '500', textAlign: 'center' }}>Logged in as:<div style={{ padding: '1px' }}></div> <span style={{ fontSize: '1rem', color: 'var(--ion-color-primary)' }}>{context.humspotUser.email}</span></IonCardTitle>
           </IonFab>
         }

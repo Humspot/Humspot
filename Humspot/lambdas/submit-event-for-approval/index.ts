@@ -202,7 +202,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
         "Access-Control-Allow-Origin": '*'
       },
       body: JSON.stringify({
-        message: 'Event added successfully.',
+        message: 'Event submission successful.',
         submissionID: submissionID,
         success: true
       }),
