@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonButton, IonIcon, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact, useIonRouter } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { add, addCircle, calendar, compass, map, person } from "ionicons/icons";
+import { addCircleOutline, calendar, compass, map, person } from "ionicons/icons";
 import { SplashScreen } from '@capacitor/splash-screen';
 
 import "@ionic/react/css/core.css";
@@ -178,7 +178,7 @@ const App: React.FC = () => {
                 <IonButton fill='clear' id='open-add-activity-modal' color=''>
                   <IonIcon
                     aria-hidden="true"
-                    icon={addCircle}
+                    icon={addCircleOutline}
                     color={context.darkMode ? 'medium' : 'warning'}
                     size="large"
                     style={{ transform: "scale(1.1)" }}

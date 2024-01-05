@@ -90,7 +90,7 @@ const ExplorePage = () => {
       </IonHeader>
 
       <IonContent ref={contentRef}>
-        <ExploreFilterButtons setShowFilterList={setShowFilterList} />
+        {/* <ExploreFilterButtons setShowFilterList={setShowFilterList} /> */}
         {!showFilterList &&
           <>
             <ExploreCarouselRecentlyViewed />
@@ -119,7 +119,7 @@ const ExplorePage = () => {
                 <div className='carousel-divider'></div>
               </section>
             }
-            <div style={{ height: '80px' }} />
+            <div style={{ height: '85px' }} />
           </>
         }
       </IonContent>
