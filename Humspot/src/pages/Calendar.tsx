@@ -78,9 +78,9 @@ function CalendarPage() {
   useEffect(() => {
     fetchEventsWeek();
   }, [fetchEventsWeek]);
-  // FetchEventsMonth
-  const [eventsMonth, seteventsMonth] = useState<any>([]);
+
   const [eventsMonthLoading, setEventsMonthLoading] = useState<boolean>(true);
+  const [eventsMonth, setEventsMonth] = useState<any[]>([]);
   const fetchEventsMonth = useCallback(async () => {
     setEventsMonthLoading(true);
     const response = await handleGetEventsBetweenTwoDates(
@@ -96,63 +96,13 @@ function CalendarPage() {
       });
       toast.present();
     }
-    seteventsMonth(response.events);
+    setEventsMonth(response.events);
     setEventsMonthLoading(false);
   }, []);
 
   useEffect(() => {
     fetchEventsMonth();
   }, [fetchEventsMonth]);
-  const [eventsTodayFiltered, seteventsTodayFiltered] = useState<any>([]);
-  const [eventsWeekFiltered, seteventsWeekFiltered] = useState<any>([]);
-  const [eventsMonthFiltered, seteventsMonthFiltered] = useState<any>([]);
-  function filterAllEvents(
-    eventsToday: any,
-    eventsWeek: any,
-    eventsMonth: any
-  ) {
-    if (filterVariable != null && eventsToday) {
-      const eventsTodayFiltered = eventsToday.filter((event: any) => {
-        return event?.tags && event.tags.includes(filterVariable as string);
-      });
-
-      seteventsTodayFiltered(eventsTodayFiltered);
-    } else {
-      seteventsTodayFiltered(eventsToday);
-    }
-    if (filterVariable != null && eventsWeek) {
-      const eventsWeekFiltered = eventsWeek.filter((event: any) => {
-        return event?.tags && event.tags.includes(filterVariable as string);
-      });
-
-      seteventsWeekFiltered(eventsWeekFiltered);
-    } else {
-      seteventsWeekFiltered(eventsWeek);
-    }
-    if (filterVariable != null && eventsMonth) {
-      const eventsMonthFiltered = eventsMonth.filter((event: any) => {
-        return event?.tags && event.tags.includes(filterVariable as string);
-      });
-
-      seteventsMonthFiltered(eventsMonthFiltered);
-    } else {
-      seteventsMonthFiltered(eventsMonth);
-    }
-  }
-  useEffect(() => {
-    // Check if events are loaded before filtering
-    if (!eventsTodayLoading && !eventsWeekLoading && !eventsMonthLoading) {
-      filterAllEvents(eventsToday, eventsWeek, eventsMonth);
-    }
-  }, [
-    filterVariable,
-    eventsToday,
-    eventsWeek,
-    eventsMonth,
-    eventsTodayLoading,
-    eventsWeekLoading,
-    eventsMonthLoading,
-  ]);
 
   useIonViewWillEnter(() => {
     if (pageRef && pageRef.current) {
@@ -177,9 +127,9 @@ function CalendarPage() {
             {/* Events Today */}
             {!eventsTodayLoading ? (
               <>
-                {eventsTodayFiltered.length > 0 ? (
+                {eventsToday.length > 0 ? (
                   <EventsListEntry
-                    events={eventsTodayFiltered}
+                    events={eventsToday}
                   ></EventsListEntry>
                 ) : (
                   <IonNote className="ion-padding" style={{ fontStyle: "italic" }}>
@@ -202,9 +152,9 @@ function CalendarPage() {
             </IonItemDivider>
             {!eventsWeekLoading ? (
               <>
-                {eventsWeekFiltered.length > 0 ? (
+                {eventsWeek.length > 0 ? (
                   <EventsListEntry
-                    events={eventsWeekFiltered}
+                    events={eventsWeek}
                   ></EventsListEntry>
                 ) : (
                   <IonNote className="ion-padding" style={{ fontStyle: "italic" }}>
@@ -227,9 +177,9 @@ function CalendarPage() {
             </IonItemDivider>
             {!eventsMonthLoading ? (
               <>
-                {eventsWeekFiltered.length > 0 ? (
+                {eventsMonth.length > 0 ? (
                   <EventsListEntry
-                    events={eventsMonthFiltered}
+                    events={eventsMonth}
                   ></EventsListEntry>
                 ) : (
                   <IonNote className="ion-padding" style={{ fontStyle: "italic" }}>
@@ -245,6 +195,7 @@ function CalendarPage() {
               </>
             )}
           </IonList>
+          <div style={{ height: '80px' }} />
         </IonContent>
         {eventsTodayLoading || eventsWeekLoading ? (
           <IonProgressBar

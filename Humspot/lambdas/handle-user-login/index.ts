@@ -87,13 +87,13 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
 
     const currentDate: string = getCurrentDate();
-    const userID: string = crypto.randomBytes(12).toString('hex'); 
+    const userID: string = crypto.randomBytes(12).toString('hex');
 
     const query = `
-      INSERT INTO Users (userID, username, email, authProvider, accountType, accountStatus, profilePicURL, dateCreated) 
+      INSERT INTO Users (userID, username, email, authProvider, accountType, accountStatus, profilePicURL, dateCreated, notificationsToken) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?);
     `;
-    const parameters = [userID, requestData.username, requestData.email, requestData.authProvider, requestData.accountType, 'active', requestData.profilePicURL || null, currentDate];
+    const parameters = [userID, requestData.username, requestData.email, requestData.authProvider, requestData.accountType, 'active', requestData.profilePicURL || null, currentDate, "notificationsToken" in requestData && requestData.notificationsToken ? requestData.notificationsToken : null];
 
     await connection.query(query, parameters);
 

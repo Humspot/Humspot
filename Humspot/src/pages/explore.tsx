@@ -119,6 +119,7 @@ const ExplorePage = () => {
                 <div className='carousel-divider'></div>
               </section>
             }
+            <div style={{ height: '80px' }} />
           </>
         }
       </IonContent>
