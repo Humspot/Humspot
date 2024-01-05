@@ -42,7 +42,27 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       };
     }
 
-    const query: string = 'SELECT * FROM Activities WHERE name LIKE ? OR description LIKE ? LIMIT 10 OFFSET ?';
+    const query: string = `
+      SELECT 
+        A.name, 
+        A.activityType,
+        A.description,
+        A.activityID,
+        AP.photoUrl 
+      FROM 
+        Activities A
+      LEFT JOIN 
+        (SELECT 
+          activityID, 
+          photoUrl 
+        FROM 
+          ActivityPhotos 
+        GROUP BY 
+          activityID) AP ON A.activityID = AP.activityID
+      WHERE 
+        A.name LIKE ? OR A.description LIKE ?
+      LIMIT 10 OFFSET ?;
+    `;
 
     const [results] = await conn.query(query, [`%${queryString}%`, `%${queryString}%`, offset]);
 

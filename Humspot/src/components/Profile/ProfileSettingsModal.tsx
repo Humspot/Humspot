@@ -21,7 +21,9 @@ import {
   IonButtons,
   useIonLoading,
   IonFab,
-  IonCardTitle
+  IonCardTitle,
+  IonAlert,
+  useIonAlert
 } from '@ionic/react';
 import {
   notificationsOutline,
@@ -34,8 +36,6 @@ import {
   constructOutline,
   logoGoogle
 } from 'ionicons/icons';
-
-import { Dialog } from '@capacitor/dialog';
 import { Preferences } from '@capacitor/preferences';
 
 import { useContext } from '../../utils/hooks/useContext';
@@ -62,6 +62,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   const context = useContext();
   const router = useIonRouter();
   const [present, dismiss] = useIonLoading();
+  const [presentAlert] = useIonAlert();
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
@@ -81,18 +82,32 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   }
 
   const clickOnLogout = async () => {
-    const { value } = await Dialog.confirm({
-      title: 'Logout',
-      message: `Are you sure you want to logout?`,
-      okButtonTitle: 'Logout'
-    });
-    if (!value) { return; }
     await present({ message: 'Logging Out...' })
     await handleLogout();
     await dismiss();
-    // localStorage.clear();
-    // sessionStorage.clear();
   };
+
+  const handleShowLogoutDialog = async () => {
+    presentAlert({
+      header: 'Logout',
+      message: 'Are you sure you want to logout?',
+      buttons:
+        [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'alert-cancel-button',
+          },
+          {
+            text: 'Logout',
+            cssClass: 'ion-alert-dialog-confirm',
+            handler: async () => {
+              await clickOnLogout();
+            },
+          },
+        ]
+    })
+  }
 
 
   useEffect(() => {
@@ -161,7 +176,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
               </IonItem>
             </>
             : context.humspotUser ?
-              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { await clickOnLogout() }}>
+              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={handleShowLogoutDialog}>
                 <IonIcon aria-hidden='true' icon={logOutOutline} slot='start' ></IonIcon>
                 <IonLabel color='danger'>Log Out</IonLabel>
               </IonItem>

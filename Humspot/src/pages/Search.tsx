@@ -411,13 +411,13 @@ const Search = () => {
             :
             activities && activities.length > 0 ?
               <>
-                {activities.map((activity, idx: number) => {
+                {activities.map((activity: { activityType: string; description: string; photoUrl: string | null; name: string; activityID: string }, idx: number) => {
                   return (
                     <FadeIn key={idx} delay={(idx % 20) * 50}>
-                      <IonCard style={{ '--background': 'var(--ion-background-color)', paddingLeft: '5px', paddingRight: '5px' }} onClick={() => { if ('activityID' in activity && activity.activityID) router.push('/activity/' + activity.activityID) }}>
+                      <IonCard style={{ '--background': 'var(--ion-background-color)', paddingLeft: '5px', paddingRight: '5px' }} onClick={() => { router.push('/activity/' + activity.activityID) }}>
                         <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px' }}>
                           <img
-                            src={activity.photoUrls ? activity.photoUrls.trim().split(',')[0] : (placeholder)}
+                            src={activity.photoUrl ? activity.photoUrl : (placeholder)}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                         </div>
@@ -434,9 +434,6 @@ const Search = () => {
                         }}>
                           {activity.description}
                         </p>
-                        {'eventDate' in activity &&
-                          <p style={{ marginTop: 0, marginBottom: '5px', fontSize: '0.8rem' }}><i>{formatDate(activity.eventDate)}</i></p>
-                        }
                       </IonCard>
                     </FadeIn>
                   )
