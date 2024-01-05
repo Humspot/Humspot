@@ -58,7 +58,7 @@ const SubmittedActivitiesPage = () => {
         </IonList>
 
         {!loading && (!submittedActivities || submittedActivities.length <= 0) &&
-          <IonTitle className="ion-text-center" style={{ display: "flex", height: "90%" }}>No Submitted Activities</IonTitle>
+          <IonTitle className="ion-text-center" style={{ display: "flex", height: "90%" }}>No Pending Submissions</IonTitle>
         }
 
       </IonContent>

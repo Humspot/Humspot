@@ -5,7 +5,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { IonContent, IonPage, IonSearchbar, useIonRouter, useIonViewDidEnter } from "@ionic/react";
+import { IonContent, IonHeader, IonPage, IonSearchbar, IonToolbar, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
 
 import ExploreFilterButtons from "../components/Explore/ExploreFilterButtons";
 import ExploreCarouselRecentlyViewed from "../components/Explore/ExploreCarouselRecentlyViewed";
@@ -67,22 +67,29 @@ const ExplorePage = () => {
     context.setShowTabs(true);
   }, []);
 
-  useEffect(() => {
-    context.setCurrentPage(pageRef.current);
+  useIonViewWillEnter(() => {
+    if (pageRef && pageRef.current) {
+      context.setCurrentPage(pageRef.current);
+    }
   }, [pageRef]);
 
   return (
-    <IonPage className='ion-page-ios-notch' ref={pageRef}>
+    <IonPage ref={pageRef}>
+
+      <IonHeader className='ion-no-border profile-modal-content' mode='ios'>
+        <IonToolbar style={{ '--background': 'var(--ion-background-color)' }} mode='ios'>
+          <IonSearchbar
+            ref={searchRef}
+            onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)}
+            placeholder="Search for Activities" spellcheck={true}
+            type="search" enterkeyhint="search"
+            autocorrect="off" showCancelButton="focus" animated={true}
+            onKeyDown={e => handleSearch(e)}
+          />
+        </IonToolbar>
+      </IonHeader>
 
       <IonContent ref={contentRef}>
-        <IonSearchbar
-          ref={searchRef}
-          onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)}
-          placeholder="Search for Activities" spellcheck={true}
-          type="search" enterkeyhint="search"
-          autocorrect="off" showCancelButton="focus" animated={true}
-          onKeyDown={e => handleSearch(e)}
-        />
         <ExploreFilterButtons setShowFilterList={setShowFilterList} />
         {!showFilterList &&
           <>
@@ -115,6 +122,7 @@ const ExplorePage = () => {
           </>
         }
       </IonContent>
+
     </IonPage>
   );
 }

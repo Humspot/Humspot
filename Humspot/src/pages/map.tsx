@@ -1,5 +1,5 @@
 
-import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, useIonRouter, useIonViewDidEnter } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
 import { Map as PigeonMap, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/hooks/useContext";
 import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/functions/map-config";
@@ -54,8 +54,10 @@ const Map = () => {
     fetchThisWeeksEvents();
   }, [fetchThisWeeksEvents]);
 
-  useEffect(() => {
-    context.setCurrentPage(pageRef.current);
+  useIonViewWillEnter(() => {
+    if (pageRef && pageRef.current) {
+      context.setCurrentPage(pageRef.current);
+    }
   }, [pageRef]);
 
   return (
@@ -80,7 +82,7 @@ const Map = () => {
           }}
         >
           <ZoomControl
-            style={{ left: "85%", top: "50%", opacity: "95%", zIndex: "100" }}
+            style={{ left: "85%", top: "47.5%", opacity: "95%", zIndex: "100" }}
             buttonStyle={
               !context.darkMode
                 ? zoomControlButtonsStyle
@@ -331,8 +333,8 @@ const Map = () => {
             </Overlay>
           )}
 
-          <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateX(1%) translateY(-100%)' }}>
-            <IonButton id="map-settings-modal" color='light'>
+          <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateX(10%) translateY(calc(-69.5px))' }}>
+            <IonButton id="map-settings-modal" mode='md' color='light' style={{ border: "1px solid var(--ion-color-warning)", borderRadius: '5px' }}>
               <IonIcon icon={settingsOutline} color='secondary' />
             </IonButton>
           </IonFab>

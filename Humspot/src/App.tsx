@@ -36,7 +36,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import SubmittedActivities from "./pages/SubmittedActivities";
-import BecomeACoordinator from "./pages/BecomeACoordinator";
+import BecomeACoordinator from "./pages/BecomeAnOrganizer";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminApproveActivitySubmission from "./pages/AdminApproveActivitySubmission";
 
@@ -54,7 +54,7 @@ import { ActionPerformed, PushNotifications } from "@capacitor/push-notification
 import { Capacitor } from "@capacitor/core";
 import { FCM } from "@capacitor-community/fcm";
 import { Preferences } from "@capacitor/preferences";
-import ProfileActivitiesModal from "./components/Profile/ProfileActivitiesModal";
+import ProfileActivitiesModal from "./components/Shared/ActivitiesModal";
 
 setupIonicReact({ mode: "ios" });
 
@@ -126,9 +126,6 @@ const App: React.FC = () => {
           {/* Handles opening of links on mobile, https://humspotapp.com/{route} */}
           <AppUrlRouter></AppUrlRouter>
 
-          {/* Modal where users can request to submit events/attractions */}
-          <ProfileActivitiesModal page={context.currentPage} />
-
           <IonTabs className={context.showTabs ? 'tab-bar-visible' : 'tab-bar-hidden'}>
             <IonRouterOutlet>
               <Route exact path="/" render={() => <Redirect to="/explore" />} />
@@ -182,8 +179,9 @@ const App: React.FC = () => {
                   <IonIcon
                     aria-hidden="true"
                     icon={addCircle}
-                    color={'warning'}
+                    color={context.darkMode ? 'medium' : 'warning'}
                     size="large"
+                    style={{ transform: "scale(1.1)" }}
                   />
                 </IonButton>
               </IonTabButton>
@@ -206,6 +204,9 @@ const App: React.FC = () => {
             </IonTabBar>
 
           </IonTabs>
+
+          {/* Modal where users can request to submit events/attractions */}
+          <ProfileActivitiesModal page={context.currentPage} />
 
         </IonReactRouter>
 

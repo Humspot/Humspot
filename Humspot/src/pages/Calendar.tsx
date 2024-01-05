@@ -7,7 +7,8 @@ import {
   useIonViewDidEnter,
   IonList,
   IonItemDivider,
-  IonLabel
+  IonLabel,
+  useIonViewWillEnter
 } from "@ionic/react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useContext } from "../utils/hooks/useContext";
@@ -153,14 +154,16 @@ function CalendarPage() {
     eventsMonthLoading,
   ]);
 
-  useEffect(() => {
-    context.setCurrentPage(pageRef.current);
+  useIonViewWillEnter(() => {
+    if (pageRef && pageRef.current) {
+      context.setCurrentPage(pageRef.current);
+    }
   }, [pageRef]);
 
   return (
     <>
       <IonPage className='ion-page-ios-notch' ref={pageRef}>
-        <IonContent>
+        <IonContent fullscreen>
           {/* <FilterAccordion
             filterprop={filterVariable}
             setFilter={setFilter}

@@ -1,6 +1,6 @@
 /**
- * @file ProfileActivitiesModal.tsx
- * @fileoverview the modal component that displays when clicking the add icon on the profile page.
+ * @file ActivitiesModal.tsx
+ * @fileoverview the modal component that displays when clicking the add icon on the tab bar.
  * It contains buttons to 'Submit an Event', 'Submit an Attraction', 'See Pending Submissions', and 'Request to Become an Organizer'.
  */
 
@@ -9,15 +9,12 @@ import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent
 import { calendarOutline, compassOutline, clipboardOutline, listCircleOutline } from "ionicons/icons";
 
 import { useContext } from "../../utils/hooks/useContext";
-import { canDismiss } from "../../utils/functions/canDismiss";
 
-import './Profile.css';
-
-type ProfileActivitiesModalProps = {
+type ActivitiesModalProps = {
   page: HTMLElement | undefined;
 };
 
-const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: ProfileActivitiesModalProps) => {
+const ActivitiesModal: React.FC<ActivitiesModalProps> = (props: ActivitiesModalProps) => {
 
   const router = useIonRouter();
   const context = useContext();
@@ -25,14 +22,14 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
   const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
   useEffect(() => {
-    if (props.page) {
-      console.log(props.page);
-      setPresentingElement(props.page);
+    if (context.currentPage) {
+      console.log(context.currentPage);
+      setPresentingElement(context.currentPage);
     }
-  }, [props.page])
+  }, [context.currentPage])
 
   return (
-    <IonModal ref={modalRef} trigger="open-add-activity-modal" presentingElement={presentingElement} canDismiss={canDismiss}>
+    <IonModal ref={modalRef} trigger="open-add-activity-modal" presentingElement={presentingElement} mode='ios'>
       <IonContent className='profile-modal-content'>
         <IonHeader className='ion-no-border'>
           <IonToolbar className='profile-modal-toolbar'>
@@ -46,14 +43,14 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
         </IonHeader>
         <br />
         <IonList lines='full'>
-          <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submit-event") }) }}>
-            <IonIcon aria-hidden="true" icon={calendarOutline} slot="start"></IonIcon>
-            <IonLabel>Submit an Event</IonLabel>
-          </IonItem>
-          <br />
           <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submit-attraction") }) }}>
             <IonIcon aria-hidden="true" icon={compassOutline} slot="start"></IonIcon>
             <IonLabel>Submit an Attraction</IonLabel>
+          </IonItem>
+          <br />
+          <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submit-event") }) }}>
+            <IonIcon aria-hidden="true" icon={calendarOutline} slot="start"></IonIcon>
+            <IonLabel>Submit an Event <i>(Organizers Only)</i></IonLabel>
           </IonItem>
           <br />
           <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submitted-activities") }) }}>
@@ -76,4 +73,4 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
   )
 };
 
-export default ProfileActivitiesModal;
+export default ActivitiesModal;

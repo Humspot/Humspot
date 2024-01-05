@@ -1,6 +1,6 @@
 /**
- * @file BecomeACoordinator.tsx
- * @fileoverview Form where users can request to become a Humspot Event Coordinator (allowing them to submit events to the app).
+ * @file BecomeAnOrganizer.tsx
+ * @fileoverview Form where users can request to become a Humspot Event Organizer (allowing them to submit events to the app).
  */
 
 import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage, IonTextarea, useIonLoading, useIonViewWillEnter } from "@ionic/react";
@@ -11,7 +11,7 @@ import { useToast } from "@agney/ir-toast";
 import { OrganizerRequestSubmission } from "../utils/types";
 import { handleSubmitRequestToBecomeOrganizer } from "../utils/server";
 
-const BecomeACoordinator: React.FC = () => {
+const BecomeAnOrganizer: React.FC = () => {
 
   const context = useContext();
   const Toast = useToast();
@@ -59,10 +59,10 @@ const BecomeACoordinator: React.FC = () => {
 
   return (
     <IonPage>
-      <GoBackHeader title="Become a Coordinator" />
+      <GoBackHeader title="Become an Organizer" />
       <IonContent>
         <div style={{ padding: '10px' }}>
-          <p>To be able to submit events to Humspot, you must be an approved coordinator.</p>
+          <p>To be able to submit events to Humspot, you must be an approved Organizer.</p>
         </div>
         {context.humspotUser?.requestForCoordinatorSubmitted === 0 ?
           <div style={{ background: 'var(--ion-background-color)', padding: '5px' }}>
@@ -81,8 +81,8 @@ const BecomeACoordinator: React.FC = () => {
             <IonButton disabled={!context.humspotUser} color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmitRequest()}>Submit</IonButton>
           </div>
           :
-          <div className='ion-text-center' style={{ padding: '10px' }}>
-            <p style={{ fontSize: "1.5rem" }}>You have already submitted a request! Check your email.</p>
+          <div className='ion-text-center' style={{ display: 'flex', height: '50%', padding: '20px' }}>
+            <p style={{ fontSize: "1.25rem" }}>You have already submitted a request! Please check your email.</p>
           </div>
         }
       </IonContent>
@@ -91,4 +91,4 @@ const BecomeACoordinator: React.FC = () => {
 
 };
 
-export default BecomeACoordinator;
+export default BecomeAnOrganizer

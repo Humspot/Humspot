@@ -3,16 +3,16 @@
 
 
 ion-tab-bar {
-  box-shadow: 0px 1px 13px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0.5px 5px rgba(var(--ion-color-medium-rgb), 0.5);
   border-radius: 25px !important;
   height: 50px;
-  width: 95%;
+  width: 92.5%;
   padding-top: 1px;
   padding-bottom: 1px;
-  bottom: 7.5px;
+  bottom: 20px;
   position: absolute;
-  left: 2.5%; 
-  right: 2.5%;
+  left: 3.75%; 
+  right: 3.75%;
   border-top: none;
 }
 

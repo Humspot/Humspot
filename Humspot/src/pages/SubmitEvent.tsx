@@ -450,7 +450,7 @@ export const EventForm = () => {
           </>
           :
           <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
-            You must be an admin or organizer to submit an event!
+            You must be an admin or organizer to submit an event! Request to be one <a onClick={() => router.push("/become-a-coordinator")}>here</a>
           </div>
         }
 
