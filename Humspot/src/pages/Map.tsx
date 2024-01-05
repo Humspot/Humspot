@@ -54,9 +54,13 @@ const Map = () => {
     fetchThisWeeksEvents();
   }, [fetchThisWeeksEvents]);
 
+  useEffect(() => {
+    context.setCurrentPage(pageRef.current);
+  }, [pageRef]);
+
   return (
     <IonPage ref={pageRef}>
-      <IonContent>
+      <IonContent fullscreen>
         <PigeonMap
           provider={(x, y, z, dpr) =>
             mapTiler(context.darkMode, x, y, z, dpr)
@@ -327,7 +331,7 @@ const Map = () => {
             </Overlay>
           )}
 
-          <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateX(15%) translateY(-15%)' }}>
+          <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateX(1%) translateY(-100%)' }}>
             <IonButton id="map-settings-modal" color='light'>
               <IonIcon icon={settingsOutline} color='secondary' />
             </IonButton>

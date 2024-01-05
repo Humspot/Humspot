@@ -45,10 +45,10 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
 
     const query: string = `
-      SELECT *
+      SELECT username
       FROM Users
       WHERE accountType = 'organizer' OR accountType = 'admin'
-      LIMIT 10 OFFSET ?;
+      LIMIT 20 OFFSET ?;
     `;
 
     const [rows]: any = await conn.query(query, [offset]);

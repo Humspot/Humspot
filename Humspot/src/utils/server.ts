@@ -35,6 +35,7 @@ import {
 
 import { Capacitor } from '@capacitor/core';
 import { Browser } from '@capacitor/browser';
+import { Preferences } from "@capacitor/preferences";
 
 // Determine if the app is running on web or as a native app
 const isWebPlatform = !Capacitor.isNativePlatform();
@@ -227,12 +228,15 @@ export const handleUserLogin = async (email: string | null, username: string | n
     const idToken = currentUserSession.getIdToken();
     const jwtToken = idToken.getJwtToken();
 
+    const notificationsToken: string | null = (await Preferences.get({ key: 'notificationsToken' })).value;
+
     const requestBody: Record<string, string> = {
       username: username,
       email: email,
       authProvider: isGoogleAccount ? "google" : "custom",
       accountType: "user",
       accountStatus: "active",
+      notificationsToken: notificationsToken ?? ''
     };
 
     const response = await fetch(
@@ -1456,7 +1460,7 @@ export const handleDenyOrganizer = async (approverID: string, submitterID: strin
 
 
 
-export const handleGetApprovedOrganizerSubmissions = async (pageNum: number, userID: string) => {
+export const handleGetApprovedOrganizerSubmissions = async (pageNum: number, userID: string): Promise<{ message: string; success: boolean; organizerList: { username: string }[] }> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -1486,7 +1490,7 @@ export const handleGetApprovedOrganizerSubmissions = async (pageNum: number, use
     return responseData;
   } catch (error) {
     console.error("Error calling API Gateway", error);
-    return { message: "Error calling API Gateway" + error, success: false, pendingSubmissions: [] };
+    return { message: "Error calling API Gateway" + error, success: false, organizerList: [] };
   }
 };
 

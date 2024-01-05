@@ -1,10 +1,19 @@
+/**
+ * @file MapSettingsModal.tsx
+ * @fileoverview the modal that pops in on the map page when clicking the settings button. 
+ * The modal contains options to filter the map pins based on a date range.
+ */
 import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonInput, IonLabel, IonList, IonModal, IonTitle, IonToolbar } from "@ionic/react";
 import { useEffect, useRef, useState } from "react";
+import { useToast } from "@agney/ir-toast";
+
 import { canDismiss } from "../../utils/functions/canDismiss";
 import { useContext } from "../../utils/hooks/useContext";
-import { useToast } from "@agney/ir-toast";
+
 import { handleGetEventsBetweenTwoDates } from "../../utils/server";
 import { GetEventsBetweenTwoDatesStatusResponse } from "../../utils/types";
+
+import './Map.css';
 
 function areDatesWithinTwoWeeks(startDate: string, endDate: string): boolean {
   const oneDay = 24 * 60 * 60 * 1000;
@@ -85,29 +94,31 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
 
         <section style={{ padding: "15px" }}>
           <IonList lines="none">
-            <IonCheckbox disabled slot='end' checked={props.showTopAttractions} onIonChange={(e) => { props.setShowTopAttractions(e.detail.checked) }}>Top Attractions</IonCheckbox>
+            <IonCheckbox className='map-modal-section-title' disabled slot='end' checked={props.showTopAttractions} onIonChange={(e) => { props.setShowTopAttractions(e.detail.checked) }}>Top Attractions</IonCheckbox>
           </IonList>
           <br />
           <IonList lines="none">
-            <IonCheckbox checked={props.showThisWeeksEvents} onIonChange={(e) => { props.setEventsBetweenTwoDates([]); props.setShowEventsBetweenTwoDates(false); props.setShowThisWeeksEvents(e.detail.checked); setStartDate(''); setEndDate(''); }}>Events within the week</IonCheckbox>
+            <IonCheckbox className='map-modal-section-title' checked={props.showThisWeeksEvents} onIonChange={(e) => { props.setEventsBetweenTwoDates([]); props.setShowEventsBetweenTwoDates(false); props.setShowThisWeeksEvents(e.detail.checked); setStartDate(''); setEndDate(''); }}>Events within the week</IonCheckbox>
           </IonList>
           <br />
           <br />
-          <div>
+          <IonLabel className='map-modal-section-title'>Select Event Date Range <i>(Max 2 weeks)</i></IonLabel>
+          <br />
+          <div style={{ paddingTop: '15px' }}>
             <IonLabel>Start Date</IonLabel>
-            <IonInput style={context.darkMode ? { '--background': '#2d2d2d' } : { '--background': '#e1e1e1' }} type='date' value={startDate} onIonChange={e => setStartDate(e.detail.value!)} />
+            <IonInput style={context.darkMode ? { '--background': '#2d2d2d', verticalAlign: 'middle', height: '50px', lineHeight: 'normal' } : { '--background': '#e1e1e1', verticalAlign: 'middle', height: '50px', lineHeight: 'normal' }} type='date' value={startDate} onIonChange={e => setStartDate(e.detail.value!)} />
           </div>
           <br />
           <div>
             <IonLabel>End Date</IonLabel>
-            <IonInput style={context.darkMode ? { '--background': '#2d2d2d' } : { '--background': '#e1e1e1' }} type='date' value={endDate} onIonChange={e => setEndDate(e.detail.value!)} />
+            <IonInput style={context.darkMode ? { '--background': '#2d2d2d', verticalAlign: 'middle', height: '50px', lineHeight: 'normal' } : { '--background': '#e1e1e1', verticalAlign: 'middle', height: '50px', lineHeight: 'normal' }} type='date' value={endDate} onIonChange={e => setEndDate(e.detail.value!)} />
           </div>
           <br />
           <IonButton
             disabled={!startDate || !endDate}
             color="secondary"
             expand="block"
-            style={{ padding: "10px" }}
+            style={{ width: "100%" }}
             onClick={handleUpdateEventsBetweenDates}
           >
             Update

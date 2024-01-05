@@ -125,10 +125,6 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
         <br />
 
         <IonList lines='full'>
-          <IonItem disabled={true ?? !context.humspotUser} style={{}}>
-            <IonIcon aria-hidden='true' icon={notificationsOutline} slot='start'></IonIcon>
-            <IonLabel><IonToggle disabled={!context.humspotUser}>Notifications </IonToggle></IonLabel>
-          </IonItem>
           <IonItem>
             <IonIcon aria-hidden='true' icon={moonOutline} slot='start' ></IonIcon>
             <IonLabel><IonToggle checked={context.darkMode} onIonChange={(e) => { toggleDarkMode(e.detail.checked) }}>Dark Mode</IonToggle></IonLabel>

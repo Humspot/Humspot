@@ -17,7 +17,7 @@ function AdminSubmissionsList(props: { submissions: any[], loading: boolean; }) 
 
   if (!props.loading && props.submissions.length <= 0) {
     return (
-      <IonCardTitle className="ion-text-center" style={{ fontSize: '1.25rem' }}>No Submissions</IonCardTitle>
+      <IonCardTitle className="ion-text-center" style={{ fontSize: '1.25rem', padding: '5px' }}>No Submissions</IonCardTitle>
     )
   }
 

@@ -7,7 +7,7 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'https'
   },
-  loggingBehavior: 'none',
+  loggingBehavior: 'debug',
   plugins: {
     SplashScreen: {
       launchShowDuration: 1500,
@@ -16,6 +16,9 @@ const config: CapacitorConfig = {
       backgroundColor: "#7DBBA4AA",
       splashFullScreen: true,
       splashImmersive: true,
+    },
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"],
     },
   },
 };

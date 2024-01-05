@@ -63,7 +63,7 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
 
   if (!props.loading && props.organizers.length <= 0) {
     return (
-      <IonCardTitle className="ion-text-center" style={{ fontSize: '1.25rem' }}>No Pending Organizers</IonCardTitle>
+      <IonCardTitle className="ion-text-center" style={{ fontSize: '1.25rem', padding: '10px' }}>No Pending Organizers</IonCardTitle>
     )
   }
 

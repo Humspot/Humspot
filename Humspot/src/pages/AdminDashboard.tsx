@@ -16,11 +16,11 @@ const AdminDashboard = () => {
   return (
     <IonPage>
       {context.humspotUser?.accountType == 'admin' &&
-        <IonContent>
+        <>
           <GoBackHeader title={"Admin - " + context.humspotUser.username} />
           <div style={{ height: "10px" }} />
           <AdminSegments />
-        </IonContent>
+        </>
       }
 
     </IonPage>

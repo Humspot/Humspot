@@ -25,7 +25,10 @@ const ProfileActivitiesModal: React.FC<ProfileActivitiesModalProps> = (props: Pr
   const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
   useEffect(() => {
-    setPresentingElement(props.page);
+    if (props.page) {
+      console.log(props.page);
+      setPresentingElement(props.page);
+    }
   }, [props.page])
 
   return (

@@ -30,7 +30,7 @@ const Profile: React.FC = () => {
       context.setShowTabs(false);
       timeout(750).then(() => {
         context.setShowTabs(false);
-        timeout(500).then(() => {
+        timeout(750).then(() => {
           router.push("/sign-up");
         })
       })
@@ -40,6 +40,10 @@ const Profile: React.FC = () => {
   useIonViewDidEnter(() => {
     context.setShowTabs(true);
   }, []);
+
+  useEffect(() => {
+    context.setCurrentPage(page.current);
+  }, [page]);
 
   return (
     <>
@@ -52,9 +56,6 @@ const Profile: React.FC = () => {
           <ProfileBio />
           <ProfileSegments />
         </IonContent>
-
-        {/* Modal where users can request to submit events/attractions */}
-        <ProfileAddActivityModal page={page.current} />
 
         {/* Modal where users can edit their profile */}
         <ProfileEditModal page={page.current} />

@@ -9,7 +9,7 @@ import {
   IonItemDivider,
   IonLabel
 } from "@ionic/react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useContext } from "../utils/hooks/useContext";
 import { useToast } from "@agney/ir-toast";
 import { handleGetEventsBetweenTwoDates } from "../utils/server";
@@ -20,6 +20,7 @@ import '../App.css';
 
 function CalendarPage() {
   const context = useContext();
+  const pageRef = useRef();
   useIonViewDidEnter(() => {
     context.setShowTabs(true);
   });
@@ -152,9 +153,13 @@ function CalendarPage() {
     eventsMonthLoading,
   ]);
 
+  useEffect(() => {
+    context.setCurrentPage(pageRef.current);
+  }, [pageRef]);
+
   return (
     <>
-      <IonPage className='ion-page-ios-notch'>
+      <IonPage className='ion-page-ios-notch' ref={pageRef}>
         <IonContent>
           {/* <FilterAccordion
             filterprop={filterVariable}

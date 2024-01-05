@@ -5,7 +5,7 @@
  */
 
 import { IonToolbar, IonButtons, IonButton, IonIcon, IonHeader, IonCardTitle, IonSkeletonText } from "@ionic/react";
-import { addCircleOutline, pencilOutline, settingsOutline } from "ionicons/icons";
+import { pencilOutline, settingsOutline } from "ionicons/icons";
 
 import { useContext } from "../../utils/hooks/useContext";
 
@@ -27,9 +27,6 @@ const ProfileHeader: React.FC = () => {
         <IonButtons slot='end'>
           <IonButton disabled={!context.humspotUser} id='open-edit-profile-modal' slot='end'>
             <IonIcon size='large' style={{ padding: "1%" }} icon={pencilOutline} />
-          </IonButton>
-          <IonButton disabled={!context.humspotUser} id='open-add-activity-modal' slot='end'>
-            <IonIcon size='large' style={{ padding: "1%" }} icon={addCircleOutline} />
           </IonButton>
           <IonButton id='open-profile-page-modal' slot='end'>
             <IonIcon size='large' style={{ padding: "2.5%" }} icon={settingsOutline} />

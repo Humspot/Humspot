@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@agney/ir-toast": "^0.3.0",
+    "@capacitor-community/fcm": "^5.0.2",
     "@capacitor/app": "5.0.6",
     "@capacitor/browser": "^5.1.0",
     "@capacitor/camera": "^5.0.7",
@@ -22,6 +23,7 @@
     "@capacitor/ios": "^5.5.1",
     "@capacitor/keyboard": "5.0.6",
     "@capacitor/preferences": "^5.0.6",
+    "@capacitor/push-notifications": "^5.1.0",
     "@capacitor/share": "^5.0.6",
     "@capacitor/splash-screen": "^5.0.6",
     "@capacitor/status-bar": "5.0.6",

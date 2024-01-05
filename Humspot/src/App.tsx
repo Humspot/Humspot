@@ -3,11 +3,11 @@
  * @fileoverview Routes and main application components.
  */
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Redirect, Route } from "react-router-dom";
-import { IonApp, IonIcon, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from "@ionic/react";
+import { IonApp, IonButton, IonIcon, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact, useIonRouter } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { calendar, compass, map, person } from "ionicons/icons";
+import { add, addCircle, calendar, compass, map, person } from "ionicons/icons";
 import { SplashScreen } from '@capacitor/splash-screen';
 
 import "@ionic/react/css/core.css";
@@ -50,6 +50,11 @@ import MoreResults from "./pages/MoreResults";
 import ContactUs from "./pages/ContactUs";
 import AppUrlRouter from "./AppUrlRouter";
 import Search from "./pages/Search";
+import { ActionPerformed, PushNotifications } from "@capacitor/push-notifications";
+import { Capacitor } from "@capacitor/core";
+import { FCM } from "@capacitor-community/fcm";
+import { Preferences } from "@capacitor/preferences";
+import ProfileActivitiesModal from "./components/Profile/ProfileActivitiesModal";
 
 setupIonicReact({ mode: "ios" });
 
@@ -64,12 +69,65 @@ const App: React.FC = () => {
 
   const [currentTab, setCurrentTab] = useState("explore");
 
+  const router = useIonRouter();
+
+  const handlePushNotificationListeners = useCallback(() => {
+    PushNotifications.addListener(
+      'pushNotificationActionPerformed',
+      (notification: ActionPerformed) => {
+        alert('clicked on notif!');
+        console.log({ notification });
+        let urlJSON = notification.notification.data["gcm.notification.data"]
+        let noBackSlashes: string = urlJSON.toString().replaceAll('\\', '');
+        let removedUrl: string = noBackSlashes.substring(7, noBackSlashes.length);
+        let finalUrl: string = removedUrl.slice(1, removedUrl.length - 2);
+        console.log(finalUrl);
+        router.push(finalUrl);
+      },
+    ).then(() => {
+      console.log('Notification action performed');
+    });
+  }, []);
+
+  const registerNotifications = async () => {
+    console.log("REGISTERING NOTIFICATIONS!!!!!!!!!!!!");
+    let permStatus = await PushNotifications.checkPermissions();
+    console.log({ permStatus });
+    if (permStatus.receive === 'prompt') {
+      permStatus = await PushNotifications.requestPermissions();
+      if (permStatus.receive !== 'granted') {
+        throw new Error('User denied permissions!');
+      } else {
+        PushNotifications.register().then(() => {
+          FCM.getToken().then(async (token: { token: string }) => {
+            await Preferences.set({ key: "notificationsToken", value: token.token });
+            console.log({ token });
+          });
+        });
+      }
+    } else {
+      const x = await Preferences.get({ key: "notificationsToken" });
+      console.log(x.value);
+    }
+  };
+
+  useEffect(() => {
+    handlePushNotificationListeners();
+    if (Capacitor.getPlatform() === 'ios') {
+      registerNotifications();
+    }
+  }, [])
+
   return (
     <IonApp>
       <ToastProvider>
         <IonReactRouter>
 
+          {/* Handles opening of links on mobile, https://humspotapp.com/{route} */}
           <AppUrlRouter></AppUrlRouter>
+
+          {/* Modal where users can request to submit events/attractions */}
+          <ProfileActivitiesModal page={context.currentPage} />
 
           <IonTabs className={context.showTabs ? 'tab-bar-visible' : 'tab-bar-hidden'}>
             <IonRouterOutlet>
@@ -119,6 +177,16 @@ const App: React.FC = () => {
                   size="large"
                 />
               </IonTabButton>
+              <IonTabButton>
+                <IonButton fill='clear' id='open-add-activity-modal' color=''>
+                  <IonIcon
+                    aria-hidden="true"
+                    icon={addCircle}
+                    color={'warning'}
+                    size="large"
+                  />
+                </IonButton>
+              </IonTabButton>
               <IonTabButton tab="calendar" href="/calendar">
                 <IonIcon
                   aria-hidden="true"
@@ -138,7 +206,9 @@ const App: React.FC = () => {
             </IonTabBar>
 
           </IonTabs>
+
         </IonReactRouter>
+
       </ToastProvider>
     </IonApp>
   );

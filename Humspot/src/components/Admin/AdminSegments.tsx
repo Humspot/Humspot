@@ -10,11 +10,6 @@ import {
   IonRefresherContent,
   RefresherEventDetail,
 } from "@ionic/react";
-import {
-  addCircleOutline,
-  personOutline,
-  personAddOutline
-} from "ionicons/icons";
 import { useCallback, useEffect, useState } from "react";
 import { useContext } from "../../utils/hooks/useContext";
 import { handleGetApprovedOrganizerSubmissions, handleGetPendingActivitySubmissions, handleGetPendingOrganizerSubmissions } from "../../utils/server";
@@ -31,11 +26,10 @@ const AdminSegment: React.FC = () => {
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [submissionsLoading, setSubmissionsLoading] = useState<boolean>(false);
 
-  // List of pending requests to be an organizer
   const [organizers, setOrganizers] = useState<any[]>([]);
   const [organizersLoading, setOrganizersLoading] = useState<boolean>(false);
 
-  const [approvedOrganizers, setApprovedOrganizers] = useState<any[]>([]);
+  const [approvedOrganizers, setApprovedOrganizers] = useState<{ username: string }[]>([]);
   const [approvedOrganizersLoading, setApprovedOrganizersLoading] = useState<boolean>(false);
 
   const fetchSubmissions = useCallback(async () => {
@@ -92,33 +86,18 @@ const AdminSegment: React.FC = () => {
         >
           <IonSegmentButton value="pendingActivities">
             <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-              {/* <IonIcon
-                icon={addCircleOutline}
-                style={{ margin: "5%" }}
-                size="large">
-              </IonIcon> */}
               <IonLabel>Pending Activities</IonLabel>
             </div>
           </IonSegmentButton>
 
           <IonSegmentButton value="pendingOrganizer">
             <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-              {/* <IonIcon
-                icon={personAddOutline}
-                style={{ margin: "5%" }}
-                size="large">
-              </IonIcon> */}
               <IonLabel>Pending Organizers</IonLabel>
             </div>
           </IonSegmentButton>
 
           <IonSegmentButton value="approvedOrganizer">
             <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-              {/* <IonIcon
-                icon={personOutline}
-                style={{ margin: "5%" }}
-                size="large">
-              </IonIcon> */}
               <IonLabel>Approved Organizers</IonLabel>
             </div>
           </IonSegmentButton>
@@ -132,15 +111,15 @@ const AdminSegment: React.FC = () => {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
         {selectedSegment === "pendingActivities" ? (
-          <IonCard style={{ marginBottom: '15vh' }}>
+          <IonCard style={{ marginBottom: '2.5vh' }}>
             <AdminSubmissionsList submissions={submissions} loading={submissionsLoading} />
           </IonCard>
         ) : selectedSegment === "pendingOrganizer" ? (
-          <IonCard style={{ marginBottom: '15vh' }}>
+          <IonCard style={{ marginBottom: '2.5vh' }}>
             <AdminPendingOrganizersList organizers={organizers} setOrganizers={setOrganizers} loading={organizersLoading} />
           </IonCard>
         ) : selectedSegment === "approvedOrganizer" ? (
-          <IonCard style={{ marginBottom: '15vh' }}>
+          <IonCard style={{ marginBottom: '2.5vh' }}>
             <AdminApprovedOrganizersList approvedOrganizers={approvedOrganizers} loading={approvedOrganizersLoading} />
           </IonCard>
         ) : (
