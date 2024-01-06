@@ -53,11 +53,15 @@ const ActivitiesModal: React.FC<ActivitiesModalProps> = (props: ActivitiesModalP
             <IonLabel>Submit an Event <i>(Organizers Only)</i></IonLabel>
           </IonItem>
           <br />
-          <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submitted-activities") }) }}>
-            <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
-            <IonLabel>See Pending Submissions</IonLabel>
-          </IonItem>
-          <br />
+          {context.humspotUser &&
+            <>
+              <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submitted-activities") }) }}>
+                <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
+                <IonLabel>See Pending Submissions</IonLabel>
+              </IonItem>
+              <br />
+            </>
+          }
           {context.humspotUser?.accountType === 'user' &&
             <>
               <IonItem role='button' onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/become-a-coordinator") }) }}>

@@ -79,8 +79,8 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
   }, [props.page])
 
   return (
-    <IonModal ref={modalRef} presentingElement={presentingElement} canDismiss={canDismiss} trigger="map-settings-modal" handle={false}>
-      <IonContent style={{ '--background': 'var(--ion-item-background' }}>
+    <IonModal ref={modalRef} presentingElement={presentingElement} trigger="map-settings-modal" handle={false}>
+      <IonContent style={{ '--background': 'var(--ion-item-background' }} scrollY={false}>
         <IonHeader className='ion-no-border'>
           <IonToolbar className='profile-modal-toolbar'>
             <IonTitle className='profile-modal-title'>Map Settings</IonTitle>

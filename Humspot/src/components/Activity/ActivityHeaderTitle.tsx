@@ -104,8 +104,8 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
       </IonCard>
 
       {props.activityType === 'attraction' &&
-        <IonModal trigger='add-rating-button' ref={modalRef} presentingElement={props.page} canDismiss={canDismiss}>
-          <IonContent style={{ '--background': 'var(--ion-item-background' }}>
+        <IonModal trigger='add-rating-button' ref={modalRef} presentingElement={props.page}>
+          <IonContent style={{ '--background': 'var(--ion-item-background' }} scrollY={false}>
             <IonHeader className='ion-no-border'>
               <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
                 <IonTitle style={{ fontSize: '1.25rem' }}>Rate Attraction</IonTitle>

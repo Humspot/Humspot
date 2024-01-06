@@ -26,7 +26,6 @@ import {
   useIonAlert
 } from '@ionic/react';
 import {
-  notificationsOutline,
   moonOutline,
   logOutOutline,
   mailOutline,
@@ -116,8 +115,8 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
 
 
   return (
-    <IonModal ref={modalRef} trigger='open-profile-page-modal' presentingElement={presentingElement} canDismiss={canDismiss}>
-      <IonContent className='profile-modal-content'>
+    <IonModal ref={modalRef} trigger='open-profile-page-modal' presentingElement={presentingElement}>
+      <IonContent className='profile-modal-content' scrollY={false}>
         <IonHeader className='ion-no-border'>
           <IonToolbar className='profile-modal-toolbar'>
             <IonTitle className='profile-modal-title'>Settings</IonTitle>

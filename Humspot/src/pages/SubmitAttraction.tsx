@@ -649,9 +649,19 @@ const SubmitAttractionPage = () => {
               />
             </div>
           </>
-        ) : (
-          <></>
-        )}
+        ) : context.humspotUser === null ? (
+          <>
+            <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
+              Loading...
+            </div>
+          </>
+        ) :
+          <>
+            <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
+              You must be logged in to submit an attraction!
+            </div>
+          </>
+        }
 
         <IonModal
           ref={mapModalRef}

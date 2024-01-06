@@ -333,7 +333,7 @@ const Map = () => {
             </Overlay>
           )}
 
-          <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateX(10%) translateY(calc(-74.5px))' }}>
+          <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateY(calc(-74.5px))' }}>
             <IonButton id="map-settings-modal" mode='md' color='light' style={{ border: "0.5px solid var(--ion-color-warning)", borderRadius: '5px' }}>
               <IonIcon icon={settingsOutline} color='secondary' />
             </IonButton>

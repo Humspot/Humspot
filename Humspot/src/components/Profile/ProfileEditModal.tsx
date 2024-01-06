@@ -120,7 +120,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
   }, [props.page]);
 
   return (
-    <IonModal ref={modalRef} trigger="open-edit-profile-modal" presentingElement={presentingElement} canDismiss={canDismiss}>
+    <IonModal ref={modalRef} trigger="open-edit-profile-modal" presentingElement={presentingElement}>
       {!context.humspotUser ? // loading
         <>
           <IonLoading message={"Loading Profile Info..."} />
@@ -138,7 +138,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
             </IonToolbar>
           </IonHeader>
 
-          <IonContent className='profile-modal-content'>
+          <IonContent className='profile-modal-content' scrollY={false}>
 
             <br />
 

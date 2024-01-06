@@ -313,7 +313,7 @@ export const EventForm = () => {
       <GoBackHeader title="Submit Event" />
       <IonContent >
 
-        {context.humspotUser?.accountType !== 'user' ?
+        {context.humspotUser && context.humspotUser.accountType !== 'user' ?
           <>
             <div style={{ background: 'var(--ion-background-color)', padding: '5px' }}>
               <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
@@ -448,10 +448,21 @@ export const EventForm = () => {
             </div>
 
           </>
-          :
-          <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
-            You must be an admin or organizer to submit an event! Request to be one <a onClick={() => router.push("/become-a-coordinator")}>here</a>
-          </div>
+          : context.humspotUser === null ? (
+            <>
+              <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
+                Loading...
+              </div>
+            </>
+          ) : context.humspotUser === undefined ? (
+            <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
+              You must be logged in to submit an event!
+            </div>
+          ) : (
+            <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
+              You must be an admin or organizer to submit an event! Request to be one <a onClick={() => router.push("/become-a-coordinator")}>here</a>
+            </div>
+          )
         }
 
         {context.humspotUser?.accountType !== 'user' &&
