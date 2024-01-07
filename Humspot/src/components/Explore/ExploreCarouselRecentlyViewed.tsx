@@ -72,25 +72,25 @@ const ExploreCarouselRecentlyViewed = () => {
                   if ("id" in activity && activity.id) router.push("/activity/" + activity.id);
                 }}
               >
-                <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px' }}>
+                <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px', border: '1px solid var(--ion-color-medium)' }}>
                   <img
                     src={activity.photoUrl ? activity.photoUrl.trim().split(',')[0] : placeholder}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '5px' }}
                   />
                 </div>
-                <IonCardTitle style={{ textAlign: 'left', paddingTop: "5px", fontSize: "1.35rem" }}>
+                <IonCardTitle style={{ textAlign: 'left', paddingLeft: '1px', paddingTop: "5px", fontSize: "1.35rem" }}>
                   {activity.name}
                 </IonCardTitle>
                 <p className='explore-carousel-activity-description'>
                   {activity.description && activity.description.length > 1 ? activity.description : "No description available"}
                 </p>
                 {"eventDate" in activity ? (
-                  <p style={{ marginTop: 0, marginBottom: '5px', fontSize: '0.8rem', textAlign: 'left' }}>
+                  <p style={{ marginTop: 0, marginBottom: '5px', paddingLeft: '1px', fontSize: '0.8rem', textAlign: 'left' }}>
                     <i>{formatDate(activity.eventDate)}</i>
                   </p>
                 ) :
                   "date" in activity && (
-                    <p style={{ marginTop: 0, marginBottom: '5px', fontSize: '0.8rem', textAlign: 'left' }}>
+                    <p style={{ marginTop: 0, marginBottom: '5px', fontSize: '0.8rem', paddingLeft: '1px', textAlign: 'left' }}>
                       <i>{formatDate(activity.date)}</i>
                     </p>
                   )

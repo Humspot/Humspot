@@ -6,7 +6,6 @@ import { useToast } from '@agney/ir-toast';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getUserRatingGivenUserID } from '../../utils/server';
-import { canDismiss } from '../../utils/functions/canDismiss';
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 
 type ActivityHeaderTitleProps = {
@@ -143,7 +142,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
             {!!originalUserRating && !hasUpdated &&
               <p className='ion-text-center'>You previously gave this a {originalUserRating} / 5</p>
             }
-            <IonButton disabled={!hasUpdated} color='secondary' expand='block' style={{ padding: '10px' }} onClick={async () => await submitRating()}>Submit</IonButton>
+            <IonButton disabled={!hasUpdated || ratingLoading} color='secondary' expand='block' style={{ padding: '10px' }} onClick={async () => await submitRating()}>Submit</IonButton>
           </IonContent>
         </IonModal>
       }

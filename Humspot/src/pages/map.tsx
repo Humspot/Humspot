@@ -14,9 +14,9 @@ const Map = () => {
   const router = useIonRouter();
   const pageRef = useRef();
 
-  const [mapZoom, setZoom] = useState<number>(15);
+  const [mapZoom, setZoom] = useState<number>(12);
   const [center, setCenter] = useState<[number, number]>([
-    40.87649434150835, -124.07918370203882,
+    40.834789599965625, -124.117142583667
   ]);
 
   const [overlayIndex, setOverlayIndex] = useState<number>(-1);
@@ -333,7 +333,7 @@ const Map = () => {
             </Overlay>
           )}
 
-          <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateY(calc(-74.5px))' }}>
+          <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateY(-15px)' }}>
             <IonButton id="map-settings-modal" mode='md' color='light' style={{ border: "0.5px solid var(--ion-color-warning)", borderRadius: '5px' }}>
               <IonIcon icon={settingsOutline} color='secondary' />
             </IonButton>

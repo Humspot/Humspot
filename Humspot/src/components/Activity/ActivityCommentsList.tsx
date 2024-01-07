@@ -1,37 +1,39 @@
+/**
+ * @file ActivityCommentsList.tsx
+ * @fileoverview handles rendering of comments list in a specific activity.
+ */
+
+import { memo } from "react";
 import { IonAvatar, IonNote, IonList, IonItem, IonLabel, IonRow, IonFab } from "@ionic/react";
+
+import IonPhotoViewer from "@codesyntax/ionic-react-photo-viewer";
+
 import avatar from "../../assets/images/avatar.svg";
 
 import { HumspotCommentResponse } from "../../utils/types";
 import { formatDate } from "../../utils/functions/formatDate";
-import IonPhotoViewer from "@codesyntax/ionic-react-photo-viewer";
+
+
 
 type ActivityCommentsList = {
   comments: HumspotCommentResponse[]
 }
 
-const ActivityCommentsList = (props: ActivityCommentsList) => {
+const ActivityCommentsList = memo((props: ActivityCommentsList) => {
 
   const comments: HumspotCommentResponse[] = props.comments;
-  console.log(comments);
 
   return (
     <>
       {
         comments.map((comment: HumspotCommentResponse, index: number) => (
           <IonList inset={true} key={comment.userID + index} style={{ marginLeft: '10px', marginRight: '10px' }}>
-            {" "}
             <IonItem lines="none">
               <IonLabel class="ion-text-wrap">
                 <IonRow>
-                  <IonPhotoViewer
-                    title={`${comment.username}'s Avatar`}
-                    src={comment.profilePicURL ?? avatar}
-                  >
-                    <IonAvatar class="activity-comment-avatar"
-                    >
-                      <img src={comment.profilePicURL ?? avatar} />
-                    </IonAvatar>
-                  </IonPhotoViewer>
+                  <IonAvatar class="activity-comment-avatar">
+                    <img src={comment.profilePicURL ?? avatar} />
+                  </IonAvatar>
                   <p className='activity-comment-username'> {comment.username} </p>
                 </IonRow>
                 <div className='activity-comment-text'>
@@ -40,30 +42,7 @@ const ActivityCommentsList = (props: ActivityCommentsList) => {
                 {comment.photoUrl &&
                   <>
                     <br></br>
-                    <div
-                      className="activity-comment-image"
-                      style={{ borderRadius: '10px' }}
-                    // onClick={(e) => {
-                    //   e.stopPropagation();
-                    //   if(!comment.photoUrl) return;
-                    //   console.log(encodeURIComponent(comment.photoUrl));
-                    //   const img: CapacitorImage = {
-                    //     url: encodeURIComponent(comment.photoUrl),
-                    //     title: `${comment.username}'s comment`
-                    //   };
-                    //   console.log(img);
-                    //   CapacitorPhotoViewer.show({
-                    //     options: {
-                    //       title: true
-                    //     },
-                    //     images: [img],
-                    //     mode: 'one',
-                    //   }).catch((err) => {
-                    //     const toast = Toast.create({ message: 'Unable to open image', position: 'top', duration: 2000, color: 'danger' });
-                    //     toast.present();
-                    //   });
-                    // }}
-                    >
+                    <div className="activity-comment-image">
                       <IonPhotoViewer
                         title={`${comment.username}'s Photo`}
                         src={comment.photoUrl}
@@ -88,6 +67,6 @@ const ActivityCommentsList = (props: ActivityCommentsList) => {
     </>
   );
 
-};
+});
 
 export default ActivityCommentsList;

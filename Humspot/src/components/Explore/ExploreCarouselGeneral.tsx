@@ -61,31 +61,31 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
                   style={{
                     '--background': 'var(--ion-background-color)',
                     height: '100%',
-                    width: "100%"
+                    width: "100%",
                   }}
                   onClick={() => {
                     if ("activityID" in activity && activity.activityID) router.push("/activity/" + activity.activityID);
                   }}
                 >
-                  <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px' }}>
+                  <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px', border: '1px solid var(--ion-color-medium)' }}>
                     <img
                       src={"photoUrls" in activity && activity.photoUrls ? activity.photoUrls.trim().split(',')[0] : "photoUrl" in activity && activity.photoUrl ? activity.photoUrl : placeholder}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </div>
-                  <IonCardTitle style={{ textAlign: 'left', paddingTop: "5px", fontSize: "1.35rem" }}>
+                  <IonCardTitle style={{ textAlign: 'left', paddingLeft: '1px', paddingTop: "5px", fontSize: "1.35rem" }}>
                     {activity.name}
                   </IonCardTitle>
                   <p className='explore-carousel-activity-description'>
                     {activity.description && activity.description.length > 1 ? activity.description : "No description available"}
                   </p>
                   {"eventDate" in activity ? (
-                    <p style={{ marginTop: 0, marginBottom: '5px', fontSize: '0.8rem', textAlign: 'left' }}>
+                    <p style={{ marginTop: 0, marginBottom: '5px', paddingLeft: '1px', fontSize: '0.8rem', textAlign: 'left' }}>
                       <i>{formatDate(activity.eventDate)}</i>
                     </p>
                   ) :
                     "date" in activity && (
-                      <p style={{ marginTop: '5px', fontSize: '0.8rem', textAlign: 'left' }}>
+                      <p style={{ marginTop: '5px', fontSize: '0.8rem', paddingLeft: '1px', textAlign: 'left' }}>
                         <i>{formatDate(activity.date)}</i>
                       </p>
                     )

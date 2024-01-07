@@ -7,7 +7,6 @@ import { useContext } from "../utils/hooks/useContext";
 const TermsAndConditions: React.FC = () => {
 
   const context = useContext();
-  const router = useIonRouter()
 
   useIonViewWillEnter(() => {
     context.setShowTabs(false);
@@ -20,131 +19,118 @@ const TermsAndConditions: React.FC = () => {
       <IonContent>
         <h2 style={{ paddingLeft: "20px" }}>Welcome to Humspot</h2>
         <section className="ion-padding">
-          <>
-            <p>
-              These terms and conditions outline the rules and regulations for the
-              use of HumSpot's Website, located at . By
-              accessing this website, we assume you accept these terms and
-              conditions. Do not continue to use HumSpot's website if you do not
-              agree to take all of the terms and conditions stated on this page.
-            </p>
-            <p>
-              The following terminology applies to these Terms and Conditions,
-              Privacy Statement and Disclaimer Notice, and any or all Agreements:
-              "Client", "You", and "Your" refers to you, the person accessing this
-              website and accepting the Company's terms and conditions. "The
-              Company", "Ourselves", "We", "Our", and "Us", refers to our Company.
-              "Party", "Parties", or "Us", refers to both the Client and
-              ourselves, or either the Client or ourselves. All terms refer to the
-              offer, acceptance, and consideration of payment necessary to
-              undertake the process of our assistance to the Client in the most
-              appropriate manner, whether by formal meetings of a fixed duration,
-              or any other means, for the express purpose of meeting the Client's
-              needs in respect of the provision of the Company's stated
-              services/products, in accordance with and subject to, prevailing law
-              of USA. Any use of the above terminology or other words in the
-              singular, plural, capitalisation and/or he/she or they, are taken as
-              interchangeable and therefore as referring to the same.
-            </p>
-
-            <ol>
-              <li><strong>Acceptance of Terms </strong></li>
-              <p>By accessing or using the Service, you agree
-                to be bound by these Terms. If you disagree with any part of the
-                terms, you may not access the Service.</p>
-
-              <li><strong>Changes to Terms</strong> </li>
-              <p>We reserve the right, at our sole discretion, to
-                modify or replace these Terms at any time. If a revision is
-                material, we will try to provide at least 30 days' notice prior to
-                any new terms taking effect. What constitutes a material change
-                will be determined at our sole discretion.</p>
-
-
-              <li><strong>Communication </strong>
-                <p>By creating an account on our Service, you agree to
-                  subscribe to newsletters, marketing or promotional materials, and
-                  other information we may send. However, you may opt-out of
-                  receiving any, or all, of these communications from us by
-                  following the unsubscribe link or instructions provided in any
-                  email we send.</p>
-              </li>
-
-              <li><strong>Content </strong>
-                <p>Our Service allows you to post, link, store, share, and
-                  otherwise make available certain information, text, graphics,
-                  videos, or other material ("Content"). You are responsible for the
-                  Content that you post on or through the Service, including its
-                  legality, reliability, and appropriateness.</p>
-              </li>
-
-              <li><strong>Accounts </strong>
-                <p>When you create an account with us, you must provide us
-                  with information that is accurate, complete, and current at all
-                  times. Failure to do so constitutes a breach of the Terms, which
-                  may result in immediate termination of your account on our
-                  Service.</p>
-              </li>
-
-              <li><strong>Links to Other Websites </strong>
-
-                <p> Our Service may contain links to
-                  third-party websites or services that are not owned or controlled
-                  by Humspot. Humspot has no control over,
-                  and assumes no responsibility for, the content, privacy policies,
-                  or practices of any third-party websites or services. You further
-                  acknowledge and agree that Humspot shall not be
-                  responsible or liable, directly or indirectly, for any damage or
-                  loss caused or alleged to be caused by or in connection with the
-                  use of or reliance on any such content, goods, or services
-                  available on or through any such websites or services.</p>
-              </li>
-
-              <li><strong>Governing Law</strong>
-                <p>These Terms shall be governed and construed in
-                  accordance with the laws of USA, without regard to its
-                  conflict of law provisions.</p>
-              </li>
-
-              <li><strong>Changes</strong>
-                <p>Changes We reserve the right, at our sole discretion, to modify or
-                  replace these Terms at any time. If a revision is material, we
-                  will provide at least 30 days' notice prior to any new terms
-                  taking effect. What constitutes a material change will be
-                  determined at our sole discretion.</p>
-              </li>
-
-              <li><strong>Contact</strong>
-                <p>Contact Us If you have any questions about these Terms, please
-                  contact us at support@humspotapp.com</p>
-              </li>
-            </ol>
-            <h3>Hyperlinking to our Content</h3>
-            <ol>
-              <li>
-                The following organizations may link to our Web site without prior
-                written approval:
-                <ol>
-                  <li>Government agencies;</li>
-                  <li>Search engines;</li>
-                  <li>News organizations;</li>
-                  <li>
-                    Online directory distributors when they list us in the
-                    directory may link to our Web site in the same manner as they
-                    hyperlink to the Web sites of other listed businesses; and
-                  </li>
-                  <li>
-                    Systemwide Accredited Businesses except soliciting non-profit
-                    organizations, charity shopping malls, and charity fundraising
-                    groups which may not hyperlink to our Web site.
-                  </li>
-                </ol>
-              </li>
-            </ol>
-          </>
-        </section>
-      </IonContent>
-    </IonPage>
+          <p>
+            By downloading or using the app, these terms will
+            automatically apply to you – you should make sure therefore
+            that you read them carefully before using the app. You’re not
+            allowed to copy or modify the app, any part of the app, or
+            our trademarks in any way. You’re not allowed to attempt to
+            extract the source code of the app, and you also shouldn’t try
+            to translate the app into other languages or make derivative
+            versions. The app itself, and all the trademarks, copyright,
+            database rights, and other intellectual property rights related
+            to it, still belong to David Yaranon.
+          </p>
+          <p>
+            David Yaranon is committed to ensuring that the app is
+            as useful and efficient as possible. For that reason, we
+            reserve the right to make changes to the app or to charge for
+            its services, at any time and for any reason. We will never
+            charge you for the app or its services without making it very
+            clear to you exactly what you’re paying for.
+          </p>
+          <p>
+            The Humspot app stores and processes personal data that
+            you have provided to us, to provide my
+            Service. It’s your responsibility to keep your phone and
+            access to the app secure. We therefore recommend that you do
+            not jailbreak or root your phone, which is the process of
+            removing software restrictions and limitations imposed by the
+            official operating system of your device. It could make your
+            phone vulnerable to malware/viruses/malicious programs,
+            compromise your phone’s security features and it could mean
+            that the Humspot app won’t work properly or at all.
+          </p>
+          <p>
+            You should be aware that there are certain things that
+            David Yaranon will not take responsibility for. Certain
+            functions of the app will require the app to have an active
+            internet connection. The connection can be Wi-Fi or provided
+            by your mobile network provider, but David Yaranon
+            cannot take responsibility for the app not working at full
+            functionality if you don’t have access to Wi-Fi, and you don’t
+            have any of your data allowance left.
+          </p>
+          <p></p>
+          <p>
+            If you’re using the app outside of an area with Wi-Fi, you
+            should remember that the terms of the agreement with your
+            mobile network provider will still apply. As a result, you may
+            be charged by your mobile provider for the cost of data for
+            the duration of the connection while accessing the app, or
+            other third-party charges. In using the app, you’re accepting
+            responsibility for any such charges, including roaming data
+            charges if you use the app outside of your home territory
+            (i.e. region or country) without turning off data roaming. If
+            you are not the bill payer for the device on which you’re
+            using the app, please be aware that we assume that you have
+            received permission from the bill payer for using the app.
+          </p>
+          <p>
+            Along the same lines, David Yaranon cannot always take
+            responsibility for the way you use the app i.e. You need to
+            make sure that your device stays charged – if it runs out of
+            battery and you can’t turn it on to avail the Service,
+            David Yaranon cannot accept responsibility.
+          </p>
+          <p>
+            With respect to David Yaranon’s responsibility for your
+            use of the app, when you’re using the app, it’s important to
+            bear in mind that although we endeavor to ensure that it is
+            updated and correct at all times, we do rely on third parties
+            to provide information to us so that we can make it available
+            to you. David Yaranon accepts no liability for any
+            loss, direct or indirect, you experience as a result of
+            relying wholly on this functionality of the app.
+          </p>
+          <p>
+            At some point, we may wish to update the app. The app is
+            currently available on iOS – the requirements for the
+            system(and for any additional systems we
+            decide to extend the availability of the app to) may change,
+            and you’ll need to download the updates if you want to keep
+            using the app. David Yaranon does not promise that it
+            will always update the app so that it is relevant to you
+            and/or works with the iOS version that you have
+            installed on your device. However, you promise to always
+            accept updates to the application when offered to you, We may
+            also wish to stop providing the app, and may terminate use of
+            it at any time without giving notice of termination to you.
+            Unless we tell you otherwise, upon any termination, (a) the
+            rights and licenses granted to you in these terms will end;
+            (b) you must stop using the app, and (if needed) delete it
+            from your device.
+          </p>
+          <p><strong>Changes to This Terms and Conditions</strong></p> <p>
+            I may update our Terms and Conditions
+            from time to time. Thus, you are advised to review this page
+            periodically for any changes. I will
+            notify you of any changes by posting the new Terms and
+            Conditions on this page.
+          </p>
+          <p>
+            These terms and conditions are effective as of 2024-01-07
+          </p>
+          <p><strong>Contact Us</strong></p>
+          <p>
+            If you have any questions or suggestions about my
+            Terms and Conditions, do not hesitate to contact me
+            at dev@humspotapp.com.
+          </p>
+          <p>This Terms and Conditions page was generated by <a href="https://app-privacy-policy-generator.nisrulz.com/" target="_blank" rel="noopener noreferrer">App Privacy Policy Generator</a></p>
+        </section >
+      </IonContent >
+    </IonPage >
   );
 };
 

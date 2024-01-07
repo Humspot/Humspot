@@ -53,7 +53,19 @@
 
 .profile-bio-text {
   font-size: 0.95rem;
-  padding: 10px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  margin-bottom: 0;
+  padding-right: 10px;
+}
+
+.profile-card-badge {
+  border-radius: 50%;
+  /* padding: 2px 10px 5px 10px; */
+  color: var(--ion-color-primary-contrast);
+  line-height: 2;
+  right: calc(var(--ion-safe-area-right, 0px) + 5px);
+  z-index: 9999;
 }
 
 

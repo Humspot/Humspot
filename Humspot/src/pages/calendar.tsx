@@ -195,7 +195,7 @@ function CalendarPage() {
               </>
             )}
           </IonList>
-          <div style={{ height: '85px' }} />
+          <div style={{ height: '15px' }} />
         </IonContent>
         {eventsTodayLoading || eventsWeekLoading ? (
           <IonProgressBar

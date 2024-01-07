@@ -19,7 +19,6 @@ const ActivitiesModal: React.FC = () => {
 
   useEffect(() => {
     if (context.currentPage) {
-      console.log(context.currentPage);
       setPresentingElement(context.currentPage);
     }
   }, [context.currentPage])
