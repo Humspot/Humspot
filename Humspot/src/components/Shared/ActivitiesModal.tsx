@@ -10,11 +10,7 @@ import { calendarOutline, compassOutline, clipboardOutline, listCircleOutline } 
 
 import { useContext } from "../../utils/hooks/useContext";
 
-type ActivitiesModalProps = {
-  page: HTMLElement | undefined;
-};
-
-const ActivitiesModal: React.FC<ActivitiesModalProps> = (props: ActivitiesModalProps) => {
+const ActivitiesModal: React.FC = () => {
 
   const router = useIonRouter();
   const context = useContext();
@@ -30,7 +26,7 @@ const ActivitiesModal: React.FC<ActivitiesModalProps> = (props: ActivitiesModalP
 
   return (
     <IonModal ref={modalRef} trigger="open-add-activity-modal" presentingElement={presentingElement} mode='ios'>
-      <IonContent className='profile-modal-content'>
+      <IonContent className='profile-modal-content' scrollY={false}>
         <IonHeader className='ion-no-border'>
           <IonToolbar className='profile-modal-toolbar'>
             <IonTitle className='profile-modal-title'>Activities</IonTitle>

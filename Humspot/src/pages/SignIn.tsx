@@ -69,7 +69,7 @@ const SignIn = () => {
   return (
     <IonPage>
       <GoBackHeader title='Sign In' />
-      <IonContent>
+      <IonContent scrollY={false}>
         <div className='center-content'>
           <section className='center-container'>
 

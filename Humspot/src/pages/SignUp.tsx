@@ -66,7 +66,7 @@ const SignUp: React.FC = () => {
   return (
     <IonPage>
       <GoBackHeader title='Sign Up' />
-      <IonContent>
+      <IonContent scrollY={false}>
         <div className='center-content'>
           <section className='center-container'>
 

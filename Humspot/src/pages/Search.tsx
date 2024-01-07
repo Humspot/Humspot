@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   IonButton, IonButtons, IonCard, IonCardTitle, IonChip, IonContent, IonHeader, IonIcon,
-  IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonPage, IonSearchbar,
+  IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonPage, IonSearchbar,
   IonSkeletonText, IonText, IonTitle, IonToolbar, useIonRouter, useIonViewWillEnter
 } from '@ionic/react';
 import { useParams } from 'react-router-dom';
@@ -17,7 +17,6 @@ import { Keyboard } from '@capacitor/keyboard';
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 
 import { handleGetSearchResults } from '../utils/server';
-import { formatDate } from '../utils/functions/formatDate';
 import { timeout } from '../utils/functions/timeout';
 import { useContext } from '../utils/hooks/useContext';
 
@@ -454,7 +453,7 @@ const Search = () => {
               :
               !loading ?
                 <div style={{ paddingTop: '25px', paddingBottom: '25px' }}>
-                  <IonTitle className='ion-text-center' style={{ display: 'flex', height: '110%', background: 'var(--ion-background-color)' }}><IonText color='dark'>No Results</IonText></IonTitle>
+                  <IonTitle className='ion-text-center' style={{ display: 'flex', height: '100%', background: 'var(--ion-background-color)' }}><IonText color='dark'>No Results</IonText></IonTitle>
                 </div>
                 :
                 <></>

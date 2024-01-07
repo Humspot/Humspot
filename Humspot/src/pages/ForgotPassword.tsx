@@ -36,7 +36,7 @@ const ForgotPassword = () => {
   return (
     <IonPage>
       <GoBackHeader title='Forgot Password' />
-      <IonContent>
+      <IonContent scrollY={false}>
         <div className='center-content'>
           <section className='center-container'>
 

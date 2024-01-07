@@ -4,10 +4,16 @@
 /** Shared **/
 .profile-modal-content {
   --background: var(--ion-item-background);
+  overflow: hidden;
+  border: 0px !important;
+  border-bottom-color: transparent !important;
+  background-image: none !important;
+  border-bottom: none !important;
 }
 
 .profile-modal-toolbar {
   --background: var(--ion-item-background);
+  border-bottom-width: 0;
 }
 
 .profile-modal-title {

@@ -16,7 +16,7 @@ const ProfileHeader: React.FC = () => {
   const context = useContext();
 
   return (
-    <IonHeader className='ion-no-border profile-modal-content' mode='ios'>
+    <IonHeader className='ion-no-border profile-modal-content' mode='ios' >
       <IonToolbar style={{ '--background': 'var(--ion-background-color)' }} mode='ios'>
         <IonCardTitle slot='start' className='profile-header-title'>
           {context.humspotUser

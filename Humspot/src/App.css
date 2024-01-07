@@ -1,6 +1,12 @@
 /** App.css **/
 /** Shared styles throughout entire application **/
 
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+
+* {
+  font-family: 'Lato', sans-serif;
+}
 
 ion-tab-bar {
   box-shadow: 0px 0px 10px rgba(var(--ion-color-medium-rgb), 0.75);
@@ -11,7 +17,7 @@ ion-tab-bar {
   padding-bottom: 1px;
   bottom: 20px;
   position: absolute;
-  left: 3.75%; 
+  left: 3.75%;
   right: 3.75%;
   border-top: none;
 }

@@ -113,22 +113,24 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
     setPresentingElement(props.page);
   }, [props.page]);
 
+  const handleStatusBarUpdate = async () => {
+    if (context.darkMode) {
+      await StatusBar.setStyle({ style: Style.Dark });
+    } else {
+      await StatusBar.setStyle({ style: Style.Light });
+    }
+  }
+
 
   return (
-    <IonModal ref={modalRef} trigger='open-profile-page-modal' presentingElement={presentingElement}>
+    <IonModal ref={modalRef} onDidDismiss={handleStatusBarUpdate} trigger='open-profile-page-modal' presentingElement={presentingElement}>
       <IonContent className='profile-modal-content' scrollY={false}>
         <IonHeader className='ion-no-border'>
           <IonToolbar className='profile-modal-toolbar'>
             <IonTitle className='profile-modal-title'>Settings</IonTitle>
             <IonButtons>
               <IonButton className='profile-modal-close-button' onClick={() => {
-                modalRef.current?.dismiss().then(async () => {
-                  if (context.darkMode) {
-                    await StatusBar.setStyle({ style: Style.Dark });
-                  } else {
-                    await StatusBar.setStyle({ style: Style.Light });
-                  }
-                })
+                modalRef.current?.dismiss().then(async () => { await handleStatusBarUpdate() })
               }}>
                 <p>Close</p>
               </IonButton>

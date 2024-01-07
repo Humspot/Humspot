@@ -206,7 +206,7 @@ const App: React.FC = () => {
           </IonTabs>
 
           {/* Modal where users can request to submit events/attractions */}
-          <ProfileActivitiesModal page={context.currentPage} />
+          <ProfileActivitiesModal />
 
         </IonReactRouter>
 
