@@ -39,3 +39,5 @@ packages/react-devtools-timeline/dist
 
 */.env
 .env
+
+GoogleService-Info.plist
