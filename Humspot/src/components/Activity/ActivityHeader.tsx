@@ -1,6 +1,6 @@
 /**
  * @file ActivityHeader.tsx
- * @fileoverview Contains the activity images and title
+ * @fileoverview Contains the activity images in a Swiper.
  */
 
 import { IonSkeletonText, IonCard } from "@ionic/react";

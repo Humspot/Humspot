@@ -20,7 +20,7 @@ import { handleGetActivitiesGivenTag } from "../utils/server";
 import placeholder from '../assets/images/placeholder.png';
 import { chevronBackOutline, shareOutline } from "ionicons/icons";
 import { useContext } from "../utils/hooks/useContext";
-import { Share } from "@capacitor/share";
+import { handleShare } from "../utils/functions/handleShare";
 
 type MoreResultsParams = {
   tagName: string;
@@ -47,14 +47,6 @@ const MoreResults = () => {
   const [filteredActivities, setFilteredActivities] = useState<any[]>();
 
   const [filterPageNum, setFilterPageNum] = useState<number>(2);
-
-  const handleShare = async () => {
-    await Share.share({
-      text: 'Check out activities tagged with ' + tagName + ' on Humspot!',
-      title: 'Check out activities tagged with ' + tagName + ' on Humspot!',
-      url: 'https://humspotapp.com' + window.location.pathname
-    });
-  };
 
   const handleGetFilteredActivities = useCallback(async () => {
     if (!tagName) {
@@ -87,7 +79,7 @@ const MoreResults = () => {
             </IonButton>
           </IonButtons>
           <IonButtons slot='end'>
-            <IonButton onClick={handleShare}>
+            <IonButton onClick={async () => await handleShare('Check out activities tagged with ' + tagName + ' on Humspot!')}>
               <IonIcon style={{ transform: 'scale(1.1)' }} icon={shareOutline} />
             </IonButton>
           </IonButtons>

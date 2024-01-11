@@ -15,7 +15,7 @@ const ContactUs = () => {
 
       <GoBackHeader title="Contact Us" />
 
-      <IonContent>
+      <IonContent fullscreen>
         <section style={{ padding: "10px" }}>
           <p >Email us at <a href="mailto:dev@humspotapp.com">dev@humspotapp.com</a>!</p>
           <p>Visit my <a href="https://www.linkedin.com/in/david-yaranon-59652a248/">LinkedIn</a> as well!</p>

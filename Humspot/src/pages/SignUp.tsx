@@ -35,16 +35,6 @@ const SignUp: React.FC = () => {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  useIonViewWillEnter(() => {
-    if (context.humspotUser) {
-      dynamicNavigate(router, '/explore', 'root');
-    }
-  }, [context.humspotUser]);
-
-  useIonViewWillEnter(() => {
-    context.setShowTabs(false);
-  });
-
   const clickOnSignUp = async () => {
     if (!passwordRef || !emailRef) return;
     await present({ message: 'Please Wait...' });
@@ -62,6 +52,16 @@ const SignUp: React.FC = () => {
     }
     await dismiss();
   };
+
+  useIonViewWillEnter(() => {
+    if (context.humspotUser) {
+      dynamicNavigate(router, '/explore', 'root');
+    }
+  }, [context.humspotUser]);
+
+  useIonViewWillEnter(() => {
+    context.setShowTabs(false);
+  });
 
   return (
     <IonPage>

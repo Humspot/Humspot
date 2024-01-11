@@ -1,3 +1,9 @@
+/**
+ * @file SubmitAttraction.tsx
+ * @fileoverview the submit attraction page. Users can enter information about a new attraction
+ * including a name, description, location, website URL, images, and tags.
+ */
+
 import { useRef, useState } from "react";
 import {
   IonPage,
@@ -411,7 +417,7 @@ const SubmitAttractionPage = () => {
   return (
     <IonPage ref={pageRef}>
       <GoBackHeader title="Submit Attraction" />
-      <IonContent>
+      <IonContent fullscreen>
 
         {context.humspotUser ? (
           <>

@@ -12,7 +12,7 @@ const GoBackHeader: React.FC<GoBackHeaderProps> = (props: GoBackHeaderProps) => 
   const router = useIonRouter();
 
   return (
-    <IonHeader className='ion-no-border'>
+    <IonHeader className='ion-no-border' translucent>
       <IonToolbar style={{ '--background': 'var(--ion-tab-bar-background)' }}>
         {/* <IonTitle style={{ fontSize: "1.25rem" }}>{title}</IonTitle> */}
         <IonButtons >

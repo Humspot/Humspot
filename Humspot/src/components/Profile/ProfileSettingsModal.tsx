@@ -22,7 +22,6 @@ import {
   useIonLoading,
   IonFab,
   IonCardTitle,
-  IonAlert,
   useIonAlert
 } from '@ionic/react';
 import {
@@ -38,7 +37,6 @@ import {
 import { Preferences } from '@capacitor/preferences';
 
 import { useContext } from '../../utils/hooks/useContext';
-import { canDismiss } from '../../utils/functions/canDismiss';
 import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from '../../utils/server';
 
 import './Profile.css';
@@ -66,7 +64,14 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
-  const toggleDarkMode = async (isChecked: boolean) => {
+  /**
+   * @description updates the dark mode values in context and Capacitor Preferences (localStorage).
+   * The document body class list, status bar, and keyboard styles are updated to reflect 
+   * the selection between light and dark mode.
+   * 
+   * @param {boolean} isChecked whether the toggle was enabled or disabled by the user.
+   */
+  const toggleDarkMode = async (isChecked: boolean): Promise<void> => {
     context.setDarkMode(isChecked);
     await Preferences.set({ key: 'darkMode', value: JSON.stringify(isChecked) });
     if (isChecked) {
@@ -78,16 +83,26 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
       await StatusBar.setStyle({ style: Style.Light });
       await Keyboard.setStyle(keyStyleOptionsLight);
     }
-  }
+  };
 
-  const clickOnLogout = async () => {
+  /**
+   * @description runs when users click on the logout button on the alert dialog.
+   * Presents a loading indicator during the duration of the logout using useIonLoading.
+   * @see handleLogout
+   */
+  const clickOnLogout = async (): Promise<void> => {
     await present({ message: 'Logging Out...' })
     await handleLogout();
     await dismiss();
   };
 
+  /**
+   * @description runs when users click on the logout button.
+   * It displays an alert dialog where users can cancel or confirm logout.
+   */
   const handleShowLogoutDialog = async () => {
     presentAlert({
+      cssClass: 'ion-alert-logout',
       header: 'Logout',
       message: 'Are you sure you want to logout?',
       buttons:
@@ -99,28 +114,29 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
           },
           {
             text: 'Logout',
-            cssClass: 'ion-alert-dialog-confirm',
             handler: async () => {
               await clickOnLogout();
             },
           },
         ]
     })
-  }
+  };
 
-
-  useEffect(() => {
-    setPresentingElement(props.page);
-  }, [props.page]);
-
+  /**
+   * @description runs when the modal dismisses. This function fixes an issue with dark mode styles
+   * incorrectly applying when the modal is opened.
+   */
   const handleStatusBarUpdate = async () => {
     if (context.darkMode) {
       await StatusBar.setStyle({ style: Style.Dark });
     } else {
       await StatusBar.setStyle({ style: Style.Light });
     }
-  }
+  };
 
+  useEffect(() => {
+    setPresentingElement(props.page);
+  }, [props.page]);
 
   return (
     <IonModal ref={modalRef} onDidDismiss={handleStatusBarUpdate} trigger='open-profile-page-modal' presentingElement={presentingElement}>

@@ -1,5 +1,5 @@
 
-import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, IonProgressBar, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
 import { Map as PigeonMap, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/hooks/useContext";
 import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/functions/map-config";
@@ -23,14 +23,14 @@ const Map = () => {
   const [attractionsOverlayIndex, setAttractionsOverlayIndex] = useState<number>(-1);
 
   const [showThisWeeksEvents, setShowThisWeeksEvents] = useState<boolean>(true);
-  const [events, setEvents] = useState<GetHumspotEventResponse[]>([]);
+  const [events, setEvents] = useState<GetHumspotEventResponse[] | null>(null);
 
 
   const [showTopAttractions, setShowTopAttractions] = useState<boolean>(false);
-  const [attractions, setAttractions] = useState<any[]>([]);
+  const [attractions, setAttractions] = useState<any[] | null>(null);
 
   const [showEventsBetweenTwoDates, setShowEventsBetweenTwoDates] = useState<boolean>(false);
-  const [eventsBetweenTwoDates, setEventsBetweenTwoDates] = useState<GetEventsBetweenTwoDatesStatusResponse['events']>([]);
+  const [eventsBetweenTwoDates, setEventsBetweenTwoDates] = useState<GetEventsBetweenTwoDatesStatusResponse['events'] | null>(null);
 
 
   useIonViewDidEnter(() => {
@@ -77,7 +77,6 @@ const Map = () => {
             setZoom(zoom);
           }}
           onClick={(e) => {
-            console.log(e.latLng);
             setOverlayIndex(-1);
           }}
         >
@@ -120,7 +119,7 @@ const Map = () => {
               />
             );
           })}
-          {showTopAttractions && attractionsOverlayIndex != -1 && attractions[attractionsOverlayIndex] && attractions[attractionsOverlayIndex].latitude && attractions[attractionsOverlayIndex].longitude && (
+          {showTopAttractions && attractionsOverlayIndex != -1 && attractions && attractions[attractionsOverlayIndex] && attractions[attractionsOverlayIndex].latitude && attractions[attractionsOverlayIndex].longitude && (
             <Overlay
               anchor={[
                 parseFloat(attractions[attractionsOverlayIndex].latitude!),
@@ -201,7 +200,7 @@ const Map = () => {
               />
             );
           })}
-          {showThisWeeksEvents && overlayIndex != -1 && events[overlayIndex] && events[overlayIndex].latitude && events[overlayIndex].longitude && (
+          {showThisWeeksEvents && overlayIndex != -1 && events && events[overlayIndex] && events[overlayIndex].latitude && events[overlayIndex].longitude && (
             <Overlay
               anchor={[
                 parseFloat(events[overlayIndex].latitude!),
@@ -282,7 +281,7 @@ const Map = () => {
               />
             );
           })}
-          {showEventsBetweenTwoDates && overlayIndex != -1 && eventsBetweenTwoDates[overlayIndex] && eventsBetweenTwoDates[overlayIndex].latitude && eventsBetweenTwoDates[overlayIndex].longitude && (
+          {showEventsBetweenTwoDates && overlayIndex != -1 && eventsBetweenTwoDates && eventsBetweenTwoDates[overlayIndex] && eventsBetweenTwoDates[overlayIndex].latitude && eventsBetweenTwoDates[overlayIndex].longitude && (
             <Overlay
               anchor={[
                 parseFloat(eventsBetweenTwoDates[overlayIndex].latitude?.toString() || ''),
@@ -334,7 +333,7 @@ const Map = () => {
           )}
 
           <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateY(-15px)' }}>
-            <IonButton id="map-settings-modal" mode='md' color='light' style={{ border: "0.5px solid var(--ion-color-warning)", borderRadius: '5px' }}>
+            <IonButton id="map-settings-modal" color='light' style={{ '--border-radius': '5px', border: "0.5px solid var(--ion-color-warning)", borderRadius: '5px' }}>
               <IonIcon icon={settingsOutline} color='secondary' />
             </IonButton>
           </IonFab>
@@ -348,6 +347,9 @@ const Map = () => {
         />
 
       </IonContent>
+      {events === null &&
+        <IonProgressBar type="indeterminate" color={"secondary"} />
+      }
     </IonPage>
   );
 }

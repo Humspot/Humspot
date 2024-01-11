@@ -311,7 +311,7 @@ export const EventForm = () => {
   return (
     <IonPage ref={pageRef}>
       <GoBackHeader title="Submit Event" />
-      <IonContent >
+      <IonContent fullscreen>
 
         {context.humspotUser && context.humspotUser.accountType !== 'user' ?
           <>

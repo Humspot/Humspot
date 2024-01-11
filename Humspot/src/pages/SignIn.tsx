@@ -40,17 +40,13 @@ const SignIn = () => {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  useIonViewWillEnter(() => {
-    if (context.humspotUser) {
-      router.push('/explore');
-    }
-  }, [context.humspotUser]);
-
-  useIonViewWillEnter(() => {
-    context.setShowTabs(false);
-  });
-
-  const clickOnSignIn = async () => {
+  /**
+   * @description runs when the user clicks on the Sign In button. 
+   * It presents a loading spinner while the username and password is verified and authenticated. 
+   * Upon success, route to /profile.
+   * @see handleSignIn
+   */
+  const clickOnSignIn = async (): Promise<void> => {
     if (!passwordRef || !emailRef) return;
     await present({ message: 'Signing In...' })
     const success = await handleSignIn(
@@ -66,9 +62,22 @@ const SignIn = () => {
     await dismiss();
   };
 
+  useIonViewWillEnter(() => {
+    if (context.humspotUser) {
+      router.push('/explore');
+    }
+  }, [context.humspotUser]);
+
+  useIonViewWillEnter(() => {
+    context.setShowTabs(false);
+  });
+
+
   return (
     <IonPage>
+
       <GoBackHeader title='Sign In' />
+
       <IonContent scrollY={false}>
         <div className='center-content'>
           <section className='center-container'>
@@ -92,12 +101,10 @@ const SignIn = () => {
 
             <p style={inputNote}><IonText onClick={() => { router.push('/forgot-password') }}>forgot your password?</IonText></p>
 
-
             <p style={{ fontSize: '0.9rem' }}><IonText color='primary'><span onClick={() => { router.goBack(); }}>Register for an Account</span></IonText></p>
             <p>OR</p>
 
             <GoogleLoginButton />
-
             <br />
 
           </section>

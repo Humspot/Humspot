@@ -6,7 +6,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle, IonHeader, IonToolbar, IonButton, IonButtons } from "@ionic/react";
-import { calendarOutline, compassOutline, clipboardOutline, listCircleOutline } from "ionicons/icons";
+import { calendarOutline, clipboardOutline, listCircleOutline, locationOutline } from "ionicons/icons";
 
 import { useContext } from "../../utils/hooks/useContext";
 
@@ -39,7 +39,7 @@ const ActivitiesModal: React.FC = () => {
         <br />
         <IonList lines='full'>
           <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submit-attraction") }) }}>
-            <IonIcon aria-hidden="true" icon={compassOutline} slot="start"></IonIcon>
+            <IonIcon aria-hidden="true" icon={locationOutline} slot="start"></IonIcon>
             <IonLabel>Submit an Attraction</IonLabel>
           </IonItem>
           <br />

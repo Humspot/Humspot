@@ -13,8 +13,6 @@ import avatar from "../../assets/images/avatar.svg";
 import { HumspotCommentResponse } from "../../utils/types";
 import { formatDate } from "../../utils/functions/formatDate";
 
-
-
 type ActivityCommentsList = {
   comments: HumspotCommentResponse[]
 }

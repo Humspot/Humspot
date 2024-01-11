@@ -9,14 +9,13 @@ import {
   IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel,
   IonList, IonLoading, IonModal, IonTextarea, IonTitle, IonToolbar, useIonLoading
 } from "@ionic/react";
-import { cameraReverseOutline, chevronBackOutline } from "ionicons/icons";
+import { cameraReverseOutline } from "ionicons/icons";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 
 import { useToast } from "@agney/ir-toast";
 import avatar from '../../assets/images/avatar.svg';
 
 import { useContext } from "../../utils/hooks/useContext";
-import { canDismiss } from "../../utils/functions/canDismiss";
 import { handleAddProfileImageToS3, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
 
 import './Profile.css';

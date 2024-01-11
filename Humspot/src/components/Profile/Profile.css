@@ -28,6 +28,10 @@
   --color: var(--ion-color-danger);
 }
 
+.ion-alert-logout {
+  --background: var(--ion-background-color);
+}
+
 
 /***************************************************************************************************/
 
@@ -64,7 +68,7 @@
   /* padding: 2px 10px 5px 10px; */
   color: var(--ion-color-primary-contrast);
   line-height: 2;
-  right: calc(var(--ion-safe-area-right, 0px) + 5px);
+  right: calc(var(--ion-safe-area-right, 0px) + 7.5px);
   z-index: 9999;
 }
 

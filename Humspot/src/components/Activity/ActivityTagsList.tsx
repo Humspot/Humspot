@@ -1,3 +1,8 @@
+/**
+ * @file ActivityTagsList.tsx
+ * @fileoverview the list of tags related to the activity.
+ */
+
 import { IonChip, useIonRouter } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 

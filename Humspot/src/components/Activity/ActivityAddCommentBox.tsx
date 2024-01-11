@@ -1,13 +1,19 @@
-import { IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton, IonCol, IonRow } from "@ionic/react";
+/**
+ * @file ActivityAddCommentBox.tsx
+ * @fileoverview the textarea at the bottom of the Activity page; has buttons to add/remove a photoa and 
+ * submit a comment.
+ */
+
 import { useEffect, useRef, useState } from "react";
+import { IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton, IonCol, IonRow } from "@ionic/react";
+import { arrowUpOutline, banOutline, cameraOutline } from "ionicons/icons";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { Keyboard, KeyboardResize, KeyboardResizeOptions } from "@capacitor/keyboard";
+import { useToast } from "@agney/ir-toast";
+import { timeout } from "../../utils/functions/timeout";
 import { handleAddComment } from "../../utils/server";
 import { useContext } from "../../utils/hooks/useContext";
 import { HumspotCommentSubmit } from "../../utils/types";
-import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
-import { useToast } from "@agney/ir-toast";
-import { arrowUpOutline, banOutline, cameraOutline } from "ionicons/icons";
-import { Keyboard, KeyboardResize, KeyboardResizeOptions } from "@capacitor/keyboard";
-import { timeout } from "../../utils/functions/timeout";
 
 const resizeOptions: KeyboardResizeOptions = {
   mode: KeyboardResize.None,
@@ -17,9 +23,15 @@ const defaultResizeOptions: KeyboardResizeOptions = {
   mode: KeyboardResize.Body,
 };
 
-function getBorderRadius(): string {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const hasTallScreen = window.screen.height / window.screen.width > 2 || window.screen.width / window.screen.height > 2;
+/**
+ * @description determines what border radius to give the textarea. If the user is on an iOS device
+ * with a curved border, return "50px", otherwise return a more square "10px".
+ * 
+ * @returns {"50px" | "10px"} the border radius of the textarea.
+ */
+function getBorderRadius(): "50px" | "10px" {
+  const isIOS: boolean = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const hasTallScreen: boolean = window.screen.height / window.screen.width > 2 || window.screen.width / window.screen.height > 2;
 
   const hasSafeAreaInset = () => {
     const div = document.createElement('div');
@@ -36,28 +48,37 @@ function getBorderRadius(): string {
 
 const ActivityAddCommentBox = (props: { id: string, activityName: string; setComments: React.Dispatch<React.SetStateAction<any[]>>; }) => {
 
-  const id: string = props.id;
+  const id: string = props.id; // the id of the activity
   const Toast = useToast();
   const context = useContext();
   const [present, dismiss] = useIonLoading();
+
   const commentRef = useRef<HTMLIonTextareaElement | null>(null);
   const [photo, setPhoto] = useState<string | undefined>(undefined);
   const [blob, setBlob] = useState<Blob | null>(null);
 
   const [kbHeight, setKbHeight] = useState<number>(0.5);
-
   const [isVisible, setIsVisible] = useState<boolean>(false);
-
   const [borderRadius, setBorderRadius] = useState<string>(getBorderRadius());
 
-  const scrollToElement = (elementId: string) => {
+  /**
+   * @description smoothly scrolls to a specified element's position on the screen.
+   * 
+   * @param {string} elementId the id of the element to scroll to
+   */
+  const scrollToElement = (elementId: string): void => {
     const element = document.getElementById(elementId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }
+  };
 
-  const handleSelectImage = async () => {
+  /**
+   * @description uses the Capacitor Camera API to allow users to select an image from their gallery.
+   * This image is then set and later used when submitting a comment.
+   * NOTE: The image must be below 15 MB in size
+   */
+  const handleSelectImage = async (): Promise<void> => {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
@@ -85,9 +106,14 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       }
     }
     dismiss();
-  }
+  };
 
-  const handleSubmitComment = async () => {
+  /**
+   * @description submits the user's comment. It ensures that the user has entered some text before sending.
+   * Upon success it dynamically updates the existing comments array with the user's newly submitted comment.
+   * @see handleAddComment
+   */
+  const handleSubmitComment = async (): Promise<void> => {
     if (!context.humspotUser) return;
     if (!commentRef || !commentRef.current || !commentRef.current.value?.trim()) {
       const toast = Toast.create({ message: "Please enter a comment", position: 'top', duration: 2000, color: 'danger' });
@@ -103,6 +129,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       activityID: id,
       photoUrl: photo ?? null
     };
+
     const res = await handleAddComment(humspotComment, blob, props.activityName);
     if (res.success) {
       const t = Toast.create({ message: "Comment added", position: 'top', duration: 2000, color: 'success' });
@@ -127,6 +154,10 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     await dismiss();
   };
 
+  /**
+   * @description adds a listener to dynamically update the border radius and position of the textarea
+   * as the keyboard opens and closes (specific to iOS).
+   */
   useEffect(() => {
     timeout(500).then(() => {
       setIsVisible(true);
@@ -164,15 +195,18 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     };
   }, []);
 
+
   return (
     <IonFab className='activity-comment-textarea'
-      style={context.darkMode ?
-        { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '3px solid #373737' }
-        : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '3px solid #e6e6e6' }}
+      style={
+        context.darkMode ?
+          { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '3px solid #373737' }
+          : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '3px solid #e6e6e6' }}
       slot="fixed"
       vertical="bottom"
       edge
     >
+
       {context.humspotUser &&
         <IonFab horizontal="end" vertical="top">
           <IonRow>
@@ -198,8 +232,8 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
             }
           </IonRow>
         </IonFab>
-
       }
+
       <IonTextarea
         color='primary'
         style={{

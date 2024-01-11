@@ -1,8 +1,7 @@
 /**
- * AWS lambda function that runs every 2 days. It uses SerpApi to retrieve the top 50 local Humboldt events from Google. 
+ * AWS lambda function that runs every day. It uses SerpApi to retrieve local Humboldt events happening 2 days in the future using Google. 
  * This information is then parsed and put into a format that the mySQL Events table expects so that it can be entered into it.
  * 
- * TO-DO: Get more tailored events! Add more keywords to Google search.
  */
 
 import { Context, Callback } from 'aws-lambda';
@@ -163,7 +162,7 @@ async function createEvents(eventsArr: SerpEventResponse[]): Promise<Event[]> {
       const { latitude, longitude } = await getLatLong(e.address);
       const eventToBeSubmitted: Event = {
         name: e.title,
-        description: e.date.when + '; ' + (e.description ?? "No description available"),
+        description: e.date.when + '; ' + (e.description && e.description !== undefined && e.description !== 'undefined' ? e.description : "No description available"),
         location: e.address && e.address[0] ? e.address[0] : '',
         addedByUserID: 'GoogleEventsScraper',
         date: formatDateForMySQL(e.date.start_date),
@@ -191,7 +190,7 @@ export const handler = async (event: any, context: Context, callback: Callback) 
 
   const baseParams = {
     engine: "google_events",
-    q: "Events in Humboldt County",
+    q: "Events in Humboldt County 2 days from now",
     hl: "en",
     gl: "us",
     location_requested: "Arcata, California, United States",
@@ -202,20 +201,20 @@ export const handler = async (event: any, context: Context, callback: Callback) 
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-  for (let start of [0, 10, 20, 30, 40]) {
-    try {
-      const params = { ...baseParams, start: start.toString() };
-      const serpEventsJson = await getJson(params);
-      const serpEventsArr: SerpEventResponse[] = serpEventsJson["events_results"] || [];
-      allSerpEvents = allSerpEvents.concat(serpEventsArr);
+  // for (let start of [0, 10, 20, 30, 40]) {
+  try {
+    const params = { ...baseParams, start: '0' /* start.toString()*/ };
+    const serpEventsJson = await getJson(params);
+    const serpEventsArr: SerpEventResponse[] = serpEventsJson["events_results"] || [];
+    allSerpEvents = allSerpEvents.concat(serpEventsArr);
 
-      if (start !== 40) {
-        await delay(1000);
-      }
-    } catch (error) {
-      console.error(`Error fetching events for start ${start}: `, error);
-    }
+    // if (start !== 40) {
+    //   await delay(1000);
+    // }
+  } catch (error) {
+    console.error(`Error fetching events for start 0: `, error);
   }
+  // }
 
   const eventsToBeAdded: Event[] = await createEvents(allSerpEvents);
 

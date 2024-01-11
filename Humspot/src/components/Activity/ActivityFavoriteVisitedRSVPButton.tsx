@@ -1,15 +1,24 @@
+/**
+ * @file ActivityFavoriteVisitedRSVPButton.tsx
+ * @fileoverview the header at the top of the Activity page. Contains a button to Favorite an activity, 
+ * say that one Visited the activity, a button to RSVP for an activity (events only), and a button to share
+ * the link using the native Share interface.
+ */
+
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useContext } from '../../utils/hooks/useContext';
 import { handleAddToFavorites, handleAddToRSVP, handleAddToVisited, handleGetFavoritesAndVisitedAndRSVPStatus } from '../../utils/server';
 import { useToast } from '@agney/ir-toast';
 import { IonButton, IonIcon } from '@ionic/react';
 import { calendar, calendarOutline, heart, heartOutline, shareOutline, walk, walkOutline } from 'ionicons/icons';
-import { Share } from '@capacitor/share';
+import { isPastDate } from '../../utils/functions/calcDates';
+import { handleShare } from '../../utils/functions/handleShare';
+import { formatDate } from '../../utils/functions/formatDate';
 
 
-const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'event' | 'attraction' | 'custom' | undefined }) => {
+const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'event' | 'attraction' | 'custom' | undefined, activityDate: string | undefined }) => {
 
-  const { id, activityType } = props;
+  const { id, activityType, activityDate } = props;
 
   const context = useContext();
   const Toast = useToast();
@@ -38,7 +47,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
       const t = Toast.create({ message: 'Something went wrong...', position: 'top', duration: 2000, color: 'danger' });
       t.present();
     }
-  }
+  };
 
   const clickOnVisited = async () => {
     if (!context.humspotUser || visited === null) return;
@@ -60,7 +69,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
       const t = Toast.create({ message: 'Something went wrong...', position: 'top', duration: 2000, color: 'danger' });
       t.present();
     }
-  }
+  };
 
   const clickOnRsvp = async () => {
     if (!context.humspotUser || rsvp === null) return;
@@ -82,17 +91,13 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
       const t = Toast.create({ message: 'Something went wrong...', position: 'top', duration: 2000, color: 'danger' });
       t.present();
     }
-  }
-
-  const handleShare = async () => {
-    const activityTypeUpper: string = activityType ? activityType[0].toUpperCase() + activityType?.slice(1) : 'Activity';
-    await Share.share({
-      "text": `Check out this ${activityTypeUpper} on Humspot!`,
-      "title": "Check out this ${activityTypeUpper} on Humspot!",
-      "url": "https://humspotapp.com" + window.location.pathname
-    });
   };
 
+  /**
+   * @description gets whether a user has clicked the buttons before to determine whether they should
+   * be filled or not. Called on page load.
+   * @see handleGetFavoritesAndVisitedAndRSVPStatus
+   */
   const getButtonStatus = useCallback(async () => {
     if (!context.humspotUser || !id) return;
     const response = await handleGetFavoritesAndVisitedAndRSVPStatus(context.humspotUser.userID, id);
@@ -100,10 +105,10 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     setVisited(response.visited);
     setRsvp(response.rsvp);
   }, [context.humspotUser]);
-
   useEffect(() => {
     getButtonStatus();
   }, [getButtonStatus])
+
 
   return (
     <div style={{ zIndex: '1000' }}>
@@ -111,7 +116,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
       {context.humspotUser &&
         <>
           <IonButton
-            className='FavoritesButton'
+            className='activity-favorites-button'
             fill='clear'
             color={'secondary'}
             size='large'
@@ -124,9 +129,9 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
             />
           </IonButton>
 
-          {activityType == 'event' ?
+          {activityType == 'event' && !isPastDate(formatDate(activityDate ?? null) ?? '') ?
             <IonButton
-              className='VisitedButton'
+              className='activity-visited-button'
               fill='clear'
               color={'secondary'}
               size='large'
@@ -141,7 +146,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
             :
             activityType == 'attraction' ?
               <IonButton
-                className='VisitedButton'
+                className='activity-visited-button'
                 fill='clear'
                 color={'secondary'}
                 size='large'
@@ -160,11 +165,14 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
         fill='clear'
         color='secondary'
         size='large'
-        onClick={handleShare}
+        onClick={async () => {
+          const activityTypeUpper: string = activityType ? activityType[0].toUpperCase() + activityType?.slice(1) : 'Activity';
+          await handleShare(`Check out this ${activityTypeUpper} on Humspot!`);
+        }}
       >
         <IonIcon style={{ transform: 'scale(1.1)' }} icon={shareOutline} />
       </IonButton>
-      
+
     </div>
   );
 

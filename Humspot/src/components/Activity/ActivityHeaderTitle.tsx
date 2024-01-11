@@ -1,3 +1,8 @@
+/**
+ * @file ActivityHeaderTitle.tsx
+ * @fileoverview card containing the title of the Activity along with a button to rate the activity (attractions only).
+ */
+
 import { IonButton, IonButtons, IonCard, IonCardTitle, IonContent, IonHeader, IonModal, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/react'
 import { Rating } from 'react-custom-rating-component'
 import { useContext } from '../../utils/hooks/useContext';

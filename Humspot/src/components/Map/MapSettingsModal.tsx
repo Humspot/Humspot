@@ -7,7 +7,6 @@ import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonInput, Io
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@agney/ir-toast";
 
-import { canDismiss } from "../../utils/functions/canDismiss";
 import { useContext } from "../../utils/hooks/useContext";
 
 import { handleGetEventsBetweenTwoDates } from "../../utils/server";
@@ -15,6 +14,13 @@ import { GetEventsBetweenTwoDatesStatusResponse } from "../../utils/types";
 
 import './Map.css';
 
+/**
+ * @description checks whether two date strings are within a two week range.
+ * 
+ * @param {string} startDate 
+ * @param {string} endDate 
+ * @returns {boolean} whether the dates are in a range of two weeks or not.
+ */
 function areDatesWithinTwoWeeks(startDate: string, endDate: string): boolean {
   const oneDay = 24 * 60 * 60 * 1000;
   const twoWeeks = 14 * oneDay;
@@ -33,7 +39,7 @@ type MapSettingsModalProps = {
   showTopAttractions: boolean;
   setShowTopAttractions: React.Dispatch<React.SetStateAction<boolean>>;
   setShowEventsBetweenTwoDates: React.Dispatch<React.SetStateAction<boolean>>;
-  setEventsBetweenTwoDates: React.Dispatch<React.SetStateAction<GetEventsBetweenTwoDatesStatusResponse['events']>>;
+  setEventsBetweenTwoDates: React.Dispatch<React.SetStateAction<GetEventsBetweenTwoDatesStatusResponse['events'] | null>>;
 };
 
 const MapSettingsModal = (props: MapSettingsModalProps) => {
@@ -48,7 +54,13 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
 
-  const handleUpdateEventsBetweenDates = async () => {
+  /**
+   * @description runs when users click the update button.
+   * The start date is verified to be before the end date, and are then verified to be in a range of two weeks.
+   * Once verified, the events on the Maps page is updated.
+   * @see handleGetEventsBetweenTwoDates
+   */
+  const handleUpdateEventsBetweenDates = async (): Promise<void> => {
     if (startDate && endDate && !areDatesWithinTwoWeeks(startDate, endDate)) {
       const t = Toast.create({ message: "Dates must be within a 2 week range; try again", duration: 2000, color: "danger", position: "bottom" });
       t.present();
@@ -72,7 +84,6 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
     const t = Toast.create({ message: "Events updated", duration: 2000, color: "success", position: "bottom" });
     t.present();
   };
-
 
   useEffect(() => {
     setPresentingElement(props.page);

@@ -15,49 +15,12 @@
   margin-right: 10px;
 }
 
-.locationcard {
-  display: flex;
-  padding: 20px;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.commentbox {
-  display: flex;
-  align-items: flex-start;
-}
-
-.commentcontents {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.commentusername {
-  font-size: medium;
-  margin-top: 5px;
-}
-
-.commentlist {
-  overflow: scroll;
-  max-height: 35vh;
-}
-
-.commentavatar {
-  width: 50px;
-  height: 50px;
-  flex-shrink: 0;
-  margin-right: 10px;
-  margin-left: 5px;
-  margin-top: 5px;
-}
-
-.FavoritesButton {
+.activity-favorites-button {
   top: 0;
   right: 0;
 }
 
-.VisitedButton {
+.activity-visited-button {
   top: 0;
   right: 80px;
 }
@@ -83,7 +46,7 @@ h1 {
   height: 125px;
   width: 100vw;
   border-top-right-radius: 10px;
-  border-top-left-radius: 10px; 
+  border-top-left-radius: 10px;
   background-color: var(--ion-background-color);
   transition: bottom 0.35s cubic-bezier(0.1, 0.76, 0.55, 0.9), opacity 300ms ease-in-out, border-radius 0.5s ease;
 }

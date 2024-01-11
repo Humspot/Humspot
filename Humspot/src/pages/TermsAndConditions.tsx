@@ -16,7 +16,7 @@ const TermsAndConditions: React.FC = () => {
     <IonPage>
       <GoBackHeader title="Terms and Conditions" />
 
-      <IonContent>
+      <IonContent fullscreen>
         <h2 style={{ paddingLeft: "20px" }}>Welcome to Humspot</h2>
         <section className="ion-padding">
           <p>

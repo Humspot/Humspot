@@ -1,3 +1,9 @@
+/**
+ * @file ActivityDescription.tsx
+ * @fileoverview the card that contains the activity description, including its open times and website url
+ * if applicable.
+ */
+
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
 
 type ActivityDescriptionProps = {

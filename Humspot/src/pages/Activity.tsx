@@ -30,6 +30,8 @@ import ActivityHeader from "../components/Activity/ActivityHeader";
 import ActivityTagsList from "../components/Activity/ActivityTagsList";
 import ActivityDescription from "../components/Activity/ActivityDescription";
 import ActivityCommentsList from "../components/Activity/ActivityCommentsList";
+import { isPastDate } from "../utils/functions/calcDates";
+import { formatDate } from "../utils/functions/formatDate";
 
 type ActivityPageParams = {
   id: string;
@@ -76,9 +78,9 @@ const Activity = () => {
   return (
     <IonPage ref={page}>
       {hasSwipedIn &&
-        <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} />} />
+        <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} activityDate={activity?.date} />} />
       }
-      <IonContent>
+      <IonContent fullscreen>
         {!hasSwipedIn &&
           <GoBackHeader title={''} />
         }
@@ -89,6 +91,10 @@ const Activity = () => {
 
         {activity && "tags" in activity &&
           <ActivityTagsList tags={activity.tags} />
+        }
+
+        {activity && activity.date && isPastDate(formatDate(activity.date ?? null)) &&
+          <p className='ion-text-left' style={{ color: 'var(--ion-color-danger)', fontWeight: '700', paddingLeft: '15px' }}>The date for this event has passed. Check out other upcoming events!</p>
         }
 
         {activity &&

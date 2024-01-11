@@ -1,3 +1,9 @@
+/**
+ * @file ActivityLocationMap.tsx
+ * @fileoverview the map component centered at the location of the activity.
+ * Clicking on it will open the location in Google Maps.
+ */
+
 import { Capacitor } from "@capacitor/core";
 import { Map, Marker } from "pigeon-maps";
 import { memo } from "react";

@@ -14,7 +14,7 @@ import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 import placeholder from '../../assets/images/school_placeholder.jpeg';
 
 import { useContext } from "../../utils/hooks/useContext";
-import { checkEventDate, formatDate } from "../../utils/functions/formatDate";
+import { formatDate } from "../../utils/functions/formatDate";
 import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse } from "../../utils/types";
 import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
 

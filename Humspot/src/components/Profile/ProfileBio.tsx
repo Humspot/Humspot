@@ -1,11 +1,11 @@
-import { IonAvatar, IonBadge, IonCard, IonFab, IonFabButton, IonRow, IonSkeletonText } from "@ionic/react";
+import { IonAvatar, IonBadge, IonCard, IonFab, IonRow, IonSkeletonText } from "@ionic/react";
 
 import { useContext } from "../../utils/hooks/useContext";
 import avatar from '../../assets/images/avatar.svg';
 
 import './Profile.css';
 
-let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
+let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh when updated profile info.
 
 const ProfileBio: React.FC = () => {
 

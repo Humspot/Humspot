@@ -11,7 +11,6 @@ import {
 } from '@ionic/react';
 import { useParams } from 'react-router-dom';
 import { chevronBackOutline, shareOutline } from 'ionicons/icons';
-import { Share } from '@capacitor/share';
 import { Keyboard } from '@capacitor/keyboard';
 
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
@@ -21,6 +20,7 @@ import { timeout } from '../utils/functions/timeout';
 import { useContext } from '../utils/hooks/useContext';
 
 import placeholder from '../assets/images/school_placeholder.jpeg';
+import { handleShare } from '../utils/functions/handleShare';
 
 
 type SearchParams = {
@@ -284,7 +284,7 @@ const tags: string[] = [
   'United Methodist Church-Joyful',
   'Wave Lounge',
   'Wharfinger Building and Eureka Public Marina',
-]
+];
 
 const LoadingCard = () => {
   return (
@@ -311,14 +311,6 @@ const Search = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [activities, setActivities] = useState<any[]>([]);
   const [pageNum, setPageNum] = useState<number>(2);
-
-  const handleShare = async () => {
-    await Share.share({
-      text: 'Check out these activities on Humspot!',
-      title: 'Check out these activities on Humspot!',
-      url: 'https://humspotapp.com' + window.location.pathname
-    });
-  };
 
   const isEnterPressed = async (key: string) => {
     if (key === 'Enter' || key === 'search') {
@@ -351,7 +343,7 @@ const Search = () => {
 
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader translucent>
         <IonToolbar>
           {query &&
             <IonTitle>{query[0].toUpperCase() + query.slice(1)}</IonTitle>
@@ -362,7 +354,7 @@ const Search = () => {
             </IonButton>
           </IonButtons>
           <IonButtons slot='end'>
-            <IonButton onClick={handleShare}>
+            <IonButton onClick={async () => await handleShare('Check out these activities on Humspot!')}>
               <IonIcon style={{ transform: 'scale(1.1)' }} icon={shareOutline} />
             </IonButton>
           </IonButtons>
@@ -379,7 +371,7 @@ const Search = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent ref={contentRef}>
+      <IonContent ref={contentRef} fullscreen>
         {query.length > 2 &&
           <>
             <div style={{ paddingLeft: '10px', paddingTop: '7.5px', paddingBottom: '0px', marginBottom: '0px' }}>

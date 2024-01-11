@@ -1,3 +1,9 @@
+/**
+ * @file ActivityDateTimeLocation.tsx
+ * @fileoverview the section containing the activity date, time, location, and a map centered 
+ * at the aforementioned location (lat + long).
+ */
+
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonRow } from "@ionic/react";
 import { formatDate } from "../../utils/functions/formatDate";
 import { ActivityLocationMap } from "./ActivityLocationMap";
@@ -14,7 +20,6 @@ type ActivityDateTimeLocationProps = {
 const ActivityDateTimeLocation = (props: ActivityDateTimeLocationProps) => {
 
   const { location, date, latitude, longitude, name } = props;
-
 
   return (
     <FadeIn>
