@@ -3,7 +3,6 @@ import {
   IonSegment,
   IonSegmentButton,
   IonLabel,
-  IonIcon,
   IonContent,
   IonCard,
   IonRefresher,
