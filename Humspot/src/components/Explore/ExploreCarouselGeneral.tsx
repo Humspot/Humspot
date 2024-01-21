@@ -30,7 +30,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
   const handleClickArrow = (e: any): void => {
     e.preventDefault();
     if (props.hasTag) {
-      router.push(`/more-results/${props.title.trim()}`);
+      router.push(`/more-results/${encodeURIComponent(props.title.trim())}`);
     }
   }
 
@@ -51,11 +51,15 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
         <Swiper
           ref={swiperRef}
           slidesPerView={1.25}
-          spaceBetween={20}
+          spaceBetween={0}
+          touchAngle={35}
+          threshold={20}
+          cssMode={true}
+          resistanceRatio={0.5}
           style={{ width: '100%', height: 'auto' }}
         >
           {props.activities && props.activities.map((activity, index) => (
-            <SwiperSlide key={index} style={{ width: 'auto', height: '100%' }}>
+            <SwiperSlide key={index} style={{ width: 'auto', height: '100%', paddingRight: "20px" }}>
               <FadeIn delay={(index % 20) * 50}>
                 <IonCard
                   style={{
@@ -94,7 +98,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
               </FadeIn>
             </SwiperSlide>
           ))}
-        </Swiper>
+        </Swiper >
       }
 
     </>

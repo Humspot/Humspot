@@ -24,10 +24,10 @@ export const ExploreCarouselLoadingSlides = (props: { amount: number }) => (
             }}
           >
             <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px' }}>
-              <IonSkeletonText animated style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <IonSkeletonText animated style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '7.5px' }} />
             </div>
             <IonCardTitle style={{ textAlign: 'left', paddingTop: "5px", fontSize: "1.35rem", width: "85%" }}>
-              <IonSkeletonText animated style={{ height: "1.35rem", width: "85%", borderRadius: "5px" }} />
+              <IonSkeletonText animated style={{ height: "1.35rem", width: "85%", borderRadius: "7.5px" }} />
             </IonCardTitle>
             <p style={{
               marginTop: '2.5px',
@@ -35,8 +35,8 @@ export const ExploreCarouselLoadingSlides = (props: { amount: number }) => (
               paddingTop: "5px",
               width: "95%"
             }}>
-              <IonSkeletonText animated style={{ height: "0.9rem", borderRadius: "5px", width: "95%" }} />
-              <IonSkeletonText animated style={{ height: "0.9rem", borderRadius: "5px", width: "95%" }} />
+              <IonSkeletonText animated style={{ height: "0.9rem", borderRadius: "7.5px", width: "95%" }} />
+              <IonSkeletonText animated style={{ height: "0.9rem", borderRadius: "7.5px", width: "95%" }} />
             </p>
           </IonCard>
         </SwiperSlide>

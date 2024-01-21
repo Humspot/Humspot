@@ -52,3 +52,7 @@ ion-tab-button ion-icon {
 button.alert-button.alert-cancel-button {
   color: var(--ion-color-danger);
 }
+
+body {
+  background-color: rgb(1, 9, 1) !important;
+}

@@ -57,6 +57,10 @@ const ExploreCarouselRecentlyViewed = () => {
         ref={swiperRef}
         slidesPerView={1.25}
         spaceBetween={0}
+        touchAngle={35}
+        threshold={20}
+        cssMode={true}
+        resistanceRatio={0.5}
         style={{ width: '100%', height: 'auto' }}
       >
         {recentActivities && recentActivities.map((activity, index) => (

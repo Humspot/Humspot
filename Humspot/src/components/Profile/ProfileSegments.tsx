@@ -6,7 +6,7 @@
 
 import { memo, useCallback, useEffect, useState } from "react";
 import { IonSegment, IonSegmentButton, IonIcon, IonLabel, IonCard, IonCardContent, IonList, IonItem, IonThumbnail, useIonRouter, IonContent, IonTitle, IonRefresher, RefresherEventDetail, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/react";
-import { people, star, walk } from "ionicons/icons";
+import { heart, people, walk } from "ionicons/icons";
 
 import { useToast } from "@agney/ir-toast";
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
@@ -97,12 +97,12 @@ const ProfileSegments: React.FC = memo(() => {
 
   return (
     <>
-      <IonSegment id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
+      <IonSegment /* style={{ height: "10vh", borderRadius: "25px" }}*/ id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
 
         <IonSegmentButton value="favorites">
           <div className="segment-button" style={{ fontSize: "0.8rem" }}>
             <IonIcon
-              icon={star}
+              icon={heart}
               style={{ margin: "5%" }}
               size="large"
             ></IonIcon>
@@ -132,7 +132,7 @@ const ProfileSegments: React.FC = memo(() => {
           </div>
         </IonSegmentButton>
 
-      </IonSegment>
+      </IonSegment >
 
 
       <IonContent>

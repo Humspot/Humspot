@@ -36,9 +36,8 @@ const titleToTagName: Record<string, string> = {
 const MoreResults = () => {
 
   const params = useParams<MoreResultsParams>();
-  const tagName: string = titleToTagName[params.tagName] ?? params.tagName ?? '';
+  const tagName: string = titleToTagName[decodeURIComponent(params.tagName)] ?? decodeURIComponent(params.tagName) ?? '';
   console.log(tagName);
-
   const Toast = useToast();
   const router = useIonRouter();
   const context = useContext();
@@ -83,13 +82,13 @@ const MoreResults = () => {
               <IonIcon style={{ transform: 'scale(1.1)' }} icon={shareOutline} />
             </IonButton>
           </IonButtons>
-          <IonTitle>{params.tagName}</IonTitle>
+          <IonTitle>{tagName}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen={true}>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">{params.tagName}</IonTitle>
+            <IonTitle size="large" style={{ paddingLeft: '17.5px' }}>{tagName}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <>

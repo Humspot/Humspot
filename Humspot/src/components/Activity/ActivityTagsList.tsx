@@ -22,7 +22,12 @@ const ActivityTagsList = (props: ActivityTagsListProps) => {
         {tags &&
           tags.split(',').map((tag: string, index: number) => {
             return (
-              <IonChip key={tag + index} color={'secondary'} onClick={() => { router.push(`/more-results/${tag.trim()}`) }}>
+              <IonChip key={tag + index} color={'secondary'} onClick={() => {
+                let encodedTag = encodeURIComponent(tag.trim());
+                encodedTag = encodeURIComponent(encodedTag);
+                console.log(encodedTag);
+                router.push(`/more-results/${encodedTag}`);
+              }}>
                 {tag}
               </IonChip>
             );

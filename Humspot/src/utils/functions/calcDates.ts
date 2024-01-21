@@ -41,17 +41,16 @@ function dateCalcFormat(date: any) {
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
-}
+};
 
 export function isPastDate(dateString: string): boolean {
-
   if (!dateString) return true;
-  // Parse the date string to a Date object
+
   const eventDate = new Date(dateString);
+  eventDate.setHours(0, 0, 0, 0);
 
-  // Get the current date and time
   const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
 
-  // Compare the dates
   return eventDate < currentDate;
-}
+};

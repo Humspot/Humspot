@@ -6,7 +6,6 @@ import {
   IonContent,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonNote,
   IonPage,
   useIonViewDidEnter,
   useIonViewWillEnter,

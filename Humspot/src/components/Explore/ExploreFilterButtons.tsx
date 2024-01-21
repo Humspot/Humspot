@@ -97,7 +97,10 @@ const ExploreFilterButtons = (props: { setShowFilterList: React.Dispatch<React.S
 
   const handleTagClick = (tag: string) => {
     if (tag) {
-      router.push(`/more-results/${tag}`);
+      let encodedTag = encodeURIComponent(tag);
+      encodedTag = encodeURIComponent(encodedTag);
+      console.log(encodedTag);
+      router.push(`/more-results/${encodedTag}`);
     }
   }
 

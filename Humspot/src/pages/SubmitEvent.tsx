@@ -344,7 +344,7 @@ export const EventForm = () => {
               <br />
               <IonItem onClick={() => { }} className='no-ripple' style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
                 <IonLabel position='stacked'>Date and Time</IonLabel>
-                <IonDatetime mode='ios' yearValues="2023,2024,2025,2026,2027,2028,2029,2030" style={{ marginTop: "20px" }} ref={dateTimeRef} min={(new Date()).toISOString()} />
+                <IonDatetime color='secondary' mode='ios' yearValues="2023,2024,2025,2026,2027,2028,2029,2030" style={{ marginTop: "20px" }} ref={dateTimeRef} min={(new Date()).toISOString()} />
               </IonItem>
               <br />
               <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
