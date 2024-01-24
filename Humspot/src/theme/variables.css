@@ -123,11 +123,11 @@ body {
   --ion-color-tertiary-tint: #7974ff;
 
   --ion-color-success: #00A879;
-	--ion-color-success-rgb: 0,168,121;
-	--ion-color-success-contrast: #000000;
-	--ion-color-success-contrast-rgb: 0,0,0;
-	--ion-color-success-shade: #00946a;
-	--ion-color-success-tint: #1ab186;
+  --ion-color-success-rgb: 0, 168, 121;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0, 0, 0;
+  --ion-color-success-shade: #00946a;
+  --ion-color-success-tint: #1ab186;
 
   --ion-color-warning: #646464;
   --ion-color-warning-rgb: 255, 213, 52;
@@ -188,12 +188,12 @@ body.dark {
   --ion-color-tertiary-tint: #7974ff;
 
   --ion-color-success: #00A879;
-	--ion-color-success-rgb: 0,168,121;
-	--ion-color-success-contrast: #000000;
-	--ion-color-success-contrast-rgb: 0,0,0;
-	--ion-color-success-shade: #00946a;
-	--ion-color-success-tint: #1ab186;
-  
+  --ion-color-success-rgb: 0, 168, 121;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0, 0, 0;
+  --ion-color-success-shade: #00946a;
+  --ion-color-success-tint: #1ab186;
+
   --ion-color-warning: #646464;
   --ion-color-warning-rgb: 255, 213, 52;
   --ion-color-warning-contrast: #000000;
@@ -264,6 +264,7 @@ body.dark {
 
   --ion-card-background: #edf2ed;
 }
+
 /* 
 .ios ion-modal {
   --ion-background-color: var(--ion-color-step-100);

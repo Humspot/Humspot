@@ -228,7 +228,7 @@ export const handleUserLogin = async (email: string | null, username: string | n
     const idToken = currentUserSession.getIdToken();
     const jwtToken = idToken.getJwtToken();
 
-    const notificationsToken: string | null = (await Preferences.get({ key: 'notificationsToken' })).value;
+    const notificationsToken: string | null = ((await Preferences.get({ key: 'notificationsToken' })).value) ?? localStorage.getItem('notificationsToken');
 
     const requestBody: Record<string, string> = {
       username: username,

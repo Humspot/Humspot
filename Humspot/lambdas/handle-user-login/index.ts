@@ -72,6 +72,16 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     const [userResult]: any = await connection.query(selectUserQuery, [requestData.email]);
 
     if (!userResult || userResult.length > 0) {
+      const notificationsToken = "notificationsToken" in requestData ? requestData.notificationsToken : '';
+      if (notificationsToken) {
+        const query = `
+          UPDATE Users 
+          SET notificationsToken = ? 
+          WHERE userID = ?;
+        `;
+        const parameters = [notificationsToken, userResult[0].userID];
+        await connection.query(query, parameters);
+      }
       return {
         statusCode: 200,
         headers: {
@@ -137,3 +147,4 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     connection.release();
   }
 };
+

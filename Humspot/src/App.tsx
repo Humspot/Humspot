@@ -3,7 +3,7 @@
  * @fileoverview Routes and main application components.
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonButton, IonIcon, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact, useIonRouter } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
@@ -50,11 +50,8 @@ import MoreResults from "./pages/MoreResults";
 import ContactUs from "./pages/ContactUs";
 import AppUrlRouter from "./AppUrlRouter";
 import Search from "./pages/Search";
-import { ActionPerformed, PushNotifications } from "@capacitor/push-notifications";
-import { Capacitor } from "@capacitor/core";
-import { FCM } from "@capacitor-community/fcm";
-import { Preferences } from "@capacitor/preferences";
 import ProfileActivitiesModal from "./components/Shared/ActivitiesModal";
+import { usePushNotifications } from "./utils/hooks/usePushNotifications";
 
 setupIonicReact({ mode: "ios" });
 
@@ -63,60 +60,13 @@ SplashScreen.show();
 const App: React.FC = () => {
 
   const context = useContext();
-  useAWSAuth(context); useDarkMode(context);
-
   const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context);
 
+  useAWSAuth(context);
+  useDarkMode(context);
+  usePushNotifications();
+
   const [currentTab, setCurrentTab] = useState("explore");
-
-  const router = useIonRouter();
-
-  const handlePushNotificationListeners = useCallback(() => {
-    PushNotifications.addListener(
-      'pushNotificationActionPerformed',
-      (notification: ActionPerformed) => {
-        alert('clicked on notif!');
-        console.log({ notification });
-        let urlJSON = notification.notification.data["gcm.notification.data"]
-        let noBackSlashes: string = urlJSON.toString().replaceAll('\\', '');
-        let removedUrl: string = noBackSlashes.substring(7, noBackSlashes.length);
-        let finalUrl: string = removedUrl.slice(1, removedUrl.length - 2);
-        console.log(finalUrl);
-        router.push(finalUrl);
-      },
-    ).then(() => {
-      console.log('Notification action performed');
-    });
-  }, []);
-
-  const registerNotifications = async () => {
-    console.log("REGISTERING NOTIFICATIONS!!!!!!!!!!!!");
-    let permStatus = await PushNotifications.checkPermissions();
-    console.log({ permStatus });
-    if (permStatus.receive === 'prompt') {
-      permStatus = await PushNotifications.requestPermissions();
-      if (permStatus.receive !== 'granted') {
-        throw new Error('User denied permissions!');
-      } else {
-        PushNotifications.register().then(() => {
-          FCM.getToken().then(async (token: { token: string }) => {
-            await Preferences.set({ key: "notificationsToken", value: token.token });
-            console.log({ token });
-          });
-        });
-      }
-    } else {
-      const x = await Preferences.get({ key: "notificationsToken" });
-      console.log(x.value);
-    }
-  };
-
-  useEffect(() => {
-    handlePushNotificationListeners();
-    if (Capacitor.getPlatform() === 'ios') {
-      registerNotifications();
-    }
-  }, [])
 
   return (
     <IonApp>
