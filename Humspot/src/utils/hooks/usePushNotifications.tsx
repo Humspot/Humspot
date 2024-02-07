@@ -1,5 +1,10 @@
+/**
+ * @file usePushNotifications.tsx
+ * @fileoverview hook to handle push notifications within native application.
+ */
+
 import { useCallback, useEffect } from 'react';
-import { PushNotifications } from '@capacitor/push-notifications';
+import { ActionPerformed, PushNotifications } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
 import { FCM } from '@capacitor-community/fcm';
 import { Preferences } from '@capacitor/preferences';
@@ -11,14 +16,14 @@ export const usePushNotifications = () => {
   const router = useIonRouter();
 
   // Function to handle push notification action
-  const handlePushNotificationActionPerformed = useCallback((notification: any) => {
-    alert('clicked on notif!');
+  const handlePushNotificationActionPerformed = useCallback((notification: ActionPerformed) => {
+    alert('clicked on notif!' + notification);
     console.log({ notification });
 
-    let urlJSON = notification.notification.data["gcm.notification.data"];
-    let noBackSlashes = urlJSON.toString().replaceAll('\\', '');
-    let removedUrl = noBackSlashes.substring(7, noBackSlashes.length);
-    let finalUrl = removedUrl.slice(1, removedUrl.length - 2);
+    let urlJSON: string = notification.notification.data["gcm.notification.data"] as string;
+    let noBackSlashes: string = urlJSON.toString().replaceAll('\\', '');
+    let removedUrl: string = noBackSlashes.substring(7, noBackSlashes.length);
+    let finalUrl: string = removedUrl.slice(1, removedUrl.length - 2);
 
     console.log(finalUrl);
     router.push(finalUrl);

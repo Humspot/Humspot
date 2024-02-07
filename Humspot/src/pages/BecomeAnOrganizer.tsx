@@ -49,7 +49,6 @@ const BecomeAnOrganizer: React.FC = () => {
       context.setHumspotUser(tempUser);
     }
     dismiss();
-
   };
 
   useIonViewWillEnter(() => {

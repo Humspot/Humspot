@@ -1,13 +1,7 @@
 import {
-  IonCardTitle,
-  IonContent,
-  IonItem,
+  IonCardTitle, IonItem,
   IonLabel,
-  IonNote,
-  IonPage,
-  IonThumbnail,
-  IonTitle,
-  useIonRouter,
+  IonNote, IonThumbnail, useIonRouter
 } from "@ionic/react";
 import { formatDate } from "../../utils/functions/formatDate";
 import placeholder from "../../assets/images/school_placeholder.jpeg";

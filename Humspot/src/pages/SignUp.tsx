@@ -13,14 +13,14 @@ import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 
 import { useToast } from '@agney/ir-toast';
 
-import { useContext } from '../utils/hooks/useContext';
-import { handleSignUp } from '../utils/server';
 import GoBackHeader from '../components/Shared/GoBackHeader';
 import GoogleLoginButton from '../components/Login/GoogleLoginButton';
 
+import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
+import { useContext } from '../utils/hooks/useContext';
+import { handleSignUp } from '../utils/server';
 
 import '../components/Login/AuthPages.css';
-import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
 
 
 const SignUp: React.FC = () => {

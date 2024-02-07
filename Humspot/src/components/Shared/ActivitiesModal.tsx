@@ -14,6 +14,7 @@ const ActivitiesModal: React.FC = () => {
 
   const router = useIonRouter();
   const context = useContext();
+
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
@@ -21,7 +22,7 @@ const ActivitiesModal: React.FC = () => {
     if (context.currentPage) {
       setPresentingElement(context.currentPage);
     }
-  }, [context.currentPage])
+  }, [context.currentPage]);
 
   return (
     <IonModal ref={modalRef} trigger="open-add-activity-modal" presentingElement={presentingElement} mode='ios'>

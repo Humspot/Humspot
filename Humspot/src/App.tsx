@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import { Redirect, Route } from "react-router-dom";
-import { IonApp, IonButton, IonIcon, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact, useIonRouter } from "@ionic/react";
+import { IonApp, IonButton, IonIcon, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { addCircleOutline, calendar, compass, map, person } from "ionicons/icons";
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -76,6 +76,7 @@ const App: React.FC = () => {
           {/* Handles opening of links on mobile, https://humspotapp.com/{route} */}
           <AppUrlRouter></AppUrlRouter>
 
+          {/* Routes and tab bar */}
           <IonTabs className={context.showTabs ? 'tab-bar-visible' : 'tab-bar-hidden'}>
             <IonRouterOutlet>
               <Route exact path="/" render={() => <Redirect to="/explore" />} />
@@ -155,7 +156,7 @@ const App: React.FC = () => {
 
           </IonTabs>
 
-          {/* Modal where users can request to submit events/attractions */}
+          {/* Global slide-up modal where users can request to submit events/attractions */}
           <ProfileActivitiesModal />
 
         </IonReactRouter>

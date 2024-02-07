@@ -392,6 +392,15 @@ export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string):
  * @param {string} activityID the ID of the activity (primary key of Activities table)
  *
  * @returns {Promise<AddToFavoritesResponse>} a status message along with the newly created favoriteID.
+ * 
+ * @example
+ * ```tsx
+ * const userID: string = 'myUserID';
+ * const activityID: string = '1234';
+ * const res = await handleAddToFavorites(userID, activityID);
+ * if(res.success) { // activity has been added to user's favorites }
+ * if(res.removed) { // activity has been removed from user's favorites }
+ * ````
  */
 export const handleAddToFavorites = async (userID: string, activityID: string): Promise<AddToFavoritesResponse> => {
   try {
@@ -1639,6 +1648,9 @@ export const handleGetCommentsGivenActivityID = async (activityID: string, pageN
 
 
 /**
+ * @function handleGetSearchResults
+ * 
+ * @description queries the database for any activity title / description that matches the search string.
  * 
  * @param {string} queryString 
  * @param {number} pageNum 

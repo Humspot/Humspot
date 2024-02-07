@@ -25,7 +25,6 @@ const Map = () => {
   const [showThisWeeksEvents, setShowThisWeeksEvents] = useState<boolean>(true);
   const [events, setEvents] = useState<GetHumspotEventResponse[] | null>(null);
 
-
   const [showTopAttractions, setShowTopAttractions] = useState<boolean>(false);
   const [attractions, setAttractions] = useState<any[] | null>(null);
 
