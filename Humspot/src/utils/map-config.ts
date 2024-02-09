@@ -36,7 +36,7 @@ export const zoomControlButtonsStyle = {
   lineHeight: '25px',
   fontSize: '20px',
   fontWeight: '500',
-  color: 'var(--ion-color-medium)',
+  color: 'black',
   cursor: 'pointer',
   border: '0.5px solid var(--ion-color-warning)',
   display: 'block',

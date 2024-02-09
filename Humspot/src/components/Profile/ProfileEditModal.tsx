@@ -75,7 +75,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
         }
         let tempUser = { ...context.humspotUser, profilePicURL: `${res.photoUrl}?${uniqueString}` };
         context.setHumspotUser(tempUser);
-        const t = Toast.create({ message: "File uploaded successfully", position: 'bottom', duration: 2000, color: "success" });
+        const t = Toast.create({ message: "File uploaded successfully", position: 'bottom', duration: 2000, color: 'secondary' });
         t.present();
       }
     }
@@ -104,7 +104,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
     if (res.success) {
       let tempUser = { ...context.humspotUser, username: (usernameRef.current.value as string).replace(/\s/g, ""), bio: bioRef.current.value as string };
       context.setHumspotUser(tempUser);
-      const t = Toast.create({ message: "Updated profile successfully", position: 'bottom', duration: 2000, color: "success" });
+      const t = Toast.create({ message: "Updated profile successfully", position: 'bottom', duration: 2000, color: 'secondary' });
       t.present();
       modalRef.current && modalRef.current.dismiss();
     } else {

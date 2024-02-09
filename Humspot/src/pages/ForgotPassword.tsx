@@ -23,7 +23,7 @@ const ForgotPassword = () => {
     await present({ message: 'Loading...' });
     const success: boolean = await handleForgotPassword(emailRef.current.value as string);
     if (success) { // route to verify page, on success email is sent with code
-      const t = Toast.create({ message: 'Success! Check your email for a verification code', position: 'bottom', duration: 2000, color: 'success' });
+      const t = Toast.create({ message: 'Success! Check your email for a verification code', position: 'bottom', duration: 2000, color: 'secondary' });
       t.present();
       dynamicNavigate(router, '/verify-email/' + encodeURIComponent(emailRef.current?.value as string) + '/password-verify', 'root');
     } else {
@@ -35,7 +35,7 @@ const ForgotPassword = () => {
 
   return (
     <IonPage>
-      <GoBackHeader title='Forgot Password' />
+      <GoBackHeader translucent={true} title='Forgot Password' />
       <IonContent scrollY={false}>
         <div className='center-content'>
           <section className='center-container'>

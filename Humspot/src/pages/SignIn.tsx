@@ -76,7 +76,7 @@ const SignIn = () => {
   return (
     <IonPage>
 
-      <GoBackHeader title='Sign In' />
+      <GoBackHeader translucent={true} title='Sign In' />
 
       <IonContent scrollY={false}>
         <div className='center-content'>

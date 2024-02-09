@@ -7,7 +7,7 @@
 import { Capacitor } from "@capacitor/core";
 import { Map, Marker } from "pigeon-maps";
 import { memo } from "react";
-import { mapTiler } from "../../utils/functions/map-config";
+import { mapTiler } from "../../utils/map-config";
 
 type ActivityLocationMapProps = {
   latitude: string | null;

@@ -58,7 +58,7 @@ const BecomeAnOrganizer: React.FC = () => {
 
   return (
     <IonPage>
-      <GoBackHeader title="Become an Organizer" />
+      <GoBackHeader translucent={true} title="Become an Organizer" />
       <IonContent>
         <div style={{ padding: '10px' }}>
           <p>To be able to submit events to Humspot, you must be an approved Organizer.</p>

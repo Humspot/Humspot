@@ -132,7 +132,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
 
     const res = await handleAddComment(humspotComment, blob, props.activityName);
     if (res.success) {
-      const t = Toast.create({ message: "Comment added", position: 'top', duration: 2000, color: 'success' });
+      const t = Toast.create({ message: "Comment added", position: 'top', duration: 2000, color: 'secondary' });
       t.present();
       const addToCommentsArray = {
         commentText: commentRef.current.value as string,

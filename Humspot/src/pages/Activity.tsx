@@ -77,11 +77,11 @@ const Activity = () => {
   return (
     <IonPage ref={page}>
       {hasSwipedIn &&
-        <GoBackHeader title={''} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} activityDate={activity?.date} />} />
+        <GoBackHeader title={''} translucent={false} buttons={<ActivityFavoriteVisitedRSVPButtons id={id} activityType={activity?.activityType} activityDate={activity?.date} />} />
       }
       <IonContent fullscreen>
         {!hasSwipedIn &&
-          <GoBackHeader title={''} />
+          <GoBackHeader title={''} translucent={false} />
         }
 
         <ActivityHeader activityType={activity?.activityType ?? ''} activityLoading={activityLoading} photoUrls={activity?.photoUrls || ''} />

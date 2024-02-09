@@ -296,7 +296,7 @@ export const EventForm = () => {
       const t = Toast.create({ message: 'Address not found, place pin on map', position: 'bottom', duration: 2000, color: 'warning' });
       t.present();
     } else {
-      const t = Toast.create({ message: 'Address found, validate location on map', position: 'bottom', duration: 2000, color: 'success' });
+      const t = Toast.create({ message: 'Address found, validate location on map', position: 'bottom', duration: 2000, color: 'secondary' });
       t.present();
       setCenter([latLong.latitude, latLong.longitude]);
       setMapPinLatLong([latLong.latitude, latLong.longitude]);
@@ -310,7 +310,7 @@ export const EventForm = () => {
 
   return (
     <IonPage ref={pageRef}>
-      <GoBackHeader title="Submit Event" />
+      <GoBackHeader translucent={true} title="Submit Event" />
       <IonContent fullscreen>
 
         {context.humspotUser && context.humspotUser.accountType !== 'user' ?

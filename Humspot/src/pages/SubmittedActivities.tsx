@@ -33,7 +33,7 @@ const SubmittedActivitiesPage = () => {
 
   return (
     <IonPage>
-      <GoBackHeader title="Pending Submissions" />
+      <GoBackHeader translucent={true} title="Pending Submissions" />
 
       <IonContent>
 

@@ -401,7 +401,7 @@ const SubmitAttractionPage = () => {
         message: "Address found, validate location on map",
         position: 'bottom',
         duration: 2000,
-        color: "success",
+        color: 'secondary',
       });
       t.present();
       setCenter([latLong.latitude, latLong.longitude]);
@@ -416,7 +416,7 @@ const SubmitAttractionPage = () => {
 
   return (
     <IonPage ref={pageRef}>
-      <GoBackHeader title="Submit Attraction" />
+      <GoBackHeader translucent={true} title="Submit Attraction" />
       <IonContent fullscreen>
 
         {context.humspotUser ? (

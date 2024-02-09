@@ -17,7 +17,7 @@ const AdminDashboard = () => {
     <IonPage>
       {context.humspotUser?.accountType == 'admin' &&
         <>
-          <GoBackHeader title={"Admin - " + context.humspotUser.username} />
+          <GoBackHeader translucent={true} title={"Admin - " + context.humspotUser.username} />
           <div style={{ height: "10px" }} />
           <AdminSegments />
         </>

@@ -60,7 +60,7 @@ SplashScreen.show();
 const App: React.FC = () => {
 
   const context = useContext();
-  const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context); t
+  const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context);
 
   useAWSAuth(context);
   useDarkMode(context);

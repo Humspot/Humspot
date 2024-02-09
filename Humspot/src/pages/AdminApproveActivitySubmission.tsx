@@ -63,7 +63,7 @@ const AdminApproveActivitySubmission = () => {
 
   return (
     <IonPage>
-      <GoBackHeader title={submissionInfo?.activityType ? "Approve " + submissionInfo.activityType : ""} />
+      <GoBackHeader translucent={true} title={submissionInfo?.activityType ? "Approve " + submissionInfo.activityType : ""} />
 
       <IonContent >
 

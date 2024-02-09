@@ -13,7 +13,7 @@ const ContactUs = () => {
   return (
     <IonPage>
 
-      <GoBackHeader title="Contact Us" />
+      <GoBackHeader translucent={true} title="Contact Us" />
 
       <IonContent fullscreen>
         <section style={{ padding: "10px" }}>

@@ -2,7 +2,7 @@
 import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, IonProgressBar, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
 import { Map as PigeonMap, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/hooks/useContext";
-import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/functions/map-config";
+import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/map-config";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { handleGetActivitiesGivenTag, handleGetThisWeeksEvents } from "../utils/server";
 import { GetEventsBetweenTwoDatesStatusResponse, GetHumspotEventResponse } from "../utils/types";

@@ -81,7 +81,7 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
     props.setShowThisWeeksEvents(false);
     props.setShowEventsBetweenTwoDates(true);
     modalRef.current && modalRef.current.dismiss();
-    const t = Toast.create({ message: "Events updated", duration: 2000, color: "success", position: "bottom" });
+    const t = Toast.create({ message: "Events updated", duration: 2000, color: 'secondary', position: "bottom" });
     t.present();
   };
 
