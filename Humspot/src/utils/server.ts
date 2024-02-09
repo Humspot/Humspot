@@ -1108,6 +1108,7 @@ export const handleGetThisWeeksEvents = async (): Promise<{ message: string; suc
   }
 };
 
+
 /**
  * @function handleSubmitEventForApproval
  * 
@@ -1146,7 +1147,12 @@ export const handleSubmitEventForApproval = async (event: HumspotEvent) => {
 };
 
 
-
+/**
+ * 
+ * @param blobs 
+ * @param folderName 
+ * @returns 
+ */
 export const handleUploadSubmissionImages = async (blobs: Blob[] | null, folderName: string) => {
   if (!blobs) {
     return {
@@ -1205,7 +1211,15 @@ export const handleUploadSubmissionImages = async (blobs: Blob[] | null, folderN
 };
 
 
-
+/**
+ * @function handleGetSubmittedActivities
+ * @description gets a list of activities (events/attractions) submitted by a user.
+ * NOTE: The list contains pending activities only, if they have been approved they will not be returned by this function.
+ * 
+ * @param {string} userID the id of the user
+ * @param {number} pageNum pagination
+ * @returns {GetSubmittedActivitiesResponse} success status and message, and an array of pending activities.
+ */
 export const handleGetSubmittedActivities = async (userID: string, pageNum: number): Promise<GetSubmittedActivitiesResponse> => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1243,7 +1257,14 @@ export const handleGetSubmittedActivities = async (userID: string, pageNum: numb
 };
 
 
-
+/**
+ * @function handleSubmitRequestToBecomeOrganizer 
+ * @description submits a request for a user to become an organizer. An email is sent to the admin list
+ * to notify them of the incoming request.
+ * 
+ * @param {OrganizerRequestSubmission} data the user's information that is being submitted
+ * @returns 
+ */
 export const handleSubmitRequestToBecomeOrganizer = async (data: OrganizerRequestSubmission) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1276,6 +1297,13 @@ export const handleSubmitRequestToBecomeOrganizer = async (data: OrganizerReques
 };
 
 
+/**
+ * 
+ * @param userID 
+ * @param activityID 
+ * @param rating 
+ * @returns 
+ */
 export const handleAddRating = async (userID: string, activityID: string, rating: number): Promise<{ message: string; success: boolean; }> => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1314,6 +1342,12 @@ export const handleAddRating = async (userID: string, activityID: string, rating
 };
 
 
+/**
+ * 
+ * @param userID 
+ * @param activityID 
+ * @returns 
+ */
 export const getUserRatingGivenUserID = async (userID: string, activityID: string): Promise<{ message: string, success: boolean; ratingInfo?: { rating: number; hasRated: string } }> => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1349,6 +1383,12 @@ export const getUserRatingGivenUserID = async (userID: string, activityID: strin
 };
 
 
+/**
+ * 
+ * @param pageNum 
+ * @param userID 
+ * @returns 
+ */
 export const handleGetPendingOrganizerSubmissions = async (pageNum: number, userID: string) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1384,7 +1424,15 @@ export const handleGetPendingOrganizerSubmissions = async (pageNum: number, user
 };
 
 
-
+/**
+ * 
+ * @param approverID 
+ * @param submitterID 
+ * @param submitterEmail 
+ * @param submissionID 
+ * @param reason 
+ * @returns 
+ */
 export const handleApproveOrganizer = async (approverID: string, submitterID: string, submitterEmail: string, submissionID: string, reason: string) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1426,7 +1474,15 @@ export const handleApproveOrganizer = async (approverID: string, submitterID: st
 };
 
 
-
+/**
+ * 
+ * @param approverID 
+ * @param submitterID 
+ * @param submitterEmail 
+ * @param submissionID 
+ * @param reason 
+ * @returns 
+ */
 export const handleDenyOrganizer = async (approverID: string, submitterID: string, submitterEmail: string, submissionID: string, reason: string) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1468,7 +1524,12 @@ export const handleDenyOrganizer = async (approverID: string, submitterID: strin
 };
 
 
-
+/**
+ * 
+ * @param pageNum 
+ * @param userID 
+ * @returns 
+ */
 export const handleGetApprovedOrganizerSubmissions = async (pageNum: number, userID: string): Promise<{ message: string; success: boolean; organizerList: { username: string }[] }> => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1504,7 +1565,12 @@ export const handleGetApprovedOrganizerSubmissions = async (pageNum: number, use
 };
 
 
-
+/**
+ * 
+ * @param userID 
+ * @param submissionID 
+ * @returns 
+ */
 export const handleGetSubmissionInfo = async (userID: string, submissionID: string) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1542,7 +1608,11 @@ export const handleGetSubmissionInfo = async (userID: string, submissionID: stri
 };
 
 
-
+/**
+ * 
+ * @param event 
+ * @returns 
+ */
 export const handleSubmitAttractionForApproval = async (event: HumspotAttraction) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1575,7 +1645,13 @@ export const handleSubmitAttractionForApproval = async (event: HumspotAttraction
 };
 
 
-
+/**
+ * 
+ * @param adminUserID 
+ * @param info 
+ * @param reason 
+ * @returns 
+ */
 export const handleApproveActivitySubmission = async (adminUserID: string, info: SubmissionInfo, reason: string) => {
   try {
     const currentUserSession = await Auth.currentSession();
@@ -1621,7 +1697,7 @@ export const handleApproveActivitySubmission = async (adminUserID: string, info:
  * @param {string} activityID 
  * @param {number} pageNum 
  * 
- * @returns {Promise<{ message: string; comments?: HumspotCommentResponse[], success: boolean }>} an array of comments
+ * @returns {Promise<{ message: string; comments?: HumspotCommentResponse[], success: boolean }>} a success message and an array of comments
  */
 export const handleGetCommentsGivenActivityID = async (activityID: string, pageNum: number): Promise<{ message: string; comments?: HumspotCommentResponse[], success: boolean }> => {
   if (!activityID || pageNum < 1) return { message: "No more comments to load", success: true, comments: [] };
@@ -1677,4 +1753,4 @@ export const handleGetSearchResults = async (queryString: string, pageNum: numbe
     console.log(err);
     return { message: "Something went wrong", success: false };
   }
-}
+};

@@ -9,6 +9,7 @@ import { IonApp, IonButton, IonIcon, IonRouterOutlet, IonTabBar, IonTabButton, I
 import { IonReactRouter } from "@ionic/react-router";
 import { addCircleOutline, calendar, compass, map, person } from "ionicons/icons";
 import { SplashScreen } from '@capacitor/splash-screen';
+import { ToastProvider } from "@agney/ir-toast";
 
 import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
@@ -38,29 +39,28 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import SubmittedActivities from "./pages/SubmittedActivities";
 import BecomeACoordinator from "./pages/BecomeAnOrganizer";
 import AdminDashboard from "./pages/AdminDashboard";
+import MoreResults from "./pages/MoreResults";
+import ContactUs from "./pages/ContactUs";
+import Search from "./pages/Search";
 import AdminApproveActivitySubmission from "./pages/AdminApproveActivitySubmission";
 
+
+import AppUrlRouter from "./AppUrlRouter";
 import useAWSAuth from "./utils/hooks/useAWSAuth";
 import useDarkMode from "./utils/hooks/useDarkMode";
 import useTabBarVisibility from "./utils/hooks/useTabBarVisibility";
 import { useContext } from "./utils/hooks/useContext";
-
-import { ToastProvider } from "@agney/ir-toast";
-import MoreResults from "./pages/MoreResults";
-import ContactUs from "./pages/ContactUs";
-import AppUrlRouter from "./AppUrlRouter";
-import Search from "./pages/Search";
-import ProfileActivitiesModal from "./components/Shared/ActivitiesModal";
 import { usePushNotifications } from "./utils/hooks/usePushNotifications";
+import ProfileActivitiesModal from "./components/Shared/ActivitiesModal";
+
 
 setupIonicReact({ mode: "ios" });
-
 SplashScreen.show();
 
 const App: React.FC = () => {
 
   const context = useContext();
-  const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context);
+  const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context); t
 
   useAWSAuth(context);
   useDarkMode(context);
