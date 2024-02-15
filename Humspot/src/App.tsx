@@ -1,6 +1,8 @@
 /**
  * @file App.tsx
  * @fileoverview Routes and main application components.
+ * 
+ * @note this is the iOS version of the application. 
  */
 
 import { useState } from "react";
