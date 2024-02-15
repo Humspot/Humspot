@@ -31,6 +31,7 @@ import ActivityDescription from "../components/Activity/ActivityDescription";
 import ActivityCommentsList from "../components/Activity/ActivityCommentsList";
 import { isPastDate } from "../utils/functions/calcDates";
 import { formatDate } from "../utils/functions/formatDate";
+import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 
 type ActivityPageParams = {
   id: string;
@@ -93,7 +94,9 @@ const Activity = () => {
         }
 
         {activity && activity.date && isPastDate(formatDate(activity.date ?? null)) &&
-          <p className='ion-text-left' style={{ color: 'var(--ion-color-danger)', fontWeight: '700', paddingLeft: '15px' }}>The date for this event has passed. Check out other upcoming events!</p>
+          <FadeIn>
+            <p className='ion-text-left' style={{ color: 'var(--ion-color-danger)', fontWeight: '700', paddingLeft: '15px' }}>The date for this event has passed. Check out other upcoming events!</p>
+          </FadeIn>
         }
 
         {activity &&

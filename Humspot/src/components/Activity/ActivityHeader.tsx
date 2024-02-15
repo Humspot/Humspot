@@ -6,6 +6,7 @@
 import { IonSkeletonText, IonCard } from "@ionic/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { chevronBackOutline } from "ionicons/icons";
 
 import placeholder from "../../assets/images/placeholder.jpeg"
 
@@ -40,6 +41,7 @@ const ActivityHeader = (props: ActivityHeaderProps) => {
                 <IonCard className='ion-no-padding ion-no-margin' style={{ width: "97.5vw", marginRight: "5px", marginLeft: "5px" }}>
                   <IonPhotoViewer
                     title={`${activityTypeUpper} Image`}
+                    icon={chevronBackOutline}
                     src={url}
                   >
                     <img

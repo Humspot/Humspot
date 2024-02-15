@@ -5,6 +5,7 @@
 
 import { memo } from "react";
 import { IonAvatar, IonNote, IonList, IonItem, IonLabel, IonRow, IonFab } from "@ionic/react";
+import { chevronBackOutline } from "ionicons/icons";
 
 import IonPhotoViewer from "@codesyntax/ionic-react-photo-viewer";
 
@@ -12,6 +13,7 @@ import avatar from "../../assets/images/avatar.svg";
 
 import { HumspotCommentResponse } from "../../utils/types";
 import { formatDate } from "../../utils/functions/formatDate";
+
 
 type ActivityCommentsList = {
   comments: HumspotCommentResponse[]
@@ -43,6 +45,7 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
                     <div className="activity-comment-image">
                       <IonPhotoViewer
                         title={`${comment.username}'s Photo`}
+                        icon={chevronBackOutline}
                         src={comment.photoUrl}
                       >
                         <img src={comment.photoUrl} alt={`${comment.username}'s photo`} />
