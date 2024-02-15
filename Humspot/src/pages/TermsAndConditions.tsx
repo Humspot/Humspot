@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { IonPage, IonContent, IonText, useIonViewWillEnter, useIonRouter } from "@ionic/react";
+import React from "react";
+import { IonPage, IonContent, useIonViewWillEnter } from "@ionic/react";
 
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { useContext } from "../utils/hooks/useContext";

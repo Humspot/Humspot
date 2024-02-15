@@ -34,7 +34,6 @@ import {
 } from "./types";
 
 import { Capacitor } from '@capacitor/core';
-import { Browser } from '@capacitor/browser';
 import { Preferences } from "@capacitor/preferences";
 
 // Determine if the app is running on web or as a native app
@@ -53,9 +52,6 @@ const updatedAwsConfig = {
     ...awsconfig.oauth,
     redirectSignIn,
     redirectSignOut,
-    // urlOpener: async (url: string, redirectUrl: string) => {
-    //   await Browser.open({ url, windowName: isWebPlatform ? '_self' : '_blank' });
-    // },
   },
 };
 
@@ -71,6 +67,21 @@ Amplify.configure(updatedAwsConfig);
  * This redirection has not been implemented yet (currently only works on localhost); Deep links are required.
  *
  * @returns {Promise<boolean>} whether the auth federated sign in (GOOGLE) is successful
+ * 
+ * @example
+ * ```ts
+ * await handleGoogleLoginAndVerifyAWSUser();
+ * ...
+ * const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
+ *  switch (event) {
+ *     case "signIn": // called after handleGoogleLoginAndVerifyAWSUser resolves as true
+ *       const currentUser = await Auth.currentAuthenticatedUser();
+ *       // handle current user logging in
+ *       break;
+ *     ...
+ *   }
+ * });
+ * ```
  */
 export const handleGoogleLoginAndVerifyAWSUser = async (): Promise<boolean> => {
   try {
@@ -93,6 +104,18 @@ export const handleGoogleLoginAndVerifyAWSUser = async (): Promise<boolean> => {
  * @param {string} email the provided user email address
  * @param {string} password the provided user password
  * @returns {Promise<boolean>} true if sign up successful, false otherwise
+ * 
+ * @example
+ * ```ts
+ * const email: string = 'email@example.com'; // from user input
+ * const password: string = 'myAwesomePassword'; // from user input
+ * const success: boolean = await handleSignUp(email, password);
+ * if (success) {
+ *  // sign up successful, code has been emailed to user, redirect as needed
+ * } else {
+ *  // email has already been registerd / something went wrong on backend
+ * }
+ * ```
  */
 export const handleSignUp = async (email: string, password: string): Promise<boolean> => {
   try {
@@ -120,6 +143,18 @@ export const handleSignUp = async (email: string, password: string): Promise<boo
  * @param {string} email the provided user email address
  * @param {string} code the verification code sent to the email
  * @returns {Promise<boolean>} true if verification was successful, false otherwise.
+ * 
+ * @example 
+ * ```ts
+ * const email: string = 'email@example.com'; // from user input
+ * const code: string = '123456'; // from user input, emailed code
+ * const success: boolean = await confirmSignUp(email, code);
+ * if (success) { 
+ *  // user has been added successfully to database and AWS amplify auth 
+ * } else { 
+ *  //email/code combination incorrect, user has not been added to database or AWS amplify auth
+ * }
+ * ```
  */
 export const confirmSignUp = async (email: string, code: string): Promise<boolean> => {
   try {
@@ -140,6 +175,23 @@ export const confirmSignUp = async (email: string, code: string): Promise<boolea
  * @param {string} email the provided user email address.
  * @param {string} password the provided user password.
  * @returns {Promise<boolean>} whether login was successful or not.
+ * 
+ * @example 
+ * ```ts
+ * const email: string = 'email@example.com'; // from user input
+ * const password: string = 'password@example.com'; // from user input
+ * await handleSignIn(email, password);
+ * ...
+ * const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
+ *  switch (event) {
+ *     case "signIn": // called after handleSignIn resolves as true
+ *       const currentUser = await Auth.currentAuthenticatedUser();
+ *       // handle current user logging in, see handleUserLogin function
+ *       break;
+ *     ...
+ *   }
+ * });
+ * ```
  */
 export const handleSignIn = async (email: string, password: string): Promise<boolean> => {
   try {
@@ -158,6 +210,16 @@ export const handleSignIn = async (email: string, password: string): Promise<boo
  * @description logs the user out of the application.
  *
  * @returns {Promise<boolean>} true if the user successfully logged out, false otherwise
+ * 
+ * @example 
+ * ```ts
+ * const isLoggedOut: boolean = await handleLogout();
+ * if (isLoggedOut) {
+ *  // user successfully logged out, redirect as needed
+ * } else {
+ *  // something went wrong, display error toast message
+ * }
+ * ```
  */
 export const handleLogout = async (): Promise<boolean> => {
   try {
@@ -176,6 +238,17 @@ export const handleLogout = async (): Promise<boolean> => {
  * 
  * @param {string} email the user's email to send the password reset verification code to.
  * @returns {Promise<boolean>} true if successfully sent, false otherwise.
+ * 
+ * @example 
+ * ```ts
+ * const email: string = "email@example.com"; // from user input
+ * const success: boolean = await handleForgotPassword(email);
+ * if (success) {
+ *  // reset password email sent successfully, redirect as needed to enter code
+ * } else {
+ *  // email not in database / something went wrong
+ * }
+ * ```
  */
 export const handleForgotPassword = async (email: string): Promise<boolean> => {
   try {
@@ -196,6 +269,19 @@ export const handleForgotPassword = async (email: string): Promise<boolean> => {
  * @param {string} code the verification code sent to the user requesting to reset password.
  * @param {string} newPassword the password being used to reset account credentials.
  * @returns {Promise<boolean>} true if successfully reset, false otherwise.
+ * 
+ * @example 
+ * ```ts
+ * const email: string = 'email@example.com'; // from user input
+ * const code: string = `123456`; // from user input, emailed code
+ * const newPassword: string = 'myNewPassword'; // from user input
+ * const success: boolean = await handleResetPassword(email, code, newPassword);
+ * if (success) {
+ *  //successfully reset password, redirect to the sign in page
+ * } else {
+ *  // email/code combination incorrect or something went wrong
+ * }
+ * ```
  */
 export const handleResetPassword = async (email: string, code: string, newPassword: string): Promise<boolean> => {
   try {
@@ -211,12 +297,24 @@ export const handleResetPassword = async (email: string, code: string, newPasswo
 /**
  * @function handleUserLogin
  * @description Calls the AWS API gateway /create-user. This will create a new user in the database if first time logging in.
+ * Otherwise, it will return the existing user's information as an object of type HumspotUser.
  *
  * @param {string | null} email
  * @param {string | null} username
  *
  * @returns {Promise<LoginResponse>} response containing a message of success or error.
  * If success, the user object is returned of type HumspotUser.
+ * 
+ * @example 
+ * ```ts 
+ * const email: string | null = 'email@example.com';
+ * const username: string | null = 'myUsername';
+ * const isGoogleAccount: boolean = true; // true if user logged in with Google, false if using email/password
+ * const res: LoginResponse = await handleUserLogin(email, username, isGoogleAccount);
+ * if (res.user) { 
+ *  setHumspotUser(res.user); 
+ * }
+ * ```
  */
 export const handleUserLogin = async (email: string | null, username: string | null, isGoogleAccount: boolean): Promise<LoginResponse> => {
   try {
@@ -310,7 +408,6 @@ export const handleAddEvent = async (newEvent: HumspotEvent): Promise<AddEventRe
  * as all attractions must be approved by an admin. 
  *
  * @param {HumspotAttraction} newAttraction the attraction to be added.
- *
  * @returns {Promise<AddAttractionResponse>} response containing a message of success or error.
  * If success, the newly added attractionID is returned.
  */
@@ -353,8 +450,17 @@ export const handleAddAttraction = async (newAttraction: HumspotAttraction): Pro
  *
  * @param {number} pageNum the page number which corresponds to the offset when selecting rows in the table
  * @param {string} tag the event tag
- *
  * @returns {Promise<{message: string; activities: any[]; success: boolean;}>} a status message and a success flag along with an array of activities.
+ * 
+ * @example
+ * ```ts 
+ * const tag: string = 'Adventure';
+ * const pageNum: number = 2;
+ * const res = await handleGetActivitiesGivenTag(pageNum, tag);
+ * if (res.success) {
+ *  setActivities(res.activities);
+ * }
+ * ```
  */
 export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string): Promise<{ message: string; activities: any[]; success: boolean; }> => {
   try {
@@ -398,8 +504,12 @@ export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string):
  * const userID: string = 'myUserID';
  * const activityID: string = '1234';
  * const res = await handleAddToFavorites(userID, activityID);
- * if(res.success) { // activity has been added to user's favorites }
- * if(res.removed) { // activity has been removed from user's favorites }
+ * if (res.success) { 
+ *  // activity has been added to user's favorites 
+ * }
+ * if (res.removed) { 
+ *  // activity has been removed from user's favorites 
+ * }
  * ````
  */
 export const handleAddToFavorites = async (userID: string, activityID: string): Promise<AddToFavoritesResponse> => {
@@ -441,12 +551,31 @@ export const handleAddToFavorites = async (userID: string, activityID: string): 
 
 /**
  * @function handleAddToVisited
- * @description Adds an activity to a User's visited list.
+ * @description Adds (or removes, if already visited) an activity to a User's visited list.
  * @note List in this context refers to a row entry in the Visited table.
+ * @todo remove the 'local' visitDate param and use server-side date instead.
  *
  * @param {string} userID the ID of the logged in user.
  * @param {string} activityID the If of the activity (primary key of the Activities table).
  * @param {string} visitedDate the date the user visited the Activity (Event / Attraction)
+ * @returns {Promise<AddToVisitedResponse>} a success message / status and whether the activity has been added or removed from their Visited list.
+ * 
+ * @example 
+ * ```ts 
+ * const userID: string = context.humspotUser.userID; // from global user context, or some other method
+ * const { activityID } = useParams<PageParams>(); // from current page URL, or some other method
+ * const visitDate: string = new Date().toISOString(); 
+ * const res = await handleAddToVisited(userID, activityID, visitDate);
+ * if (res.success) {
+ *  if (res.removed) {
+ *    // activity has been removed from Visited list
+ *  } else {
+ *    // activity has been added to Visited list
+ *  }
+ * } else {
+ *  // something went wrong when trying to add to Visited lsit
+ * }
+ * ```
  */
 export const handleAddToVisited = async (userID: string, activityID: string, visitDate: string): Promise<AddToVisitedResponse> => {
   try {
@@ -487,12 +616,31 @@ export const handleAddToVisited = async (userID: string, activityID: string, vis
 
 /**
  * @function handleAddToRSVP
- * @description Adds an activity to a User's RSVP list.
+ * @description Adds (or removes, if already in RSVP list) an activity to a User's RSVP list.
  * @note List in this context refers to a row entry in the RSVP table.
+ * @todo remove the 'local' rsvpDate param and use server-side date instead.
+ * @todo include the date/time of the activity so that a notification can be sent out to the user.
  *
  * @param {string} userID the ID of the logged in user.
  * @param {string} activityID the If of the activity (primary key of the Activities table).
  * @param {string} rsvpDate the date the user visited the Activity (Event / Attraction)
+ * 
+ * @example 
+ * ```ts 
+ * const userID: string = context.humspotUser.userID; // from global user context, or some other method
+ * const { activityID } = useParams<PageParams>(); // from current page URL, or some other method
+ * const rsvpDate: string = new Date().toISOString();
+ * const res = await handleAddToRSVP(userID, activityID, visitDate);
+ * if (res.success) {
+ *  if (res.removed) {
+ *    // activity has been removed from Visited list
+ *  } else {
+ *    // activity has been added to Visited list
+ *  }
+ * } else {
+ *  // something went wrong when trying to add to Visited lsit
+ * }
+ * ```
  */
 export const handleAddToRSVP = async (userID: string, activityID: string, rsvpDate: string): Promise<AddToRSVPResponse> => {
   try {
@@ -540,6 +688,20 @@ export const handleAddToRSVP = async (userID: string, activityID: string, rsvpDa
  * @param {string} userID the user's ID
  * @param {Blob} blob the photo data
  * @returns {Promise<AddImageResponse>} a status message, a success flag, and a photo URL corresponding to the uploaded image.
+ * 
+ * @example 
+ * ```ts
+ * const image = await Camera.getPhoto({...}); // using Capacitor Camera API
+ * const path = await fetch(image.webPath!);
+ * const blob: Blob = await path.blob();
+ * const userID; string = context.humspotUser.userID; // from global context variable, or some other method
+ * const res = await handleAddProfileImageToS3(userID, blob);
+ * if (res.success) {
+ *  // set profile photo URl to res.photoUrl;
+ * } else {
+ *  // something went wrong when uploading picture
+ * }
+ * ```
  */
 export const handleAddProfileImageToS3 = async (userID: string, blob: Blob): Promise<AddImageResponse> => {
   try {
@@ -593,8 +755,15 @@ export const handleAddProfileImageToS3 = async (userID: string, blob: Blob): Pro
 /**
  * @function handleAddComment
  * @description calls the AWS API gateway /add-comment. This will add a row to the Comments table.
+ * @todo add return type to function.
  *
  * @param {HumspotCommentSubmit} comment the user comment data.
+ * 
+ * @example 
+ * ```ts
+ * const comment: HumpspotCommentSubmit = { commentText: 'This is a comment!', userID: context.humspotUser.userID, activityID: `123456`, photoUrl: null };
+ * await handleAddComment(comment, null, 'Cool Activity'); // no image is uploaded with comment
+ * ```
  */
 export const handleAddComment = async (comment: HumspotCommentSubmit, blob: Blob | null, activityName: string) => {
   try {
@@ -673,12 +842,21 @@ export const handleAddComment = async (comment: HumspotCommentSubmit, blob: Blob
 /**
  * @function handleGetInteractionsGivenUserID
  * @description gets an array of comments and/or RSVP'd events from a specified user.
- * It returns 20  at a time, and more can be loaded my incrementing the pageNum param.
+ * It returns 20 at a time, and more can be loaded my incrementing the pageNum param.
  *
  * @param {number} pageNum
  * @param {string} userID
  *
  * @returns {Promise<GetInteractionsResponse>} a status message, a success flag, and an array of at most 20 comments and/or RSVP'd events of type GetCommentsResponse
+ * 
+ * @example
+ * ```ts
+ * let interactionsArray: HumspotInteractionsResponse[] = [];
+ * const res: GetInteractionsResponse = await handleGetInteractionGivenUserID(1, 'myUserID');
+ * if (res.success) {
+ *  interactionsArray.push(...res.interactions);
+ * }
+ * ```
  */
 export const handleGetInteractionsGivenUserID = async (pageNum: number, userID: string): Promise<GetInteractionsResponse> => {
   try {
@@ -1084,7 +1262,7 @@ export const handleGetPendingActivitySubmissions = async (pageNum: number, userI
  * @function handleGetThisWeeksEvents
  * @description gets the events that are happening this week (within the next 7 days, inclusive).
  * 
- * @returns {message: string; success: boolean; events: GetHumspotEventResponse[]}
+ * @returns {Promise<{message: string; success: boolean; events: GetHumspotEventResponse[]}>} a success status / message an an array of events
  */
 export const handleGetThisWeeksEvents = async (): Promise<{ message: string; success: boolean; events: GetHumspotEventResponse[] }> => {
   try {
