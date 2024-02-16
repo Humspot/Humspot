@@ -228,6 +228,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       }
 
       <IonTextarea
+        mode='ios'
         color='primary'
         style={{
           borderColor: '#eee',
