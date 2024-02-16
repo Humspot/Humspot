@@ -12,7 +12,6 @@ import MapSettingsModal from "../components/Map/MapSettingsModal";
 const Map = () => {
   const context = useContext();
   const router = useIonRouter();
-  const pageRef = useRef();
 
   const [mapZoom, setZoom] = useState<number>(12);
   const [center, setCenter] = useState<[number, number]>([
@@ -54,7 +53,7 @@ const Map = () => {
   }, [fetchThisWeeksEvents]);
 
   return (
-    <IonPage ref={pageRef}>
+    <IonPage>
       <IonContent fullscreen>
         <PigeonMap
           provider={(x, y, z, dpr) =>
@@ -333,7 +332,7 @@ const Map = () => {
 
         </PigeonMap>
 
-        <MapSettingsModal page={pageRef.current}
+        <MapSettingsModal
           showTopAttractions={showTopAttractions} setShowTopAttractions={setShowTopAttractions}
           showThisWeeksEvents={showThisWeeksEvents} setShowThisWeeksEvents={setShowThisWeeksEvents}
           setShowEventsBetweenTwoDates={setShowEventsBetweenTwoDates} setEventsBetweenTwoDates={setEventsBetweenTwoDates}
