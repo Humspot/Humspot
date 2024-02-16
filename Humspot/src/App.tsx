@@ -68,7 +68,8 @@ const App: React.FC = () => {
   useDarkMode(context);
   usePushNotifications();
 
-  const [currentTab, setCurrentTab] = useState("explore");
+  const [currentTab, setCurrentTab] = useState<string>("explore");
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   return (
     <IonApp>
@@ -108,7 +109,7 @@ const App: React.FC = () => {
             <IonTabBar
               id='main-tab-bar'
               slot="bottom"
-              onIonTabsWillChange={(e) => { setCurrentTab(e.detail.tab); }}
+              onIonTabsWillChange={(e) => { if (e.detail.tab === 'showModal') { setShowModal(true) } else { setCurrentTab(e.detail.tab); } }}
               style={{ display: tabBarDisplay, opacity: tabBarOpacity.toString() }}
             >
               <IonTabButton tab="explore" href="/explore">
@@ -127,16 +128,13 @@ const App: React.FC = () => {
                   size="large"
                 />
               </IonTabButton>
-              <IonTabButton>
-                {/* <IonButton fill='clear' color=''> */}
+              <IonTabButton tab="showModal">
                 <IonIcon
-                  id='open-add-activity-modal'
                   aria-hidden="true"
                   icon={addCircleOutline}
                   color={context.darkMode ? 'medium' : 'warning'}
                   style={{ transform: "scale(1.25)" }}
                 />
-                {/* </IonButton> */}
               </IonTabButton>
               <IonTabButton tab="calendar" href="/calendar">
                 <IonIcon
@@ -159,7 +157,7 @@ const App: React.FC = () => {
           </IonTabs>
 
           {/* Global slide-up modal where users can request to submit events/attractions */}
-          <ProfileActivitiesModal />
+          <ProfileActivitiesModal showModal={showModal} setShowModal={setShowModal} />
 
         </IonReactRouter>
 

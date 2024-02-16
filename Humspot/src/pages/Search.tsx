@@ -355,7 +355,7 @@ const Search = () => {
           </IonButtons>
           <IonButtons slot='end'>
             <IonButton onClick={async () => await handleShare('Check out these activities on Humspot!')}>
-              <IonIcon icon={shareOutline} />
+              <IonIcon color='primary' icon={shareOutline} />
             </IonButton>
           </IonButtons>
         </IonToolbar>

@@ -20,6 +20,8 @@ import "swiper/css";
 import { Keyboard } from "@capacitor/keyboard";
 import { timeout } from "../utils/functions/timeout";
 
+import HumspotLogo from '../../resources/icon-only.png';
+
 
 const fetchHighlights = async (): Promise<any[] | null> => {
   const res = await handleGetActivitiesGivenTag(1, 'highlight');

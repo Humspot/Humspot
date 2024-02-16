@@ -79,7 +79,7 @@ const Activity = () => {
 
   useEffect(() => {
     const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(10, () => {
+      ev.detail.register(50, () => {
         router.goBack();
       });
     };

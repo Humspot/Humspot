@@ -4,23 +4,29 @@
  * It contains buttons to 'Submit an Event', 'Submit an Attraction', 'See Pending Submissions', and 'Request to Become an Organizer'.
  */
 
-import { useEffect, useRef } from "react";
+import { SetStateAction, useEffect, useRef } from "react";
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle, IonHeader, IonToolbar, IonButton, IonButtons } from "@ionic/react";
 import { calendarOutline, clipboardOutline, listCircleOutline, locationOutline } from "ionicons/icons";
 
 import { useContext } from "../../utils/hooks/useContext";
 
-const ActivitiesModal: React.FC = () => {
+type ActivitiesModalProps = {
+  showModal: boolean;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ActivitiesModal = (props: ActivitiesModalProps) => {
 
   const router = useIonRouter();
   const context = useContext();
+  console.log({ props })
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
 
   useEffect(() => {
     const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, async () => {
-        await modalRef?.current?.dismiss();
+      ev.detail.register(20, () => {
+        props.setShowModal(false);
       });
     };
 
@@ -33,7 +39,7 @@ const ActivitiesModal: React.FC = () => {
 
 
   return (
-    <IonModal ref={modalRef} trigger="open-add-activity-modal" handle={true} breakpoints={[0, 0.75,]} initialBreakpoint={0.75}>
+    <IonModal ref={modalRef} isOpen={props.showModal} onDidDismiss={() => props.setShowModal(false)} handle={true} breakpoints={[0, 0.75,]} initialBreakpoint={0.75}>
       <IonContent className='profile-modal-content' scrollY={false}>
         <IonHeader className='ion-no-border' mode='ios'>
           <IonToolbar className='profile-modal-toolbar'>

@@ -27,7 +27,7 @@
     "@capacitor/share": "^5.0.6",
     "@capacitor/splash-screen": "^5.0.6",
     "@capacitor/status-bar": "5.0.6",
-    "@codesyntax/ionic-react-photo-viewer": "github:davidyaranon/ionic-react-photo-viewer#main",
+    "@codesyntax/ionic-react-photo-viewer": "github:davidyaranon/ionic-react-photo-viewer#d775520",
     "@ionic/react": "^7.5.0",
     "@ionic/react-router": "^7.5.0",
     "@rcnoverwatcher/react-fade-in-react-18": "^2.0.5",
