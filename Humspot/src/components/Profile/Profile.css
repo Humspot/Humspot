@@ -43,6 +43,7 @@
 /** ProfileBio.tsx **/
 .profile-bio-card {
   margin: 10px;
+  margin-bottom: 7.5px;
 }
 
 .profile-bio-picture-and-stats-row {
@@ -142,9 +143,9 @@
 
 /** ProfileSegments.tsx **/
 #profile-segment {
-  margin-left: 2.5%;
-  width: 95%;
-  border-radius: 7.5px;
+  width: 94.75vw;
+  margin: auto;
+  border-radius: 2.5px;
 }
 
 #profile-segment ion-segment-button {
@@ -159,7 +160,7 @@
 #profile-segment ion-segment-button {
   --background-checked: var(--ion-color-primary);
   --color-checked: var(--ion-color-primary-contrast);
-  --indicator-color: transparent;
+  /* --indicator-color: transparent; */
 }
 
 #profile-segment .segment-button {
@@ -183,4 +184,12 @@
   .segment-button ion-label {
     display: none;
   }
+}
+
+ion-segment-button::part(indicator-background) {
+  background: var(--ion-color-secondary);
+}
+
+ion-segment-button {
+  --background: var(--ion-item-background);
 }

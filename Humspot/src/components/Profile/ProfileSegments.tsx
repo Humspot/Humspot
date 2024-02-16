@@ -97,7 +97,7 @@ const ProfileSegments: React.FC = memo(() => {
 
   return (
     <>
-      <IonSegment /* style={{ height: "10vh", borderRadius: "25px" }}*/ id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
+      <IonSegment id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
 
         <IonSegmentButton value="favorites">
           <div className="segment-button" style={{ fontSize: "0.8rem" }}>
@@ -134,6 +134,7 @@ const ProfileSegments: React.FC = memo(() => {
 
       </IonSegment >
 
+      <div style={{ height: '7.5px' }} />
 
       <IonContent>
 
@@ -147,9 +148,9 @@ const ProfileSegments: React.FC = memo(() => {
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Favorites</IonTitle>
               :
               <>
-                <IonCard>
+                <IonCard style={{ marginTop: 0 }}>
                   <IonCardContent className='ion-no-padding'>
-                    <IonList inset={false}>
+                    <IonList inset={false} style={{ paddingTop: 0 }}>
                       {!favoritesLoading ?
                         favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
                           return (
@@ -196,9 +197,9 @@ const ProfileSegments: React.FC = memo(() => {
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Places Visited</IonTitle>
               :
               <>
-                <IonCard>
+                <IonCard style={{ marginTop: 0 }}>
                   <IonCardContent className='ion-no-padding'>
-                    <IonList inset={false}>
+                    <IonList inset={false} style={{ paddingTop: 0 }}>
                       {!visitedLoading ?
                         visited.map((visitedPlace: HumspotVisitedResponse, index: number) => {
                           return (
@@ -245,9 +246,9 @@ const ProfileSegments: React.FC = memo(() => {
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Interactions</IonTitle>
               :
               <>
-                <IonCard>
+                <IonCard style={{ marginTop: 0 }}>
                   <IonCardContent className='ion-no-padding'>
-                    <IonList inset={false}>
+                    <IonList inset={false} style={{ paddingTop: 0 }}>
                       {!interactionsLoading ?
                         interactions.map((interaction: HumspotInteractionResponse, index: number) => {
                           return (
