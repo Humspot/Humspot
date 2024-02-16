@@ -76,11 +76,11 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
     await Preferences.set({ key: 'darkMode', value: JSON.stringify(isChecked) });
     if (isChecked) {
       document.body.classList.add('dark');
-      await StatusBar.setStyle({ style: Style.Dark });
+      // await StatusBar.setStyle({ style: Style.Dark });
       await Keyboard.setStyle(keyStyleOptionsDark);
     } else {
       document.body.classList.remove('dark');
-      await StatusBar.setStyle({ style: Style.Light });
+      // await StatusBar.setStyle({ style: Style.Light });
       await Keyboard.setStyle(keyStyleOptionsLight);
     }
   };
@@ -122,20 +122,6 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
     })
   };
 
-  /**
-   * @description runs when the modal dismisses. Applies the appropriate
-   * light/dark mode styles to the keyboard (and status bar only on iOS because of a bug).
-   */
-  const handleStatusBarUpdate = async () => {
-    if (context.darkMode) {
-      Capacitor.getPlatform() === 'ios' && await StatusBar.setStyle({ style: Style.Dark });
-      await Keyboard.setStyle({ style: KeyboardStyle.Dark });
-    } else {
-      Capacitor.getPlatform() === 'ios' && await StatusBar.setStyle({ style: Style.Light });
-      await Keyboard.setStyle({ style: KeyboardStyle.Light });
-    }
-  };
-
   useEffect(() => {
     const eventListener: any = (ev: CustomEvent<any>) => {
       ev.detail.register(20, async () => {
@@ -151,14 +137,12 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   }, [modalRef]);
 
   return (
-    <IonModal ref={modalRef} onDidDismiss={handleStatusBarUpdate} trigger='open-profile-page-modal'>
+    <IonModal ref={modalRef} trigger='open-profile-page-modal'>
       <IonContent className='profile-modal-content' scrollY={false}>
         <IonHeader className='ion-no-border'>
           <IonToolbar className='profile-modal-toolbar'>
             <IonButtons>
-              <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} className='profile-modal-close-button' onClick={() => {
-                modalRef.current?.dismiss().then(async () => { await handleStatusBarUpdate() })
-              }}>
+              <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss(); }}>
                 <IonIcon icon={chevronBackOutline} />
               </IonButton>
               <p style={{ fontSize: "1.25rem" }}>Settings</p>

@@ -57,7 +57,6 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   const [photo, setPhoto] = useState<string | undefined>(undefined);
   const [blob, setBlob] = useState<Blob | null>(null);
 
-  const [kbHeight, setKbHeight] = useState<number>(0.5);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [borderRadius, setBorderRadius] = useState<string>(getBorderRadius());
 
@@ -164,9 +163,6 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     })
     const keyboardShowListener = Keyboard.addListener('keyboardWillShow', info => {
       setBorderRadius("0px");
-      Keyboard.setResizeMode(resizeOptions);
-      setKbHeight(info.keyboardHeight);
-
       const element: Element | null = document.querySelector('.activity-comment-textarea');
       if (element) {
         element.classList.remove('hide-keyboard');
@@ -175,9 +171,6 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
 
     const keyboardHideListener = Keyboard.addListener('keyboardWillHide', () => {
       setBorderRadius(getBorderRadius());
-      Keyboard.setResizeMode(defaultResizeOptions);
-      setKbHeight(0.5);
-
       const element: Element | null = document.querySelector('.activity-comment-textarea');
       if (element) {
         element.classList.add('hide-keyboard');
@@ -200,8 +193,8 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     <IonFab className='activity-comment-textarea'
       style={
         context.darkMode ?
-          { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '3px solid #373737' }
-          : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, bottom: `${kbHeight}px`, border: '3px solid #e6e6e6' }}
+          { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, border: '3px solid #373737' }
+          : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, border: '3px solid #e6e6e6' }}
       slot="fixed"
       vertical="bottom"
       edge
