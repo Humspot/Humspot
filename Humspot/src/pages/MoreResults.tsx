@@ -74,13 +74,13 @@ const MoreResults = () => {
         <IonToolbar style={{ '--background': 'var(--ion-tab-bar-background)' }}>
           <IonButtons >
             <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} onClick={() => { router.goBack(); }}>
-              <IonIcon icon={chevronBackOutline} />
+              <IonIcon color='primary' icon={chevronBackOutline} />
             </IonButton>
             <p style={{ fontSize: "1.25rem" }}>{tagName}</p>
           </IonButtons>
           <IonButtons slot='end'>
-            <IonButton onClick={async () => await handleShare('Check out activities tagged with ' + tagName + ' on Humspot!')}>
-              <IonIcon icon={shareOutline} />
+            <IonButton style={{ fontSize: '1.15rem' }} onClick={async () => await handleShare('Check out activities tagged with ' + tagName + ' on Humspot!')}>
+              <IonIcon color='primary' icon={shareOutline} />
             </IonButton>
           </IonButtons>
         </IonToolbar>

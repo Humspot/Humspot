@@ -347,7 +347,7 @@ const Search = () => {
         <IonToolbar>
           <IonButtons>
             <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} onClick={() => { router.push('/explore', 'back', 'pop'); }}>
-              <IonIcon icon={chevronBackOutline} />
+              <IonIcon color='primary' icon={chevronBackOutline} />
             </IonButton>
             {query &&
               <p style={{ fontSize: '1.25rem' }}>{query[0].toUpperCase() + query.slice(1)}</p>

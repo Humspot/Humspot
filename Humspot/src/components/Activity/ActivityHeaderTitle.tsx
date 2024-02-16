@@ -129,7 +129,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
               <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
                 <IonButtons style={{ height: '5vh' }}>
                   <IonButton style={{ fontSize: '1.15em', }} onClick={() => { modalRef.current?.dismiss().then(() => { setNewUserRating(originalUserRating); setHasUpdated(false); }) }}>
-                    <IonIcon icon={chevronBack} />
+                    <IonIcon color='primary' icon={chevronBack} />
                   </IonButton>
                   <p style={{ fontSize: '1.25rem' }}>Rate Attraction</p>
                 </IonButtons>

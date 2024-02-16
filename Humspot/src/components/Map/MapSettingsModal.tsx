@@ -104,7 +104,7 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
           <IonToolbar className='profile-modal-toolbar'>
             <IonButtons>
               <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss() }}>
-                <IonIcon icon={chevronBackOutline} />
+                <IonIcon color='primary' icon={chevronBackOutline} />
               </IonButton>
               <p style={{ fontSize: "1.05rem" }}>Map Settings</p>
             </IonButtons>

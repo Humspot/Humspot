@@ -705,7 +705,7 @@ const SubmitAttractionPage = () => {
                         mapModalRef.current.dismiss();
                     }}
                   >
-                    <IonIcon icon={chevronBack} />
+                    <IonIcon color='primary' icon={chevronBack} />
                   </IonButton>
                   <p style={{ fontSize: "1.25rem" }}>Map Pin Selection</p>
                 </IonButtons>

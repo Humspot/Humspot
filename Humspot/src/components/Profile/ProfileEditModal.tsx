@@ -134,7 +134,7 @@ const ProfileEditModal = () => {
             <IonToolbar className='profile-modal-content'>
               <IonButtons>
                 <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
-                  <IonIcon icon={chevronBackOutline} />
+                  <IonIcon color='primary' icon={chevronBackOutline} />
                 </IonButton>
                 <p style={{ fontSize: "1.25rem" }}>Edit Profile</p>
               </IonButtons>

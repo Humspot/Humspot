@@ -487,7 +487,7 @@ export const EventForm = () => {
                 <IonToolbar>
                   <IonButtons >
                     <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} onClick={() => { mapModalRef && mapModalRef.current && mapModalRef.current.dismiss() }}>
-                      <IonIcon icon={chevronBack} />
+                      <IonIcon color='primary' icon={chevronBack} />
                     </IonButton>
                     <p style={{ fontSize: '1.25rem' }}>Map Pin Selection</p>
                   </IonButtons>

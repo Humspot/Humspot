@@ -185,7 +185,7 @@ const AdminApproveActivitySubmission = () => {
               <IonToolbar style={{ '--background': 'black' }}>
                 <IonButtons >
                   <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { mapModalRef && mapModalRef.current && mapModalRef.current.dismiss() }}>
-                    <IonIcon icon={chevronBackOutline} />
+                    <IonIcon color='primary' icon={chevronBackOutline} />
                   </IonButton>
                   <IonTitle>Map Pin View</IonTitle>
                 </IonButtons>
