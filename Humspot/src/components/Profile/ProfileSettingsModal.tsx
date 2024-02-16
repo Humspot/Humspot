@@ -42,6 +42,7 @@ import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from '../../utils/ser
 import './Profile.css';
 import { Keyboard, KeyboardStyleOptions, KeyboardStyle } from '@capacitor/keyboard';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { Capacitor } from '@capacitor/core';
 
 type ProfileSettingsModalProps = {
   page: HTMLElement | undefined;
@@ -122,14 +123,16 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   };
 
   /**
-   * @description runs when the modal dismisses. This function fixes an issue with dark mode styles
-   * incorrectly applying when the modal is opened.
+   * @description runs when the modal dismisses. Applies the appropriate
+   * light/dark mode styles to the keyboard (and status bar only on iOS because of a bug).
    */
   const handleStatusBarUpdate = async () => {
     if (context.darkMode) {
-      await StatusBar.setStyle({ style: Style.Dark });
+      Capacitor.getPlatform() === 'ios' && await StatusBar.setStyle({ style: Style.Dark });
+      await Keyboard.setStyle({ style: KeyboardStyle.Dark });
     } else {
-      await StatusBar.setStyle({ style: Style.Light });
+      Capacitor.getPlatform() === 'ios' && await StatusBar.setStyle({ style: Style.Light });
+      await Keyboard.setStyle({ style: KeyboardStyle.Light });
     }
   };
 

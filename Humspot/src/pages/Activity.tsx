@@ -7,6 +7,7 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonPage,
+  useIonRouter,
   useIonViewDidEnter,
   useIonViewWillEnter,
 } from "@ionic/react";
@@ -43,6 +44,7 @@ const Activity = () => {
 
   const context = useContext();
   const page = useRef();
+  const router = useIonRouter();
 
   const [hasSwipedIn, setHasSwipedIn] = useState<boolean>(false);
 
@@ -74,6 +76,20 @@ const Activity = () => {
   useIonViewDidEnter(() => {
     setHasSwipedIn(true);
   }, []);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(10, () => {
+        router.goBack();
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [router]);
 
   return (
     <IonPage ref={page}>
