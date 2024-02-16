@@ -3,7 +3,7 @@
  * @fileoverview card containing the title of the Activity along with a button to rate the activity (attractions only).
  */
 
-import { IonButton, IonButtons, IonCard, IonCardTitle, IonContent, IonHeader, IonModal, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/react'
+import { IonButton, IonButtons, IonCard, IonCardTitle, IonContent, IonHeader, IonIcon, IonModal, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/react'
 import { Rating } from 'react-custom-rating-component'
 import { useContext } from '../../utils/hooks/useContext';
 import { handleAddRating } from '../../utils/server';
@@ -12,6 +12,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getUserRatingGivenUserID } from '../../utils/server';
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
+import { chevronBack } from 'ionicons/icons';
 
 type ActivityHeaderTitleProps = {
   activity: boolean;
@@ -68,7 +69,21 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
 
   useEffect(() => {
     getUserRating();
-  }, [getUserRating])
+  }, [getUserRating]);
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, async () => {
+        await modalRef?.current?.dismiss();
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [modalRef]);
 
   return (
     <FadeIn>
@@ -112,11 +127,11 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
           <IonContent style={{ '--background': 'var(--ion-item-background' }} scrollY={false}>
             <IonHeader className='ion-no-border'>
               <IonToolbar style={{ '--background': 'var(--ion-item-background' }}>
-                <IonTitle style={{ fontSize: '1.25rem' }}>Rate Attraction</IonTitle>
                 <IonButtons style={{ height: '5vh' }}>
                   <IonButton style={{ fontSize: '1.15em', }} onClick={() => { modalRef.current?.dismiss().then(() => { setNewUserRating(originalUserRating); setHasUpdated(false); }) }}>
-                    <p>Back</p>
+                    <IonIcon icon={chevronBack} />
                   </IonButton>
+                  <p style={{ fontSize: '1.25rem' }}>Rate Attraction</p>
                 </IonButtons>
               </IonToolbar>
             </IonHeader>

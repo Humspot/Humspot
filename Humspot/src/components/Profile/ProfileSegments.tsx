@@ -154,9 +154,9 @@ const ProfileSegments: React.FC = memo(() => {
                         favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
                           return (
                             <FadeIn key={favorite.name + index} delay={(index % 10) * 50}>
-                              <IonItem className='ion-no-padding' role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
-                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={favorite.photoUrl || placeholder} /></IonThumbnail>
-                                <IonLabel style={{ paddingLeft: "10px" }}>
+                              <IonItem button className='ion-no-padding' role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
+                                <IonThumbnail style={{ marginLeft: "10px", marginBottom: '7.5px' }}><img style={{ borderRadius: "5px" }} src={favorite.photoUrl || placeholder} /></IonThumbnail>
+                                <IonLabel style={{ paddingLeft: "10px", margin: 0 }}>
                                   <h2>{favorite.name}</h2>
                                   <p style={{ fontSize: "0.9rem" }}>{favorite.description}</p>
                                   <p style={{ fontSize: "0.8rem" }}>{favorite.location}</p>
@@ -203,9 +203,9 @@ const ProfileSegments: React.FC = memo(() => {
                         visited.map((visitedPlace: HumspotVisitedResponse, index: number) => {
                           return (
                             <FadeIn key={visitedPlace.name + index} delay={(index % 10) * 50}>
-                              <IonItem className='ion-no-padding' role='button' onClick={() => { if (visitedPlace.activityID) router.push("/activity/" + visitedPlace.activityID) }}>
-                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={visitedPlace.photoUrl || placeholder} /></IonThumbnail>
-                                <IonLabel style={{ paddingLeft: "10px" }}>
+                              <IonItem button className='ion-no-padding' role='button' onClick={() => { if (visitedPlace.activityID) router.push("/activity/" + visitedPlace.activityID) }}>
+                                <IonThumbnail style={{ marginLeft: "10px", marginBottom: '7.5px' }}><img style={{ borderRadius: "5px" }} src={visitedPlace.photoUrl || placeholder} /></IonThumbnail>
+                                <IonLabel style={{ paddingLeft: "10px", margin: 0 }}>
                                   <h2>{visitedPlace.name}</h2>
                                   <p style={{ fontSize: "0.9rem" }}>{visitedPlace.description}</p>
                                   <p style={{ fontSize: "0.8rem" }}>{visitedPlace.location}</p>
@@ -252,9 +252,9 @@ const ProfileSegments: React.FC = memo(() => {
                         interactions.map((interaction: HumspotInteractionResponse, index: number) => {
                           return (
                             <FadeIn key={interaction.name + index} delay={(index % 20) * 50}>
-                              <IonItem className='ion-no-padding' role='button' onClick={() => { if (interaction.activityID) router.push("/activity/" + interaction.activityID) }}>
-                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={interaction.photoUrl || placeholder} /></IonThumbnail>
-                                <IonLabel style={{ paddingLeft: "10px" }}>
+                              <IonItem button className='ion-no-padding' role='button' onClick={() => { if (interaction.activityID) router.push("/activity/" + interaction.activityID) }}>
+                                <IonThumbnail style={{ marginLeft: "10px", marginBottom: '7.5px' }}><img style={{ borderRadius: "5px" }} src={interaction.photoUrl || placeholder} /></IonThumbnail>
+                                <IonLabel style={{ paddingLeft: "10px", margin: 0 }}>
                                   <h2>{interaction.name}</h2>
                                   {interaction.interactionType === 'comment' ?
                                     <>

@@ -1,5 +1,5 @@
 
-import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, IonProgressBar, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCardTitle, IonContent, IonFab, IonIcon, IonPage, IonProgressBar, useIonRouter, useIonViewDidEnter } from "@ionic/react";
 import { Map as PigeonMap, Marker, Overlay, ZoomControl } from "pigeon-maps";
 import { useContext } from "../utils/hooks/useContext";
 import { mapTiler, zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/map-config";
@@ -52,12 +52,6 @@ const Map = () => {
   useEffect(() => {
     fetchThisWeeksEvents();
   }, [fetchThisWeeksEvents]);
-
-  useIonViewWillEnter(() => {
-    if (pageRef && pageRef.current) {
-      context.setCurrentPage(pageRef.current);
-    }
-  }, [pageRef]);
 
   return (
     <IonPage ref={pageRef}>

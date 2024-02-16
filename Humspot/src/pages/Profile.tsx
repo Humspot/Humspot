@@ -5,7 +5,7 @@
  * @see /src/components/Profile for the components / CSS used on this page.
  */
 
-import { IonContent, IonPage, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter, useIonViewDidEnter } from "@ionic/react";
 
 import { memo, useEffect, useRef } from "react";
 import { useContext } from "../utils/hooks/useContext";
@@ -40,12 +40,6 @@ const Profile: React.FC = () => {
     context.setShowTabs(true);
   }, []);
 
-  useIonViewWillEnter(() => {
-    if (page && page.current) {
-      context.setCurrentPage(page.current);
-    }
-  }, [page]);
-
   return (
     <>
       <IonPage ref={page}>
@@ -59,7 +53,7 @@ const Profile: React.FC = () => {
         </IonContent>
 
         {/* Modal where users can edit their profile */}
-        <ProfileEditModal page={page.current} />
+        <ProfileEditModal />
 
         {/* Modal where users can tinker with app settings */}
         <ProfileSettingsModal page={page.current} />

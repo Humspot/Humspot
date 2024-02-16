@@ -1,7 +1,7 @@
 import { useToast } from "@agney/ir-toast";
 import { IonList, IonSkeletonText, IonItem, IonLabel, IonModal, IonContent, IonTitle, IonButton, IonFab, IonTextarea, IonLoading, IonCardTitle, IonButtons, IonHeader, IonToolbar } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useContext } from "../../utils/hooks/useContext";
 import { handleApproveOrganizer, handleDenyOrganizer } from "../../utils/server";
 import { canDismiss } from "../../utils/functions/canDismiss";
@@ -60,6 +60,20 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
     setLoading(false);
     modalRef.current?.dismiss();
   };
+
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, async () => {
+        await modalRef?.current?.dismiss();
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [modalRef]);
 
   if (!props.loading && props.organizers.length <= 0) {
     return (

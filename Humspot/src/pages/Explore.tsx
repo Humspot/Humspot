@@ -4,8 +4,8 @@
  * Contains swipers for different kinds of activities, as well as a search bar and a way to filter the activities.
  */
 
-import { useEffect, useRef, useState } from "react";
-import { IonContent, IonHeader, IonPage, IonSearchbar, IonToolbar, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
+import { useRef, useState } from "react";
+import { IonContent, IonHeader, IonPage, IonSearchbar, IonToolbar, useIonRouter, useIonViewDidEnter } from "@ionic/react";
 
 import ExploreFilterButtons from "../components/Explore/ExploreFilterButtons";
 import ExploreCarouselRecentlyViewed from "../components/Explore/ExploreCarouselRecentlyViewed";
@@ -67,24 +67,19 @@ const ExplorePage = () => {
     context.setShowTabs(true);
   }, []);
 
-  useIonViewWillEnter(() => {
-    if (pageRef && pageRef.current) {
-      context.setCurrentPage(pageRef.current);
-    }
-  }, [pageRef]);
-
   return (
     <IonPage ref={pageRef}>
 
-      <IonHeader className='ion-no-border profile-modal-content' mode='ios'>
-        <IonToolbar style={{ '--background': 'var(--ion-background-color)' }} mode='ios'>
+      <IonHeader className='ion-no-border profile-modal-content'>
+        <IonToolbar style={{ '--background': 'var(--ion-background-color)' }} >
           <IonSearchbar
             ref={searchRef}
             onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)}
             placeholder="Search for Activities" spellcheck={true}
             type="search" enterkeyhint="search"
-            autocorrect="off" showCancelButton="focus" animated={true}
+            autocorrect="off" showCancelButton="never" animated={false}
             onKeyDown={e => handleSearch(e)}
+            color='light'
           />
         </IonToolbar>
       </IonHeader>
@@ -124,7 +119,7 @@ const ExplorePage = () => {
         }
       </IonContent>
 
-    </IonPage>
+    </IonPage >
   );
 }
 

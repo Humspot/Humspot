@@ -343,19 +343,19 @@ const Search = () => {
 
   return (
     <IonPage>
-      <IonHeader translucent>
+      <IonHeader>
         <IonToolbar>
-          {query &&
-            <IonTitle>{query[0].toUpperCase() + query.slice(1)}</IonTitle>
-          }
           <IonButtons>
-            <IonButton style={{ fontSize: '1.15em', marginLeft: '-2.5px' }} onClick={() => { router.push('/explore', 'back', 'pop'); }}>
-              <IonIcon icon={chevronBackOutline} /> <p>Back</p>
+            <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} onClick={() => { router.push('/explore', 'back', 'pop'); }}>
+              <IonIcon icon={chevronBackOutline} />
             </IonButton>
+            {query &&
+              <p style={{ fontSize: '1.25rem' }}>{query[0].toUpperCase() + query.slice(1)}</p>
+            }
           </IonButtons>
           <IonButtons slot='end'>
             <IonButton onClick={async () => await handleShare('Check out these activities on Humspot!')}>
-              <IonIcon style={{ transform: 'scale(1.1)' }} icon={shareOutline} />
+              <IonIcon icon={shareOutline} />
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -365,7 +365,7 @@ const Search = () => {
             onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)}
             placeholder='Search for Activities' spellcheck={true}
             type='search' enterkeyhint='search'
-            autocorrect='off' showCancelButton='focus' animated={true}
+            autocorrect='off' showCancelButton='never' animated={true}
             onKeyDown={e => isEnterPressed(e.key)}
           />
         </IonToolbar>

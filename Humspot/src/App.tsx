@@ -2,7 +2,7 @@
  * @file App.tsx
  * @fileoverview Routes and main application components.
  * 
- * @note this is the iOS version of the application. 
+ * @note this is the android version of the application. 
  */
 
 import { useState } from "react";
@@ -56,7 +56,7 @@ import { usePushNotifications } from "./utils/hooks/usePushNotifications";
 import ProfileActivitiesModal from "./components/Shared/ActivitiesModal";
 
 
-setupIonicReact({ mode: "ios" });
+setupIonicReact({ mode: "md" });
 SplashScreen.show();
 
 const App: React.FC = () => {
@@ -128,15 +128,15 @@ const App: React.FC = () => {
                 />
               </IonTabButton>
               <IonTabButton>
-                <IonButton fill='clear' id='open-add-activity-modal' color=''>
-                  <IonIcon
-                    aria-hidden="true"
-                    icon={addCircleOutline}
-                    color={context.darkMode ? 'medium' : 'warning'}
-                    size="large"
-                    style={{ transform: "scale(1.1)" }}
-                  />
-                </IonButton>
+                {/* <IonButton fill='clear' color=''> */}
+                <IonIcon
+                  id='open-add-activity-modal'
+                  aria-hidden="true"
+                  icon={addCircleOutline}
+                  color={context.darkMode ? 'medium' : 'warning'}
+                  style={{ transform: "scale(1.25)" }}
+                />
+                {/* </IonButton> */}
               </IonTabButton>
               <IonTabButton tab="calendar" href="/calendar">
                 <IonIcon

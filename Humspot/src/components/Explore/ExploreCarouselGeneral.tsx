@@ -38,12 +38,12 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
     <>
       {props.activities && props.activities.length > 0 && !props.loading ?
         <div style={{ display: 'flex', justifyContent: 'right' }}>
-          <IonItemDivider style={{ background: "var(--ion-background-color)", fontSize: "1.50rem" }}><IonText onClick={handleClickArrow} color='primary'>{props.title}</IonText></IonItemDivider>
-          <IonButton fill='clear' onClick={handleClickArrow}><IonIcon color='primary' icon={arrowForward}></IonIcon></IonButton>
+          <IonItemDivider mode='ios' style={{ background: "var(--ion-background-color)", fontSize: "1.50rem", paddingTop: '10px' }}><IonText onClick={handleClickArrow} color='primary'>{props.title}</IonText></IonItemDivider>
+          <IonButton fill='clear' style={{ paddingTop: "10px" }} onClick={handleClickArrow}><IonIcon color='primary' icon={arrowForward}></IonIcon></IonButton>
         </div>
         :
         props.loading &&
-        <IonItemDivider style={{ background: "var(--ion-background-color)" }}><IonSkeletonText style={{ height: "1.5rem", width: "50vw", marginTop: "15px" }} animated /></IonItemDivider>
+        <IonItemDivider mode='ios' style={{ background: "var(--ion-background-color)", paddingTop: '10px' }}><IonSkeletonText style={{ height: "1.5rem", width: "50vw", marginTop: "15px" }} animated /></IonItemDivider>
       }
       {props.loading ?
         <ExploreCarouselLoadingSlides amount={4} />

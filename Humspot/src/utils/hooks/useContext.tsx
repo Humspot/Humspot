@@ -19,8 +19,6 @@ export type ContextType = {
   setShowTabs: React.Dispatch<React.SetStateAction<boolean>>;
   recentlyViewedUpdated: boolean;
   setRecentlyViewedUpdated: React.Dispatch<React.SetStateAction<boolean>>;
-  currentPage: any;
-  setCurrentPage: React.Dispatch<React.SetStateAction<any>>;
 };
 
 export const Context = React.createContext<ContextType | null>(null);
@@ -29,7 +27,6 @@ export const ContextProvider = ({ children }: Props) => {
   const [darkMode, setDarkMode] = React.useState<boolean>(true);
   const [showTabs, setShowTabs] = React.useState<boolean>(true);
   const [recentlyViewedUpdated, setRecentlyViewedUpdated] = React.useState<boolean>(false);
-  const [currentPage, setCurrentPage] = React.useState<any>(null);
 
   const memoizedContextValue = React.useMemo(
     () => ({
@@ -41,10 +38,8 @@ export const ContextProvider = ({ children }: Props) => {
       setShowTabs,
       recentlyViewedUpdated,
       setRecentlyViewedUpdated,
-      currentPage,
-      setCurrentPage
     }),
-    [humspotUser, setHumspotUser, darkMode, setDarkMode, showTabs, setShowTabs, recentlyViewedUpdated, setRecentlyViewedUpdated, currentPage, setCurrentPage]
+    [humspotUser, setHumspotUser, darkMode, setDarkMode, showTabs, setShowTabs, recentlyViewedUpdated, setRecentlyViewedUpdated]
   );
 
   return (

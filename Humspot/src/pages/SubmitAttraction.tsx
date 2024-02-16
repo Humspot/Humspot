@@ -4,7 +4,7 @@
  * including a name, description, location, website URL, images, and tags.
  */
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   IonPage,
   IonContent,
@@ -36,6 +36,7 @@ import { Map, Marker } from "pigeon-maps";
 import {
   addOutline,
   cameraOutline,
+  chevronBack,
   chevronDownOutline,
   mapOutline,
 } from "ionicons/icons";
@@ -414,6 +415,20 @@ const SubmitAttractionPage = () => {
     context.setShowTabs(false);
   }, []);
 
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, async () => {
+        await mapModalRef?.current?.dismiss();
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [mapModalRef]);
+
   return (
     <IonPage ref={pageRef}>
       <GoBackHeader translucent={true} title="Submit Attraction" />
@@ -683,16 +698,16 @@ const SubmitAttractionPage = () => {
               <IonToolbar>
                 <IonButtons>
                   <IonButton
-                    style={{ fontSize: "1.05em", marginLeft: "5px" }}
+                    style={{ fontSize: '1.15em', marginRight: '15px' }}
                     onClick={() => {
                       mapModalRef &&
                         mapModalRef.current &&
                         mapModalRef.current.dismiss();
                     }}
                   >
-                    Close
+                    <IonIcon icon={chevronBack} />
                   </IonButton>
-                  <IonTitle>Map Pin Selection</IonTitle>
+                  <p style={{ fontSize: "1.25rem" }}>Map Pin Selection</p>
                 </IonButtons>
               </IonToolbar>
             </IonHeader>

@@ -70,27 +70,23 @@ const MoreResults = () => {
 
   return (
     <IonPage>
-      <IonHeader translucent={true}>
-        <IonToolbar>
-          <IonButtons>
-            <IonButton style={{ fontSize: '1.15em', marginLeft: '-2.5px' }} onClick={() => { router.goBack(); }}>
-              <IonIcon icon={chevronBackOutline} /> <p>Back</p>
+      <IonHeader className='ion-no-border' translucent={false}>
+        <IonToolbar style={{ '--background': 'var(--ion-tab-bar-background)' }}>
+          <IonButtons >
+            <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} onClick={() => { router.goBack(); }}>
+              <IonIcon icon={chevronBackOutline} />
             </IonButton>
+            <p style={{ fontSize: "1.25rem" }}>{tagName}</p>
           </IonButtons>
           <IonButtons slot='end'>
             <IonButton onClick={async () => await handleShare('Check out activities tagged with ' + tagName + ' on Humspot!')}>
-              <IonIcon style={{ transform: 'scale(1.1)' }} icon={shareOutline} />
+              <IonIcon icon={shareOutline} />
             </IonButton>
           </IonButtons>
-          <IonTitle>{tagName}</IonTitle>
         </IonToolbar>
       </IonHeader>
+
       <IonContent fullscreen={true}>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large" style={{ paddingLeft: '17.5px' }}>{tagName}</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <>
           {
             tagName ?

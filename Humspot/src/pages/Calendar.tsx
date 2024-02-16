@@ -8,7 +8,6 @@ import {
   IonList,
   IonItemDivider,
   IonLabel,
-  useIonViewWillEnter
 } from "@ionic/react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useContext } from "../utils/hooks/useContext";
@@ -104,12 +103,6 @@ function CalendarPage() {
     fetchEventsMonth();
   }, [fetchEventsMonth]);
 
-  useIonViewWillEnter(() => {
-    if (pageRef && pageRef.current) {
-      context.setCurrentPage(pageRef.current);
-    }
-  }, [pageRef]);
-
   return (
     <>
       <IonPage className='ion-page-ios-notch' ref={pageRef}>
@@ -119,7 +112,7 @@ function CalendarPage() {
             setFilter={setFilter}
           ></FilterAccordion> */}
           <IonList style={{ paddingTop: "0", marginTop: "0" }}>
-            <IonItemDivider style={{ '--background': 'var(--ion-background-color)', paddingTop: "7.5px", paddingBottom: "7.5px" }}>
+            <IonItemDivider mode='ios' style={{ '--background': 'var(--ion-background-color)', paddingTop: "7.5px", paddingBottom: "7.5px" }}>
               <IonLabel>
                 <h1 style={{ paddingTop: "5px", paddingBottom: "5px" }}>Today</h1>
               </IonLabel>
@@ -145,7 +138,7 @@ function CalendarPage() {
               </>
             )}
             {/* Events This Week */}
-            <IonItemDivider style={{ '--background': 'var(--ion-background-color)', paddingTop: "7.5px", paddingBottom: "7.5px" }}>
+            <IonItemDivider mode='ios' style={{ '--background': 'var(--ion-background-color)', paddingTop: "7.5px", paddingBottom: "7.5px" }}>
               <IonLabel>
                 <h1 style={{ paddingTop: "5px", paddingBottom: "5px", color: "var(--ion-color-dark)" }}>Next 7 Days</h1>
               </IonLabel>
@@ -170,7 +163,7 @@ function CalendarPage() {
               </>
             )}
             {/* Events This Month */}
-            <IonItemDivider style={{ '--background': 'var(--ion-background-color)', paddingTop: "7.5px", paddingBottom: "7.5px" }}>
+            <IonItemDivider mode='ios' style={{ '--background': 'var(--ion-background-color)', paddingTop: "7.5px", paddingBottom: "7.5px" }}>
               <IonLabel>
                 <h1 style={{ paddingTop: "5px", paddingBottom: "5px", color: "var(--ion-color-dark)" }}>Next 30 Days</h1>
               </IonLabel>

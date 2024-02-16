@@ -17,7 +17,11 @@
 }
 
 .profile-modal-title {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
 
 .profile-modal-close-button {
@@ -49,17 +53,17 @@
 
 .profile-bio-avatar-picture {
   flex-shrink: 0;
-  margin-right: 15%;
-  margin-left: 20px;
+  margin-right: 7.5%;
+  margin-left: 7.5px;
   margin-top: 10px;
-  transform: scale(1.25);
+  /* transform: scale(1.25); */
 }
 
 .profile-bio-text {
   font-size: 0.95rem;
   padding-left: 10px;
   padding-bottom: 5px;
-  margin-bottom: 0;
+  margin-bottom: 2.5px;
   padding-right: 10px;
 }
 
@@ -90,8 +94,8 @@
 }
 
 .profile-edit-modal-user-avatar {
-  height: 85px;
-  width: 85px;
+  height: 75px;
+  width: 75px;
   display: inline-block;
   border: 1px solid rgb(119, 119, 119);
   overflow: hidden;
@@ -124,6 +128,7 @@
 /** ProfileHeader.tsx **/
 .profile-header-title {
   padding: 10px;
+  padding-bottom: 0;
   font-size: 1.5rem;
   width: 60vw;
   white-space: nowrap;
@@ -139,6 +144,7 @@
 #profile-segment {
   margin-left: 2.5%;
   width: 95%;
+  border-radius: 7.5px;
 }
 
 #profile-segment ion-segment-button {

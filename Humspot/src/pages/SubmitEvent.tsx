@@ -1,6 +1,6 @@
 
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   IonPage, IonContent, IonInput, IonButton, IonLabel, IonDatetime, IonTextarea, IonTitle, IonItem,
   useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, IonCardContent, IonCardHeader, IonAlert, useIonRouter
@@ -10,7 +10,7 @@ import { useContext } from '../utils/hooks/useContext';
 import { useToast } from '@agney/ir-toast';
 import { handleSubmitEventForApproval, handleUploadSubmissionImages } from '../utils/server';
 import { Map, Marker } from "pigeon-maps";
-import { addOutline, cameraOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
+import { addOutline, cameraOutline, chevronBack, chevronDownOutline, mapOutline } from 'ionicons/icons';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import GoBackHeader from '../components/Shared/GoBackHeader';
 
@@ -308,6 +308,20 @@ export const EventForm = () => {
     context.setShowTabs(false);
   }, []);
 
+  useEffect(() => {
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, async () => {
+        await mapModalRef?.current?.dismiss();
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [mapModalRef]);
+
   return (
     <IonPage ref={pageRef}>
       <GoBackHeader translucent={true} title="Submit Event" />
@@ -472,10 +486,10 @@ export const EventForm = () => {
               <IonHeader className='ion-no-border'>
                 <IonToolbar>
                   <IonButtons >
-                    <IonButton style={{ fontSize: '1.05em', marginLeft: '5px' }} onClick={() => { mapModalRef && mapModalRef.current && mapModalRef.current.dismiss() }}>
-                      Close
+                    <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} onClick={() => { mapModalRef && mapModalRef.current && mapModalRef.current.dismiss() }}>
+                      <IonIcon icon={chevronBack} />
                     </IonButton>
-                    <IonTitle>Map Pin Selection</IonTitle>
+                    <p style={{ fontSize: '1.25rem' }}>Map Pin Selection</p>
                   </IonButtons>
                 </IonToolbar>
               </IonHeader>

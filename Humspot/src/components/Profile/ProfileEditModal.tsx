@@ -4,12 +4,12 @@
  * It contains options to update the user's profile photo, username, and bio.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel,
   IonList, IonLoading, IonModal, IonTextarea, IonTitle, IonToolbar, useIonLoading
 } from "@ionic/react";
-import { cameraReverseOutline } from "ionicons/icons";
+import { cameraReverseOutline, chevronBackOutline } from "ionicons/icons";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 
 import { useToast } from "@agney/ir-toast";
@@ -23,11 +23,7 @@ import './Profile.css';
 
 let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
 
-type ProfileEditModalProps = {
-  page: HTMLElement | undefined;
-};
-
-const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
+const ProfileEditModal = () => {
 
   const context = useContext();
   const Toast = useToast();
@@ -36,8 +32,6 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const usernameRef = useRef<HTMLIonInputElement | null>(null);
   const bioRef = useRef<HTMLIonTextareaElement | null>(null);
-
-  const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
   const clickUpdateProfilePhoto = async () => {
     if (!context.humspotUser) {
@@ -115,11 +109,21 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
   };
 
   useEffect(() => {
-    setPresentingElement(props.page);
-  }, [props.page]);
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, async () => {
+        await modalRef?.current?.dismiss();
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [modalRef]);
 
   return (
-    <IonModal ref={modalRef} trigger="open-edit-profile-modal" presentingElement={presentingElement}>
+    <IonModal ref={modalRef} trigger="open-edit-profile-modal" >
       {!context.humspotUser ? // loading
         <>
           <IonLoading message={"Loading Profile Info..."} />
@@ -128,11 +132,11 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
         <>
           <IonHeader className='ion-no-border'>
             <IonToolbar className='profile-modal-content'>
-              <IonTitle className='profile-modal-title'>Edit Profile</IonTitle>
               <IonButtons>
-                <IonButton className='profile-modal-close-button' onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
-                  <p>Close</p>
+                <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
+                  <IonIcon icon={chevronBackOutline} />
                 </IonButton>
+                <p style={{ fontSize: "1.25rem" }}>Edit Profile</p>
               </IonButtons>
             </IonToolbar>
           </IonHeader>

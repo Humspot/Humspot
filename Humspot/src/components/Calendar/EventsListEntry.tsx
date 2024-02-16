@@ -16,11 +16,11 @@ const EventsListEntry = (props: { events: any }) => {
         events?.map((activity: any, index: number) => (
           <FadeIn key={index} >
             <IonItem
+              lines='full'
               onClick={() => {
                 router.push("/activity/" + activity?.activityID);
               }}
               button
-              detail={true}
             >
               <IonThumbnail slot="start">
                 <img src={activity?.photoUrl || placeholder} alt="Activity Photo" />

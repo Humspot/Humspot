@@ -3,7 +3,7 @@
  * @fileoverview the modal that pops in on the map page when clicking the settings button. 
  * The modal contains options to filter the map pins based on a date range.
  */
-import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonInput, IonLabel, IonList, IonModal, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonInput, IonLabel, IonList, IonModal, IonTitle, IonToolbar } from "@ionic/react";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@agney/ir-toast";
 
@@ -13,6 +13,7 @@ import { handleGetEventsBetweenTwoDates } from "../../utils/server";
 import { GetEventsBetweenTwoDatesStatusResponse } from "../../utils/types";
 
 import './Map.css';
+import { chevronBackOutline } from "ionicons/icons";
 
 /**
  * @description checks whether two date strings are within a two week range.
@@ -33,7 +34,6 @@ function areDatesWithinTwoWeeks(startDate: string, endDate: string): boolean {
 };
 
 type MapSettingsModalProps = {
-  page: any;
   showThisWeeksEvents: boolean;
   setShowThisWeeksEvents: React.Dispatch<React.SetStateAction<boolean>>
   showTopAttractions: boolean;
@@ -49,8 +49,6 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
 
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-
-  const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
 
@@ -86,19 +84,29 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
   };
 
   useEffect(() => {
-    setPresentingElement(props.page);
-  }, [props.page])
+    const eventListener: any = (ev: CustomEvent<any>) => {
+      ev.detail.register(20, async () => {
+        await modalRef?.current?.dismiss();
+      });
+    };
+
+    document.addEventListener('ionBackButton', eventListener);
+
+    return () => {
+      document.removeEventListener('ionBackButton', eventListener);
+    };
+  }, [modalRef]);
 
   return (
-    <IonModal ref={modalRef} presentingElement={presentingElement} trigger="map-settings-modal" handle={false}>
+    <IonModal ref={modalRef} trigger="map-settings-modal" handle={false}>
       <IonContent style={{ '--background': 'var(--ion-item-background' }} scrollY={false}>
         <IonHeader className='ion-no-border'>
           <IonToolbar className='profile-modal-toolbar'>
-            <IonTitle className='profile-modal-title'>Map Settings</IonTitle>
             <IonButtons>
-              <IonButton className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss() }}>
-                <p>Close</p>
+              <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss() }}>
+                <IonIcon icon={chevronBackOutline} />
               </IonButton>
+              <p style={{ fontSize: "1.05rem" }}>Map Settings</p>
             </IonButtons>
           </IonToolbar>
         </IonHeader>
@@ -129,7 +137,8 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
             disabled={!startDate || !endDate}
             color="secondary"
             expand="block"
-            style={{ width: "100%" }}
+            className='profile-edit-modal-update-button'
+            style={{ width: '100%' }}
             onClick={handleUpdateEventsBetweenDates}
           >
             Update
