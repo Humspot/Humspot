@@ -39,6 +39,7 @@
 /** ProfileBio.tsx **/
 .profile-bio-card {
   margin: 10px;
+  margin-bottom: 7.5px;
 }
 
 .profile-bio-picture-and-stats-row {
@@ -59,7 +60,7 @@
   font-size: 0.95rem;
   padding-left: 10px;
   padding-bottom: 5px;
-  margin-bottom: 0;
+  margin-bottom: 1px;
   padding-right: 10px;
 }
 
@@ -137,8 +138,8 @@
 
 /** ProfileSegments.tsx **/
 #profile-segment {
-  margin-left: 2.5%;
-  width: 95%;
+  width: 93.5%;
+  margin: auto;
 }
 
 #profile-segment ion-segment-button {
