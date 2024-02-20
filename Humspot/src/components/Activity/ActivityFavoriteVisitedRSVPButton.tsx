@@ -37,14 +37,14 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setFavorited(true);
-      const t = Toast.create({ message: 'Added to favorites!', position: 'top', duration: 2000, color: 'secondary' });
+      const t = Toast.create({ message: 'Added to favorites!', position: 'bottom', duration: 2000, color: 'secondary' });
       t.present();
     } else if (res && res.removed) {
       setFavorited(false);
-      const t = Toast.create({ message: 'Removed from favorites', position: 'top', duration: 2000, color: 'dark' });
+      const t = Toast.create({ message: 'Removed from favorites', position: 'bottom', duration: 2000, color: 'dark' });
       t.present();
     } else {
-      const t = Toast.create({ message: 'Something went wrong...', position: 'top', duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: 'Something went wrong...', position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
     }
   };
@@ -59,14 +59,14 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setVisited(true);
-      const t = Toast.create({ message: 'Added to visited!', position: 'top', duration: 2000, color: 'secondary' });
+      const t = Toast.create({ message: 'Added to visited!', position: 'bottom', duration: 2000, color: 'secondary' });
       t.present();
     } else if (res && res.removed) {
       setVisited(false);
-      const t = Toast.create({ message: 'Removed from visited', position: 'top', duration: 2000, color: 'dark' });
+      const t = Toast.create({ message: 'Removed from visited', position: 'bottom', duration: 2000, color: 'dark' });
       t.present();
     } else {
-      const t = Toast.create({ message: 'Something went wrong...', position: 'top', duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: 'Something went wrong...', position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
     }
   };
@@ -81,14 +81,14 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     );
     if (res && !res.removed) {
       setRsvp(true);
-      const t = Toast.create({ message: "RSVP'd for event!", position: 'top', duration: 2000, color: 'secondary' });
+      const t = Toast.create({ message: "RSVP'd for event!", position: 'bottom', duration: 2000, color: 'secondary' });
       t.present();
     } else if (res && res.removed) {
       setRsvp(false);
-      const t = Toast.create({ message: 'Removed RSVP from event.', position: 'top', duration: 2000, color: 'dark' });
+      const t = Toast.create({ message: 'Removed RSVP from event.', position: 'bottom', duration: 2000, color: 'dark' });
       t.present();
     } else {
-      const t = Toast.create({ message: 'Something went wrong...', position: 'top', duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: 'Something went wrong...', position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
     }
   };
@@ -119,7 +119,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
             className='activity-favorites-button'
             fill='clear'
             color={'secondary'}
-            size='large'
+            // size='large'
             onClick={clickOnFavorite}
             disabled={favorited === null}
           >
@@ -134,7 +134,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
               className='activity-visited-button'
               fill='clear'
               color={'secondary'}
-              size='large'
+              // size='large'
               disabled={rsvp === null}
               onClick={clickOnRsvp}
             >
@@ -149,7 +149,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
                 className='activity-visited-button'
                 fill='clear'
                 color={'secondary'}
-                size='large'
+                // size='large'
                 disabled={visited === null}
                 onClick={clickOnVisited}
               >
@@ -164,7 +164,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
       <IonButton
         fill='clear'
         color='secondary'
-        size='large'
+        // size='large'
         onClick={async () => {
           const activityTypeUpper: string = activityType ? activityType[0].toUpperCase() + activityType?.slice(1) : 'Activity';
           await handleShare(`Check out this ${activityTypeUpper} on Humspot!`);

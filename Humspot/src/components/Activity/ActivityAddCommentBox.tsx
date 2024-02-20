@@ -88,7 +88,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
 
     if (!image) return;
     if (!image.webPath) {
-      const toast = Toast.create({ message: 'Something went wrong', position: 'top', duration: 2000, color: 'danger' });
+      const toast = Toast.create({ message: 'Something went wrong', position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
     }
 
@@ -96,7 +96,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
     const blobRes = await res.blob();
     if (blobRes) {
       if (blobRes.size > 15_000_000) { // 15 MB
-        const toast = Toast.create({ message: 'Image too large', position: 'top', duration: 2000, color: 'danger' });
+        const toast = Toast.create({ message: 'Image too large', position: 'bottom', duration: 2000, color: 'danger' });
         toast.present();
         dismiss();
       } else {
@@ -116,7 +116,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
   const handleSubmitComment = async (): Promise<void> => {
     if (!context.humspotUser) return;
     if (!commentRef || !commentRef.current || !commentRef.current.value?.trim()) {
-      const toast = Toast.create({ message: "Please enter a comment", position: 'top', duration: 2000, color: 'danger' });
+      const toast = Toast.create({ message: "Please enter a comment", position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
       return;
     }
@@ -132,7 +132,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
 
     const res = await handleAddComment(humspotComment, blob, props.activityName);
     if (res.success) {
-      const t = Toast.create({ message: "Comment added", position: 'top', duration: 2000, color: 'secondary' });
+      const t = Toast.create({ message: "Comment added", position: 'bottom', duration: 2000, color: 'secondary' });
       t.present();
       const addToCommentsArray = {
         commentText: commentRef.current.value as string,
@@ -148,7 +148,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       commentRef.current.value = null;
       setPhoto(undefined);
     } else {
-      const t = Toast.create({ message: "Something went wrong!", position: 'top', duration: 2000, color: 'danger' });
+      const t = Toast.create({ message: "Something went wrong!", position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
     }
     await dismiss();
