@@ -1,19 +1,19 @@
 /**
  * @file ActivityFavoriteVisitedRSVPButton.tsx
  * @fileoverview the header at the top of the Activity page. Contains a button to Favorite an activity, 
- * say that one Visited the activity, a button to RSVP for an activity (events only), and a button to share
+ * a button to mark an activity as Visited, a button to RSVP for an activity (events only), and a button to share
  * the link using the native Share interface.
  */
 
 import { memo, useCallback, useEffect, useState } from 'react';
-import { useContext } from '../../utils/hooks/useContext';
-import { handleAddToFavorites, handleAddToRSVP, handleAddToVisited, handleGetFavoritesAndVisitedAndRSVPStatus } from '../../utils/server';
-import { useToast } from '@agney/ir-toast';
 import { IonButton, IonIcon } from '@ionic/react';
 import { calendar, calendarOutline, heart, heartOutline, shareOutline, walk, walkOutline } from 'ionicons/icons';
+import { useToast } from '@agney/ir-toast';
+import { useContext } from '../../utils/hooks/useContext';
 import { isPastDate } from '../../utils/functions/calcDates';
 import { handleShare } from '../../utils/functions/handleShare';
 import { formatDate } from '../../utils/functions/formatDate';
+import { handleAddToFavorites, handleAddToRSVP, handleAddToVisited, handleGetFavoritesAndVisitedAndRSVPStatus } from '../../utils/server';
 
 
 const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'event' | 'attraction' | 'custom' | undefined, activityDate: string | undefined }) => {
@@ -98,7 +98,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
    * be filled or not. Called on page load.
    * @see handleGetFavoritesAndVisitedAndRSVPStatus
    */
-  const getButtonStatus = useCallback(async () => {
+  const getButtonsStatus = useCallback(async () => {
     if (!context.humspotUser || !id) return;
     const response = await handleGetFavoritesAndVisitedAndRSVPStatus(context.humspotUser.userID, id);
     setFavorited(response.favorited);
@@ -106,8 +106,8 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
     setRsvp(response.rsvp);
   }, [context.humspotUser]);
   useEffect(() => {
-    getButtonStatus();
-  }, [getButtonStatus])
+    getButtonsStatus();
+  }, [getButtonsStatus])
 
 
   return (
