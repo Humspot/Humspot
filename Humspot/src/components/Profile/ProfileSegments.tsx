@@ -151,7 +151,7 @@ const ProfileSegments: React.FC = memo(() => {
               <>
                 <IonCard style={{ marginTop: 0 }}>
                   <IonCardContent className='ion-no-padding'>
-                    <IonList inset={false} style={{ paddingTop: 0 }}>
+                    <IonList inset={false} style={{ paddingTop: 0, paddingBottom: 0 }}>
                       {!favoritesLoading ?
                         favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
                           return (
@@ -200,7 +200,7 @@ const ProfileSegments: React.FC = memo(() => {
               <>
                 <IonCard style={{ marginTop: 0 }}>
                   <IonCardContent className='ion-no-padding'>
-                    <IonList inset={false} style={{ paddingTop: 0 }}>
+                    <IonList inset={false} style={{ paddingTop: 0, paddingBottom: 0 }}>
                       {!visitedLoading ?
                         visited.map((visitedPlace: HumspotVisitedResponse, index: number) => {
                           return (
@@ -249,7 +249,7 @@ const ProfileSegments: React.FC = memo(() => {
               <>
                 <IonCard style={{ marginTop: 0 }}>
                   <IonCardContent className='ion-no-padding'>
-                    <IonList inset={false} style={{ paddingTop: 0 }}>
+                    <IonList inset={false} style={{ paddingTop: 0, paddingBottom: 0 }}>
                       {!interactionsLoading ?
                         interactions.map((interaction: HumspotInteractionResponse, index: number) => {
                           return (
