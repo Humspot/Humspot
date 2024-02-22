@@ -9,12 +9,13 @@ import { HumspotEvent } from '../utils/types';
 import { useContext } from '../utils/hooks/useContext';
 import { useToast } from '@agney/ir-toast';
 import { handleSubmitEventForApproval, handleUploadSubmissionImages } from '../utils/server';
-import { Map, Marker } from "pigeon-maps";
+import { Map, Marker, ZoomControl } from "pigeon-maps";
 import { addOutline, cameraOutline, chevronDownOutline, mapOutline } from 'ionicons/icons';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import GoBackHeader from '../components/Shared/GoBackHeader';
 
 import { canDismiss } from '../utils/functions/canDismiss';
+import { zoomControlButtonsStyle, zoomControlButtonsStyleDark } from '../utils/map-config';
 
 
 const eventTags: string[] = [
@@ -480,11 +481,8 @@ export const EventForm = () => {
                 </IonToolbar>
               </IonHeader>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{}}>
+                <div style={{ height: "50vh", width: "100vw" }}>
                   <Map
-                    maxZoom={14}
-                    height={400}
-                    width={500}
                     attribution={false}
                     zoom={zoom}
                     center={center}
@@ -496,6 +494,14 @@ export const EventForm = () => {
                       setZoom(zoom);
                     }}
                   >
+                    <ZoomControl
+                      style={{ opacity: "95%", zIndex: "100" }}
+                      buttonStyle={
+                        !context.darkMode
+                          ? zoomControlButtonsStyle
+                          : zoomControlButtonsStyleDark
+                      }
+                    />
                     {mapPinLatLong &&
                       <Marker color='var(--ion-color-secondary)' width={40} anchor={[mapPinLatLong[0], mapPinLatLong[1]]}></Marker>
                     }
@@ -525,7 +531,7 @@ export const EventForm = () => {
                       mapModalRef?.current?.dismiss();
                     }}
                   >
-                    Save Location
+                    Save Pinned Location
                   </IonButton>
                 </div>
               </div>
