@@ -42,7 +42,7 @@ import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from '../../utils/ser
 import './Profile.css';
 import { Keyboard, KeyboardStyleOptions, KeyboardStyle } from '@capacitor/keyboard';
 import { StatusBar, Style } from '@capacitor/status-bar';
-import { Capacitor } from '@capacitor/core';
+import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar';
 
 type ProfileSettingsModalProps = {
   page: HTMLElement | undefined;
@@ -77,12 +77,14 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
     if (isChecked) {
       document.body.classList.add('dark');
       await StatusBar.setStyle({ style: Style.Dark });
-      await StatusBar.setBackgroundColor({ color: "#121212" })
+      await StatusBar.setBackgroundColor({ color: '#121212' })
+      await NavigationBar.setColor({ color: '#1f1f1f' });
       await Keyboard.setStyle(keyStyleOptionsDark);
     } else {
       document.body.classList.remove('dark');
       await StatusBar.setStyle({ style: Style.Light });
-      await StatusBar.setBackgroundColor({ color: "#f5fff7" })
+      await StatusBar.setBackgroundColor({ color: '#f5fff7' });
+      await NavigationBar.setColor({ color: '#edf2ed' });
       await Keyboard.setStyle(keyStyleOptionsLight);
     }
   };
@@ -127,10 +129,12 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   const handleStatusBarUpdate = async () => {
     if (context.darkMode) {
       await StatusBar.setStyle({ style: Style.Dark });
-      await StatusBar.setBackgroundColor({ color: "#121212" })
+      await StatusBar.setBackgroundColor({ color: '#121212' })
+      await NavigationBar.setColor({ color: '#1f1f1f' });
     } else {
       await StatusBar.setStyle({ style: Style.Light });
-      await StatusBar.setBackgroundColor({ color: "#f5fff7" })
+      await StatusBar.setBackgroundColor({ color: '#f5fff7' })
+      await NavigationBar.setColor({ color: '#edf2ed' });
     }
   };
 
@@ -149,7 +153,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   }, [modalRef]);
 
   return (
-    <IonModal ref={modalRef} onDidDismiss={handleStatusBarUpdate} trigger='open-profile-page-modal'>
+    <IonModal ref={modalRef} trigger='open-profile-page-modal'>
       <IonContent className='profile-modal-content' scrollY={false}>
         <IonHeader className='ion-no-border'>
           <IonToolbar className='profile-modal-toolbar'>
@@ -160,7 +164,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
               >
                 <IonIcon color='primary' icon={chevronBackOutline} />
               </IonButton>
-              <p style={{ fontSize: "1.25rem" }}>Settings</p>
+              <p style={{ fontSize: '1.25rem' }}>Settings</p>
             </IonButtons>
           </IonToolbar>
         </IonHeader>
@@ -211,7 +215,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
           }
         </IonList>
         {context.humspotUser &&
-          <IonFab vertical='bottom' horizontal='center' style={{ paddingBottom: "15px" }}>
+          <IonFab vertical='bottom' horizontal='center' style={{ paddingBottom: '15px' }}>
             <IonCardTitle style={{ fontSize: '0.8rem', fontWeight: '500', textAlign: 'center' }}>Logged in as:<div style={{ padding: '1px' }}></div> <span style={{ fontSize: '1rem', color: 'var(--ion-color-primary)' }}>{context.humspotUser.email}</span></IonCardTitle>
           </IonFab>
         }
