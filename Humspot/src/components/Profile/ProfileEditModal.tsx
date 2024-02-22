@@ -7,7 +7,7 @@
 import { useEffect, useRef } from "react";
 import {
   IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel,
-  IonList, IonLoading, IonModal, IonTextarea, IonTitle, IonToolbar, useIonLoading
+  IonList, IonLoading, IonModal, IonTextarea, IonToolbar, useIonLoading
 } from "@ionic/react";
 import { cameraReverseOutline, chevronBackOutline } from "ionicons/icons";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
@@ -167,7 +167,7 @@ const ProfileEditModal = () => {
                 </IonItem>
                 <IonItem>
                   <IonLabel position="fixed" style={{ alignSelf: 'flex-start' }}>About</IonLabel>
-                  <IonTextarea aria-label="About" ref={bioRef} maxlength={250} rows={4} value={context.humspotUser.bio} />
+                  <IonTextarea aria-label="About" ref={bioRef} maxlength={150} rows={4} value={context.humspotUser.bio} />
                 </IonItem>
               </IonList>
             </section>

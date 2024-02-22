@@ -12,7 +12,6 @@ import {
   IonButton,
   IonLabel,
   IonTextarea,
-  IonTitle,
   IonItem,
   useIonLoading,
   IonChip,
@@ -44,7 +43,7 @@ import {
   handleSubmitAttractionForApproval,
   handleUploadSubmissionImages,
 } from "../utils/server";
-import { Camera, CameraResultType } from "@capacitor/camera";
+import { Camera } from "@capacitor/camera";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { canDismiss } from "../utils/functions/canDismiss";
 import { zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/map-config";
