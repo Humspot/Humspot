@@ -26,14 +26,14 @@ const useDarkMode = (context: ContextType) => {
     if (isChecked.value === "false") {
       context.setDarkMode(false);
       await StatusBar.setStyle({ style: Style.Light });
+      await StatusBar.setBackgroundColor({ color: "#f5fff7" });
       await Keyboard.setStyle(keyStyleOptionsLight);
-      // if (Capacitor.getPlatform() === 'ios') {}
     } else if (!isChecked || !isChecked.value || isChecked.value === 'true') {
       document.body.classList.toggle("dark");
       context.setDarkMode(true);
       await StatusBar.setStyle({ style: Style.Dark });
+      await StatusBar.setBackgroundColor({ color: "#121212" });
       await Keyboard.setStyle(keyStyleOptionsDark);
-      // if (Capacitor.getPlatform() === 'ios') {}
     }
   }, []);
 
