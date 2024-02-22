@@ -545,7 +545,7 @@ export const EventForm = () => {
                       mapModalRef?.current?.dismiss();
                     }}
                   >
-                    Save Location
+                    Save Pinned Location
                   </IonButton>
                 </div>
               </div>

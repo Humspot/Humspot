@@ -32,7 +32,7 @@ import {
 import { HumspotAttraction } from "../utils/types";
 import { useContext } from "../utils/hooks/useContext";
 import { useToast } from "@agney/ir-toast";
-import { Map, Marker } from "pigeon-maps";
+import { Map, Marker, ZoomControl } from "pigeon-maps";
 import {
   addOutline,
   cameraOutline,
@@ -47,6 +47,7 @@ import {
 import { Camera, CameraResultType } from "@capacitor/camera";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { canDismiss } from "../utils/functions/canDismiss";
+import { zoomControlButtonsStyle, zoomControlButtonsStyleDark } from "../utils/map-config";
 
 const attractionTags: string[] = [
   "Beach",
@@ -732,6 +733,14 @@ const SubmitAttractionPage = () => {
                     setZoom(zoom);
                   }}
                 >
+                  <ZoomControl
+                    style={{ opacity: "95%", zIndex: "100" }}
+                    buttonStyle={
+                      !context.darkMode
+                        ? zoomControlButtonsStyle
+                        : zoomControlButtonsStyleDark
+                    }
+                  />
                   {mapPinLatLong && (
                     <Marker
                       color='var(--ion-color-secondary)'
@@ -771,7 +780,7 @@ const SubmitAttractionPage = () => {
                     mapModalRef?.current?.dismiss();
                   }}
                 >
-                  Save Location
+                  Save Pinned Location
                 </IonButton>
               </div>
             </div>
