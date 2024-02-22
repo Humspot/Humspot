@@ -18,7 +18,7 @@ import { formatDate } from "../utils/functions/formatDate";
 import { handleGetActivitiesGivenTag } from "../utils/server";
 
 import placeholder from '../assets/images/placeholder.png';
-import { chevronBackOutline, shareOutline } from "ionicons/icons";
+import { chevronBackOutline, shareSocialOutline } from "ionicons/icons";
 import { useContext } from "../utils/hooks/useContext";
 import { handleShare } from "../utils/functions/handleShare";
 
@@ -80,7 +80,7 @@ const MoreResults = () => {
           </IonButtons>
           <IonButtons slot='end'>
             <IonButton style={{ fontSize: '1.15rem' }} onClick={async () => await handleShare('Check out activities tagged with ' + tagName + ' on Humspot!')}>
-              <IonIcon color='primary' icon={shareOutline} />
+              <IonIcon color='primary' icon={shareSocialOutline} />
             </IonButton>
           </IonButtons>
         </IonToolbar>

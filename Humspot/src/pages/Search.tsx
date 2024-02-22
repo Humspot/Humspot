@@ -10,7 +10,7 @@ import {
   IonSkeletonText, IonText, IonTitle, IonToolbar, useIonRouter, useIonViewWillEnter
 } from '@ionic/react';
 import { useParams } from 'react-router-dom';
-import { chevronBackOutline, shareOutline } from 'ionicons/icons';
+import { chevronBackOutline, shareSocialOutline } from 'ionicons/icons';
 import { Keyboard } from '@capacitor/keyboard';
 
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
@@ -354,8 +354,8 @@ const Search = () => {
             }
           </IonButtons>
           <IonButtons slot='end'>
-            <IonButton onClick={async () => await handleShare('Check out these activities on Humspot!')}>
-              <IonIcon color='primary' icon={shareOutline} />
+            <IonButton style={{ padding: 0, margin: 0, fontSize: '1.15rem' }} onClick={async () => await handleShare('Check out these activities on Humspot!')}>
+              <IonIcon color='primary' icon={shareSocialOutline} />
             </IonButton>
           </IonButtons>
         </IonToolbar>

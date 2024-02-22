@@ -7,7 +7,7 @@
 
 import { memo, useCallback, useEffect, useState } from 'react';
 import { IonButton, IonIcon } from '@ionic/react';
-import { calendar, calendarOutline, heart, heartOutline, shareOutline, walk, walkOutline } from 'ionicons/icons';
+import { calendar, calendarOutline, heart, heartOutline, shareSocialOutline, walk, walkOutline } from 'ionicons/icons';
 import { useToast } from '@agney/ir-toast';
 import { useContext } from '../../utils/hooks/useContext';
 import { isPastDate } from '../../utils/functions/calcDates';
@@ -173,7 +173,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
           await handleShare(`Check out this ${activityTypeUpper} on Humspot!`);
         }}
       >
-        <IonIcon icon={shareOutline} />
+        <IonIcon icon={shareSocialOutline} />
       </IonButton>
 
     </div>
