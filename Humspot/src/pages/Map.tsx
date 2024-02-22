@@ -325,7 +325,7 @@ const Map = () => {
           )}
 
           <IonFab horizontal="end" vertical="bottom" style={{ transform: 'translateY(-15px)' }}>
-            <IonButton id="map-settings-modal" color='light' style={{ '--border-radius': '5px', border: "0.5px solid var(--ion-color-warning)", borderRadius: '5px' }}>
+            <IonButton mode='ios' id="map-settings-modal" color='light' style={{ '--border-radius': '5px', border: "0.5px solid var(--ion-color-warning)", borderRadius: '5px' }}>
               <IonIcon icon={settingsOutline} color='secondary' />
             </IonButton>
           </IonFab>

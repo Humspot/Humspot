@@ -125,12 +125,12 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
           <br />
           <div style={{ paddingTop: '15px' }}>
             <IonLabel>Start Date</IonLabel>
-            <IonInput style={context.darkMode ? { '--background': '#2d2d2d', verticalAlign: 'middle', height: '50px', lineHeight: 'normal' } : { '--background': '#e1e1e1', verticalAlign: 'middle', height: '50px', lineHeight: 'normal' }} type='date' value={startDate} onIonChange={e => setStartDate(e.detail.value!)} />
+            <IonInput style={context.darkMode ? { '--background': '#2d2d2d', verticalAlign: 'middle', height: '50px', lineHeight: 'normal', borderRadius: '5px' } : { '--background': '#e1e1e1', verticalAlign: 'middle', height: '50px', lineHeight: 'normal', borderRadius: '5px' }} type='date' value={startDate} onIonChange={e => setStartDate(e.detail.value!)} />
           </div>
           <br />
           <div>
             <IonLabel>End Date</IonLabel>
-            <IonInput style={context.darkMode ? { '--background': '#2d2d2d', verticalAlign: 'middle', height: '50px', lineHeight: 'normal' } : { '--background': '#e1e1e1', verticalAlign: 'middle', height: '50px', lineHeight: 'normal' }} type='date' value={endDate} onIonChange={e => setEndDate(e.detail.value!)} />
+            <IonInput style={context.darkMode ? { '--background': '#2d2d2d', verticalAlign: 'middle', height: '50px', lineHeight: 'normal', borderRadius: '5px' } : { '--background': '#e1e1e1', verticalAlign: 'middle', height: '50px', lineHeight: 'normal', borderRadius: '5px' }} type='date' value={endDate} onIonChange={e => setEndDate(e.detail.value!)} />
           </div>
           <br />
           <IonButton

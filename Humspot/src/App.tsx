@@ -7,7 +7,7 @@
 
 import { useState } from "react";
 import { Redirect, Route } from "react-router-dom";
-import { IonApp, IonButton, IonIcon, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from "@ionic/react";
+import { IonApp, IonIcon, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { addCircleOutline, calendar, compass, map, person } from "ionicons/icons";
 import { SplashScreen } from '@capacitor/splash-screen';

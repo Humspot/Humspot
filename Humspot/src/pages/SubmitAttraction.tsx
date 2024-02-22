@@ -719,11 +719,8 @@ const SubmitAttractionPage = () => {
                 justifyContent: "center",
               }}
             >
-              <div style={{}}>
+              <div style={{ height: "50vh", width: "100vw" }}>
                 <Map
-                  maxZoom={14}
-                  height={400}
-                  width={500}
                   attribution={false}
                   zoom={zoom}
                   center={center}
