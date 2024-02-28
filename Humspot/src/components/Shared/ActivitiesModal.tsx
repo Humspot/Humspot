@@ -9,6 +9,7 @@ import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent
 import { calendarOutline, clipboardOutline, listCircleOutline, locationOutline } from "ionicons/icons";
 
 import { useContext } from "../../utils/hooks/useContext";
+import useIonBackButton from "../../utils/hooks/useIonBackButton";
 
 type ActivitiesModalProps = {
   showModal: boolean;
@@ -22,20 +23,7 @@ const ActivitiesModal = (props: ActivitiesModalProps) => {
   console.log({ props })
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, () => {
-        props.setShowModal(false);
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [modalRef]);
+  useIonBackButton(20, async () => { props.setShowModal(false) }, [modalRef]);
 
 
   return (

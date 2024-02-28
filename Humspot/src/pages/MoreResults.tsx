@@ -37,7 +37,6 @@ const MoreResults = () => {
 
   const params = useParams<MoreResultsParams>();
   const tagName: string = titleToTagName[decodeURIComponent(params.tagName)] ?? decodeURIComponent(params.tagName) ?? '';
-  console.log(tagName);
   const Toast = useToast();
   const router = useIonRouter();
   const context = useContext();

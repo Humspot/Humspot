@@ -33,6 +33,7 @@ import ActivityCommentsList from "../components/Activity/ActivityCommentsList";
 import { isPastDate } from "../utils/functions/calcDates";
 import { formatDate } from "../utils/functions/formatDate";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
+import useIonBackButton from "../utils/hooks/useIonBackButton";
 
 type ActivityPageParams = {
   id: string;
@@ -45,6 +46,7 @@ const Activity = () => {
   const context = useContext();
   const page = useRef();
   const router = useIonRouter();
+  useIonBackButton(50, () => { router.goBack(); }, [router]);
 
   const [hasSwipedIn, setHasSwipedIn] = useState<boolean>(false);
 
@@ -76,20 +78,6 @@ const Activity = () => {
   useIonViewDidEnter(() => {
     setHasSwipedIn(true);
   }, []);
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(50, () => {
-        router.goBack();
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [router]);
 
   return (
     <IonPage ref={page}>

@@ -43,6 +43,7 @@ import './Profile.css';
 import { Keyboard, KeyboardStyleOptions, KeyboardStyle } from '@capacitor/keyboard';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { NavigationBar } from '@hugotomazi/capacitor-navigation-bar';
+import useIonBackButton from '../../utils/hooks/useIonBackButton';
 
 type ProfileSettingsModalProps = {
   page: HTMLElement | undefined;
@@ -63,6 +64,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   const [presentAlert] = useIonAlert();
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
+  useIonBackButton(20, async () => { await modalRef.current?.dismiss(); }, [modalRef]);
 
   /**
    * @description updates the dark mode values in context and Capacitor Preferences (localStorage).
@@ -137,20 +139,6 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
       await NavigationBar.setColor({ color: '#edf2ed' });
     }
   };
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, async () => {
-        await modalRef?.current?.dismiss();
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [modalRef]);
 
   return (
     <IonModal ref={modalRef} trigger='open-profile-page-modal'>

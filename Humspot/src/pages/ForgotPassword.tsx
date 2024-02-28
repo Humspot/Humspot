@@ -7,8 +7,8 @@ import { useToast } from '@agney/ir-toast';
 import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage, useIonLoading, useIonRouter } from '@ionic/react';
 import { useRef } from 'react';
 import { handleForgotPassword } from '../utils/server';
-import GoBackHeader from '../components/Shared/GoBackHeader';
 import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
+import GoBackHeader from '../components/Shared/GoBackHeader';
 
 const ForgotPassword = () => {
 

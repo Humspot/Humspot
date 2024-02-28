@@ -26,13 +26,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     if (context.humspotUser === undefined) { // not logged in
-      context.setShowTabs(false);
-      timeout(750).then(() => {
-        context.setShowTabs(false);
-        timeout(750).then(() => {
-          router.push("/sign-up");
-        })
-      })
+      router.push("/sign-up");
     }
   }, [context.humspotUser]);
 

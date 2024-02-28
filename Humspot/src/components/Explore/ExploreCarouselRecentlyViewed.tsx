@@ -61,6 +61,20 @@ const ExploreCarouselRecentlyViewed = () => {
         cssMode={true}
         resistanceRatio={0.5}
         style={{ width: '100%', height: 'auto' }}
+        breakpoints={{
+          320: {
+            slidesPerView: 1.25,
+          },
+          480: {
+            slidesPerView: 1.25,
+          },
+          720: {
+            slidesPerView: 2.25,
+          },
+          1024: {
+            slidesPerView: 3.25,
+          }
+        }}
       >
         {recentActivities && recentActivities.map((activity, index) => (
           <SwiperSlide key={index} style={{ width: 'auto', height: '100%', paddingRight: "20px" }}>

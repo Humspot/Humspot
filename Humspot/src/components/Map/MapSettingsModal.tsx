@@ -14,6 +14,7 @@ import { GetEventsBetweenTwoDatesStatusResponse } from "../../utils/types";
 
 import './Map.css';
 import { chevronBackOutline } from "ionicons/icons";
+import useIonBackButton from "../../utils/hooks/useIonBackButton";
 
 /**
  * @description checks whether two date strings are within a two week range.
@@ -51,6 +52,7 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
   const [endDate, setEndDate] = useState('');
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
+  useIonBackButton(20, async () => { await modalRef.current?.dismiss(); }, [modalRef]);
 
   /**
    * @description runs when users click the update button.
@@ -82,20 +84,6 @@ const MapSettingsModal = (props: MapSettingsModalProps) => {
     const t = Toast.create({ message: "Events updated", duration: 2000, color: 'secondary', position: "bottom" });
     t.present();
   };
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, async () => {
-        await modalRef?.current?.dismiss();
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [modalRef]);
 
   return (
     <IonModal ref={modalRef} trigger="map-settings-modal" handle={false}>

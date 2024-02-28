@@ -16,6 +16,7 @@ import GoBackHeader from '../components/Shared/GoBackHeader';
 
 import { canDismiss } from '../utils/functions/canDismiss';
 import { zoomControlButtonsStyle, zoomControlButtonsStyleDark } from '../utils/map-config';
+import useIonBackButton from '../utils/hooks/useIonBackButton';
 
 
 const eventTags: string[] = [
@@ -146,6 +147,7 @@ export const EventForm = () => {
   const [mapPinLatLong, setMapPinLatLong] = useState<[number, number] | null>(null);
   const [visibleTags, setVisibleTags] = useState<string[]>(eventTags.slice(0, 20));
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
 
   const toggleTag = (tag: string) => {
     if (selectedTags.includes(tag)) {
@@ -308,20 +310,6 @@ export const EventForm = () => {
   useIonViewWillEnter(() => {
     context.setShowTabs(false);
   }, []);
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, async () => {
-        await mapModalRef?.current?.dismiss();
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [mapModalRef]);
 
   return (
     <IonPage ref={pageRef}>

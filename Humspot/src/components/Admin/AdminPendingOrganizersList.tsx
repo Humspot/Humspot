@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useContext } from "../../utils/hooks/useContext";
 import { handleApproveOrganizer, handleDenyOrganizer } from "../../utils/server";
 import { canDismiss } from "../../utils/functions/canDismiss";
+import useIonBackButton from "../../utils/hooks/useIonBackButton";
 
 type Organizer = {
   name: string;
@@ -22,6 +23,8 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
 
   const [organizerInfo, setOrganizerInfo] = useState<Organizer | null>(null);
   const modalRef = useRef<HTMLIonModalElement | null>(null);
+  useIonBackButton(20, async () => { await modalRef.current?.dismiss(); }, [modalRef]);
+
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -60,20 +63,6 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
     setLoading(false);
     modalRef.current?.dismiss();
   };
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, async () => {
-        await modalRef?.current?.dismiss();
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [modalRef]);
 
   if (!props.loading && props.organizers.length <= 0) {
     return (

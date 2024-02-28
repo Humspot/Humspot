@@ -13,6 +13,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { getUserRatingGivenUserID } from '../../utils/server';
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 import { chevronBack } from 'ionicons/icons';
+import useIonBackButton from '../../utils/hooks/useIonBackButton';
 
 type ActivityHeaderTitleProps = {
   activity: boolean;
@@ -29,6 +30,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
   const Toast = useToast();
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
+  useIonBackButton(20, async () => { await modalRef.current?.dismiss(); }, [modalRef]);
 
   const [ratingLoading, setRatingLoading] = useState<boolean>(false);
   const [newUserRating, setNewUserRating] = useState<number>(0);
@@ -71,19 +73,6 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
     getUserRating();
   }, [getUserRating]);
 
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, async () => {
-        await modalRef?.current?.dismiss();
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [modalRef]);
 
   return (
     <FadeIn>

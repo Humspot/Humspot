@@ -1,3 +1,8 @@
+/**
+ * @file Calendar.tsx
+ * @fileoverview the 3rd tab on the tab bar. Contains a list of upcoming events.
+ */
+
 import {
   IonContent,
   IonNote,
@@ -21,13 +26,10 @@ import '../App.css';
 function CalendarPage() {
   const context = useContext();
   const pageRef = useRef();
-  useIonViewDidEnter(() => {
-    context.setShowTabs(true);
-  });
   const [eventsToday, seteventsToday] = useState<any>([]);
   const [eventsTodayLoading, setEventsTodayLoading] = useState<boolean>(true);
+
   const Toast = useToast();
-  const [filterVariable, setFilter] = useState<string | null>(null);
   // FetchEventsToday
   const fetchEventsToday = useCallback(async () => {
     setEventsTodayLoading(true);
@@ -102,6 +104,10 @@ function CalendarPage() {
   useEffect(() => {
     fetchEventsMonth();
   }, [fetchEventsMonth]);
+
+  useIonViewDidEnter(() => {
+    context.setShowTabs(true);
+  });
 
   return (
     <>

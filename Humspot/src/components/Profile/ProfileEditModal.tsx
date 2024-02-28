@@ -19,6 +19,7 @@ import { useContext } from "../../utils/hooks/useContext";
 import { handleAddProfileImageToS3, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
 
 import './Profile.css';
+import useIonBackButton from "../../utils/hooks/useIonBackButton";
 
 
 let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
@@ -32,6 +33,8 @@ const ProfileEditModal = () => {
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const usernameRef = useRef<HTMLIonInputElement | null>(null);
   const bioRef = useRef<HTMLIonTextareaElement | null>(null);
+
+  useIonBackButton(20, async () => { await modalRef.current?.dismiss(); }, [modalRef]);
 
   const clickUpdateProfilePhoto = async () => {
     if (!context.humspotUser) {
@@ -107,20 +110,6 @@ const ProfileEditModal = () => {
     }
     dismiss();
   };
-
-  useEffect(() => {
-    const eventListener: any = (ev: CustomEvent<any>) => {
-      ev.detail.register(20, async () => {
-        await modalRef?.current?.dismiss();
-      });
-    };
-
-    document.addEventListener('ionBackButton', eventListener);
-
-    return () => {
-      document.removeEventListener('ionBackButton', eventListener);
-    };
-  }, [modalRef]);
 
   return (
     <IonModal ref={modalRef} trigger="open-edit-profile-modal" >
