@@ -4,7 +4,7 @@
  * Contains swipers for different kinds of activities, as well as a search bar and a way to filter the activities.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { IonContent, IonHeader, IonPage, IonSearchbar, IonToolbar, useIonRouter, useIonViewDidEnter } from "@ionic/react";
 
 import ExploreFilterButtons from "../components/Explore/ExploreFilterButtons";
@@ -19,10 +19,6 @@ import { handleGetActivitiesGivenTag, handleGetThisWeeksEvents } from "../utils/
 import "swiper/css";
 import { Keyboard } from "@capacitor/keyboard";
 import { timeout } from "../utils/functions/timeout";
-
-import HumspotLogo from '../../resources/icon-only.png';
-import { StatusBar, Style } from "@capacitor/status-bar";
-import { NavigationBar } from "@hugotomazi/capacitor-navigation-bar";
 
 
 const fetchHighlights = async (): Promise<any[] | null> => {
