@@ -138,8 +138,9 @@
 
 /** ProfileSegments.tsx **/
 #profile-segment {
-  width: 93.5%;
-  margin: auto;
+  width: auto;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 #profile-segment ion-segment-button {

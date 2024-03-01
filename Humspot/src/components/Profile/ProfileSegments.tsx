@@ -149,7 +149,7 @@ const ProfileSegments: React.FC = memo(() => {
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Favorites</IonTitle>
               :
               <>
-                <IonCard style={{ marginTop: 0 }}>
+                <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>
                   <IonCardContent className='ion-no-padding'>
                     <IonList inset={false} style={{ paddingTop: 0, paddingBottom: 0 }}>
                       {!favoritesLoading ?
@@ -198,7 +198,7 @@ const ProfileSegments: React.FC = memo(() => {
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Places Visited</IonTitle>
               :
               <>
-                <IonCard style={{ marginTop: 0 }}>
+                <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>
                   <IonCardContent className='ion-no-padding'>
                     <IonList inset={false} style={{ paddingTop: 0, paddingBottom: 0 }}>
                       {!visitedLoading ?
@@ -247,7 +247,7 @@ const ProfileSegments: React.FC = memo(() => {
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Interactions</IonTitle>
               :
               <>
-                <IonCard style={{ marginTop: 0 }}>
+                <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>
                   <IonCardContent className='ion-no-padding'>
                     <IonList inset={false} style={{ paddingTop: 0, paddingBottom: 0 }}>
                       {!interactionsLoading ?
