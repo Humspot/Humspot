@@ -51,7 +51,7 @@
 .profile-bio-avatar-picture {
   flex-shrink: 0;
   margin-right: 15%;
-  margin-left: 20px;
+  margin-left: 15px;
   margin-top: 10px;
   transform: scale(1.25);
 }
@@ -71,6 +71,20 @@
   line-height: 2;
   right: calc(var(--ion-safe-area-right, 0px) + 7.5px);
   z-index: 9999;
+}
+
+.profile-bio-text.collapsed {
+  max-height: 5rem;
+  overflow: hidden;
+}
+
+.profile-bio-text.expanded {
+  max-height: none;
+}
+
+.bio-toggle {
+  cursor: pointer;
+  color: var(--ion-color-secondary)
 }
 
 
