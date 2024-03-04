@@ -17,7 +17,7 @@ import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 
 import { handleGetSearchResults } from '../utils/server';
 import { timeout } from '../utils/functions/timeout';
-import { useContext } from '../utils/hooks/useContext';
+import useContext from '../utils/hooks/useContext';
 
 import placeholder from '../assets/images/school_placeholder.jpeg';
 import { handleShare } from '../utils/functions/handleShare';

@@ -1,5 +1,5 @@
 import { IonContent, IonItem, IonLabel, IonList, IonPage, IonTitle, useIonViewWillEnter } from "@ionic/react";
-import { useContext } from "../utils/hooks/useContext";
+import useContext from "../utils/hooks/useContext";
 import { useCallback, useEffect, useState } from "react";
 import { handleGetSubmittedActivities } from "../utils/server";
 import { SubmittedActivities } from "../utils/types";

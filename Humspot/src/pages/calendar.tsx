@@ -11,7 +11,7 @@ import {
   useIonViewWillEnter
 } from "@ionic/react";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useContext } from "../utils/hooks/useContext";
+import useContext from "../utils/hooks/useContext";
 import { useToast } from "@agney/ir-toast";
 import { handleGetEventsBetweenTwoDates } from "../utils/server";
 import EventsListEntry from "../components/Calendar/EventsListEntry";

@@ -5,7 +5,7 @@
 
 import { IonButton, IonButtons, IonCard, IonCardTitle, IonContent, IonHeader, IonModal, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/react'
 import { Rating } from 'react-custom-rating-component'
-import { useContext } from '../../utils/hooks/useContext';
+import useContext from '../../utils/hooks/useContext';
 import { handleAddRating } from '../../utils/server';
 import { useToast } from '@agney/ir-toast';
 import { useCallback, useEffect, useRef, useState } from 'react';

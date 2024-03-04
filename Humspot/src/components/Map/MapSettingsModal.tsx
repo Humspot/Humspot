@@ -7,7 +7,7 @@ import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonInput, Io
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@agney/ir-toast";
 
-import { useContext } from "../../utils/hooks/useContext";
+import useContext from "../../utils/hooks/useContext";
 
 import { handleGetEventsBetweenTwoDates } from "../../utils/server";
 import { GetEventsBetweenTwoDatesStatusResponse } from "../../utils/types";

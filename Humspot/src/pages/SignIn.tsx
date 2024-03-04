@@ -15,7 +15,7 @@ import { useToast } from '@agney/ir-toast';
 import GoBackHeader from '../components/Shared/GoBackHeader';
 import GoogleLoginButton from '../components/Login/GoogleLoginButton';
 
-import { useContext } from '../utils/hooks/useContext';
+import useContext from '../utils/hooks/useContext';
 import { handleSignIn } from '../utils/server';
 import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
 

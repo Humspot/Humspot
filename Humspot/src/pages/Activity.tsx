@@ -21,7 +21,7 @@ import ActivityDateTimeLocation from "../components/Activity/ActivityDateTimeLoc
 import ActivityFavoriteVisitedRSVPButtons from "../components/Activity/ActivityFavoriteVisitedRSVPButton";
 
 import { HumspotActivity, HumspotCommentResponse } from "../utils/types";
-import { useContext } from "../utils/hooks/useContext";
+import useContext from "../utils/hooks/useContext";
 import { updateRecentlyViewed } from "../utils/functions/updateRecentlyViewed";
 
 import '../components/Activity/Activity.css';

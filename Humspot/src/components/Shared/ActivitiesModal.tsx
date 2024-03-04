@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent, IonTitle, IonHeader, IonToolbar, IonButton, IonButtons } from "@ionic/react";
 import { calendarOutline, clipboardOutline, listCircleOutline, locationOutline } from "ionicons/icons";
 
-import { useContext } from "../../utils/hooks/useContext";
+import useContext from "../../utils/hooks/useContext";
 
 const ActivitiesModal: React.FC = () => {
 

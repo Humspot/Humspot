@@ -17,7 +17,7 @@ import GoBackHeader from '../components/Shared/GoBackHeader';
 import GoogleLoginButton from '../components/Login/GoogleLoginButton';
 
 import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
-import { useContext } from '../utils/hooks/useContext';
+import useContext from '../utils/hooks/useContext';
 import { handleSignUp } from '../utils/server';
 
 import '../components/Login/AuthPages.css';

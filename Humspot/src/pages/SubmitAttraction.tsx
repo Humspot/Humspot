@@ -30,7 +30,7 @@ import {
   IonAlert,
 } from "@ionic/react";
 import { HumspotAttraction } from "../utils/types";
-import { useContext } from "../utils/hooks/useContext";
+import useContext from "../utils/hooks/useContext";
 import { useToast } from "@agney/ir-toast";
 import { Map, Marker, ZoomControl } from "pigeon-maps";
 import {

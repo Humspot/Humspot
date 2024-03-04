@@ -1,7 +1,7 @@
 
 
 import { useIonViewDidEnter, IonPage, IonContent } from "@ionic/react";
-import { useContext } from '../utils/hooks/useContext';
+import useContext from '../utils/hooks/useContext';
 import AdminSegments from "../components/Admin/AdminSegments";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 

@@ -12,7 +12,7 @@ import { Keyboard, KeyboardResize, KeyboardResizeOptions } from "@capacitor/keyb
 import { useToast } from "@agney/ir-toast";
 import { timeout } from "../../utils/functions/timeout";
 import { handleAddComment } from "../../utils/server";
-import { useContext } from "../../utils/hooks/useContext";
+import useContext from "../../utils/hooks/useContext";
 import { HumspotCommentSubmit } from "../../utils/types";
 
 const resizeOptions: KeyboardResizeOptions = {

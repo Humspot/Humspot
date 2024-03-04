@@ -7,7 +7,7 @@
 import { IonToolbar, IonButtons, IonButton, IonIcon, IonHeader, IonCardTitle, IonSkeletonText } from "@ionic/react";
 import { pencilOutline, settingsOutline } from "ionicons/icons";
 
-import { useContext } from "../../utils/hooks/useContext";
+import useContext from "../../utils/hooks/useContext";
 
 import './Profile.css';
 

@@ -11,7 +11,7 @@ import ExploreFilterButtons from "../components/Explore/ExploreFilterButtons";
 import ExploreCarouselRecentlyViewed from "../components/Explore/ExploreCarouselRecentlyViewed";
 import ExploreCarouselGeneral from "../components/Explore/ExploreCarouselGeneral";
 
-import { useContext } from "../utils/hooks/useContext";
+import useContext from "../utils/hooks/useContext";
 import useFetchData from "../utils/hooks/useFetchData";
 import { GetHumspotEventResponse } from "../utils/types";
 import { handleGetActivitiesGivenTag, handleGetThisWeeksEvents } from "../utils/server";

@@ -11,7 +11,7 @@ import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { IonCard, IonCardTitle, IonItemDivider, IonText, useIonRouter, useIonViewWillEnter } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 
-import { useContext } from "../../utils/hooks/useContext";
+import useContext from "../../utils/hooks/useContext";
 import { formatDate } from "../../utils/functions/formatDate";
 
 import placeholder from '../../assets/images/school_placeholder.jpeg';

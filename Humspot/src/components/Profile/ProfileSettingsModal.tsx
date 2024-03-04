@@ -36,7 +36,7 @@ import {
 } from 'ionicons/icons';
 import { Preferences } from '@capacitor/preferences';
 
-import { useContext } from '../../utils/hooks/useContext';
+import useContext from '../../utils/hooks/useContext';
 import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from '../../utils/server';
 
 import './Profile.css';

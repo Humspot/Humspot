@@ -6,7 +6,7 @@
 import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonPage, IonTextarea, useIonLoading, useIonViewWillEnter } from "@ionic/react";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { useRef } from "react";
-import { useContext } from "../utils/hooks/useContext";
+import useContext from "../utils/hooks/useContext";
 import { useToast } from "@agney/ir-toast";
 import { OrganizerRequestSubmission } from "../utils/types";
 import { handleSubmitRequestToBecomeOrganizer } from "../utils/server";

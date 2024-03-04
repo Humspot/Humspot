@@ -10,7 +10,7 @@ import {
   RefresherEventDetail,
 } from "@ionic/react";
 import { useCallback, useEffect, useState } from "react";
-import { useContext } from "../../utils/hooks/useContext";
+import useContext from "../../utils/hooks/useContext";
 import { handleGetApprovedOrganizerSubmissions, handleGetPendingActivitySubmissions, handleGetPendingOrganizerSubmissions } from "../../utils/server";
 import AdminSubmissionsList from "./AdminSubmissionsList";
 import AdminPendingOrganizersList from "./AdminPendingOrganizersList";

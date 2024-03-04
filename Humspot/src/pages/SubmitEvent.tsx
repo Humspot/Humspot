@@ -6,7 +6,7 @@ import {
   useIonLoading, IonChip, IonIcon, IonModal, IonButtons, IonHeader, IonToolbar, IonLoading, IonCard, useIonViewWillEnter, IonCardContent, IonCardHeader, IonAlert, useIonRouter
 } from '@ionic/react';
 import { HumspotEvent } from '../utils/types';
-import { useContext } from '../utils/hooks/useContext';
+import useContext from '../utils/hooks/useContext';
 import { useToast } from '@agney/ir-toast';
 import { handleSubmitEventForApproval, handleUploadSubmissionImages } from '../utils/server';
 import { Map, Marker, ZoomControl } from "pigeon-maps";

@@ -8,7 +8,7 @@
 import { IonContent, IonPage, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
 
 import { memo, useEffect, useRef } from "react";
-import { useContext } from "../utils/hooks/useContext";
+import useContext from "../utils/hooks/useContext";
 import { timeout } from "../utils/functions/timeout";
 
 import ProfileBio from "../components/Profile/ProfileBio";

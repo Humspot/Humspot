@@ -1,6 +1,6 @@
 import { IonContent, IonPage, useIonViewWillEnter } from "@ionic/react";
 import GoBackHeader from "../components/Shared/GoBackHeader";
-import { useContext } from "../utils/hooks/useContext";
+import useContext from "../utils/hooks/useContext";
 
 const ContactUs = () => {
 

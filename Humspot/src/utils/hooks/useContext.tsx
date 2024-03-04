@@ -55,10 +55,12 @@ export const ContextProvider = ({ children }: Props) => {
   );
 };
 
-export const useContext = () => {
+const useContext = () => {
   const context = React.useContext(Context);
   if (!context) {
     throw new Error("Context must be used within a Provider");
   }
   return context;
 };
+
+export default useContext;

@@ -1,6 +1,6 @@
 import { IonAvatar, IonBadge, IonCard, IonFab, IonRow, IonSkeletonText } from "@ionic/react";
 
-import { useContext } from "../../utils/hooks/useContext";
+import useContext from "../../utils/hooks/useContext";
 import avatar from '../../assets/images/avatar.svg';
 
 import './Profile.css';

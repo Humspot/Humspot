@@ -19,7 +19,7 @@ import { handleGetActivitiesGivenTag } from "../utils/server";
 
 import placeholder from '../assets/images/placeholder.png';
 import { chevronBackOutline, shareOutline } from "ionicons/icons";
-import { useContext } from "../utils/hooks/useContext";
+import useContext from "../utils/hooks/useContext";
 import { handleShare } from "../utils/functions/handleShare";
 
 type MoreResultsParams = {

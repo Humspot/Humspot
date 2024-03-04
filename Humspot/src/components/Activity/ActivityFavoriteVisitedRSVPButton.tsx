@@ -6,7 +6,7 @@
  */
 
 import { memo, useCallback, useEffect, useState } from 'react';
-import { useContext } from '../../utils/hooks/useContext';
+import useContext from '../../utils/hooks/useContext';
 import { handleAddToFavorites, handleAddToRSVP, handleAddToVisited, handleGetFavoritesAndVisitedAndRSVPStatus } from '../../utils/server';
 import { useToast } from '@agney/ir-toast';
 import { IonButton, IonIcon } from '@ionic/react';

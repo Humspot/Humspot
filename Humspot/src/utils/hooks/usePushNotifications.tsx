@@ -11,7 +11,7 @@ import { Preferences } from '@capacitor/preferences';
 import { useIonRouter } from '@ionic/react';
 
 
-export const usePushNotifications = () => {
+const usePushNotifications = () => {
 
   const router = useIonRouter();
 
@@ -65,3 +65,5 @@ export const usePushNotifications = () => {
     };
   }, [handlePushNotificationActionPerformed, registerPushNotifications]);
 };
+
+export default usePushNotifications;

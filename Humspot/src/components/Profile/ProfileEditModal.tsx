@@ -15,7 +15,7 @@ import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { useToast } from "@agney/ir-toast";
 import avatar from '../../assets/images/avatar.svg';
 
-import { useContext } from "../../utils/hooks/useContext";
+import useContext from "../../utils/hooks/useContext";
 import { handleAddProfileImageToS3, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
 
 import './Profile.css';
