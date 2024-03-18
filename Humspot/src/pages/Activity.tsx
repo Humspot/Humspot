@@ -37,7 +37,7 @@ type ActivityPageParams = {
   id: string;
 };
 
-const Activity = () => {
+const Activity: React.FC<{}> = () => {
   const params = useParams<ActivityPageParams>();
   const id: string = params.id;
 

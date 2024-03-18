@@ -3,7 +3,7 @@
  * @fileoverview the list of tags related to the activity.
  */
 
-import { IonChip, useIonRouter } from "@ionic/react";
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, useIonRouter } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 
 type ActivityTagsListProps = {
@@ -18,21 +18,27 @@ const ActivityTagsList = (props: ActivityTagsListProps) => {
 
   return (
     <FadeIn>
-      <section style={{ paddingLeft: '5px' }}>
-        {tags &&
-          tags.split(',').map((tag: string, index: number) => {
-            return (
-              <IonChip key={tag + index} color={'secondary'} onClick={() => {
-                let encodedTag = encodeURIComponent(tag.trim());
-                encodedTag = encodeURIComponent(encodedTag);
-                console.log(encodedTag);
-                router.push(`/more-results/${encodedTag}`);
-              }}>
-                {tag}
-              </IonChip>
-            );
-          })}
-      </section>
+      <IonCard className='activity-card'>
+        <IonCardHeader className='ion-no-padding ion-no-margin' style={{ paddingBottom: "10px", paddingTop: '20px', paddingLeft: '20px' }}>
+          <IonCardTitle style={{ fontSize: "1.25rem" }}>Tags</IonCardTitle>
+        </IonCardHeader>
+        <section style={{ paddingLeft: '10px' }}>
+          {tags &&
+            tags.split(',').map((tag: string, index: number) => {
+              return (
+                <IonChip key={tag + index} color={'secondary'} onClick={() => {
+                  let encodedTag = encodeURIComponent(tag.trim());
+                  encodedTag = encodeURIComponent(encodedTag);
+                  console.log(encodedTag);
+                  router.push(`/more-results/${encodedTag}`);
+                }}>
+                  {tag}
+                </IonChip>
+              );
+            })}
+        </section>
+
+      </IonCard>
     </FadeIn>
   )
 

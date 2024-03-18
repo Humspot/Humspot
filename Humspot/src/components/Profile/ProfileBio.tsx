@@ -4,18 +4,18 @@
  * profile information (picture + bio).
  */
 
+import { useState } from "react";
 import { IonAvatar, IonBadge, IonCard, IonFab, IonRow, IonSkeletonText } from "@ionic/react";
 
 import useContext from "../../utils/hooks/useContext";
 import avatar from '../../assets/images/avatar.svg';
 
 import './Profile.css';
-import { useState } from "react";
 
 let uniqueString: number = new Date().getTime(); // Use a timestamp to force cache refresh when updated profile info.
 const MAX_BIO_LENGTH: number = 150;
 
-const ProfileBio: React.FC = () => {
+const ProfileBio: React.FC<{}> = () => {
 
   const context = useContext();
   const [isBioExpanded, setIsBioExpanded] = useState<boolean>(false);

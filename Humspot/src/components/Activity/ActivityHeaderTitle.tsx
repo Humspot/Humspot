@@ -3,7 +3,7 @@
  * @fileoverview card containing the title of the Activity along with a button to rate the activity (attractions only).
  */
 
-import { IonButton, IonButtons, IonCard, IonCardTitle, IonContent, IonHeader, IonModal, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/react'
+import { IonButton, IonButtons, IonCard, IonCardTitle, IonContent, IonHeader, IonItemDivider, IonModal, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/react'
 import { Rating } from 'react-custom-rating-component'
 import useContext from '../../utils/hooks/useContext';
 import { handleAddRating } from '../../utils/server';
@@ -72,11 +72,11 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
 
   return (
     <FadeIn>
-      <IonCard color='primary' className='activity-header-card activity-card'>
+      <div style={{ marginTop: '30vh', }}>
         <section style={{ padding: '10px' }}>
           {props.activity ? (
             <>
-              {<h1>{props.name}</h1>}
+              {<h1 style={{ fontWeight: 'bolder' }}>{props.name}</h1>}
               {props.activityType === 'attraction' &&
                 <>
                   <div style={{ display: 'flex', alignItems: 'center', paddingTop: '10px' }}>
@@ -105,7 +105,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
             </IonCardTitle>
           )}
         </section>
-      </IonCard>
+      </div>
 
       {props.activityType === 'attraction' &&
         <IonModal trigger='add-rating-button' ref={modalRef} presentingElement={props.page}>
@@ -151,7 +151,6 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
           </IonContent>
         </IonModal>
       }
-
     </FadeIn>
   )
 };
