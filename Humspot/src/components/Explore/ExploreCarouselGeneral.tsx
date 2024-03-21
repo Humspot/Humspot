@@ -3,7 +3,7 @@
  * @fileoverview Carousel that takes in an array of activities and renders them in a Swiper list.
  */
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { IonButton, IonCard, IonCardTitle, IonIcon, IonItemDivider, IonSkeletonText, IonText, useIonRouter } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
@@ -14,6 +14,7 @@ import { ExploreCarouselLoadingSlides } from "./ExploreCarouselLoadingSlides";
 
 import './Explore.css';
 import { arrowForward } from "ionicons/icons";
+import { timeout } from "../../utils/functions/timeout";
 
 type ExploreCarouselGeneralProps = {
   title: string;
@@ -32,7 +33,17 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
     if (props.hasTag) {
       router.push(`/more-results/${encodeURIComponent(props.title.trim())}`);
     }
-  }
+  };
+
+  useEffect(() => {
+    if (props.activities && !props.loading && swiperRef.current) {
+      timeout(100).then(() => {
+        if (props.activities && !props.loading && swiperRef.current) {
+          swiperRef.current.swiper.slideTo(0, 1000);
+        }
+      })
+    }
+  }, [props.activities, props.loading, swiperRef]);
 
   return (
     <>
