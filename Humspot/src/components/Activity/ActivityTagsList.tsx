@@ -3,12 +3,12 @@
  * @fileoverview the list of tags related to the activity.
  */
 
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonChip, useIonRouter } from "@ionic/react";
+import { IonCard, IonCardHeader, IonCardTitle, IonChip, useIonRouter } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 
 type ActivityTagsListProps = {
   tags: string;
-}
+};
 
 const ActivityTagsList = (props: ActivityTagsListProps) => {
 
@@ -29,7 +29,6 @@ const ActivityTagsList = (props: ActivityTagsListProps) => {
                 <IonChip key={tag + index} color={'secondary'} onClick={() => {
                   let encodedTag = encodeURIComponent(tag.trim());
                   encodedTag = encodeURIComponent(encodedTag);
-                  console.log(encodedTag);
                   router.push(`/more-results/${encodedTag}`);
                 }}>
                   {tag}
