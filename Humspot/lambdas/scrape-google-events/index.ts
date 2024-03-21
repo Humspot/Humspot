@@ -1,7 +1,6 @@
 /**
  * AWS lambda function that runs every day. It uses SerpApi to retrieve local Humboldt events happening 2 days in the future using Google. 
  * This information is then parsed and put into a format that the mySQL Events table expects so that it can be entered into it.
- * 
  */
 
 import { Context, Callback } from 'aws-lambda';
@@ -129,24 +128,18 @@ function getTimeFromDate(dateString: string): string {
   }
 };
 
-async function getLatLong(address: string[]): Promise<{ latitude: number; longitude: number; }> {
-  if (address.length <= 0) throw new Error("No Address found!");
+async function getLatLong(address: string[]): Promise<{ latitude: number | null; longitude: number | null; }> {
+  if (address.length <= 0) return ({ latitude: null, longitude: null });
 
   const addr = extractPhysicalAddress(address);
   const url = `https://geocode.maps.co/search?q=${encodeURIComponent(addr)}`;
   const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+  if (!response.ok) return ({ latitude: null, longitude: null });
+
 
   const data = await response.json();
-  if (data.length === 0) {
-    return {
-      latitude: null,
-      longitude: null
-    };
-  }
+  if (data.length === 0) return { latitude: null, longitude: null };
 
   return {
     latitude: parseFloat(data[0].lat),
@@ -216,7 +209,9 @@ export const handler = async (event: any, context: Context, callback: Callback) 
   }
   // }
 
+  console.log(JSON.stringify(allSerpEvents));
   const eventsToBeAdded: Event[] = await createEvents(allSerpEvents);
+  console.log(JSON.stringify(eventsToBeAdded));
 
   for (let i = 0; i < eventsToBeAdded.length; i++) {
     const e: Event = eventsToBeAdded[i];
@@ -237,3 +232,4 @@ export const handler = async (event: any, context: Context, callback: Callback) 
 
   callback(null, 'Finished');
 };
+
