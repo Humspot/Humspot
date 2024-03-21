@@ -51,6 +51,9 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     const date1: string = getCurrentDate();
     const date2: string = getDateDaysFromNow(7);
 
+    console.log(date1);
+    console.log(date2);
+
     // Query events that are happening between the two dates 
     const query = `
       SELECT e.*, a.name, a.description, a.location, a.websiteURL,
@@ -64,7 +67,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       LEFT JOIN ActivityPhotos ap ON a.activityID = ap.activityID
       LEFT JOIN ActivityTags at ON a.activityID = at.activityID
       LEFT JOIN Tags t ON at.tagID = t.tagID
-      WHERE e.date BETWEEN ? AND ? AND e.latitude IS NOT NULL AND e.longitude IS NOT NULL
+      WHERE e.date BETWEEN ? AND ?
       GROUP BY e.eventID, a.name, a.description, a.location, a.websiteURL
       ORDER BY e.date;
     `;

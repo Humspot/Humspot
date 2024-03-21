@@ -22,7 +22,7 @@ const ActivityTagsList = (props: ActivityTagsListProps) => {
         <IonCardHeader className='ion-no-padding ion-no-margin' style={{ paddingBottom: "10px", paddingTop: '20px', paddingLeft: '20px' }}>
           <IonCardTitle style={{ fontSize: "1.25rem" }}>Tags</IonCardTitle>
         </IonCardHeader>
-        <section style={{ paddingLeft: '10px' }}>
+        <section style={{ paddingLeft: '10px', paddingBottom: '10px' }}>
           {tags &&
             tags.split(',').map((tag: string, index: number) => {
               return (

@@ -3,7 +3,7 @@
  * @fileoverview Carousel that takes in an array of activities and renders them in a Swiper list.
  */
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { IonButton, IonCard, IonCardTitle, IonIcon, IonItemDivider, IonSkeletonText, IonText, useIonRouter } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
@@ -14,12 +14,14 @@ import { ExploreCarouselLoadingSlides } from "./ExploreCarouselLoadingSlides";
 
 import './Explore.css';
 import { arrowForward } from "ionicons/icons";
+import { timeout } from "../../utils/functions/timeout";
 
 type ExploreCarouselGeneralProps = {
   title: string;
   hasTag?: boolean;
   loading: boolean;
   activities: any[] | null;
+  button?: boolean;
 };
 
 const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
@@ -34,12 +36,22 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
     }
   }
 
+  useEffect(() => {
+    if (props.activities && !props.loading && swiperRef.current) {
+      timeout(500).then(() => {
+        if (props.activities && !props.loading && swiperRef.current) {
+          swiperRef.current.swiper.slideTo(0, 1000);
+        }
+      })
+    }
+  }, [props.activities, props.loading, swiperRef]);
+
   return (
     <>
       {props.activities && props.activities.length > 0 && !props.loading ?
         <div style={{ display: 'flex', justifyContent: 'right' }}>
           <IonItemDivider style={{ background: "var(--ion-background-color)", fontSize: "1.50rem" }}><IonText onClick={handleClickArrow} color='primary'>{props.title}</IonText></IonItemDivider>
-          <IonButton fill='clear' onClick={handleClickArrow}><IonIcon color='primary' icon={arrowForward}></IonIcon></IonButton>
+          <IonButton fill='clear' disabled={!props.button} onClick={handleClickArrow}><IonIcon color='primary' icon={arrowForward}></IonIcon></IonButton>
         </div>
         :
         props.loading &&
