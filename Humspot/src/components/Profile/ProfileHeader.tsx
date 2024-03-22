@@ -5,17 +5,19 @@
  */
 
 import { IonToolbar, IonButtons, IonButton, IonIcon, IonHeader, IonCardTitle, IonSkeletonText, IonTitle, useIonRouter } from "@ionic/react";
-import { chevronBackOutline, pencilOutline, settingsOutline } from "ionicons/icons";
+import { chevronBackOutline, pencilOutline, settingsOutline, shareOutline } from "ionicons/icons";
 
 import useContext from "../../utils/hooks/useContext";
 
 import './Profile.css';
 import { HumspotUser } from "../../utils/types";
+import { handleShare } from "../../utils/functions/handleShare";
 
 type ProfileHeaderProps = {
   user: HumspotUser | null | undefined;
   buttons: boolean;
   backButton: boolean;
+  shareButton: boolean;
 }
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
@@ -46,6 +48,13 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
             </IonButton>
             <IonButton id='open-profile-page-modal' slot='end'>
               <IonIcon size='large' style={{ padding: "2.5%" }} icon={settingsOutline} />
+            </IonButton>
+          </IonButtons>
+        }
+        {props.shareButton &&
+          <IonButtons slot='end'>
+            <IonButton disabled={!humspotUser} slot='end' onClick={() => handleShare('Checkout ' + humspotUser?.username + '\'s profile on Humspot!')}>
+              <IonIcon style={{ padding: "1%" }} icon={shareOutline} />
             </IonButton>
           </IonButtons>
         }

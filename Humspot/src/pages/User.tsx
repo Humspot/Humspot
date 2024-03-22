@@ -44,11 +44,11 @@ const User: React.FC<{}> = () => {
   return (
     <IonPage ref={pageRef}>
 
-      <ProfileHeader user={user} backButton={true} buttons={false} />
+      <ProfileHeader user={user} buttons={false} backButton shareButton />
 
       <IonContent scrollY={false}>
         <ProfileBio user={user} />
-        <ProfileSegments user={user} />
+        <ProfileSegments user={user} submissions={true} />
       </IonContent>
 
     </IonPage>

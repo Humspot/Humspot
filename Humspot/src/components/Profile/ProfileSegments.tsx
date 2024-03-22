@@ -6,7 +6,7 @@
 
 import { memo, useCallback, useEffect, useState } from "react";
 import { IonSegment, IonSegmentButton, IonIcon, IonLabel, IonCard, IonCardContent, IonList, IonItem, IonThumbnail, useIonRouter, IonContent, IonTitle, IonRefresher, RefresherEventDetail, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/react";
-import { heart, people, walk } from "ionicons/icons";
+import { heart, listCircle, people, walk } from "ionicons/icons";
 
 import { useToast } from "@agney/ir-toast";
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
@@ -24,6 +24,7 @@ import './Profile.css';
 
 type ProfileSegmentsProps = {
   user: HumspotUser | null | undefined;
+  submissions: boolean;
 }
 
 const ProfileSegments = memo((props: ProfileSegmentsProps) => {
@@ -38,14 +39,17 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
   const [favorites, setFavorites] = useState<HumspotFavoriteResponse[]>([]);
   const [visited, setVisited] = useState<HumspotVisitedResponse[]>([]);
   const [interactions, setInteractions] = useState<HumspotInteractionResponse[]>([]);
+  const [submissions, setSubmissions] = useState<any[]>([]);
 
   const [favoritesLoading, setFavoritesLoading] = useState<boolean>(true);
   const [visitedLoading, setVisitedLoading] = useState<boolean>(true);
   const [interactionsLoading, setInteractionsLoading] = useState<boolean>(true);
+  const [submissionsLoading, setSubmissionsLoading] = useState<boolean>(true);
 
   const [favoritesPageCount, setFavoritesPageCount] = useState<number>(2);
   const [visitedPageCount, setVisitedPageCount] = useState<number>(2);
   const [interactionsPageCount, setInteractionsPageCount] = useState<number>(2);
+  const [submissionsPageCount, setSubmissionsPageCount] = useState<number>(2);
 
   const fetchFavorites = useCallback(async () => {
     if (!humspotUser) return;
@@ -101,7 +105,20 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
 
   return (
     <>
-      <IonSegment id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
+      <IonSegment scrollable={props.submissions} id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
+
+        {props.submissions &&
+          <IonSegmentButton value="submissions">
+            <div className="segment-button" style={{ fontSize: "0.8rem" }}>
+              <IonIcon
+                icon={listCircle}
+                style={{ margin: "5%" }}
+                size="large"
+              ></IonIcon>
+              <IonLabel>Posted Events</IonLabel>
+            </div>
+          </IonSegmentButton>
+        }
 
         <IonSegmentButton value="favorites">
           <div className="segment-button" style={{ fontSize: "0.8rem" }}>
@@ -245,7 +262,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
               </>
             }
           </>
-        ) : (
+        ) : selectedSegment === "interactions" ? (
           <>
             {!interactionsLoading && interactions.length === 0 ?
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Interactions</IonTitle>
@@ -292,6 +309,54 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                       setInteractionsPageCount((prev) => prev + 1);
                       setInteractions((prev) => [...prev, ...response.interactions]);
                     }
+                    ev.target.complete();
+                  }}
+                >
+                  <IonInfiniteScrollContent></IonInfiniteScrollContent>
+                </IonInfiniteScroll>
+              </>
+            }
+          </>
+        ) : (
+          <>
+            {!submissionsLoading && submissions.length === 0 ?
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Posts from User</IonTitle>
+              :
+              <>
+                <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>
+                  <IonCardContent className='ion-no-padding'>
+                    <IonList inset={false} style={{ paddingTop: 0, paddingBottom: 0 }}>
+                      {!submissionsLoading ?
+                        submissions.map((submission, index: number) => {
+                          return (
+                            <FadeIn key={submission.name + index} delay={(index % 20) * 50}>
+                              <IonItem className='ion-no-padding' role='button' onClick={() => { if (submission.activityID) router.push("/activity/" + submission.activityID) }}>
+                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={submission.photoUrl || placeholder} /></IonThumbnail>
+                                <IonLabel style={{ paddingLeft: "10px" }}>
+                                  <h2>{submission.name}</h2>
+                                  {submission.submissionType === 'comment' ?
+                                    <>
+                                      <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {submission.submissionText}</p>
+                                      <p style={{ fontSize: "0.8rem" }}>{formatDate(submission.submissionDate as string)}</p>
+                                    </>
+                                    :
+                                    <p style={{ fontSize: "0.9rem" }}><b>You RSVP'd</b> for this event</p>
+                                  }
+                                </IonLabel>
+                              </IonItem>
+                            </FadeIn>
+                          )
+                        })
+                        :
+                        <SkeletonLoading count={4} animated={true} height={"5rem"} />
+                      }
+                    </IonList>
+                  </IonCardContent>
+                </IonCard>
+                <IonInfiniteScroll
+                  onIonInfinite={async (ev) => {
+                    if (!humspotUser) return;
+
                     ev.target.complete();
                   }}
                 >

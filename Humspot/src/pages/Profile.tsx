@@ -51,11 +51,11 @@ const Profile: React.FC = () => {
       <IonPage ref={page}>
 
         {/* Edit, and Settings button */}
-        <ProfileHeader user={context.humspotUser} backButton={false} buttons={true} />
+        <ProfileHeader user={context.humspotUser} backButton={false} buttons={true} shareButton={false} />
 
         <IonContent scrollY={false}>
           <ProfileBio user={context.humspotUser} />
-          <ProfileSegments user={context.humspotUser} />
+          <ProfileSegments user={context.humspotUser} submissions={false} />
         </IonContent>
 
         {/* Modal where users can edit their profile */}
