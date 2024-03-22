@@ -51,7 +51,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
             </IonButton>
           </IonButtons>
         }
-        {props.shareButton &&
+        {props.shareButton && humspotUser &&
           <IonButtons slot='end'>
             <IonButton disabled={!humspotUser} slot='end' onClick={() => handleShare('Checkout ' + humspotUser?.username + '\'s profile on Humspot!')}>
               <IonIcon style={{ padding: "1%" }} icon={shareOutline} />
