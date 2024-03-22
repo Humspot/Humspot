@@ -4,7 +4,7 @@
  */
 
 import { memo } from "react";
-import { IonAvatar, IonNote, IonList, IonItem, IonLabel, IonRow, IonFab } from "@ionic/react";
+import { IonAvatar, IonNote, IonList, IonItem, IonLabel, IonRow, IonFab, useIonRouter } from "@ionic/react";
 import { chevronBackOutline } from "ionicons/icons";
 
 import IonPhotoViewer from "@codesyntax/ionic-react-photo-viewer";
@@ -22,6 +22,7 @@ type ActivityCommentsList = {
 const ActivityCommentsList = memo((props: ActivityCommentsList) => {
 
   const comments: HumspotCommentResponse[] = props.comments;
+  const router = useIonRouter();
 
   return (
     <>
@@ -32,7 +33,7 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
               <IonLabel class="ion-text-wrap">
                 <IonRow>
                   <IonAvatar class="activity-comment-avatar">
-                    <img src={comment.profilePicURL ?? avatar} />
+                    <img src={comment.profilePicURL ?? avatar} onClick={() => router.push("/user/" + comment.userID)} />
                   </IonAvatar>
                   <p className='activity-comment-username'> {comment.username} </p>
                 </IonRow>

@@ -15,17 +15,21 @@ import placeholder from '../../assets/images/school_placeholder.jpeg';
 
 import useContext from "../../utils/hooks/useContext";
 import { formatDate } from "../../utils/functions/formatDate";
-import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse } from "../../utils/types";
+import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse, HumspotUser } from "../../utils/types";
 import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
 
 import SkeletonLoading from "../Shared/SkeletonLoading";
 
 import './Profile.css';
 
+type ProfileSegmentsProps = {
+  user: HumspotUser | null | undefined;
+}
 
-const ProfileSegments: React.FC = memo(() => {
+const ProfileSegments = memo((props: ProfileSegmentsProps) => {
 
-  const context = useContext();
+  const humspotUser = props.user;
+
   const Toast = useToast();
   const router = useIonRouter();
 
@@ -44,45 +48,45 @@ const ProfileSegments: React.FC = memo(() => {
   const [interactionsPageCount, setInteractionsPageCount] = useState<number>(2);
 
   const fetchFavorites = useCallback(async () => {
-    if (!context.humspotUser) return;
-    const response = await handleGetFavoritesGivenUserID(1, context.humspotUser.userID);
+    if (!humspotUser) return;
+    const response = await handleGetFavoritesGivenUserID(1, humspotUser.userID);
     if (!response.success) {
       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
     }
     setFavorites(response.favorites);
     setFavoritesLoading(false);
-  }, [context.humspotUser]);
+  }, [humspotUser]);
 
   useEffect(() => {
     fetchFavorites();
   }, [fetchFavorites]);
 
   const fetchVisited = useCallback(async () => {
-    if (!context.humspotUser) return;
-    const response = await handleGetVisitedGivenUserID(1, context.humspotUser.userID);
+    if (!humspotUser) return;
+    const response = await handleGetVisitedGivenUserID(1, humspotUser.userID);
     if (!response.success) {
       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
     }
     setVisited(response.visited);
     setVisitedLoading(false);
-  }, [context.humspotUser]);
+  }, [humspotUser]);
 
   useEffect(() => {
     fetchVisited();
   }, [fetchVisited]);
 
   const fetchInteractions = useCallback(async () => {
-    if (!context.humspotUser) return;
-    const response = await handleGetInteractionsGivenUserID(1, context.humspotUser.userID);
+    if (!humspotUser) return;
+    const response = await handleGetInteractionsGivenUserID(1, humspotUser.userID);
     if (!response.success) {
       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
     }
     setInteractions(response.interactions);
     setInteractionsLoading(false);
-  }, [context.humspotUser]);
+  }, [humspotUser]);
 
   useEffect(() => {
     fetchInteractions();
@@ -175,8 +179,8 @@ const ProfileSegments: React.FC = memo(() => {
                 </IonCard>
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
-                    if (!context.humspotUser) return;
-                    const response = await handleGetFavoritesGivenUserID(favoritesPageCount, context.humspotUser.userID);
+                    if (!humspotUser) return;
+                    const response = await handleGetFavoritesGivenUserID(favoritesPageCount, humspotUser.userID);
                     if (!response.success) {
                       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
                       toast.present();
@@ -224,8 +228,8 @@ const ProfileSegments: React.FC = memo(() => {
                 </IonCard>
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
-                    if (!context.humspotUser) return;
-                    const response = await handleGetVisitedGivenUserID(visitedPageCount, context.humspotUser.userID);
+                    if (!humspotUser) return;
+                    const response = await handleGetVisitedGivenUserID(visitedPageCount, humspotUser.userID);
                     if (!response.success) {
                       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
                       toast.present();
@@ -279,8 +283,8 @@ const ProfileSegments: React.FC = memo(() => {
                 </IonCard>
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
-                    if (!context.humspotUser) return;
-                    const response = await handleGetInteractionsGivenUserID(interactionsPageCount, context.humspotUser.userID);
+                    if (!humspotUser) return;
+                    const response = await handleGetInteractionsGivenUserID(interactionsPageCount, humspotUser.userID);
                     if (!response.success) {
                       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
                       toast.present();

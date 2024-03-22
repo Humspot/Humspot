@@ -53,6 +53,7 @@ import useTabBarVisibility from "./utils/hooks/useTabBarVisibility";
 import useContext from "./utils/hooks/useContext";
 import usePushNotifications from "./utils/hooks/usePushNotifications";
 import ProfileActivitiesModal from "./components/Shared/ActivitiesModal";
+import User from "./pages/User";
 
 
 setupIonicReact({ mode: "ios" });
@@ -102,6 +103,7 @@ const App: React.FC = () => {
               <Route exact path="/activity/:id" component={Activity} />
               <Route exact path="/search/:query" component={Search} />
               <Route exact path="/more-results/:tagName" component={MoreResults} />
+              <Route exact path="/user/:uid" component={User} />
             </IonRouterOutlet>
 
             <IonTabBar

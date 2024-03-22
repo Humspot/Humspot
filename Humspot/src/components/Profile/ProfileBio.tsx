@@ -11,20 +11,25 @@ import useContext from "../../utils/hooks/useContext";
 import avatar from '../../assets/images/avatar.svg';
 
 import './Profile.css';
+import { HumspotUser } from "../../utils/types";
 
 let uniqueString: number = new Date().getTime(); // Use a timestamp to force cache refresh when updated profile info.
 const MAX_BIO_LENGTH: number = 150;
 
-const ProfileBio: React.FC<{}> = () => {
+type ProfileBioProps = {
+  user: HumspotUser | null | undefined;
+}
 
-  const context = useContext();
+const ProfileBio = (props: ProfileBioProps) => {
+
+  const humspotUser = props.user;
   const [isBioExpanded, setIsBioExpanded] = useState<boolean>(false);
 
   return (
     <>
-      {context.humspotUser && context.humspotUser.accountType !== 'user' &&
+      {humspotUser && humspotUser.accountType !== 'user' &&
         <IonFab vertical="top" horizontal="end" edge className='profile-card-badge'>
-          <IonBadge style={{ zIndex: 9999 }}>{context.humspotUser.accountType.toUpperCase()}</IonBadge>
+          <IonBadge style={{ zIndex: 9999 }}>{humspotUser.accountType.toUpperCase()}</IonBadge>
         </IonFab>
       }
       <IonCard className='ion-no-margin profile-bio-card'>
@@ -34,16 +39,16 @@ const ProfileBio: React.FC<{}> = () => {
         <section id='top-bio'>
           <IonRow className='profile-bio-picture-and-stats-row'>
             <IonAvatar className='profile-bio-avatar-picture'>
-              {!context.humspotUser ?
+              {!humspotUser ?
                 <IonSkeletonText animated />
                 :
                 <img
-                  src={`${context.humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
+                  src={`${humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
                   alt="User Profile Picture"
                 />
               }
             </IonAvatar>
-            {/* {context.humspotUser && (
+            {/* {humspotUser && (
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flex: 0.9 }}>
                 <div className="" style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: '1.15rem', fontWeight: 'bold' }}>
@@ -70,10 +75,10 @@ const ProfileBio: React.FC<{}> = () => {
 
         <section id='bottom-bio'>
           <p className={`profile-bio-text ${isBioExpanded ? 'expanded' : 'collapsed'}`}>
-            {context.humspotUser ? (
+            {humspotUser ? (
               <>
-                {isBioExpanded ? context.humspotUser.bio : context.humspotUser.bio.substring(0, MAX_BIO_LENGTH)}
-                {context.humspotUser.bio.length > MAX_BIO_LENGTH && (
+                {isBioExpanded ? humspotUser.bio : humspotUser.bio.substring(0, MAX_BIO_LENGTH)}
+                {humspotUser.bio.length > MAX_BIO_LENGTH && (
                   <span className="bio-toggle" onClick={() => setIsBioExpanded((prev) => !prev)}>
                     {isBioExpanded ? ' Less' : ' ... More'}
                   </span>

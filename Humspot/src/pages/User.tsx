@@ -1,8 +1,13 @@
 
-import { IonPage, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
-import { useRef } from "react";
+import { IonContent, IonPage, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useContext from "../utils/hooks/useContext";
+import { handleGetUserInfo } from "../utils/server";
+import ProfileBio from "../components/Profile/ProfileBio";
+import { HumspotUser } from "../utils/types";
+import ProfileHeader from "../components/Profile/ProfileHeader";
+import ProfileSegments from "../components/Profile/ProfileSegments";
 
 type UserPageParams = {
   uid: string;
@@ -15,9 +20,7 @@ const User: React.FC<{}> = () => {
   const pageRef = useRef(null);
   const context = useContext();
 
-  useIonViewDidEnter(() => {
-    context.setShowTabs(true);
-  }, []);
+  const [user, setUser] = useState<HumspotUser | null>(null);
 
   useIonViewWillEnter(() => {
     if (pageRef && pageRef.current) {
@@ -25,8 +28,28 @@ const User: React.FC<{}> = () => {
     }
   }, [pageRef]);
 
+  const fetchUserInfo = useCallback(async (uid: string) => {
+    const res = await handleGetUserInfo(uid);
+    if (res.success) {
+      setUser(res.info);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (uid) {
+      fetchUserInfo(uid);
+    }
+  }, [uid, fetchUserInfo]);
+
   return (
     <IonPage ref={pageRef}>
+
+      <ProfileHeader user={user} backButton={true} buttons={false} />
+
+      <IonContent scrollY={false}>
+        <ProfileBio user={user} />
+        <ProfileSegments user={user} />
+      </IonContent>
 
     </IonPage>
   )

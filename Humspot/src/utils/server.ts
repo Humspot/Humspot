@@ -30,7 +30,8 @@ import {
   GetSubmittedActivitiesResponse,
   OrganizerRequestSubmission,
   SubmissionInfo,
-  HumspotCommentResponse
+  HumspotCommentResponse,
+  HumspotUser
 } from "./types";
 
 import { Capacitor } from '@capacitor/core';
@@ -1930,5 +1931,34 @@ export const handleGetSearchResults = async (queryString: string, pageNum: numbe
   } catch (err) {
     console.log(err);
     return { message: "Something went wrong", success: false };
+  }
+};
+
+
+/**
+ * @function handleGetUserInfo
+ * @description gets the user information from the Users table
+ * 
+ * @param {string} uid the user's ID 
+ */
+export const handleGetUserInfo = async (uid: string) => {
+  if (!uid) return { message: "Incorrect user ID", success: false, info: null };
+  try {
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_USER_INFO + "/" + uid,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const responseData: { message: string; success: boolean; info: HumspotUser } = await response.json();
+    console.log(responseData);
+    return responseData;
+  } catch (err) {
+    console.log(err);
+    return { message: "Something went wrong", success: false, info: null };
   }
 };
