@@ -18,26 +18,26 @@ const ActivityTagsList = (props: ActivityTagsListProps) => {
 
   return (
     <FadeIn>
-      <IonCard className='activity-card' style={{ marginTop: 0 }}>
+      {/* <IonCard className='activity-card' style={{ marginTop: 0 }}>
         <IonCardHeader className='ion-no-padding ion-no-margin' style={{ paddingBottom: "10px", paddingTop: '20px', paddingLeft: '20px' }}>
           <IonCardTitle style={{ fontSize: "1.25rem" }}>Tags</IonCardTitle>
-        </IonCardHeader>
-        <section style={{ paddingLeft: '10px', paddingBottom: '10px' }}>
-          {tags &&
-            tags.split(',').map((tag: string, index: number) => {
-              return (
-                <IonChip key={tag + index} color={'secondary'} onClick={() => {
-                  let encodedTag = encodeURIComponent(tag.trim());
-                  encodedTag = encodeURIComponent(encodedTag);
-                  router.push(`/more-results/${encodedTag}`);
-                }}>
-                  {tag}
-                </IonChip>
-              );
-            })}
-        </section>
+        </IonCardHeader> */}
+      <section style={{ paddingBottom: '10px' }}>
+        {tags &&
+          tags.split(',').map((tag: string, index: number) => {
+            return (
+              <IonChip key={tag + index} color={'secondary'} onClick={() => {
+                let encodedTag = encodeURIComponent(tag.trim());
+                encodedTag = encodeURIComponent(encodedTag);
+                router.push(`/more-results/${encodedTag}`);
+              }}>
+                {tag}
+              </IonChip>
+            );
+          })}
+      </section>
 
-      </IonCard>
+      {/* </IonCard> */}
     </FadeIn>
   )
 

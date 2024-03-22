@@ -91,7 +91,7 @@ const Activity: React.FC<{}> = () => {
 
         {activity && activity.date && isPastDate(formatDate(activity.date ?? null)) &&
           <FadeIn>
-            <p className='ion-text-left' style={{ color: 'var(--ion-color-danger)', fontWeight: '700', paddingLeft: '15px' }}>The date for this event has passed. Check out other upcoming events!</p>
+            <p className='ion-text-left' style={{ color: 'var(--ion-color-danger)', fontWeight: '700', paddingLeft: '10px' }}>The date for this event has passed. Check out other upcoming events!</p>
           </FadeIn>
         }
 
