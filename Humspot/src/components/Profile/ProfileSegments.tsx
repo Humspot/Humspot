@@ -34,7 +34,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
   const Toast = useToast();
   const router = useIonRouter();
 
-  const [selectedSegment, setSelectedSegment] = useState<string>("favorites");
+  const [selectedSegment, setSelectedSegment] = useState<string>(props.submissions ? "submissions" : "submissions");
 
   const [favorites, setFavorites] = useState<HumspotFavoriteResponse[]>([]);
   const [visited, setVisited] = useState<HumspotVisitedResponse[]>([]);
