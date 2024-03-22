@@ -18,7 +18,7 @@ const ActivityTagsList = (props: ActivityTagsListProps) => {
 
   return (
     <FadeIn>
-      <IonCard className='activity-card'>
+      <IonCard className='activity-card' style={{ marginTop: 0 }}>
         <IonCardHeader className='ion-no-padding ion-no-margin' style={{ paddingBottom: "10px", paddingTop: '20px', paddingLeft: '20px' }}>
           <IonCardTitle style={{ fontSize: "1.25rem" }}>Tags</IonCardTitle>
         </IonCardHeader>

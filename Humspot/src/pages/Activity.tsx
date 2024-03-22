@@ -89,14 +89,14 @@ const Activity: React.FC<{}> = () => {
 
         <ActivityHeaderTitle page={page.current} id={id} activity={activity ? true : false} activityType={activity?.activityType} avgRating={activity?.avgRating} name={activity?.name} />
 
-        {activity && "tags" in activity &&
-          <ActivityTagsList tags={activity.tags} />
-        }
-
         {activity && activity.date && isPastDate(formatDate(activity.date ?? null)) &&
           <FadeIn>
             <p className='ion-text-left' style={{ color: 'var(--ion-color-danger)', fontWeight: '700', paddingLeft: '15px' }}>The date for this event has passed. Check out other upcoming events!</p>
           </FadeIn>
+        }
+
+        {activity && "tags" in activity &&
+          <ActivityTagsList tags={activity.tags} />
         }
 
         {activity &&
