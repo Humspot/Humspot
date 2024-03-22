@@ -1397,6 +1397,17 @@ export const handleUploadSubmissionImages = async (blobs: Blob[] | null, folderN
  * @param {string} userID the id of the user
  * @param {number} pageNum pagination
  * @returns {GetSubmittedActivitiesResponse} success status and message, and an array of pending activities.
+ * 
+ * @example
+ * ```ts
+ * const useID: string = 'myUserID';
+ * const [pageNum, setPageNum] = React.useState<number>(1);
+ * const res = await handleGetSubmittedActivities(userID, pageNum);
+ * if(res.success){
+ *  setPendingSubmissions(res.submittedActivities);
+ *  setPageNum((prev) => prev + 1);
+ * }  
+ * ```
  */
 export const handleGetSubmittedActivities = async (userID: string, pageNum: number): Promise<GetSubmittedActivitiesResponse> => {
   try {
@@ -1843,7 +1854,7 @@ export const handleApproveActivitySubmission = async (adminUserID: string, info:
       adminUserID: adminUserID,
       submissionInfo: info,
       reason: reason
-    }
+    };
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_APPROVE_ACTIVITY,
@@ -1876,6 +1887,17 @@ export const handleApproveActivitySubmission = async (adminUserID: string, info:
  * @param {number} pageNum 
  * 
  * @returns {Promise<{ message: string; comments?: HumspotCommentResponse[], success: boolean }>} a success message and an array of comments
+ * 
+ * @example
+ * ```ts
+ * const activityID: string = 'myActivityID';
+ * const [pageNum, setPageNum] = React.useState<number>(1);
+ * const {success, comments} = await handleGetCommentsGivenActivityID(activityID, pageNum);
+ * if(success){
+ *  setComments((prevComments) => [comments, ...prevComments]);
+ *  setPageNum((prev) => prev + 1);
+ * }
+ * ```
  */
 export const handleGetCommentsGivenActivityID = async (activityID: string, pageNum: number): Promise<{ message: string; comments?: HumspotCommentResponse[], success: boolean }> => {
   if (!activityID || pageNum < 1) return { message: "No more comments to load", success: true, comments: [] };
