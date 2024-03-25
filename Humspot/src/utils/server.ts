@@ -59,6 +59,38 @@ const updatedAwsConfig = {
 // Configure Amplify
 Amplify.configure(updatedAwsConfig);
 
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import {
+  getAuth, indexedDBLocalPersistence, initializeAuth, signInWithCredential,
+  signOut, GoogleAuthProvider, User, UserCredential,
+} from "firebase/auth";
+import {
+  runTransaction, doc, getDoc, getFirestore, setDoc, updateDoc, DocumentReference, FirestoreError, arrayUnion
+} from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL, getStorage, deleteObject, StorageReference } from 'firebase/storage';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAJUMd2SdNZO20-ieXt_YAiOb86YiHtunY",
+  authDomain: "humspot.firebaseapp.com",
+  projectId: "humspot",
+  storageBucket: "humspot.appspot.com",
+  messagingSenderId: "567162209270",
+  appId: "1:567162209270:web:70944b08393aafc32ebdd7",
+  measurementId: "G-WBF9HH8L7M"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+const storage = getStorage();
+const FirebaseAuth = Capacitor.isNativePlatform() ?
+  initializeAuth(app, {
+    persistence: indexedDBLocalPersistence,
+  }) :
+  getAuth();
+export default FirebaseAuth;
+
 
 /**
  * @function handleGoogleLoginAndVerifyAWSUser
