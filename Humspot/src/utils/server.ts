@@ -624,26 +624,25 @@ export const handleAddToVisited = async (userID: string, activityID: string, vis
  *
  * @param {string} userID the ID of the logged in user.
  * @param {string} activityID the If of the activity (primary key of the Activities table).
- * @param {string} rsvpDate the date the user visited the Activity (Event / Attraction)
  * 
  * @example 
  * ```ts 
  * const userID: string = context.humspotUser.userID; // from global user context, or some other method
  * const { activityID } = useParams<PageParams>(); // from current page URL, or some other method
- * const rsvpDate: string = new Date().toISOString();
- * const res = await handleAddToRSVP(userID, activityID, visitDate);
+ * const res = await handleAddToRSVP(userID, activityID, activityDate);
  * if (res.success) {
  *  if (res.removed) {
- *    // activity has been removed from Visited list
+ *    // activity has been removed from RSVP list
  *  } else {
- *    // activity has been added to Visited list
+ *    // activity has been added to RSVP list
  *  }
  * } else {
- *  // something went wrong when trying to add to Visited lsit
+ *  // something went wrong when trying to add to RSVP list
  * }
  * ```
  */
-export const handleAddToRSVP = async (userID: string, activityID: string, rsvpDate: string): Promise<AddToRSVPResponse> => {
+export const handleAddToRSVP = async (userID: string, activityID: string, activityDate: string | undefined): Promise<AddToRSVPResponse> => {
+  if(!activityDate || !userID || !activityID) throw new Error('Invalid params');
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -655,7 +654,7 @@ export const handleAddToRSVP = async (userID: string, activityID: string, rsvpDa
     const params: Record<string, string> = {
       userID: userID,
       activityID: activityID,
-      rsvpDate: rsvpDate,
+      activityDate: activityDate
     };
 
     const response = await fetch(

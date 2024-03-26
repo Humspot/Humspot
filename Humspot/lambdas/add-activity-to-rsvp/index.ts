@@ -23,8 +23,17 @@ const pool = mysql.createPool({
 export type RSVPParams = {
   userID: string;
   activityID: string;
-  rsvpDate: string;
+  activityDate: string;
 };
+
+function convertStringToMySQLDate(dateString: string): string {
+  const date = new Date(dateString);
+  const year = date.getUTCFullYear();
+  const month = ('0' + (date.getUTCMonth() + 1)).slice(-2); // Adding 1 because months are zero-indexed
+  const day = ('0' + date.getUTCDate()).slice(-2);
+
+  return `${year}-${month}-${day}`;
+}
 
 export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   const conn = await pool.getConnection();
@@ -32,7 +41,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     const event: RSVPParams = JSON.parse(gatewayEvent.body || '{}');
 
     // Ensure all data has bene passed through the event
-    if (!event || typeof event.userID !== 'string' || typeof event.activityID !== 'string' || typeof event.rsvpDate !== 'string') {
+    if (!event || typeof event.userID !== 'string' || typeof event.activityID !== 'string' || typeof event.activityDate !== 'string') {
       return {
         statusCode: 400,
         headers: {
@@ -70,8 +79,8 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     // Add activity to RSVP table
     const RSVPID: string = crypto.randomBytes(16).toString('hex');
-    let query: string = 'INSERT INTO RSVP (RSVPID, userID, activityID, rsvpDate) VALUES (?, ?, ?, ?)';
-    let params: string[] = [RSVPID, event.userID, event.activityID, event.rsvpDate];
+    let query: string = 'INSERT INTO RSVP (RSVPID, userID, activityID, rsvpDate, activityDate) VALUES (?, ?, ?, ?, ?)';
+    let params: string[] = [RSVPID, event.userID, event.activityID, (new Date().toISOString()), convertStringToMySQLDate(event.activityDate)];
     await conn.query(query, params);
 
     await conn.commit();
@@ -112,4 +121,3 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
     }
   }
 };
-

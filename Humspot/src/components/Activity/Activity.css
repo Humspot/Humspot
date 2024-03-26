@@ -101,3 +101,23 @@ h1 {
   border-radius: 10px;
 
 }
+
+.map-container {
+  height: 32.5vh;
+  width: 97.5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.map-container>div[dir="ltr"] {
+  border-radius: 5px;
+  width: 100vw;
+  margin-right: 2.5%;
+  /* margin-left: 2.5%; */
+}
+
+ion-item.comment-list-item::part(native) {
+  padding-left: 10px;
+}

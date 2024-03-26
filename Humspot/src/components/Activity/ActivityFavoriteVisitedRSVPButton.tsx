@@ -74,16 +74,12 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   const clickOnRsvp = async () => {
     if (!context.humspotUser || rsvp === null) return;
     setRsvp(null);
-    const res = await handleAddToRSVP(
-      context.humspotUser.userID,
-      id,
-      new Date().toISOString()
-    );
-    if (res && !res.removed) {
+    const res = await handleAddToRSVP(context.humspotUser.userID, id, activityDate);
+    if (res.success && !res.removed) {
       setRsvp(true);
       const t = Toast.create({ message: "RSVP'd for event!", position: 'bottom', duration: 2000, color: 'secondary' });
       t.present();
-    } else if (res && res.removed) {
+    } else if (res.success && res.removed) {
       setRsvp(false);
       const t = Toast.create({ message: 'Removed RSVP from event.', position: 'bottom', duration: 2000, color: 'dark' });
       t.present();

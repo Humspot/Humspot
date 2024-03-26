@@ -19,16 +19,15 @@ const ActivityDescription = (props: ActivityDescriptionProps) => {
   const openTimes: string | null = props.openTimes || null;
 
   return (
-    <IonCard className='activity-card'>
-      <IonCardContent>
-        <IonCardHeader className='ion-no-padding ion-no-margin' style={{ paddingBottom: "10px" }}>
-          <IonCardTitle style={{ fontSize: "1.25rem" }}>Description</IonCardTitle>
-        </IonCardHeader>
-        {openTimes && <><p>Open: {openTimes}</p> <br /></>}
-        {description && <p>{description}</p>}
-        {websiteURL && <p> <a href={websiteURL ?? ''} target='_blank' rel='noopener noreferrer'> Visit Site </a> </p>}
-      </IonCardContent>
-    </IonCard>
+    <section style={{ padding: '10px' }}>
+
+      <IonCardHeader className='ion-no-padding ion-no-margin' style={{ paddingBottom: "10px" }}>
+        <IonCardTitle style={{ fontSize: "1.25rem" }}>Description</IonCardTitle>
+      </IonCardHeader>
+      {openTimes && <><p>Open: {openTimes}</p></>}
+      {description && <p>{description}</p>}
+      {websiteURL && <p> <a href={websiteURL ?? ''} target='_blank' rel='noopener noreferrer'> Visit Site </a> </p>}
+    </section>
   );
 };
 

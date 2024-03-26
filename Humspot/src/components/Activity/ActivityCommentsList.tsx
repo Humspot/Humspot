@@ -4,7 +4,7 @@
  */
 
 import { memo } from "react";
-import { IonAvatar, IonNote, IonList, IonItem, IonLabel, IonRow, IonFab, useIonRouter } from "@ionic/react";
+import { IonAvatar, IonNote, IonList, IonItem, IonLabel, IonRow, IonFab, useIonRouter, IonCardTitle, IonCardHeader } from "@ionic/react";
 import { chevronBackOutline } from "ionicons/icons";
 
 import IonPhotoViewer from "@codesyntax/ionic-react-photo-viewer";
@@ -26,10 +26,15 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
 
   return (
     <>
+      {comments && comments.length &&
+        <IonCardHeader className='ion-no-padding ion-no-margin' style={{ paddingLeft: '10px', paddingBottom: '10px' }}>
+          <IonCardTitle style={{ fontSize: "1.25rem" }}>Comments</IonCardTitle>
+        </IonCardHeader>
+      }
       {
         comments.map((comment: HumspotCommentResponse, index: number) => (
-          <IonList inset={true} key={comment.userID + index} style={{ marginLeft: '10px', marginRight: '10px' }}>
-            <IonItem lines="none">
+          <IonList key={comment.userID + index} >
+            <IonItem className='comment-list-item' lines="none" style={{ '--background': 'var(--ion-background-color)' }}>
               <IonLabel class="ion-text-wrap">
                 <IonRow>
                   <IonAvatar class="activity-comment-avatar">
