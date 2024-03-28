@@ -149,32 +149,36 @@
 
 /***************************************************************************************************/
 
-
 /** ProfileSegments.tsx **/
 #profile-segment {
   width: auto;
   margin-left: 10px;
   margin-right: 10px;
+  --indicator-box-shadow: 0 0 5px rgba(0, 0, 0, 0);
 }
 
 #profile-segment ion-segment-button {
   --color: gray;
+  height: 5vh;
+  --indicator-box-shadow: 0 0 5px rgba(0, 0, 0, 0);
 }
 
 #profile-segment ion-segment-button.segment-button-checked {
   --color: var(--ion-color-primary);
+  --indicator-box-shadow: 0 0 5px rgba(0, 0, 0, 0);
 }
 
 /* This removes the animation when changing buttons ... ? */
 #profile-segment ion-segment-button {
-  --background-checked: var(--ion-color-primary);
   --color-checked: var(--ion-color-primary-contrast);
-  --indicator-color: transparent;
+  --indicator-color: var(--ion-color-primary);
+  --indicator-box-shadow: 0 0 5px rgba(0, 0, 0, 0);
 }
 
 #profile-segment .segment-button {
   display: flex;
   align-items: center;
+  --indicator-box-shadow: 0 0 5px rgba(0, 0, 0, 0);
 }
 
 @media (max-width: 389px) {

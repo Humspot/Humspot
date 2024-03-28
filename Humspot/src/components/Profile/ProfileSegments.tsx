@@ -35,8 +35,8 @@ const descriptionStyle: React.CSSProperties = {
   textOverflow: 'ellipsis',
   fontSize: '0.9rem',
   whiteSpace: 'normal',
-  lineHeight: '1.2em', // Adjust based on your font-size
-  height: '2.4em' // Twice the line-height
+  lineHeight: '1.2em',
+  height: '2.4em'
 };
 
 const ProfileSegments = memo((props: ProfileSegmentsProps) => {

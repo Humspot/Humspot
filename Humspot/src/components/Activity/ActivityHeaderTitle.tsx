@@ -73,9 +73,9 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
   return (
     <FadeIn>
       <div style={{ marginTop: '25vh', }}>
-        <section style={{ padding: '10px' }}>
+        <>
           {props.activity ? (
-            <>
+            <section style={{ padding: '10px' }}>
               {<h1 style={{ fontWeight: 'bolder' }}>{props.name}</h1>}
               {props.activityType === 'attraction' &&
                 <>
@@ -98,13 +98,13 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                   }
                 </>
               }
-            </>
+            </section>
           ) : (
-            <IonCardTitle>
+            <IonCardTitle className='ion-no-padding ion-no-margin' style={{ paddingLeft: '5px', paddingTop: '5px' }}>
               <IonSkeletonText style={{ height: '40px', width: '80vw' }} animated></IonSkeletonText>
             </IonCardTitle>
           )}
-        </section>
+        </>
       </div>
 
       {props.activityType === 'attraction' &&
