@@ -56,6 +56,11 @@ const ActivitiesModal: React.FC = () => {
                 <IonLabel>See Pending Submissions</IonLabel>
               </IonItem>
               <br />
+              <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/approved-activities") }) }}>
+                <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
+                <IonLabel>See Approved Submissions</IonLabel>
+              </IonItem>
+              <br />
             </>
           }
           {context.humspotUser?.accountType === 'user' &&

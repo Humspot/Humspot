@@ -1,13 +1,13 @@
 .activity-image-swiper-container {
   width: 100%;
-  height: 30vh;
+  height: 25vh;
   position: absolute;
   overflow: hidden;
   z-index: 0;
 }
 
 .activity-header-card {
-  margin-top: 30vh;
+  margin-top: 25vh;
 }
 
 .activity-card {

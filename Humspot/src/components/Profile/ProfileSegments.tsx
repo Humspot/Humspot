@@ -16,7 +16,7 @@ import placeholder from '../../assets/images/school_placeholder.jpeg';
 import useContext from "../../utils/hooks/useContext";
 import { formatDate } from "../../utils/functions/formatDate";
 import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse, HumspotUser } from "../../utils/types";
-import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
+import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID, handleGetApprovedSubmissions } from "../../utils/server";
 
 import SkeletonLoading from "../Shared/SkeletonLoading";
 
@@ -25,7 +25,19 @@ import './Profile.css';
 type ProfileSegmentsProps = {
   user: HumspotUser | null | undefined;
   submissions: boolean;
-}
+};
+
+const descriptionStyle: React.CSSProperties = {
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  fontSize: '0.9rem',
+  whiteSpace: 'normal',
+  lineHeight: '1.2em', // Adjust based on your font-size
+  height: '2.4em' // Twice the line-height
+};
 
 const ProfileSegments = memo((props: ProfileSegmentsProps) => {
 
@@ -39,7 +51,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
   const [favorites, setFavorites] = useState<HumspotFavoriteResponse[]>([]);
   const [visited, setVisited] = useState<HumspotVisitedResponse[]>([]);
   const [interactions, setInteractions] = useState<HumspotInteractionResponse[]>([]);
-  const [submissions, setSubmissions] = useState<any[]>([]);
+  const [submissions, setSubmissions] = useState<{ description: string; name: string; activityID: string; image_url: string }[]>([]);
 
   const [favoritesLoading, setFavoritesLoading] = useState<boolean>(true);
   const [visitedLoading, setVisitedLoading] = useState<boolean>(true);
@@ -96,6 +108,21 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
     fetchInteractions();
   }, [fetchInteractions]);
 
+  const fetchSubmissions = useCallback(async () => {
+    if (!humspotUser) return;
+    const response = await handleGetApprovedSubmissions(1, humspotUser.userID);
+    if (!response.success) {
+      const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
+      toast.present();
+    }
+    setSubmissions(response.submissions);
+    setSubmissionsLoading(false);
+  }, [humspotUser]);
+
+  useEffect(() => {
+    fetchSubmissions();
+  }, [fetchSubmissions]);
+
   const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => { // called when user swipes down on page
     await fetchFavorites();
     await fetchInteractions();
@@ -115,7 +142,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                 style={{ margin: "5%" }}
                 size="large"
               ></IonIcon>
-              <IonLabel>Posted Events</IonLabel>
+              <IonLabel>Posted Activities</IonLabel>
             </div>
           </IonSegmentButton>
         }
@@ -329,19 +356,13 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                       {!submissionsLoading ?
                         submissions.map((submission, index: number) => {
                           return (
-                            <FadeIn key={submission.name + index} delay={(index % 20) * 50}>
+                            <FadeIn key={submission.activityID + index} delay={(index % 20) * 50}>
                               <IonItem className='ion-no-padding' role='button' onClick={() => { if (submission.activityID) router.push("/activity/" + submission.activityID) }}>
-                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={submission.photoUrl || placeholder} /></IonThumbnail>
+                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={submission.image_url || placeholder} /></IonThumbnail>
                                 <IonLabel style={{ paddingLeft: "10px" }}>
                                   <h2>{submission.name}</h2>
-                                  {submission.submissionType === 'comment' ?
-                                    <>
-                                      <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {submission.submissionText}</p>
-                                      <p style={{ fontSize: "0.8rem" }}>{formatDate(submission.submissionDate as string)}</p>
-                                    </>
-                                    :
-                                    <p style={{ fontSize: "0.9rem" }}><b>You RSVP'd</b> for this event</p>
-                                  }
+                                  <p style={descriptionStyle}>{submission.description}</p>
+                                  {/* <p>{" "}&nbsp;</p> */}
                                 </IonLabel>
                               </IonItem>
                             </FadeIn>
@@ -356,7 +377,14 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
                     if (!humspotUser) return;
-
+                    const response = await handleGetApprovedSubmissions(submissionsPageCount, humspotUser.userID);
+                    if (!response.success) {
+                      const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
+                      toast.present();
+                    } else {
+                      setSubmissionsPageCount((prev) => prev + 1);
+                      setSubmissions((prev) => [...prev, ...response.submissions]);
+                    }
                     ev.target.complete();
                   }}
                 >

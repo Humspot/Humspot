@@ -5,7 +5,7 @@
  */
 
 import { IonToolbar, IonButtons, IonButton, IonIcon, IonHeader, IonCardTitle, IonSkeletonText, IonTitle, useIonRouter } from "@ionic/react";
-import { chevronBackOutline, pencilOutline, settingsOutline, shareOutline } from "ionicons/icons";
+import { alertCircleOutline, chevronBackOutline, pencilOutline, settingsOutline, shareOutline } from "ionicons/icons";
 
 import useContext from "../../utils/hooks/useContext";
 
@@ -24,6 +24,10 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
 
   const humspotUser = props.user;
   const router = useIonRouter();
+
+  const handleReport = async () => {
+
+  };
 
   return (
     <IonHeader className='ion-no-border profile-modal-content' mode='ios' >
@@ -51,10 +55,13 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
             </IonButton>
           </IonButtons>
         }
-        {props.shareButton && humspotUser &&
+        {props.shareButton &&
           <IonButtons slot='end'>
             <IonButton disabled={!humspotUser} slot='end' onClick={() => handleShare('Checkout ' + humspotUser?.username + '\'s profile on Humspot!')}>
               <IonIcon style={{ padding: "1%" }} icon={shareOutline} />
+            </IonButton>
+            <IonButton disabled={!humspotUser} slot='end' onClick={async () => await handleReport()}>
+              <IonIcon style={{ paddingTop: "10%" }} icon={alertCircleOutline} />
             </IonButton>
           </IonButtons>
         }

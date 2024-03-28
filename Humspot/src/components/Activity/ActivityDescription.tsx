@@ -21,7 +21,7 @@ const ActivityDescription = (props: ActivityDescriptionProps) => {
   return (
     <section style={{ padding: '10px' }}>
 
-      <IonCardHeader className='ion-no-padding ion-no-margin' style={{ paddingBottom: "10px" }}>
+      <IonCardHeader className='ion-no-padding ion-no-margin'>
         <IonCardTitle style={{ fontSize: "1.25rem" }}>Description</IonCardTitle>
       </IonCardHeader>
       {openTimes && <><p>Open: {openTimes}</p></>}

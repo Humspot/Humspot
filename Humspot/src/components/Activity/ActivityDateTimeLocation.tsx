@@ -24,24 +24,14 @@ const ActivityDateTimeLocation = (props: ActivityDateTimeLocationProps) => {
   return (
     <FadeIn>
       <section style={{ padding: '10px' }}>
-        <IonRow style={{ paddingBottom: "10px" }}>
+        <IonRow className='ion-no-padding ion-no-margin'>
           <IonCardHeader className='ion-no-padding ion-no-margin'>
             <IonCardTitle style={{ fontSize: "1.25rem" }}>Location</IonCardTitle>
           </IonCardHeader>
         </IonRow>
-        <IonRow>
+        <IonRow className='ion-no-padding ion-no-margin'>
           <IonCol size='7' className='ion-no-padding ion-no-margin'>
-            <div >
-              <p>{location ?? ""}</p>
-            </div>
-            {date &&
-              <>
-                <br />
-                <div>
-                  <p>{formatDate(date ?? "")}</p>
-                </div>
-              </>
-            }
+            <p>{location ?? ""}</p>
           </IonCol>
           <IonCol></IonCol>
           <IonCol className='ion-no-padding ion-no-margin'>
@@ -57,6 +47,22 @@ const ActivityDateTimeLocation = (props: ActivityDateTimeLocationProps) => {
           </IonCol>
         </IonRow>
       </section>
+      {date &&
+        <section style={{ padding: '10px' }}>
+          <IonRow>
+            <IonCardHeader className='ion-no-padding ion-no-margin'>
+              <IonCardTitle style={{ fontSize: "1.25rem" }}>Date</IonCardTitle>
+            </IonCardHeader>
+          </IonRow>
+          <IonRow>
+            <IonCol size='7' className='ion-no-padding ion-no-margin'>
+              <div>
+                <p>{formatDate(date ?? "")}</p>
+              </div>
+            </IonCol>
+          </IonRow>
+        </section>
+      }
     </FadeIn>
   );
 };

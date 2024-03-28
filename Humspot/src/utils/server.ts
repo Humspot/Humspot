@@ -234,6 +234,39 @@ export const handleLogout = async (): Promise<boolean> => {
 
 
 /**
+ * @function handleDeleteAccount
+ * @description deletes the user's AWS amplify account from the user pool and removes their info from the database.
+ * 
+ * @param {string} userID the user's uid
+ * @returns a success status / message indicating successful / failed deletion of account
+ */
+export const handleDeleteAccount = async (userID: string) => {
+  try {
+    const res = await Auth.deleteUser();
+    if (res) {
+      const response = await fetch(
+        import.meta.env.VITE_AWS_API_GATEWAY_DELETE_USER_FROM_DATABASE,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userID: userID }),
+        }
+      );
+      const responseData: { success: boolean; message: string } = await response.json();
+      return responseData;
+    }
+    return { success: false, message: "Error during delete account!" };
+
+  } catch (err) {
+    console.error("Error during delete account " + err);
+    return { success: false, message: "Error during delete account " + err };
+  }
+};
+
+
+/**
  * @function handleForgotPassword 
  * @description Sends a password reset email containing a verification code.
  * 
@@ -491,6 +524,35 @@ export const handleGetActivitiesGivenTag = async (pageNum: number, tag: string):
 
 
 /**
+ * 
+ * @param pageNum 
+ * @param userID 
+ * @returns 
+ */
+export const handleGetApprovedSubmissions = async (pageNum: number, userID: string) => {
+  try {
+    const url: string = import.meta.env.VITE_AWS_API_GATEWAY_GET_APPROVED_SUBMISSIONS_URL + "/" + pageNum + "/" + userID;
+    const response = await fetch(
+      url,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const responseData: { message: string; submissions: { description: string; name: string; activityID: string; image_url: string }[]; success: boolean } = await response.json();
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, submissions: [], success: false };
+  }
+};
+
+
+/**
  * @function handleAddToFavorites
  * @description Adds the activity (event or attraction) to the User's favorites list.
  * @note List in this context refers a row entry in the Favorites table.
@@ -642,7 +704,7 @@ export const handleAddToVisited = async (userID: string, activityID: string, vis
  * ```
  */
 export const handleAddToRSVP = async (userID: string, activityID: string, activityDate: string | undefined): Promise<AddToRSVPResponse> => {
-  if(!activityDate || !userID || !activityID) throw new Error('Invalid params');
+  if (!activityDate || !userID || !activityID) throw new Error('Invalid params');
   try {
     const currentUserSession = await Auth.currentSession();
 

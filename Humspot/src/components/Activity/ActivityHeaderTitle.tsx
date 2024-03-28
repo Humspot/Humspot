@@ -72,7 +72,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
 
   return (
     <FadeIn>
-      <div style={{ marginTop: '30vh', }}>
+      <div style={{ marginTop: '25vh', }}>
         <section style={{ padding: '10px' }}>
           {props.activity ? (
             <>
@@ -101,7 +101,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
             </>
           ) : (
             <IonCardTitle>
-              <IonSkeletonText animated></IonSkeletonText>
+              <IonSkeletonText style={{ height: '40px', width: '80vw' }} animated></IonSkeletonText>
             </IonCardTitle>
           )}
         </section>

@@ -22,7 +22,8 @@ import {
   useIonLoading,
   IonFab,
   IonCardTitle,
-  useIonAlert
+  useIonAlert,
+  useIonToast
 } from '@ionic/react';
 import {
   moonOutline,
@@ -32,12 +33,13 @@ import {
   readerOutline,
   logInOutline,
   constructOutline,
-  logoGoogle
+  logoGoogle,
+  closeCircleOutline
 } from 'ionicons/icons';
 import { Preferences } from '@capacitor/preferences';
 
 import useContext from '../../utils/hooks/useContext';
-import { handleGoogleLoginAndVerifyAWSUser, handleLogout } from '../../utils/server';
+import { handleDeleteAccount, handleGoogleLoginAndVerifyAWSUser, handleLogout } from '../../utils/server';
 
 import './Profile.css';
 import { Keyboard, KeyboardStyleOptions, KeyboardStyle } from '@capacitor/keyboard';
@@ -59,7 +61,8 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
   const context = useContext();
   const router = useIonRouter();
   const [present, dismiss] = useIonLoading();
-  const [presentAlert] = useIonAlert();
+  const [presentAlert, dismissAlert] = useIonAlert();
+  const [presentToast] = useIonToast();
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
@@ -96,12 +99,24 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
     await dismiss();
   };
 
+  const clickOnDeleteAccount = async (userID: string): Promise<void> => {
+    await present({ message: 'Deleting account...' });
+    const res = await handleDeleteAccount(userID);
+    if (res.success) {
+      await handleLogout();
+      await presentToast({ message: res.message, color: 'secondary' });
+    } else {
+      await presentToast({ message: res.message, color: 'danger' });
+    }
+    await dismiss();
+  };
+
   /**
    * @description runs when users click on the logout button.
    * It displays an alert dialog where users can cancel or confirm logout.
    */
   const handleShowLogoutDialog = async () => {
-    presentAlert({
+    await presentAlert({
       cssClass: 'ion-alert-logout',
       header: 'Logout',
       message: 'Are you sure you want to logout?',
@@ -117,6 +132,56 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
             handler: async () => {
               await clickOnLogout();
             },
+          },
+        ]
+    })
+  };
+
+  const handleShowSecondDeleteAccountDialog = async () => {
+    console.log('Show second delete account dialog');
+    await presentAlert({
+      cssClass: 'ion-alert-logout',
+      header: 'Delete Account',
+      message: 'Are you REALLY sure you want to delete your account?',
+      buttons:
+        [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'alert-cancel-button',
+          },
+          {
+            cssClass: 'alert-cancel-button',
+            text: 'I\'m sure, delete my account',
+            handler: async () => {
+              if (!context.humspotUser) return;
+              await clickOnDeleteAccount(context.humspotUser.userID);
+            },
+          },
+        ]
+    })
+  }
+
+  const handleShowDeleteAccountDialog = async () => {
+    await presentAlert({
+      cssClass: 'ion-alert-logout',
+      header: 'Delete Humspot Account',
+      message: 'Are you sure you want to delete your account?',
+      buttons:
+        [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'alert-cancel-button',
+          },
+          {
+            cssClass: 'alert-cancel-button',
+            text: 'Delete my Account',
+            handler: async () => {
+              console.log('Delete my Account');
+              await dismissAlert();
+              await handleShowSecondDeleteAccountDialog();
+            }
           },
         ]
     })
@@ -193,10 +258,16 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
               </IonItem>
             </>
             : context.humspotUser ?
-              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={handleShowLogoutDialog}>
-                <IonIcon aria-hidden='true' icon={logOutOutline} slot='start' ></IonIcon>
-                <IonLabel color='danger'>Log Out</IonLabel>
-              </IonItem>
+              <>
+                <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={handleShowLogoutDialog}>
+                  <IonIcon aria-hidden='true' icon={logOutOutline} slot='start' ></IonIcon>
+                  <IonLabel color='danger'>Log Out</IonLabel>
+                </IonItem>
+                <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={handleShowDeleteAccountDialog}>
+                  <IonIcon aria-hidden='true' icon={closeCircleOutline} slot='start' ></IonIcon>
+                  <IonLabel color='danger'>Delete Account</IonLabel>
+                </IonItem>
+              </>
               :
               <></>
           }
