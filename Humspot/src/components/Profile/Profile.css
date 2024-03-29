@@ -168,7 +168,6 @@
   --indicator-box-shadow: 0 0 5px rgba(0, 0, 0, 0);
 }
 
-/* This removes the animation when changing buttons ... ? */
 #profile-segment ion-segment-button {
   --color-checked: var(--ion-color-primary-contrast);
   --indicator-color: var(--ion-color-primary);

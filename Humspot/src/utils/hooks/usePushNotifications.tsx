@@ -17,16 +17,19 @@ const usePushNotifications = () => {
 
   // Function to handle push notification action
   const handlePushNotificationActionPerformed = useCallback((notification: ActionPerformed) => {
-    alert('clicked on notif!' + notification);
+    // alert('clicked on notif!' + notification);
     console.log({ notification });
 
-    let urlJSON: string = notification.notification.data["gcm.notification.data"] as string;
-    let noBackSlashes: string = urlJSON.toString().replaceAll('\\', '');
-    let removedUrl: string = noBackSlashes.substring(7, noBackSlashes.length);
-    let finalUrl: string = removedUrl.slice(1, removedUrl.length - 2);
+    // let urlJSON: string = notification.notification.data["gcm.notification.data"] as string;
+    // let noBackSlashes: string = urlJSON.toString().replaceAll('\\', '');
+    // let removedUrl: string = noBackSlashes.substring(7, noBackSlashes.length);
+    // let finalUrl: string = removedUrl.slice(1, removedUrl.length - 2);
+    let route: string = notification.notification.data.route;
 
-    console.log(finalUrl);
-    router.push(finalUrl);
+    // console.log(finalUrl);
+    // router.push(finalUrl);
+    console.log(route);
+    router.push(route);
   }, []);
 
   // Function to register push notifications

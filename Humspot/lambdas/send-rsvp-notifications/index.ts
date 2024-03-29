@@ -1,20 +1,37 @@
 import { Context, Callback } from 'aws-lambda';
 import * as admin from 'firebase-admin';
-import * as path from 'path';
+import * as mysql from 'mysql2/promise';
 
-const serviceAccountPath = path.join(__dirname, 'humspot-web-deep-links-firebase-adminsdk-9o65y-0ae72b742a.json');
-const serviceAccount = require(serviceAccountPath);
+export function timeout(delay: number): Promise<unknown> {
+  return new Promise((res) => setTimeout(res, delay));
+};
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+const pool = mysql.createPool({
+  host: process.env.AWS_RDS_HOSTNAME,
+  user: process.env.AWS_RDS_USER,
+  password: process.env.AWS_RDS_PASSWORD,
+  database: process.env.AWS_RDS_DATABASE_NAME,
+  port: Number(process.env.AWS_RDS_PORT),
+  connectionLimit: 1000,
+  connectTimeout: (60 * 60 * 1000),
+  debug: true
 });
 
-const sendPushNotification = async (notificationsToken: string, info: string) => {
+type RSVPInfo = {
+  userID: string;
+  activityID: string;
+};
+
+const sendPushNotification = async (notificationsToken: string, info: string, activityID: string) => {
+  console.log('sending push notification to ' + notificationsToken);
   try {
     const message: admin.messaging.Message = {
       notification: {
         title: 'Humspot',
-        body: `${info}`,
+        body: `You RSVP'd for ${info}, happening today!`,
+      },
+      data: {
+        'route': `/activity/${activityID}`
       },
       token: notificationsToken,
     };
@@ -26,19 +43,66 @@ const sendPushNotification = async (notificationsToken: string, info: string) =>
 };
 
 export const handler = async (event: any, context: Context, callback: Callback) => {
+  const connection = await pool.getConnection();
+  try {
+    const url = 'https://notificationss.s3.us-west-1.amazonaws.com/humspot-web-deep-links-firebase-adminsdk-9o65y-0ae72b742a.json';
+    const response = await fetch(url);
+    if (!response.ok) { throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`); }
+    const json = await response.json();
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential: admin.credential.cert(json)
+      });
+    }
 
-  // access RSVP table and get list of userIDs and activityIDs from events with today's date
-  // access Users table and use the list of userIDs to get a list of notificationsTokens for each user
-  // access Activities table and use the list of activityIDs to get an event name for each user's RSVP
-  // loop through list of notificationsTokens and call sendPushNotification function
+    const today: string = new Date().toISOString().split('T')[0];
+    const rsvpQuery: string = `
+      SELECT userID, activityID
+      FROM RSVP
+      WHERE activityDate = ?
+    `;
+    const [rsvpRows]: any = await connection.execute(rsvpQuery, [today]);
+    if (!Array.isArray(rsvpRows) || rsvpRows.length === 0) {
+      console.log("No RSVPs found for today's date.");
+      return;
+    }
+    let userIDs: string[] = [];
+    let activityIDs: string[] = [];
+    for (let i = 0; i < rsvpRows.length; ++i) {
+      const rsvpInfo: RSVPInfo = rsvpRows[i];
+      userIDs.push(rsvpInfo.userID);
+      activityIDs.push(rsvpInfo.activityID);
+    }
+    const [userTokens]: any = await connection.query(`
+      SELECT userID, notificationsToken
+      FROM Users
+      WHERE userID IN (?)
+    `, [userIDs]);
+    const [activityNames]: any = await connection.query(`
+      SELECT activityID, name
+      FROM Activities
+      WHERE activityID IN (?)
+    `, [activityIDs]);
 
-  // temp test!
-  const notificationsToken: string = 'eF-1sgI69E3svQsE3nqTYf:APA91bHd9v_aZBI76o7OCnY4N3PzlfPBvDDOl1i94sJBOe2UNSFLnf6bbYgrBO3bmKS9ep_XOWjBjo3vvY4-O-at7pdHe6vnl9nuA5KsywTdceU6C61pQJhqwaG35eps1pJRJzcwb9Yj';
-  const eventName: string = 'THIS IS A NEW EVENT!'
-  const message: string = `You RSVP\'d for ${eventName}, happening today!`;
-
-  await sendPushNotification(notificationsToken, message);
-
-  callback(null, 'Finished');
-
+    console.log(JSON.stringify(userTokens));
+    console.log(JSON.stringify(activityNames));
+    console.log("RSVP ROWS LENGTH: " + rsvpRows.length);
+    for (let i = 0; i < rsvpRows.length; ++i) {
+      const rsvp: RSVPInfo = rsvpRows[i];
+      const token = userTokens.find((user: any) => user.userID === rsvp.userID)?.notificationsToken;
+      const eventName = activityNames.find((activity: any) => activity.activityID === rsvp.activityID)?.name;
+      if (token && eventName) {
+        await sendPushNotification(token, eventName, rsvp.activityID);
+        await timeout(500);
+      }
+    }
+    if (connection) connection.release();
+    return "Finished";
+  } catch (err) {
+    console.error(err);
+    if (connection) connection.release();
+    return 'Error: ' + err;
+  } finally {
+    if (connection) connection.release();
+  }
 };
