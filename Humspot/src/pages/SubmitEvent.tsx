@@ -155,22 +155,28 @@ export const EventForm = () => {
     }
   };
 
-  const showMoreTags = () => {
-    const nextTags = eventTags.slice(visibleTags.length, visibleTags.length + 20);
-    setVisibleTags([...visibleTags, ...nextTags]);
-  };
-
   const addNewTag = (tag: string) => {
-    if (!tag) return;
-    for (let i = 0; i < visibleTags.length; i++) {
-      if (visibleTags[i].toLowerCase().trim() === tag.toLowerCase().trim()) {
-        const t = Toast.create({ message: `${tag} already in list!`, position: 'bottom', duration: 2000, color: 'danger' });
-        t.present();
-        return;
-      }
+    const tagLowerCase = tag.toLowerCase().trim();
+    const isTagPresent = visibleTags.some(currTag => currTag.toLowerCase().trim() === tagLowerCase);
+
+    if (!isTagPresent) {
+      setVisibleTags([tag, ...visibleTags]);
+    } else {
+      const t = Toast.create({ message: "Tag is already a part of the list, select it below.", duration: 2000, color: "danger", position: 'bottom' });
+      t.present();
     }
-    setVisibleTags([tag, ...visibleTags]);
   }
+
+  const showMoreTags = () => {
+    const nextTags = eventTags.slice(
+      visibleTags.length,
+      visibleTags.length + 20
+    ).filter(tag => {
+      return !visibleTags.some(visibleTag => visibleTag.toLowerCase().trim() === tag.toLowerCase().trim());
+    });
+
+    setVisibleTags(prevTags => [...prevTags, ...nextTags]);
+  };
 
   const isFormValid = () => {
     return refs.every(ref => ref.current && ref.current.value && (ref.current.value as string).trim() !== '');

@@ -215,15 +215,26 @@ const SubmitAttractionPage = () => {
   };
 
   const addNewTag = (tag: string) => {
-    setVisibleTags([tag, ...visibleTags]);
+    const tagLowerCase = tag.toLowerCase().trim();
+    const isTagPresent = visibleTags.some(currTag => currTag.toLowerCase().trim() === tagLowerCase);
+
+    if (!isTagPresent) {
+      setVisibleTags([tag, ...visibleTags]);
+    } else {
+      const t = Toast.create({ message: "Tag is already a part of the list, select it below.", duration: 2000, color: "danger", position: 'bottom' });
+      t.present();
+    }
   }
 
   const showMoreTags = () => {
     const nextTags = attractionTags.slice(
       visibleTags.length,
       visibleTags.length + 20
-    );
-    setVisibleTags([...visibleTags, ...nextTags]);
+    ).filter(tag => {
+      return !visibleTags.some(visibleTag => visibleTag.toLowerCase().trim() === tag.toLowerCase().trim());
+    });
+
+    setVisibleTags(prevTags => [...prevTags, ...nextTags]);
   };
 
   const isFormValid = () => {
