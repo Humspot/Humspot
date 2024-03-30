@@ -101,9 +101,10 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
 
     const query = `
       INSERT INTO Users (userID, username, email, authProvider, accountType, accountStatus, profilePicURL, dateCreated, notificationsToken) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
-    const parameters = [userID, requestData.username, requestData.email, requestData.authProvider, requestData.accountType, 'active', requestData.profilePicURL || null, currentDate, "notificationsToken" in requestData && requestData.notificationsToken ? requestData.notificationsToken : null];
+    const notificationsToken = requestData.notificationsToken || null;
+    const parameters = [userID, requestData.username, requestData.email, requestData.authProvider, requestData.accountType, 'active', requestData.profilePicURL || null, currentDate, notificationsToken];
 
     await connection.query(query, parameters);
 

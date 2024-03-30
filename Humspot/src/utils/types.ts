@@ -13,7 +13,7 @@ export type HumspotUser = {
   authProvider: "google" | "custom";
   dateCreated: string;
   username?: string;
-  bio: string;
+  bio: string | null;
   requestForCoordinatorSubmitted: number;
 };
 

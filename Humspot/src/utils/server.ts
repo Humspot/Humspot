@@ -370,6 +370,7 @@ export const handleUserLogin = async (email: string | null, username: string | n
       accountStatus: "active",
       notificationsToken: notificationsToken ?? ''
     };
+    console.log(requestBody);
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_CREATE_USER_URL,
@@ -2023,3 +2024,23 @@ export const handleGetUserInfo = async (uid: string) => {
     return { message: "Something went wrong", success: false, info: null };
   }
 };
+
+
+/**
+ * @function handleClickOnReportButton
+ * 
+ * @param reporterEmail the person reporting
+ * @param suspectEmail the person being reported
+ * @param details the details of the report
+ */
+export const handleClickOnReportButton = async (reporterEmail: string | null | undefined, suspectEmail: string | null | undefined, details: string) => {
+  try {
+    if (!reporterEmail || !suspectEmail) throw new Error("No emails provided to function");
+    const res = await fetch('', {});
+    const data: { message: string; success: boolean } = await res.json();
+    return data;
+  } catch (err: any) {
+    console.error(err);
+    return { message: err.toString(), success: false };
+  }
+};  

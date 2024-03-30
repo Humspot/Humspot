@@ -317,12 +317,12 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                                   <h2>{interaction.name}</h2>
                                   {interaction.interactionType === 'comment' ?
                                     <>
-                                      <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {interaction.interactionText}</p>
+                                      <p style={{ fontSize: "0.9rem" }}><b>{props.submissions ? 'They' : 'You'} commented:</b> {interaction.interactionText}</p>
                                       <p style={{ fontSize: "0.8rem" }}>{formatDate(interaction.interactionDate as string)}</p>
                                     </>
                                     :
                                     <>
-                                      <p style={{ fontSize: "0.9rem" }}><b>You RSVP'd</b> for this event</p>
+                                      <p style={{ fontSize: "0.9rem" }}><b>{props.submissions ? 'They' : 'You'}  RSVP'd</b> for this event</p>
                                       <p>{""}&nbsp;</p>
                                     </>
                                   }

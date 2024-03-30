@@ -77,8 +77,8 @@ const ProfileBio = (props: ProfileBioProps) => {
           <p className={`profile-bio-text ${isBioExpanded ? 'expanded' : 'collapsed'}`}>
             {humspotUser ? (
               <>
-                {isBioExpanded ? humspotUser.bio : humspotUser.bio.substring(0, MAX_BIO_LENGTH)}
-                {humspotUser.bio.length > MAX_BIO_LENGTH && (
+                {isBioExpanded ? humspotUser.bio : humspotUser.bio && humspotUser.bio.length > 0 && humspotUser.bio.substring(0, MAX_BIO_LENGTH)}
+                {humspotUser.bio && humspotUser.bio.length > MAX_BIO_LENGTH && (
                   <span className="bio-toggle" onClick={() => setIsBioExpanded((prev) => !prev)}>
                     {isBioExpanded ? ' Less' : ' ... More'}
                   </span>

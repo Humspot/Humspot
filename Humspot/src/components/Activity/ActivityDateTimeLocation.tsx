@@ -30,21 +30,16 @@ const ActivityDateTimeLocation = (props: ActivityDateTimeLocationProps) => {
           </IonCardHeader>
         </IonRow>
         <IonRow className='ion-no-padding ion-no-margin'>
-          <IonCol size='7' className='ion-no-padding ion-no-margin'>
-            <p>{location ?? ""}</p>
-          </IonCol>
-          <IonCol></IonCol>
-          <IonCol className='ion-no-padding ion-no-margin'>
-            <div>
-              {latitude && longitude && name && (
-                <ActivityLocationMap
-                  latitude={latitude}
-                  longitude={longitude}
-                  activityName={name}
-                />
-              )}
-            </div>
-          </IonCol>
+          <p>{location ?? ""}</p>
+          <div>
+            {latitude && longitude && name && (
+              <ActivityLocationMap
+                latitude={latitude}
+                longitude={longitude}
+                activityName={name}
+              />
+            )}
+          </div>
         </IonRow>
       </section>
       {date &&

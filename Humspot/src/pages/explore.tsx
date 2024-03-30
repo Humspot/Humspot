@@ -5,7 +5,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { IonContent, IonHeader, IonPage, IonSearchbar, IonToolbar, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
+import { IonCol, IonContent, IonHeader, IonPage, IonRow, IonSearchbar, IonToolbar, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
 
 import ExploreFilterButtons from "../components/Explore/ExploreFilterButtons";
 import ExploreCarouselRecentlyViewed from "../components/Explore/ExploreCarouselRecentlyViewed";
@@ -19,6 +19,7 @@ import { handleGetActivitiesGivenTag, handleGetThisWeeksEvents } from "../utils/
 import "swiper/css";
 import { Keyboard } from "@capacitor/keyboard";
 import { timeout } from "../utils/functions/timeout";
+import Logo from '../assets/images/AppIcon_Home.png';
 
 
 const fetchHighlights = async (): Promise<any[] | null> => {
@@ -53,6 +54,11 @@ const ExplorePage = () => {
   const { data: adventure, loading: adventureLoading, error: adventureError } = useFetchData<any[] | null>(fetchAdventure);
   const { data: chill, loading: chillLoading, error: chillError } = useFetchData<any[] | null>(fetchChill);
 
+  const handleClickLogo = () => {
+    contentRef && contentRef.current && contentRef.current.scrollToTop(1000);
+    alert("Welcome to Humspot! Let us know what you want to see on the app! Email dev@humspotapp.com")
+  }
+
   const handleSearch = async (event: React.KeyboardEvent<HTMLIonSearchbarElement>) => {
     if (event.key === 'Enter' || event.key === 'search') {
       if (searchRef && searchRef.current && searchRef.current.value) {
@@ -78,14 +84,19 @@ const ExplorePage = () => {
 
       <IonHeader className='ion-no-border profile-modal-content' mode='ios'>
         <IonToolbar style={{ '--background': 'var(--ion-background-color)' }} mode='ios'>
-          <IonSearchbar
-            ref={searchRef}
-            onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)}
-            placeholder="Search for Activities" spellcheck={true}
-            type="search" enterkeyhint="search"
-            autocorrect="off" showCancelButton="focus" animated={true}
-            onKeyDown={e => handleSearch(e)}
-          />
+          <IonRow className='ion-no-padding ion-no-margin' style={{ paddingLeft: '5px' }}>
+            <IonCol size='1.5'><img onClick={handleClickLogo} src={Logo} style={{ borderRadius: '5px' }} /></IonCol>
+            <IonCol>
+              <IonSearchbar
+                ref={searchRef}
+                onClick={() => contentRef && contentRef.current && contentRef.current.scrollToTop(1000)}
+                placeholder="Search for Activities" spellcheck={true}
+                type="search" enterkeyhint="search"
+                autocorrect="off" showCancelButton="focus" animated={true}
+                onKeyDown={e => handleSearch(e)}
+              />
+            </IonCol>
+          </IonRow>
         </IonToolbar>
       </IonHeader>
 
