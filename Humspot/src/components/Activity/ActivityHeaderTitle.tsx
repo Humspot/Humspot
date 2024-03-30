@@ -80,22 +80,24 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
               {props.activityType === 'attraction' &&
                 <>
                   <div style={{ display: 'flex', alignItems: 'center', paddingTop: '10px' }}>
-                    <Rating
-                      readOnly={true}
-                      defaultValue={props.avgRating ?? 0}
-                      spacing='5px'
-                      activeColor='#F6D075'
-                      precision={0.5}
-                    />
+                    <IonButton id='add-rating-button' className='ion-no-margin ion-no-padding' fill='clear' style={{ minHeight: 'auto', minWidth: 'auto' }}>
+                      <Rating
+                        readOnly={true}
+                        defaultValue={props.avgRating ?? 0}
+                        spacing='5px'
+                        activeColor='#F6D075'
+                        precision={0.5}
+                      />
+                    </IonButton>
                   </div>
 
-                  {context.humspotUser &&
+                  {/* {context.humspotUser &&
                     <div>
                       <IonButton className='ion-no-padding ion-no-margin' slot='start' fill='clear' style={{ color: '#3D6876' }} id='add-rating-button'>
                         Add Rating
                       </IonButton>
                     </div>
-                  }
+                  } */}
                 </>
               }
             </section>

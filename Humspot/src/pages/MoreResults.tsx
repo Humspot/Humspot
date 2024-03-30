@@ -100,33 +100,41 @@ const MoreResults = () => {
                     <>
                       <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
                         <div style={{ padding: "5px" }}>
-                          <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                          <IonSkeletonText style={{
+                            height: "200px", borderRadius: "5px"
+                          }} animated />
                           {/* <br /> */}
-                          <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
+                          < IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
                           <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
                         </div>
                       </IonCard>
                       <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
                         <div style={{ padding: "5px" }}>
-                          <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                          <IonSkeletonText style={{
+                            height: "200px", borderRadius: "5px"
+                          }} animated />
                           {/* <br /> */}
-                          <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
+                          < IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
                           <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
                         </div>
                       </IonCard>
                       <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
                         <div style={{ padding: "5px" }}>
-                          <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                          <IonSkeletonText style={{
+                            height: "200px", borderRadius: "5px"
+                          }} animated />
                           {/* <br /> */}
-                          <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
+                          < IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
                           <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
                         </div>
                       </IonCard>
                       <IonCard style={{ '--background': 'var(--ion-background-color)' }}>
                         <div style={{ padding: "5px" }}>
-                          <IonSkeletonText style={{ height: "200px", borderRadius: "5px" }} animated />
+                          <IonSkeletonText style={{
+                            height: "200px", borderRadius: "5px"
+                          }} animated />
                           {/* <br /> */}
-                          <IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
+                          < IonSkeletonText style={{ height: "20px", width: "75vw", borderRadius: "5px" }} animated />
                           <IonSkeletonText style={{ height: "20px", width: "50vw", borderRadius: "5px" }} animated />
                         </div>
                       </IonCard>
@@ -138,9 +146,12 @@ const MoreResults = () => {
                           return (
                             <FadeIn key={idx} delay={(idx % 20) * 50}>
                               <IonCard style={{ '--background': 'var(--ion-background-color)', paddingLeft: "5px", paddingRight: "5px" }} onClick={() => { if ("activityID" in activity && activity.activityID) router.push("/activity/" + activity.activityID) }}>
-                                <div style={{ height: '175px', overflow: 'hidden', borderRadius: "5px" }}>
+                                <div style={{
+                                  height: '175px', overflow: 'hidden', borderRadius: "5px"
+                                }}>
                                   <img
-                                    src={activity.photoUrls ? activity.photoUrls.trim().split(',')[0] : placeholder}
+                                    src={activity.photoUrls ? activity.photoUrls.trim().split(',')[0] : placeholder
+                                    }
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                   />
                                 </div>
@@ -193,7 +204,7 @@ const MoreResults = () => {
 
 
       </IonContent>
-    </IonPage>
+    </IonPage >
   )
 };
 

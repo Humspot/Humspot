@@ -38,3 +38,7 @@ button.alert-button.alert-cancel-button {
 ion-segment-buttom::before {
   opacity: 0;
 }
+
+#add-custom-tag {
+  min-height: auto;
+}

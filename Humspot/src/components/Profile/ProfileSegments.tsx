@@ -205,8 +205,11 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                           return (
                             <FadeIn key={favorite.name + index} delay={(index % 10) * 50}>
                               <IonItem className='ion-no-padding' role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
-                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={favorite.photoUrl || placeholder} /></IonThumbnail>
-                                <IonLabel style={{ paddingLeft: "10px" }}>
+                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{
+                                  borderRadius: "5px"
+                                }} src={favorite.photoUrl || placeholder} /></IonThumbnail>
+                                <IonLabel style={{ paddingLeft: "10px" }
+                                } >
                                   <h2>{favorite.name}</h2>
                                   <p style={{ fontSize: "0.9rem" }}>{favorite.description}</p>
                                   <p style={{ fontSize: "0.8rem" }}>{favorite.location}</p>
@@ -254,8 +257,11 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                           return (
                             <FadeIn key={visitedPlace.name + index} delay={(index % 10) * 50}>
                               <IonItem className='ion-no-padding' role='button' onClick={() => { if (visitedPlace.activityID) router.push("/activity/" + visitedPlace.activityID) }}>
-                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={visitedPlace.photoUrl || placeholder} /></IonThumbnail>
-                                <IonLabel style={{ paddingLeft: "10px" }}>
+                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{
+                                  borderRadius: "5px"
+                                }} src={visitedPlace.photoUrl || placeholder} /></IonThumbnail>
+                                <IonLabel style={{ paddingLeft: "10px" }
+                                } >
                                   <h2>{visitedPlace.name}</h2>
                                   <p style={{ fontSize: "0.9rem" }}>{visitedPlace.description}</p>
                                   <p style={{ fontSize: "0.8rem" }}>{visitedPlace.location}</p>
@@ -303,8 +309,11 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                           return (
                             <FadeIn key={interaction.name + index} delay={(index % 20) * 50}>
                               <IonItem className='ion-no-padding' role='button' onClick={() => { if (interaction.activityID) router.push("/activity/" + interaction.activityID) }}>
-                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={interaction.photoUrl || placeholder} /></IonThumbnail>
-                                <IonLabel style={{ paddingLeft: "10px" }}>
+                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{
+                                  borderRadius: "5px"
+                                }} src={interaction.photoUrl || placeholder} /></IonThumbnail>
+                                <IonLabel style={{ paddingLeft: "10px" }
+                                } >
                                   <h2>{interaction.name}</h2>
                                   {interaction.interactionType === 'comment' ?
                                     <>
@@ -312,7 +321,10 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                                       <p style={{ fontSize: "0.8rem" }}>{formatDate(interaction.interactionDate as string)}</p>
                                     </>
                                     :
-                                    <p style={{ fontSize: "0.9rem" }}><b>You RSVP'd</b> for this event</p>
+                                    <>
+                                      <p style={{ fontSize: "0.9rem" }}><b>You RSVP'd</b> for this event</p>
+                                      <p>{""}&nbsp;</p>
+                                    </>
                                   }
                                 </IonLabel>
                               </IonItem>
@@ -358,11 +370,13 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                           return (
                             <FadeIn key={submission.activityID + index} delay={(index % 20) * 50}>
                               <IonItem className='ion-no-padding' role='button' onClick={() => { if (submission.activityID) router.push("/activity/" + submission.activityID) }}>
-                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{ borderRadius: "5px" }} src={submission.image_url || placeholder} /></IonThumbnail>
-                                <IonLabel style={{ paddingLeft: "10px" }}>
+                                <IonThumbnail style={{ marginLeft: "10px" }}><img style={{
+                                  borderRadius: "5px"
+                                }} src={submission.image_url || placeholder} /></IonThumbnail>
+                                <IonLabel style={{ paddingLeft: "10px" }
+                                } >
                                   <h2>{submission.name}</h2>
                                   <p style={descriptionStyle}>{submission.description}</p>
-                                  {/* <p>{" "}&nbsp;</p> */}
                                 </IonLabel>
                               </IonItem>
                             </FadeIn>

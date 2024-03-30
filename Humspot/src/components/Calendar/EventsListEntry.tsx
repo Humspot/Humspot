@@ -23,7 +23,7 @@ const EventsListEntry = (props: { events: any }) => {
               detail={true}
             >
               <IonThumbnail slot="start">
-                <img src={activity?.photoUrl || placeholder} alt="Activity Photo" />
+                <img style={{ borderRadius: "5px" }} src={activity?.photoUrl || placeholder} alt="Activity Photo" />
               </IonThumbnail>
               <IonLabel>
                 {activity?.name}

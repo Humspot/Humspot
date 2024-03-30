@@ -82,7 +82,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
                     if ("activityID" in activity && activity.activityID) router.push("/activity/" + activity.activityID);
                   }}
                 >
-                  <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px', border: '1px solid var(--ion-color-medium)' }}>
+                  <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px' }}>
                     <img
                       src={"photoUrls" in activity && activity.photoUrls ? activity.photoUrls.trim().split(',')[0] : "photoUrl" in activity && activity.photoUrl ? activity.photoUrl : placeholder}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}

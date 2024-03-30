@@ -155,7 +155,7 @@ const Map = () => {
                       <div style={{ height: "1vh" }} />
                       <img
                         className="ion-img-container"
-                        style={{ borderRadius: '10px', width: '100%' }}
+                        style={{ borderRadius: '5px', width: '100%' }}
                         src={attractions[attractionsOverlayIndex].photoUrl!}
                         alt=""
                         onError={() => {
@@ -236,7 +236,7 @@ const Map = () => {
                       <div style={{ height: "1vh" }} />
                       <img
                         className="ion-img-container"
-                        style={{ borderRadius: '10px', width: '100%' }}
+                        style={{ borderRadius: '5px', width: '100%' }}
                         src={events[overlayIndex].photoUrl!}
                         alt=""
                         onError={() => {
@@ -317,7 +317,7 @@ const Map = () => {
                       <div style={{ height: "1vh" }} />
                       <img
                         className="ion-img-container"
-                        style={{ borderRadius: '10px', width: '100%' }}
+                        style={{ borderRadius: '5px', width: '100%' }}
                         src={eventsBetweenTwoDates[overlayIndex].photoUrls[0]}
                         alt=""
                         onError={() => {

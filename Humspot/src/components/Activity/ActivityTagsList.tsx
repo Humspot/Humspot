@@ -26,7 +26,9 @@ const ActivityTagsList = (props: ActivityTagsListProps) => {
         {tags &&
           tags.split(',').map((tag: string, index: number) => {
             return (
-              <IonChip key={tag + index} color={'secondary'} onClick={() => {
+              <IonChip key={tag + index} color={'secondary'} style={{
+                paddingLeft: '5px', paddingRight: '5px', paddingTop: '2.5px', paddingBottom: '2.5px', borderRadius: "5px"
+              }} onClick={() => {
                 let encodedTag = encodeURIComponent(tag.trim());
                 encodedTag = encodeURIComponent(encodedTag);
                 router.push(`/more-results/${encodedTag}`);

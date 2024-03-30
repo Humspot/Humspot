@@ -45,9 +45,10 @@ const ActivityHeader = (props: ActivityHeaderProps) => {
                     src={url}
                   >
                     <img
+                      className='activity-header-image-style'
                       alt="Attraction Image"
                       src={url || ''}
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      style={{ width: "100%", height: "30vh", objectFit: "cover" }}
                     />
                   </IonPhotoViewer>
                 </IonCard>

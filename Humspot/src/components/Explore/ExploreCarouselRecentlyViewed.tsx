@@ -75,7 +75,7 @@ const ExploreCarouselRecentlyViewed = () => {
                   if ("id" in activity && activity.id) router.push("/activity/" + activity.id);
                 }}
               >
-                <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px', border: '1px solid var(--ion-color-medium)' }}>
+                <div style={{ height: '175px', overflow: 'hidden', borderRadius: '5px' }}>
                   <img
                     src={activity.photoUrl ? activity.photoUrl.trim().split(',')[0] : placeholder}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '5px' }}

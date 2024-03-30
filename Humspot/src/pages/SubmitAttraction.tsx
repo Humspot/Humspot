@@ -578,7 +578,7 @@ const SubmitAttractionPage = () => {
               </IonItem>
               <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', paddingRight: "5px", paddingLeft: "5px" }}>
                 <IonButton id='add-custom-tag' className='ion-no-padding' fill='clear'>
-                  <IonChip style={{ width: `60px` }}>
+                  <IonChip style={{ width: `60px`, borderRadius: '5px' }}>
                     <IonIcon icon={addOutline} style={{ marginRight: '5px' }} />
                   </IonChip>
                 </IonButton>
@@ -587,6 +587,7 @@ const SubmitAttractionPage = () => {
                     key={tag}
                     onClick={() => toggleTag(tag)}
                     color={selectedTags.includes(tag) ? "secondary" : "dark"}
+                    style={{ borderRadius: '5px' }}
                   >
                     <IonLabel>{tag}</IonLabel>
                   </IonChip>

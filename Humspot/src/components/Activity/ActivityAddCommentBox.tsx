@@ -29,7 +29,7 @@ const defaultResizeOptions: KeyboardResizeOptions = {
  * 
  * @returns {"50px" | "10px"} the border radius of the textarea.
  */
-function getBorderRadius(): "50px" | "10px" {
+function getBorderRadius(): "50px" | "5px" {
   const isIOS: boolean = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const hasTallScreen: boolean = window.screen.height / window.screen.width > 2 || window.screen.width / window.screen.height > 2;
 
@@ -43,7 +43,7 @@ function getBorderRadius(): "50px" | "10px" {
     return parseFloat(calculatedPadding) > 0;
   };
 
-  return (isIOS && hasTallScreen && hasSafeAreaInset()) ? "50px" : "10px";
+  return (isIOS && hasTallScreen && hasSafeAreaInset()) ? "50px" : "5px";
 };
 
 const ActivityAddCommentBox = (props: { id: string, activityName: string; setComments: React.Dispatch<React.SetStateAction<any[]>>; }) => {
