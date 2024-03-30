@@ -55,6 +55,7 @@ import usePushNotifications from "./utils/hooks/usePushNotifications";
 import ProfileActivitiesModal from "./components/Shared/ActivitiesModal";
 import User from "./pages/User";
 import ApprovedActivitiesPage from "./pages/ApprovedActivities";
+import UpcomingEvents from "./pages/UpcomingEvents";
 
 
 setupIonicReact({ mode: "ios" });
@@ -102,6 +103,7 @@ const App: React.FC = () => {
               <Route exact path="/submit-attraction" component={SubmitAttraction} />
               <Route exact path="/submitted-activities" component={SubmittedActivities} />
               <Route exact path="/approved-activities" component={ApprovedActivitiesPage} />
+              <Route exact path="/upcoming-events" component={UpcomingEvents} />
               <Route exact path="/activity/:id" component={Activity} />
               <Route exact path="/search/:query" component={Search} />
               <Route exact path="/more-results/:tagName" component={MoreResults} />

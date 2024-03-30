@@ -33,6 +33,8 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
     e.preventDefault();
     if (props.hasTag) {
       router.push(`/more-results/${encodeURIComponent(props.title.trim())}`);
+    } else {
+      router.push("/upcoming-events");
     }
   }
 
@@ -51,7 +53,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
       {props.activities && props.activities.length > 0 && !props.loading ?
         <div style={{ display: 'flex', justifyContent: 'right' }}>
           <IonItemDivider style={{ background: "var(--ion-background-color)", fontSize: "1.50rem" }}><IonText onClick={handleClickArrow} color='primary'>{props.title}</IonText></IonItemDivider>
-          <IonButton fill='clear' disabled={!props.button} onClick={handleClickArrow}><IonIcon color='primary' icon={arrowForward}></IonIcon></IonButton>
+          <IonButton fill='clear' onClick={handleClickArrow}><IonIcon color='primary' icon={arrowForward}></IonIcon></IonButton>
         </div>
         :
         props.loading &&
