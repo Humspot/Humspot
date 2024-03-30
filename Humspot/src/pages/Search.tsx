@@ -443,12 +443,8 @@ const Search = () => {
                 </IonInfiniteScroll>
               </>
               :
-              !loading ?
-                <div style={{ paddingTop: '25px', paddingBottom: '25px' }}>
-                  <IonTitle className='ion-text-center' style={{ display: 'flex', height: '100%', background: 'var(--ion-background-color)' }}><IonText color='dark'>No Results</IonText></IonTitle>
-                </div>
-                :
-                <></>
+
+              <></>
         }
       </IonContent>
 

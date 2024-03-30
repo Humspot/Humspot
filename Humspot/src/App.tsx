@@ -61,7 +61,7 @@ import UpcomingEvents from "./pages/UpcomingEvents";
 setupIonicReact({ mode: "ios" });
 SplashScreen.show();
 
-const App: React.FC = () => {
+const RoutingSystem: React.FC = () => {
 
   const context = useContext();
   const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context);
@@ -73,104 +73,111 @@ const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState("explore");
 
   return (
+    <>
+
+      {/* Handles opening of links on mobile, https://humspotapp.com/{route} */}
+      <AppUrlRouter></AppUrlRouter>
+
+      {/* Routes and tab bar */}
+      <IonTabs className={context.showTabs ? 'tab-bar-visible' : 'tab-bar-hidden'}>
+        <IonRouterOutlet>
+          <Route exact path="/" render={() => <Redirect to="/explore" />} />
+          <Route exact path="/redirect-sign-in" render={() => <Redirect to="/explore" />} />
+          <Route exact path="/explore" component={Explore} />
+          <Route exact path="/calendar" component={Calendar} />
+          <Route exact path="/map" component={Map} />
+          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/sign-up" component={SignUp} />
+          <Route exact path="/sign-in" component={SignIn} />
+          <Route exact path="/contact-us" component={ContactUs} />
+          <Route exact path="/forgot-password" component={ForgotPassword} />
+          <Route exact path="/terms-and-conditions" component={TermsAndConditions} />
+          <Route exact path="/privacy-policy" component={PrivacyPolicy} />
+          <Route exact path="/become-a-coordinator" component={BecomeACoordinator} />
+          <Route exact path="/admin-dashboard" component={AdminDashboard} />
+          <Route exact path="/admin-dashboard/submission/:id" component={AdminApproveActivitySubmission} />
+          <Route exact path="/verify-email/:email/:toVerify" component={VerifyEmail} />
+          <Route exact path="/submit-event" component={SubmitEvent} />
+          <Route exact path="/submit-attraction" component={SubmitAttraction} />
+          <Route exact path="/submitted-activities" component={SubmittedActivities} />
+          <Route exact path="/approved-activities" component={ApprovedActivitiesPage} />
+          <Route exact path="/upcoming-events" component={UpcomingEvents} />
+          <Route exact path="/activity/:id" component={Activity} />
+          <Route exact path="/search/:query" component={Search} />
+          <Route exact path="/more-results/:tagName" component={MoreResults} />
+          <Route exact path="/user/:uid" component={User} />
+        </IonRouterOutlet>
+
+        <IonTabBar
+          id='main-tab-bar'
+          slot="bottom"
+          onIonTabsWillChange={(e) => { setCurrentTab(e.detail.tab); }}
+          style={{ display: tabBarDisplay, opacity: tabBarOpacity.toString() }}
+        >
+          <IonTabButton tab="explore" href="/explore">
+            <IonIcon
+              aria-hidden="true"
+              icon={compass}
+              color={currentTab == "explore" ? "primary" : ""}
+              size="large"
+            />
+          </IonTabButton>
+          <IonTabButton tab="map" href="/map">
+            <IonIcon
+              aria-hidden="true"
+              icon={map}
+              color={currentTab == "map" ? "primary" : ""}
+              size="large"
+            />
+          </IonTabButton>
+          <IonTabButton>
+            <IonButton fill='clear' id='open-add-activity-modal' color=''>
+              <IonIcon
+                aria-hidden="true"
+                icon={addCircleOutline}
+                color={context.darkMode ? 'medium' : 'warning'}
+                size="large"
+                style={{ transform: "scale(1.1)" }}
+              />
+            </IonButton>
+          </IonTabButton>
+          <IonTabButton tab="calendar" href="/calendar">
+            <IonIcon
+              aria-hidden="true"
+              icon={calendar}
+              color={currentTab == "calendar" ? "primary" : ""}
+              size="large"
+            />
+          </IonTabButton>
+          <IonTabButton tab="profile" href="/profile">
+            <IonIcon
+              aria-hidden="true"
+              icon={person}
+              color={currentTab == "profile" ? "primary" : ""}
+              size="large"
+            />
+          </IonTabButton>
+        </IonTabBar>
+
+      </IonTabs>
+
+      {/* Global slide-up modal where users can request to submit events/attractions */}
+      <ProfileActivitiesModal />
+
+    </>
+  );
+};
+
+const App: React.FC = () => {
+  return (
     <IonApp>
       <ToastProvider>
         <IonReactRouter>
-
-          {/* Handles opening of links on mobile, https://humspotapp.com/{route} */}
-          <AppUrlRouter></AppUrlRouter>
-
-          {/* Routes and tab bar */}
-          <IonTabs className={context.showTabs ? 'tab-bar-visible' : 'tab-bar-hidden'}>
-            <IonRouterOutlet>
-              <Route exact path="/" render={() => <Redirect to="/explore" />} />
-              <Route exact path="/redirect-sign-in" render={() => <Redirect to="/explore" />} />
-              <Route exact path="/explore" component={Explore} />
-              <Route exact path="/calendar" component={Calendar} />
-              <Route exact path="/map" component={Map} />
-              <Route exact path="/profile" component={Profile} />
-              <Route exact path="/sign-up" component={SignUp} />
-              <Route exact path="/sign-in" component={SignIn} />
-              <Route exact path="/contact-us" component={ContactUs} />
-              <Route exact path="/forgot-password" component={ForgotPassword} />
-              <Route exact path="/terms-and-conditions" component={TermsAndConditions} />
-              <Route exact path="/privacy-policy" component={PrivacyPolicy} />
-              <Route exact path="/become-a-coordinator" component={BecomeACoordinator} />
-              <Route exact path="/admin-dashboard" component={AdminDashboard} />
-              <Route exact path="/admin-dashboard/submission/:id" component={AdminApproveActivitySubmission} />
-              <Route exact path="/verify-email/:email/:toVerify" component={VerifyEmail} />
-              <Route exact path="/submit-event" component={SubmitEvent} />
-              <Route exact path="/submit-attraction" component={SubmitAttraction} />
-              <Route exact path="/submitted-activities" component={SubmittedActivities} />
-              <Route exact path="/approved-activities" component={ApprovedActivitiesPage} />
-              <Route exact path="/upcoming-events" component={UpcomingEvents} />
-              <Route exact path="/activity/:id" component={Activity} />
-              <Route exact path="/search/:query" component={Search} />
-              <Route exact path="/more-results/:tagName" component={MoreResults} />
-              <Route exact path="/user/:uid" component={User} />
-            </IonRouterOutlet>
-
-            <IonTabBar
-              id='main-tab-bar'
-              slot="bottom"
-              onIonTabsWillChange={(e) => { setCurrentTab(e.detail.tab); }}
-              style={{ display: tabBarDisplay, opacity: tabBarOpacity.toString() }}
-            >
-              <IonTabButton tab="explore" href="/explore">
-                <IonIcon
-                  aria-hidden="true"
-                  icon={compass}
-                  color={currentTab == "explore" ? "primary" : ""}
-                  size="large"
-                />
-              </IonTabButton>
-              <IonTabButton tab="map" href="/map">
-                <IonIcon
-                  aria-hidden="true"
-                  icon={map}
-                  color={currentTab == "map" ? "primary" : ""}
-                  size="large"
-                />
-              </IonTabButton>
-              <IonTabButton>
-                <IonButton fill='clear' id='open-add-activity-modal' color=''>
-                  <IonIcon
-                    aria-hidden="true"
-                    icon={addCircleOutline}
-                    color={context.darkMode ? 'medium' : 'warning'}
-                    size="large"
-                    style={{ transform: "scale(1.1)" }}
-                  />
-                </IonButton>
-              </IonTabButton>
-              <IonTabButton tab="calendar" href="/calendar">
-                <IonIcon
-                  aria-hidden="true"
-                  icon={calendar}
-                  color={currentTab == "calendar" ? "primary" : ""}
-                  size="large"
-                />
-              </IonTabButton>
-              <IonTabButton tab="profile" href="/profile">
-                <IonIcon
-                  aria-hidden="true"
-                  icon={person}
-                  color={currentTab == "profile" ? "primary" : ""}
-                  size="large"
-                />
-              </IonTabButton>
-            </IonTabBar>
-
-          </IonTabs>
-
-          {/* Global slide-up modal where users can request to submit events/attractions */}
-          <ProfileActivitiesModal />
-
+          <RoutingSystem></RoutingSystem>
         </IonReactRouter>
-
       </ToastProvider>
     </IonApp>
   );
-};
+}
 
 export default App;
