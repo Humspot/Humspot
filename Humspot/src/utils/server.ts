@@ -2033,10 +2033,19 @@ export const handleGetUserInfo = async (uid: string) => {
  * @param suspectEmail the person being reported
  * @param details the details of the report
  */
-export const handleClickOnReportButton = async (reporterEmail: string | null | undefined, suspectEmail: string | null | undefined, details: string) => {
+export const handleClickOnReportButton = async (reporterUserID: string, reporterEmail: string | null | undefined, suspectUserID: string, suspectEmail: string | null | undefined, details: string) => {
   try {
     if (!reporterEmail || !suspectEmail) throw new Error("No emails provided to function");
-    const res = await fetch('', {});
+    const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_REPORT_USER, {
+      method: 'POST',
+      body: JSON.stringify({
+        reporterUserID: reporterUserID,
+        reporterEmail: reporterEmail,
+        suspectUserID: suspectUserID,
+        suspectEmail: suspectEmail,
+        details: details
+      })
+    });
     const data: { message: string; success: boolean } = await res.json();
     return data;
   } catch (err: any) {

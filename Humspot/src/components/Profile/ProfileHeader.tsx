@@ -4,7 +4,7 @@
  * modal components as well as the user's username.
  */
 
-import { IonToolbar, IonButtons, IonButton, IonIcon, IonHeader, IonCardTitle, IonSkeletonText, useIonRouter, useIonAlert, IonModal, IonContent, IonTitle, IonTextarea } from "@ionic/react";
+import { IonToolbar, IonButtons, IonButton, IonIcon, IonHeader, IonCardTitle, IonSkeletonText, useIonRouter, useIonAlert, IonModal, IonContent, IonTitle, IonTextarea, useIonToast } from "@ionic/react";
 import { alertCircleOutline, chevronBackOutline, pencilOutline, settingsOutline, shareOutline } from "ionicons/icons";
 
 import useContext from "../../utils/hooks/useContext";
@@ -28,6 +28,8 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
   const humspotUser = props.user;
   const router = useIonRouter();
   const [presentAlert] = useIonAlert();
+  const [presentToast] = useIonToast();
+  const [loading, setLoading] = useState<boolean>(false);
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const [details, setDetails] = useState<string>('');
 
@@ -59,6 +61,19 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
         ]
     });
   };
+
+  const handleReportUser = async () => {
+    if (context.humspotUser && humspotUser) {
+      setLoading(true);
+      const res = await handleClickOnReportButton(context.humspotUser.userID, context.humspotUser.email, humspotUser.userID, humspotUser?.email, details);
+      if (res.success) {
+        presentToast({ message: 'Report sent successfully', color: 'secondary', duration: 2000 });
+      } else {
+        presentToast({ message: 'Something went wrong', color: 'danger', duration: 2000 });
+      }
+      setLoading(false);
+    }
+  }
 
   return (
     <>
@@ -113,10 +128,10 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
         </IonHeader>
 
         <IonContent className='profile-modal-content' scrollY={false}>
-          <section style={{ padding: '10px' }}>
+          <section style={{ padding: '20px' }}>
             <p>You are reporting {humspotUser ? humspotUser.username : ' a user'}, please provide a reason below</p>
-            <IonTextarea placeholder="This user is not being nice! ..." rows={3}> </IonTextarea>
-            <IonButton color='secondary' className="profile-edit-modal-update-button" onClick={async () => { await handleClickOnReportButton(context.humspotUser?.email, humspotUser?.email, details) }} expand="block">Report</IonButton>
+            <IonTextarea onIonInput={(e) => setDetails(e.detail.value as string)} placeholder="This user is not being nice! ..." rows={3}> </IonTextarea>
+            <IonButton color='secondary' disabled={loading} className="profile-edit-modal-update-button" onClick={handleReportUser} expand="block">Report</IonButton>
           </section>
         </IonContent>
       </IonModal>

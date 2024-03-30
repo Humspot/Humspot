@@ -23,7 +23,7 @@ const UpcomingEvents = () => {
       if (res.success) {
         setEvents(res.events);
       } else {
-        presentToast({ message: res.message, color: 'danger' });
+        presentToast({ message: res.message, color: 'danger', duration: 2000 });
       }
     }
   }, [context.humspotUser]);
