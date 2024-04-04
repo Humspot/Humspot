@@ -103,7 +103,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
             </section>
           ) : (
             <IonCardTitle className='ion-no-padding ion-no-margin' style={{ paddingLeft: '5px', paddingTop: '5px' }}>
-              <IonSkeletonText style={{ height: '40px', width: '80vw' }} animated></IonSkeletonText>
+              <IonSkeletonText style={{ height: '40px', width: '90vw', borderRadius: '5px' }} animated></IonSkeletonText>
             </IonCardTitle>
           )}
         </>

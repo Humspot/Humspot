@@ -32,7 +32,9 @@ const ActivityHeader = (props: ActivityHeaderProps) => {
       <Swiper modules={[Autoplay, Navigation]} navigation autoplay={{ delay: 2500 }}>
         {activityLoading ?
           <SwiperSlide>
-            <IonSkeletonText style={{ height: "200px" }} animated />
+            <IonCard className='ion-no-padding ion-no-margin' style={{ width: "97.5vw", marginRight: "5px", marginLeft: "5px" }}>
+              <IonSkeletonText style={{ height: "200px" }} animated />
+            </IonCard>
           </SwiperSlide>
           :
           photoUrls ?
@@ -56,7 +58,7 @@ const ActivityHeader = (props: ActivityHeaderProps) => {
             ))
             :
             <SwiperSlide>
-              <IonCard className='ion-no-padding ion-no-margin' style={{ width: "97.5vw" }}>
+              <IonCard className='ion-no-padding ion-no-margin' style={{ width: "97.5vw", marginRight: "5px", marginLeft: "5px" }}>
                 <img
                   alt="Attraction Image"
                   src={placeholder}

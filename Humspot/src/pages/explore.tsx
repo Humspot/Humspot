@@ -5,7 +5,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { IonCol, IonContent, IonHeader, IonPage, IonRow, IonSearchbar, IonToolbar, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
+import { IonCol, IonContent, IonHeader, IonPage, IonRow, IonSearchbar, IonToolbar, useIonAlert, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
 
 import ExploreFilterButtons from "../components/Explore/ExploreFilterButtons";
 import ExploreCarouselRecentlyViewed from "../components/Explore/ExploreCarouselRecentlyViewed";
@@ -46,6 +46,7 @@ const ExplorePage = () => {
   const pageRef = useRef();
 
   const router = useIonRouter();
+  const [presentAlert] = useIonAlert();
 
   const [showFilterList, setShowFilterList] = useState<boolean>(false);
 
@@ -56,8 +57,8 @@ const ExplorePage = () => {
 
   const handleClickLogo = () => {
     contentRef && contentRef.current && contentRef.current.scrollToTop(1000);
-    alert("Welcome to Humspot! Let us know what you want to see on the app! Email dev@humspotapp.com")
-  }
+    presentAlert("Welcome to Humspot! Email dev@humspotapp.com to let us know what new features you would like to see!", [{ text: "Close" }])
+  };
 
   const handleSearch = async (event: React.KeyboardEvent<HTMLIonSearchbarElement>) => {
     if (event.key === 'Enter' || event.key === 'search') {
@@ -67,7 +68,7 @@ const ExplorePage = () => {
         router.push('/search/' + searchRef.current.value as string);
       }
     }
-  }
+  };
 
   useIonViewDidEnter(() => {
     context.setShowTabs(true);
@@ -112,12 +113,12 @@ const ExplorePage = () => {
                 <div className='carousel-divider'></div>
               </section>
             }
-            {!highlightsError &&
+            {/* {!highlightsError && highlights &&
               <section>
                 <ExploreCarouselGeneral title='Highlights' button hasTag activities={highlights} loading={highlightsLoading} />
                 <div className='carousel-divider'></div>
               </section>
-            }
+            } */}
             {!adventureError &&
               <section>
                 <ExploreCarouselGeneral title='Adventure' button hasTag activities={adventure} loading={adventureLoading} />
@@ -127,7 +128,7 @@ const ExplorePage = () => {
             {!chillError &&
               <section>
                 <ExploreCarouselGeneral title='Chill Places' button hasTag activities={chill} loading={chillLoading} />
-                <div className='carousel-divider'></div>
+                {/* <div className='carousel-divider'></div> */}
               </section>
             }
             <div style={{ height: '15px' }} />
