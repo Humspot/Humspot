@@ -311,17 +311,17 @@ const Map = () => {
                     }
                   </p>
 
-                  {eventsBetweenTwoDates[overlayIndex].photoUrls &&
-                    eventsBetweenTwoDates[overlayIndex].photoUrls.length > 0 ? (
+                  {eventsBetweenTwoDates[overlayIndex].photoUrl &&
+                    eventsBetweenTwoDates[overlayIndex].photoUrl!.length > 0 ? (
                     <>
                       <div style={{ height: "1vh" }} />
                       <img
                         className="ion-img-container"
                         style={{ borderRadius: '5px', width: '100%' }}
-                        src={eventsBetweenTwoDates[overlayIndex].photoUrls[0]}
+                        src={eventsBetweenTwoDates[overlayIndex].photoUrl}
                         alt=""
                         onError={() => {
-                          eventsBetweenTwoDates[overlayIndex].photoUrls[0] = '';
+                          eventsBetweenTwoDates[overlayIndex].photoUrl = '';
                         }}
                       />
                     </>

@@ -20,6 +20,7 @@ import { handleAddProfileImageToS3, handleUpdateProfilePhoto, handleUpdateUserPr
 
 import './Profile.css';
 import { Keyboard } from "@capacitor/keyboard";
+import { timeout } from "../../utils/functions/timeout";
 
 
 let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
@@ -131,7 +132,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
             <IonToolbar className='profile-modal-content'>
               <IonTitle className='profile-modal-title'>Edit Profile</IonTitle>
               <IonButtons>
-                <IonButton className='profile-modal-close-button' onClick={async () => { await Keyboard.hide(); usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
+                <IonButton className='profile-modal-close-button' onClick={async () => { await Keyboard.hide(); await timeout(100); usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
                   <p>Close</p>
                 </IonButton>
               </IonButtons>

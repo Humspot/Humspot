@@ -226,7 +226,7 @@ export type GetEventsBetweenTwoDatesStatusResponse = {
     websiteURL: string;
     organizer: string;
     tags: string[];
-    photoUrls: string[];
+    photoUrl: string;
   } & {
     eventID: string;
     activityID: string;
