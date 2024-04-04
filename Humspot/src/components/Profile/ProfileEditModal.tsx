@@ -19,6 +19,7 @@ import useContext from "../../utils/hooks/useContext";
 import { handleAddProfileImageToS3, handleUpdateProfilePhoto, handleUpdateUserProfile } from "../../utils/server";
 
 import './Profile.css';
+import { Keyboard } from "@capacitor/keyboard";
 
 
 let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh
@@ -130,7 +131,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
             <IonToolbar className='profile-modal-content'>
               <IonTitle className='profile-modal-title'>Edit Profile</IonTitle>
               <IonButtons>
-                <IonButton className='profile-modal-close-button' onClick={() => { usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
+                <IonButton className='profile-modal-close-button' onClick={async () => { await Keyboard.hide(); usernameRef.current = null; bioRef.current = null; modalRef.current?.dismiss(); }}>
                   <p>Close</p>
                 </IonButton>
               </IonButtons>
