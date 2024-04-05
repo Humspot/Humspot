@@ -142,6 +142,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
         profilePicURL: context.humspotUser.profilePicURL,
         username: context.humspotUser.username,
         commentDate: (new Date().toISOString()),
+        commentID: res.commentID
       };
       props.setComments((prev) => [addToCommentsArray, ...prev]);
       scrollToElement('top-of-comments-list');
