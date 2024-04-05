@@ -14,7 +14,7 @@ import avatar from "../../assets/images/avatar.svg";
 import { HumspotCommentResponse, ReportedUser } from "../../utils/types";
 import { formatDate } from "../../utils/functions/formatDate";
 import useContext from "../../utils/hooks/useContext";
-import { handleClickOnReportButton, handleDeleteComment } from "../../utils/server";
+import { handleBlockUser, handleClickOnReportButton, handleDeleteComment } from "../../utils/server";
 
 
 type ActivityCommentsList = {
@@ -36,35 +36,6 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
   const [presentActionSheet] = useIonActionSheet();
   const [presentLoading, dismissLoading] = useIonLoading();
   const [loading, setLoading] = useState<boolean>(false);
-
-  const clickOnReport = async (comment: HumspotCommentResponse) => {
-    const u: ReportedUser = {
-      userID: comment.userID,
-      activityID: comment.activityID,
-      username: comment.username
-    };
-    setReportedUser(u);
-    modalRef.current && modalRef.current.present();
-  };
-
-  const clickOnDeleteComment = async (commentID: string) => {
-    if (!context.humspotUser) return;
-    await presentLoading({ message: "Deleting..." });
-    const res = await handleDeleteComment(context.humspotUser.userID, commentID);
-    if (res.success) {
-      const newComments: any[] = [];
-      for (let i = 0; i < comments.length; ++i) {
-        if (comments[i].commentID !== commentID) {
-          newComments.push(comments[i]);
-        }
-      }
-      props.setComments(newComments);
-      presentToast({ message: "Comment deleted", duration: 2000, color: 'secondary' });
-    } else {
-      presentToast({ message: "Something went wrong!", duration: 2000, color: 'danger' });
-    }
-    dismissLoading();
-  };
 
   const handleReport = async (comment: HumspotCommentResponse) => {
     await presentAlert({
@@ -88,6 +59,52 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
           },
         ]
     });
+  };
+
+  const clickOnReport = async (comment: HumspotCommentResponse) => {
+    const u: ReportedUser = {
+      userID: comment.userID,
+      activityID: comment.activityID,
+      username: comment.username
+    };
+    setReportedUser(u);
+    modalRef.current && modalRef.current.present();
+  };
+
+  const handleReportUser = async () => {
+    if (!details || details.trim().length <= 0) {
+      presentToast({ message: 'Please provide a reason why', color: 'danger', duration: 2000 });
+      return;
+    }
+    if (context.humspotUser && reportedUser) {
+      setLoading(true);
+      const res = await handleClickOnReportButton(context.humspotUser.userID, context.humspotUser.email, reportedUser.userID, '', details, reportedUser.activityID);
+      if (res.success) {
+        presentToast({ message: 'Report sent successfully', color: 'secondary', duration: 2000 });
+      } else {
+        presentToast({ message: 'Something went wrong', color: 'danger', duration: 2000 });
+      }
+      setLoading(false);
+    }
+  };
+
+  const clickOnDeleteComment = async (commentID: string) => {
+    if (!context.humspotUser) return;
+    await presentLoading({ message: "Deleting..." });
+    const res = await handleDeleteComment(context.humspotUser.userID, commentID);
+    if (res.success) {
+      const newComments: any[] = [];
+      for (let i = 0; i < comments.length; ++i) {
+        if (comments[i].commentID !== commentID) {
+          newComments.push(comments[i]);
+        }
+      }
+      props.setComments(newComments);
+      presentToast({ message: "Comment deleted", duration: 2000, color: 'secondary' });
+    } else {
+      presentToast({ message: "Something went wrong!", duration: 2000, color: 'danger' });
+    }
+    await dismissLoading();
   };
 
   const handleShowDeleteCommentAlert = async (commentID: string) => {
@@ -177,25 +194,16 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
     }
   };
 
-  const handleReportUser = async () => {
-    if (!details || details.trim().length <= 0) {
-      presentToast({ message: 'Please provide a reason why', color: 'danger', duration: 2000 });
-      return;
+  const handleClickOnBlockUser = async () => {
+    if (!context.humspotUser || !reportedUser) return;
+    await presentLoading({ message: "Blocking..." });
+    const res = await handleBlockUser(context.humspotUser.userID, reportedUser.userID)
+    if (res.success) {
+      presentToast({ message: 'Report sent successfully', color: 'secondary', duration: 2000 });
+    } else {
+      presentToast({ message: 'Something went wrong', color: 'danger', duration: 2000 });
     }
-    if (context.humspotUser && reportedUser) {
-      setLoading(true);
-      const res = await handleClickOnReportButton(context.humspotUser.userID, context.humspotUser.email, reportedUser.userID, '', details, reportedUser.activityID);
-      if (res.success) {
-        presentToast({ message: 'Report sent successfully', color: 'secondary', duration: 2000 });
-      } else {
-        presentToast({ message: 'Something went wrong', color: 'danger', duration: 2000 });
-      }
-      setLoading(false);
-    }
-  };
-
-  const handleBlockUser = async () => {
-
+    await dismissLoading();
   };
 
   return (
@@ -261,7 +269,7 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
             <IonTextarea style={{ padding: '20px' }} onIonInput={(e) => setDetails(e.detail.value as string)} placeholder="This user is not being nice! ..." rows={3}> </IonTextarea>
             <IonButton color='danger' disabled={loading} className="profile-edit-modal-update-button" onClick={handleReportUser} expand="block">Report</IonButton>
             <p style={{ fontSize: '0.9rem' }} className='ion-text-center'><IonNote className='ion-text-center'><span>OR</span></IonNote></p>
-            <IonButton color='danger' disabled={loading} className="profile-edit-modal-update-button" onClick={handleBlockUser} expand="block">Block User</IonButton>
+            <IonButton color='danger' disabled={loading} className="profile-edit-modal-update-button" onClick={handleClickOnBlockUser} expand="block">Block User</IonButton>
           </section>
         </IonContent>
       </IonModal>

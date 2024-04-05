@@ -2038,12 +2038,6 @@ export const handleGetUserInfo = async (uid: string) => {
  * @param details the details of the report
  */
 export const handleClickOnReportButton = async (reporterUserID: string, reporterEmail: string | null | undefined, suspectUserID: string, suspectEmail: string | null | undefined, details: string, activityID: string = '') => {
-  console.log(reporterUserID)
-  console.log(reporterEmail)
-  console.log(suspectUserID)
-  console.log(suspectEmail)
-  console.log(details)
-  console.log(activityID)
   try {
     if (!reporterEmail) throw new Error("No emails provided to function");
     const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_REPORT_USER, {
@@ -2091,3 +2085,28 @@ export const handleDeleteComment = async (userID: string, commentID: string) => 
     return { message: err.toString(), success: false };
   }
 };
+
+
+/**
+ * 
+ * @param blockerUserID 
+ * @param blockedUserID 
+ * @returns 
+ */
+export const handleBlockUser = async (blockerUserID: string, blockedUserID: string) => {
+  try {
+    if (!blockerUserID || !blockedUserID) throw new Error("No userIDs provided");
+    const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_BLOCK_USER, {
+      method: 'POST',
+      body: JSON.stringify({
+        blockerUserID: blockerUserID,
+        blockedUserID: blockedUserID
+      })
+    });
+    const data: { message: string; success: boolean } = await res.json();
+    return data;
+  } catch (err: any) {
+    console.error(err)
+    return { message: err.toString(), success: false };
+  }
+}

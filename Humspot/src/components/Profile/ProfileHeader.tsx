@@ -4,7 +4,7 @@
  * modal components as well as the user's username.
  */
 
-import { IonToolbar, IonButtons, IonButton, IonIcon, IonHeader, IonCardTitle, IonSkeletonText, useIonRouter, useIonAlert, IonModal, IonContent, IonTitle, IonTextarea, useIonToast, IonNote } from "@ionic/react";
+import { IonToolbar, IonButtons, IonButton, IonIcon, IonHeader, IonCardTitle, IonSkeletonText, useIonRouter, useIonAlert, IonModal, IonContent, IonTitle, IonTextarea, useIonToast, IonNote, useIonLoading } from "@ionic/react";
 import { alertCircleOutline, chevronBackOutline, pencilOutline, settingsOutline, shareOutline } from "ionicons/icons";
 
 import useContext from "../../utils/hooks/useContext";
@@ -13,7 +13,7 @@ import './Profile.css';
 import { HumspotUser } from "../../utils/types";
 import { handleShare } from "../../utils/functions/handleShare";
 import { useRef, useState } from "react";
-import { handleClickOnReportButton } from "../../utils/server";
+import { handleBlockUser, handleClickOnReportButton } from "../../utils/server";
 
 type ProfileHeaderProps = {
   user: HumspotUser | null | undefined;
@@ -29,6 +29,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
   const router = useIonRouter();
   const [presentAlert] = useIonAlert();
   const [presentToast] = useIonToast();
+  const [presentLoading, dismissLoading] = useIonLoading();
   const [loading, setLoading] = useState<boolean>(false);
   const modalRef = useRef<HTMLIonModalElement | null>(null);
   const [details, setDetails] = useState<string>('');
@@ -79,8 +80,16 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
     }
   };
 
-  const handleBlockUser = async () => {
-
+  const handleClickOnBlockUser = async () => {
+    if (!context.humspotUser || !humspotUser) return;
+    await presentLoading({ message: "Blocking..." });
+    const res = await handleBlockUser(context.humspotUser.userID, humspotUser.userID)
+    if (res.success) {
+      presentToast({ message: 'Report sent successfully', color: 'secondary', duration: 2000 });
+    } else {
+      presentToast({ message: 'Something went wrong', color: 'danger', duration: 2000 });
+    }
+    await dismissLoading();
   };
 
   return (
@@ -143,7 +152,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
             <IonTextarea style={{ padding: '20px' }} onIonInput={(e) => setDetails(e.detail.value as string)} placeholder="This user is not being nice! ..." rows={3}> </IonTextarea>
             <IonButton color='danger' disabled={loading} className="profile-edit-modal-update-button" onClick={handleReportUser} expand="block">Report</IonButton>
             <p style={{ fontSize: '0.9rem' }} className='ion-text-center'><IonNote className='ion-text-center'><span>OR</span></IonNote></p>
-            <IonButton color='danger' disabled={loading} className="profile-edit-modal-update-button" onClick={handleBlockUser} expand="block">Block User</IonButton>
+            <IonButton color='danger' disabled={loading} className="profile-edit-modal-update-button" onClick={handleClickOnBlockUser} expand="block">Block User</IonButton>
           </section>
         </IonContent>
       </IonModal>
