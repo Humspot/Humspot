@@ -2057,4 +2057,31 @@ export const handleClickOnReportButton = async (reporterUserID: string, reporter
     console.error(err);
     return { message: err.toString(), success: false };
   }
-};  
+};
+
+
+/**
+ * @function handleDeleteComment
+ * @description Removes a user's comment from the Comments table in the DB.
+ * 
+ * @param userID 
+ * @param commentID 
+ * @returns 
+ */
+export const handleDeleteComment = async (userID: string, commentID: string) => {
+  try {
+    if (!userID || !commentID) throw new Error('No userID or commentID provided');
+    const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_DELETE_COMMENT, {
+      method: 'POST',
+      body: JSON.stringify({
+        userID: userID,
+        commentID: commentID
+      })
+    });
+    const data: { message: string; success: boolean } = await res.json();
+    return data;
+  } catch (err: any) {
+    console.error(err);
+    return { message: err.toString(), success: false };
+  }
+};

@@ -14,7 +14,7 @@ import avatar from "../../assets/images/avatar.svg";
 import { HumspotCommentResponse, ReportedUser } from "../../utils/types";
 import { formatDate } from "../../utils/functions/formatDate";
 import useContext from "../../utils/hooks/useContext";
-import { handleClickOnReportButton } from "../../utils/server";
+import { handleClickOnReportButton, handleDeleteComment } from "../../utils/server";
 
 
 type ActivityCommentsList = {
@@ -50,16 +50,20 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
   const clickOnDeleteComment = async (commentID: string) => {
     if (!context.humspotUser) return;
     await presentLoading({ message: "Deleting..." });
-    // await handleDeleteComment(context.humspotUser.userID, commentID);
-    const newComments: any[] = [];
-    for (let i = 0; i < comments.length; ++i) {
-      if (comments[i].commentID !== commentID) {
-        newComments.push(comments[i]);
+    const res = await handleDeleteComment(context.humspotUser.userID, commentID);
+    if (res.success) {
+      const newComments: any[] = [];
+      for (let i = 0; i < comments.length; ++i) {
+        if (comments[i].commentID !== commentID) {
+          newComments.push(comments[i]);
+        }
       }
+      props.setComments(newComments);
+      presentToast({ message: "Comment deleted", duration: 2000, color: 'secondary' });
+    } else {
+      presentToast({ message: "Something went wrong!", duration: 2000, color: 'danger' });
     }
-    props.setComments(newComments);
     dismissLoading();
-    presentToast({ message: "Comment deleted", duration: 2000, color: 'secondary' });
   };
 
   const handleReport = async (comment: HumspotCommentResponse) => {
@@ -112,8 +116,6 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
 
   const handleShowActionSheet = async (comment: HumspotCommentResponse) => {
     if (!context.humspotUser) return;
-    console.log(comment.userID);
-    console.log(context.humspotUser.userID);
     if (comment.userID !== context.humspotUser.userID) {
       await presentActionSheet(({
         header: `${comment.username}'s Comment`,
