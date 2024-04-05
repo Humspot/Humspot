@@ -46,15 +46,10 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
   };
 
   const handleReport = async (comment: HumspotCommentResponse) => {
-    const u: ReportedUser = {
-      userID: comment.userID,
-      activityID: comment.activityID,
-      username: comment.username
-    };
     await presentAlert({
       cssClass: 'ion-alert-logout',
       header: 'Report / Block',
-      message: `Are you sure you want to report / block ${u.username}?`,
+      message: `Are you sure you want to report / block ${comment.username}?`,
       buttons:
         [
           {
@@ -75,34 +70,67 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
   };
 
   const handleShowActionSheet = async (comment: HumspotCommentResponse) => {
-    await presentActionSheet(({
-      header: `${comment.username}'s Comment`,
-      buttons: [
-        {
-          text: 'View Profile',
-          handler: async () => {
-            router.push(`/user/${comment.userID}`)
+    if (!context.humspotUser) return;
+    console.log(comment.userID);
+    console.log(context.humspotUser.userID);
+    if (comment.userID !== context.humspotUser.userID) {
+      await presentActionSheet(({
+        header: `${comment.username}'s Comment`,
+        buttons: [
+          {
+            text: 'View Profile',
+            handler: async () => {
+              router.push(`/user/${comment.userID}`)
+            },
           },
-        },
-        {
-          text: 'Report / Block',
-          role: 'destructive',
-          data: {
-            action: 'delete',
+          {
+            text: 'Report / Block',
+            role: 'destructive',
+            data: {
+              action: 'delete',
+            },
+            handler: async () => {
+              await handleReport(comment);
+            }
           },
-          handler: async () => {
-            await handleReport(comment);
-          }
-        },
-        {
-          text: 'Cancel',
-          role: 'destructive',
-          data: {
-            action: 'cancel',
+          {
+            text: 'Cancel',
+            role: 'destructive',
+            data: {
+              action: 'cancel',
+            },
           },
-        },
-      ],
-    }));
+        ],
+      }));
+    } else {
+      await presentActionSheet(({
+        header: `${comment.username}'s Comment`,
+        buttons: [
+          {
+            text: 'View Profile',
+            handler: async () => {
+              router.push(`/user/${comment.userID}`)
+            },
+          },
+          {
+            text: 'Delete Comment',
+            data: {
+              action: 'delete'
+            },
+            role: 'destructive',
+            handler: async () => {
+            },
+          },
+          {
+            text: 'Cancel',
+            role: 'destructive',
+            data: {
+              action: 'cancel',
+            },
+          },
+        ],
+      }));
+    }
   };
 
   const handleReportUser = async () => {
@@ -147,9 +175,6 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
                   </IonRow>
                   <div className='activity-comment-text'>
                     {comment.commentText}
-                    {/* <IonFab horizontal="end" vertical="bottom" onClick={async () => await handleReport(comment)}>
-                    <IonButton size='small' fill='clear' color='danger'><IonIcon icon={warningOutline} /></IonButton>
-                  </IonFab> */}
                   </div>
                   {comment.photoUrl &&
                     <>
@@ -167,10 +192,7 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
                   }
                 </IonLabel>
                 <IonFab vertical="top" horizontal="end" style={{ paddingTop: '20px' }}>
-                  {/* <IonNote style={{ fontSize: "0.75em" }}> */}
-                  {/* {formatDate(comment.commentDate)} */}
                   <IonIcon onClick={async () => { handleShowActionSheet(comment) }} icon={ellipsisHorizontal} />
-                  {/* </IonNote> */}
                 </IonFab>
                 <div></div>
               </IonItem>
@@ -179,12 +201,12 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
         )
         )
       }
-      <IonModal ref={modalRef} presentingElement={props.page}>
+      <IonModal ref={modalRef} presentingElement={props.page} onDidDismiss={() => setReportedUser(null)}>
         <IonHeader className='ion-no-border'>
           <IonToolbar className='profile-modal-content'>
             <IonTitle className='profile-modal-title'>Report / Block</IonTitle>
             <IonButtons>
-              <IonButton className='profile-modal-close-button' onClick={() => { setReportedUser(null); modalRef.current?.dismiss() }}>
+              <IonButton className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss() }}>
                 <p>Close</p>
               </IonButton>
             </IonButtons>

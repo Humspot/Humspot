@@ -68,7 +68,7 @@ const Activity: React.FC<{}> = () => {
       context.setRecentlyViewedUpdated(true);
     }
     setActivityLoading(false);
-  }, [id]);
+  }, [id, context.humspotUser]);
   useEffect(() => {
     if (id) fetchActivity(id);
   }, [id, context.humspotUser]);
