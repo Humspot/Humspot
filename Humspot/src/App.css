@@ -42,3 +42,8 @@ ion-segment-buttom::before {
 #add-custom-tag {
   min-height: auto;
 }
+
+
+.ion-photo-viewer img {
+  border-radius: 5px !important;
+}

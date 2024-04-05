@@ -44,7 +44,7 @@ async function sendEmail(e: { reporterEmail: string; reporterUserID: string; sus
         <p>Suspect Email: ${e.suspectEmail}</p>
         <p>Suspect userID: ${e.suspectUserID}</p>
         <p>Reason: ${e.details}</p>
-        <p>ActivityID: ${e.activityID}</p>
+        <p>Activity ID: ${e.activityID}</p>
       </div>
     `
   }
@@ -65,7 +65,7 @@ async function sendEmail(e: { reporterEmail: string; reporterUserID: string; sus
 
 export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   const { reporterUserID, reporterEmail, suspectUserID, suspectEmail, details, activityID } = JSON.parse(gatewayEvent.body);
-  if (!reporterUserID || !reporterEmail || !suspectUserID || !suspectEmail || !details) {
+  if (!reporterUserID || !reporterEmail || !suspectUserID || !details) {
     return {
       statusCode: 400,
       body: JSON.stringify({ success: false, message: 'Missing params!' }),

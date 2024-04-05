@@ -2038,6 +2038,12 @@ export const handleGetUserInfo = async (uid: string) => {
  * @param details the details of the report
  */
 export const handleClickOnReportButton = async (reporterUserID: string, reporterEmail: string | null | undefined, suspectUserID: string, suspectEmail: string | null | undefined, details: string, activityID: string = '') => {
+  console.log(reporterUserID)
+  console.log(reporterEmail)
+  console.log(suspectUserID)
+  console.log(suspectEmail)
+  console.log(details)
+  console.log(activityID)
   try {
     if (!reporterEmail) throw new Error("No emails provided to function");
     const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_REPORT_USER, {

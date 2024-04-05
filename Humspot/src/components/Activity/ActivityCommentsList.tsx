@@ -112,7 +112,7 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
           },
         ]
     });
-  }
+  };
 
   const handleShowActionSheet = async (comment: HumspotCommentResponse) => {
     if (!context.humspotUser) return;
