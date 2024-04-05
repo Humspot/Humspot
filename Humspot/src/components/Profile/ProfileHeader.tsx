@@ -115,9 +115,11 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
               <IonButton disabled={!humspotUser} slot='end' onClick={() => handleShare('Checkout ' + humspotUser?.username + '\'s profile on Humspot!')}>
                 <IonIcon style={{ padding: "1%" }} icon={shareOutline} />
               </IonButton>
-              <IonButton disabled={!humspotUser} slot='end' onClick={async () => await handleReport()}>
-                <IonIcon color='danger' style={{ paddingTop: "10%" }} icon={alertCircleOutline} />
-              </IonButton>
+              {humspotUser && context.humspotUser && humspotUser.userID !== context.humspotUser.userID &&
+                <IonButton disabled={!humspotUser} slot='end' onClick={async () => await handleReport()}>
+                  <IonIcon color='danger' style={{ paddingTop: "10%" }} icon={alertCircleOutline} />
+                </IonButton>
+              }
             </IonButtons>
           }
         </IonToolbar>

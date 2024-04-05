@@ -4,7 +4,7 @@
  */
 
 import { memo, useRef, useState } from "react";
-import { IonAvatar, IonNote, IonList, IonItem, IonLabel, IonRow, IonFab, useIonRouter, IonCardTitle, IonCardHeader, IonButton, IonIcon, IonButtons, IonContent, IonHeader, IonModal, IonTextarea, IonTitle, IonToolbar, useIonToast, useIonAlert, IonActionSheet, useIonActionSheet } from "@ionic/react";
+import { IonAvatar, IonNote, IonList, IonItem, IonLabel, IonRow, IonFab, useIonRouter, IonCardTitle, IonCardHeader, IonButton, IonIcon, IonButtons, IonContent, IonHeader, IonModal, IonTextarea, IonTitle, IonToolbar, useIonToast, useIonAlert, IonActionSheet, useIonActionSheet, useIonLoading } from "@ionic/react";
 import { chevronBackOutline, ellipsisHorizontal, warningOutline } from "ionicons/icons";
 
 import IonPhotoViewer from "@codesyntax/ionic-react-photo-viewer";
@@ -19,6 +19,7 @@ import { handleClickOnReportButton } from "../../utils/server";
 
 type ActivityCommentsList = {
   comments: HumspotCommentResponse[];
+  setComments: React.Dispatch<React.SetStateAction<any[]>>;
   page: any;
 }
 
@@ -33,6 +34,7 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
   const [presentToast] = useIonToast();
   const [presentAlert] = useIonAlert();
   const [presentActionSheet] = useIonActionSheet();
+  const [presentLoading, dismissLoading] = useIonLoading();
   const [loading, setLoading] = useState<boolean>(false);
 
   const clickOnReport = async (comment: HumspotCommentResponse) => {
@@ -43,6 +45,19 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
     };
     setReportedUser(u);
     modalRef.current && modalRef.current.present();
+  };
+
+  const clickOnDeleteComment = async (commentID: string) => {
+    await presentLoading({ message: "Deleting..." });
+    const newComments: any[] = [];
+    for (let i = 0; i < comments.length; ++i) {
+      if (comments[i].commentID !== commentID) {
+        newComments.push(comments[i]);
+      }
+    }
+    props.setComments(newComments);
+    dismissLoading();
+    presentToast({ message: "Comment deleted", duration: 2000, color: 'secondary' });
   };
 
   const handleReport = async (comment: HumspotCommentResponse) => {
@@ -68,6 +83,30 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
         ]
     });
   };
+
+  const handleShowDeleteCommentAlert = async (commentID: string) => {
+    await presentAlert({
+      cssClass: 'ion-alert-logout',
+      header: 'Delete Comment',
+      message: `Are you sure you want to delete your comment?`,
+      buttons:
+        [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'alert-cancel-button',
+          },
+          {
+            text: 'Delete',
+            id: 'click-on-report',
+            cssClass: 'alert-cancel-button',
+            handler: async () => {
+              await clickOnDeleteComment(commentID);
+            },
+          },
+        ]
+    });
+  }
 
   const handleShowActionSheet = async (comment: HumspotCommentResponse) => {
     if (!context.humspotUser) return;
@@ -119,6 +158,7 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
             },
             role: 'destructive',
             handler: async () => {
+              await handleShowDeleteCommentAlert(comment.commentID);
             },
           },
           {
@@ -163,41 +203,39 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
       }
       {
         comments.map((comment: HumspotCommentResponse, index: number) => (
-          <>
-            <IonList key={comment.userID + index} >
-              <IonItem className='comment-list-item' lines="none" style={{ '--background': 'var(--ion-background-color)' }}>
-                <IonLabel class="ion-text-wrap">
-                  <IonRow>
-                    <IonAvatar class="activity-comment-avatar">
-                      <img src={comment.profilePicURL ?? avatar} onClick={() => router.push("/user/" + comment.userID)} />
-                    </IonAvatar>
-                    <p className='activity-comment-username'> {comment.username.length >= 15 ? comment.username.substring(0, 15) + '...' : comment.username} <IonNote style={{ fontSize: '0.75rem' }}> - {formatDate(comment.commentDate)}</IonNote></p>
-                  </IonRow>
-                  <div className='activity-comment-text'>
-                    {comment.commentText}
-                  </div>
-                  {comment.photoUrl &&
-                    <>
-                      <br></br>
-                      <div className="activity-comment-image">
-                        <IonPhotoViewer
-                          title={`${comment.username}'s Photo`}
-                          icon={chevronBackOutline}
-                          src={comment.photoUrl}
-                        >
-                          <img src={comment.photoUrl} alt={`${comment.username}'s photo`} />
-                        </IonPhotoViewer>
-                      </div>
-                    </>
-                  }
-                </IonLabel>
-                <IonFab vertical="top" horizontal="end" style={{ paddingTop: '20px' }}>
-                  <IonIcon onClick={async () => { handleShowActionSheet(comment) }} icon={ellipsisHorizontal} />
-                </IonFab>
-                <div></div>
-              </IonItem>
-            </IonList>
-          </>
+          <IonList key={comment.userID + index} >
+            <IonItem className='comment-list-item' lines="none" style={{ '--background': 'var(--ion-background-color)' }}>
+              <IonLabel class="ion-text-wrap">
+                <IonRow>
+                  <IonAvatar class="activity-comment-avatar">
+                    <img src={comment.profilePicURL ?? avatar} onClick={() => router.push("/user/" + comment.userID)} />
+                  </IonAvatar>
+                  <p className='activity-comment-username'> {comment.username.length >= 25 ? comment.username.substring(0, 25) + '...' : comment.username} <IonNote style={{ fontSize: '0.75rem' }}> - {formatDate(comment.commentDate)}</IonNote></p>
+                </IonRow>
+                <div className='activity-comment-text'>
+                  {comment.commentText}
+                </div>
+                {comment.photoUrl &&
+                  <>
+                    <br></br>
+                    <div className="activity-comment-image">
+                      <IonPhotoViewer
+                        title={`${comment.username}'s Photo`}
+                        icon={chevronBackOutline}
+                        src={comment.photoUrl}
+                      >
+                        <img src={comment.photoUrl} alt={`${comment.username}'s photo`} />
+                      </IonPhotoViewer>
+                    </div>
+                  </>
+                }
+              </IonLabel>
+              <IonFab vertical="top" horizontal="end" style={{ paddingTop: '20px' }}>
+                <IonIcon onClick={async () => { handleShowActionSheet(comment) }} icon={ellipsisHorizontal} />
+              </IonFab>
+              <div></div>
+            </IonItem>
+          </IonList>
         )
         )
       }

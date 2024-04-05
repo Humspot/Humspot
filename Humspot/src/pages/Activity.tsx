@@ -119,7 +119,7 @@ const Activity: React.FC<{}> = () => {
           <>
             <div id='top-of-comments-list'></div>
             <br />
-            <ActivityCommentsList page={page.current} comments={comments} />
+            <ActivityCommentsList page={page.current} comments={comments} setComments={setComments} />
           </>
         }
 
