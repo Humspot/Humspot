@@ -116,7 +116,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
                 <IonIcon style={{ padding: "1%" }} icon={shareOutline} />
               </IonButton>
               <IonButton disabled={!humspotUser} slot='end' onClick={async () => await handleReport()}>
-                <IonIcon style={{ paddingTop: "10%" }} icon={alertCircleOutline} />
+                <IonIcon color='danger' style={{ paddingTop: "10%" }} icon={alertCircleOutline} />
               </IonButton>
             </IonButtons>
           }

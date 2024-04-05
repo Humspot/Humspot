@@ -71,7 +71,7 @@ const Activity: React.FC<{}> = () => {
   }, [id]);
   useEffect(() => {
     if (id) fetchActivity(id);
-  }, [id]);
+  }, [id, context.humspotUser]);
 
   useIonViewWillEnter(() => {
     context.setShowTabs(false);
