@@ -33,7 +33,7 @@ const ActivityHeader = (props: ActivityHeaderProps) => {
         {activityLoading ?
           <SwiperSlide>
             <IonCard className='ion-no-padding ion-no-margin' style={{ width: "97.5vw", marginRight: "5px", marginLeft: "5px" }}>
-              <IonSkeletonText style={{ height: "200px" }} animated />
+              <IonSkeletonText style={{ height: "200px", borderRadius: '5px' }} animated />
             </IonCard>
           </SwiperSlide>
           :

@@ -97,7 +97,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
           <IonCardTitle slot={props.backButton ? 'end' : 'start'} className='profile-header-title'>
             {humspotUser
               ? humspotUser.username
-              : <IonSkeletonText animated style={{ width: "50vw", height: "1.5rem" }} />
+              : <IonSkeletonText animated style={{ width: "50vw", height: "1.5rem", borderRadius: '5px' }} />
             }
           </IonCardTitle>
           {props.buttons &&

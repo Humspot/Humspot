@@ -57,7 +57,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
         </div>
         :
         props.loading &&
-        <IonItemDivider style={{ background: "var(--ion-background-color)" }}><IonSkeletonText style={{ height: "1.5rem", width: "50vw", marginTop: "15px" }} animated /></IonItemDivider>
+        <IonItemDivider style={{ background: "var(--ion-background-color)" }}><IonSkeletonText style={{ height: "1.5rem", width: "50vw", marginTop: "15px", borderRadius: '5px' }} animated /></IonItemDivider>
       }
       {props.loading ?
         <ExploreCarouselLoadingSlides amount={4} />

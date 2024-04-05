@@ -11,7 +11,7 @@ const SkeletonLoading = (props: SkeletonLoadingProps) => {
     <>
       {
         Array.from({ length: props.count }, (_, index) => (
-          <IonSkeletonText key={index} style={{ height: props.height }} animated={props.animated} />
+          <IonSkeletonText key={index} style={{ height: props.height, borderRadius: '5px' }} animated={props.animated} />
         ))
       }
     </>

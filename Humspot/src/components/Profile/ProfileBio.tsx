@@ -40,7 +40,7 @@ const ProfileBio = (props: ProfileBioProps) => {
           <IonRow className='profile-bio-picture-and-stats-row'>
             <IonAvatar className='profile-bio-avatar-picture'>
               {!humspotUser ?
-                <IonSkeletonText animated />
+                <IonSkeletonText animated style={{ borderRadius: '5px' }} />
                 :
                 <img
                   src={`${humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
@@ -86,8 +86,8 @@ const ProfileBio = (props: ProfileBioProps) => {
               </>
             ) : (
               <>
-                <IonSkeletonText animated style={{ height: "1.1rem" }} />
-                <IonSkeletonText animated style={{ height: "1.1rem", width: "90%" }} />
+                <IonSkeletonText animated style={{ height: "1.1rem", borderRadius: '5px' }} />
+                <IonSkeletonText animated style={{ height: "1.1rem", width: "90%", borderRadius: '5px' }} />
               </>
             )}
           </p>

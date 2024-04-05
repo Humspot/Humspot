@@ -73,53 +73,53 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
         {props.loading ?
           <>
             <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "1.25rem", width: '100%' }} />
+              <IonSkeletonText animated style={{ height: "1.25rem", width: '100%', borderRadius: '5px' }} />
             </div>
             <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "1rem", width: '80%' }} />
+              <IonSkeletonText animated style={{ height: "1rem", width: '80%', borderRadius: '5px' }} />
             </div>
             <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "0.9rem", width: '60%' }} />
-            </div>
-            <br />
-            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "1.25rem", width: '100%' }} />
-            </div>
-            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "1rem", width: '80%' }} />
-            </div>
-            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "0.9rem", width: '60%' }} />
+              <IonSkeletonText animated style={{ height: "0.9rem", width: '60%', borderRadius: '5px' }} />
             </div>
             <br />
             <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "1.25rem", width: '100%' }} />
+              <IonSkeletonText animated style={{ height: "1.25rem", width: '100%', borderRadius: '5px' }} />
             </div>
             <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "1rem", width: '80%' }} />
+              <IonSkeletonText animated style={{ height: "1rem", width: '80%', borderRadius: '5px' }} />
             </div>
             <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "0.9rem", width: '60%' }} />
-            </div>
-            <br />
-            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "1.25rem", width: '100%' }} />
-            </div>
-            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "1rem", width: '80%' }} />
-            </div>
-            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "0.9rem", width: '60%' }} />
+              <IonSkeletonText animated style={{ height: "0.9rem", width: '60%', borderRadius: '5px' }} />
             </div>
             <br />
             <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "1.25rem", width: '100%' }} />
+              <IonSkeletonText animated style={{ height: "1.25rem", width: '100%', borderRadius: '5px' }} />
             </div>
             <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "1rem", width: '80%' }} />
+              <IonSkeletonText animated style={{ height: "1rem", width: '80%', borderRadius: '5px' }} />
             </div>
             <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
-              <IonSkeletonText animated style={{ height: "0.9rem", width: '60%' }} />
+              <IonSkeletonText animated style={{ height: "0.9rem", width: '60%', borderRadius: '5px' }} />
+            </div>
+            <br />
+            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
+              <IonSkeletonText animated style={{ height: "1.25rem", width: '100%', borderRadius: '5px' }} />
+            </div>
+            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
+              <IonSkeletonText animated style={{ height: "1rem", width: '80%', borderRadius: '5px' }} />
+            </div>
+            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
+              <IonSkeletonText animated style={{ height: "0.9rem", width: '60%', borderRadius: '5px' }} />
+            </div>
+            <br />
+            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
+              <IonSkeletonText animated style={{ height: "1.25rem", width: '100%', borderRadius: '5px' }} />
+            </div>
+            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
+              <IonSkeletonText animated style={{ height: "1rem", width: '80%', borderRadius: '5px' }} />
+            </div>
+            <div style={{ paddingLeft: "10px", paddingRight: "5px" }}>
+              <IonSkeletonText animated style={{ height: "0.9rem", width: '60%', borderRadius: '5px' }} />
             </div>
             <br />
           </>

@@ -142,7 +142,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                 />
                 :
                 <>
-                  <IonSkeletonText style={{ height: '30px', width: '75vw' }} animated />
+                  <IonSkeletonText style={{ height: '30px', width: '75vw', borderRadius: '5px' }} animated />
                 </>
               }
             </section>

@@ -48,7 +48,9 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
   };
 
   const clickOnDeleteComment = async (commentID: string) => {
+    if (!context.humspotUser) return;
     await presentLoading({ message: "Deleting..." });
+    // await handleDeleteComment(context.humspotUser.userID, commentID);
     const newComments: any[] = [];
     for (let i = 0; i < comments.length; ++i) {
       if (comments[i].commentID !== commentID) {
