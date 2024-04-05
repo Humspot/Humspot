@@ -149,7 +149,7 @@ const RoutingSystem: React.FC = () => {
               size="large"
             />
           </IonTabButton>
-          <IonTabButton tab="profile" href="/profile">
+          <IonTabButton tab="profile" href={context.humspotUser ? "/profile" : "/sign-up"}>
             <IonIcon
               aria-hidden="true"
               icon={person}
