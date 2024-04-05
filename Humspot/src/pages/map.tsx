@@ -133,7 +133,7 @@ const Map = () => {
               >
                 <IonCardContent>
                   <div style={{ height: "0.5vh" }} />
-                  <IonCardTitle style={{ fontSize: "medium" }} mode="ios">
+                  <IonCardTitle style={{ fontSize: "0.9rem" }} mode="ios">
                     {attractions[attractionsOverlayIndex].name}
                   </IonCardTitle>
                   <IonFab horizontal="end" vertical="top">
@@ -142,7 +142,7 @@ const Map = () => {
                     </p>
                   </IonFab>
                   <div style={{ height: "0.5vh" }} />
-                  <p>
+                  <p style={{ fontSize: '0.7rem' }}>
                     {attractions[attractionsOverlayIndex].description.substring(0, 120)}
                     {attractions[attractionsOverlayIndex].description.length > 120 &&
                       " ... "
@@ -214,7 +214,7 @@ const Map = () => {
               >
                 <IonCardContent>
                   <div style={{ height: "0.5vh" }} />
-                  <IonCardTitle style={{ fontSize: "medium" }} mode="ios">
+                  <IonCardTitle style={{ fontSize: "0.9rem" }} mode="ios">
                     {events[overlayIndex].name}
                   </IonCardTitle>
                   <IonFab horizontal="end" vertical="top">
@@ -223,7 +223,7 @@ const Map = () => {
                     </p>
                   </IonFab>
                   <div style={{ height: "0.5vh" }} />
-                  <p>
+                  <p style={{ fontSize: '0.7rem' }}>
                     {events[overlayIndex].description.substring(0, 120)}
                     {events[overlayIndex].description.length > 120 &&
                       " ... "
@@ -295,7 +295,7 @@ const Map = () => {
               >
                 <IonCardContent>
                   <div style={{ height: "0.5vh" }} />
-                  <IonCardTitle style={{ fontSize: "medium" }} mode="ios">
+                  <IonCardTitle style={{ fontSize: "0.9rem" }} mode="ios">
                     {eventsBetweenTwoDates[overlayIndex].name}
                   </IonCardTitle>
                   <IonFab horizontal="end" vertical="top">
@@ -304,7 +304,7 @@ const Map = () => {
                     </p>
                   </IonFab>
                   <div style={{ height: "0.5vh" }} />
-                  <p>
+                  <p style={{ fontSize: '0.7rem' }}>
                     {eventsBetweenTwoDates[overlayIndex].description.substring(0, 120)}
                     {eventsBetweenTwoDates[overlayIndex].description.length > 120 &&
                       " ... "
