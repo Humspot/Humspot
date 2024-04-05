@@ -251,7 +251,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
         placeholder={
           context.humspotUser
             ? "Add a comment..."
-            : "Log in to add comments."
+            : "Log in view and add comments."
         }
         rows={5}
         ref={commentRef}

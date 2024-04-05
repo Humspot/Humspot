@@ -958,14 +958,16 @@ export const handleGetInteractionsGivenUserID = async (pageNum: number, userID: 
  *
  * @returns {Promise<GetFavoritesResponse>} a status message, and if successful, an array of 10 favorites
  */
-export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: string): Promise<GetFavoritesResponse> => {
+export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: string, isCallingForSelf: boolean = true): Promise<GetFavoritesResponse> => {
   try {
-    const currentUserSession = await Auth.currentSession();
+    if (isCallingForSelf) {
+      const currentUserSession = await Auth.currentSession();
 
-    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+      if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+    }
 
-    const idToken = currentUserSession.getIdToken();
-    const jwtToken = idToken.getJwtToken();
+    // const idToken = currentUserSession.getIdToken();
+    // const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_FAVORITES_GIVEN_USERID_URL +
@@ -977,7 +979,7 @@ export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: str
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
+          // Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
@@ -1003,14 +1005,16 @@ export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: str
  *
  * @returns {} a status message, and if successful, an array of 10 places most recently visited.
  */
-export const handleGetVisitedGivenUserID = async (pageNum: number, userID: string) => {
+export const handleGetVisitedGivenUserID = async (pageNum: number, userID: string, isCallingForSelf: boolean = true) => {
   try {
-    const currentUserSession = await Auth.currentSession();
+    if (isCallingForSelf) {
+      const currentUserSession = await Auth.currentSession();
 
-    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+      if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+    }
 
-    const idToken = currentUserSession.getIdToken();
-    const jwtToken = idToken.getJwtToken();
+    // const idToken = currentUserSession.getIdToken();
+    // const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_VISITED_GIVEN_USERID_URL +
@@ -1022,7 +1026,7 @@ export const handleGetVisitedGivenUserID = async (pageNum: number, userID: strin
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
+          // Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
@@ -2033,9 +2037,9 @@ export const handleGetUserInfo = async (uid: string) => {
  * @param suspectEmail the person being reported
  * @param details the details of the report
  */
-export const handleClickOnReportButton = async (reporterUserID: string, reporterEmail: string | null | undefined, suspectUserID: string, suspectEmail: string | null | undefined, details: string) => {
+export const handleClickOnReportButton = async (reporterUserID: string, reporterEmail: string | null | undefined, suspectUserID: string, suspectEmail: string | null | undefined, details: string, activityID: string = '') => {
   try {
-    if (!reporterEmail || !suspectEmail) throw new Error("No emails provided to function");
+    if (!reporterEmail) throw new Error("No emails provided to function");
     const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_REPORT_USER, {
       method: 'POST',
       body: JSON.stringify({
@@ -2043,7 +2047,8 @@ export const handleClickOnReportButton = async (reporterUserID: string, reporter
         reporterEmail: reporterEmail,
         suspectUserID: suspectUserID,
         suspectEmail: suspectEmail,
-        details: details
+        details: details,
+        activityID: activityID
       })
     });
     const data: { message: string; success: boolean } = await res.json();

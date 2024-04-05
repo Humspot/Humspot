@@ -286,3 +286,9 @@ export type SubmissionInfo = {
   time: string | null;
   websiteURL: string | null;
 };
+
+export type ReportedUser = {
+  username: string;
+  userID: string;
+  activityID: string;
+}

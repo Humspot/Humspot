@@ -57,7 +57,13 @@ const Activity: React.FC<{}> = () => {
     setActivityLoading(true);
     const res = await handleGetActivity(id);
     if ("activity" in res && res.activity) {
-      setActivity(res.activity); setComments(res.activity.comments);
+      setActivity(res.activity);
+      console.log(res.activity.comments);
+      if (context.humspotUser) {
+        setComments(res.activity.comments);
+      } else {
+        setComments([]);
+      }
       await updateRecentlyViewed(id, res.activity?.name ?? '', res.activity?.description ?? '', res.activity?.date ?? '', res.activity?.photoUrls ?? '');
       context.setRecentlyViewedUpdated(true);
     }
@@ -113,7 +119,7 @@ const Activity: React.FC<{}> = () => {
           <>
             <div id='top-of-comments-list'></div>
             <br />
-            <ActivityCommentsList comments={comments} />
+            <ActivityCommentsList page={page.current} comments={comments} />
           </>
         }
 

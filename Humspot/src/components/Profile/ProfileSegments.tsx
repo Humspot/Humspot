@@ -42,6 +42,7 @@ const descriptionStyle: React.CSSProperties = {
 const ProfileSegments = memo((props: ProfileSegmentsProps) => {
 
   const humspotUser = props.user;
+  const context = useContext();
 
   const Toast = useToast();
   const router = useIonRouter();
@@ -65,7 +66,8 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
 
   const fetchFavorites = useCallback(async () => {
     if (!humspotUser) return;
-    const response = await handleGetFavoritesGivenUserID(1, humspotUser.userID);
+    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === humspotUser.userID)
+    const response = await handleGetFavoritesGivenUserID(1, humspotUser.userID, isCallingForSelf);
     if (!response.success) {
       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
@@ -80,7 +82,8 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
 
   const fetchVisited = useCallback(async () => {
     if (!humspotUser) return;
-    const response = await handleGetVisitedGivenUserID(1, humspotUser.userID);
+    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === humspotUser.userID)
+    const response = await handleGetVisitedGivenUserID(1, humspotUser.userID, isCallingForSelf);
     if (!response.success) {
       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
@@ -193,7 +196,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
 
         {selectedSegment === "favorites" ? (
           <>
-            {!favoritesLoading && favorites.length === 0 ?
+            {!favoritesLoading && favorites && favorites.length === 0 ?
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Favorites</IonTitle>
               :
               <>
@@ -227,7 +230,8 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
                     if (!humspotUser) return;
-                    const response = await handleGetFavoritesGivenUserID(favoritesPageCount, humspotUser.userID);
+                    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === humspotUser.userID)
+                    const response = await handleGetFavoritesGivenUserID(favoritesPageCount, humspotUser.userID, isCallingForSelf);
                     if (!response.success) {
                       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
                       toast.present();
@@ -245,7 +249,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
           </>
         ) : selectedSegment === "visited" ? (
           <>
-            {!visitedLoading && visited.length === 0 ?
+            {!visitedLoading && visited && visited.length === 0 ?
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Places Visited</IonTitle>
               :
               <>
@@ -279,7 +283,8 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
                     if (!humspotUser) return;
-                    const response = await handleGetVisitedGivenUserID(visitedPageCount, humspotUser.userID);
+                    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === humspotUser.userID)
+                    const response = await handleGetVisitedGivenUserID(visitedPageCount, humspotUser.userID, isCallingForSelf);
                     if (!response.success) {
                       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
                       toast.present();
@@ -297,7 +302,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
           </>
         ) : selectedSegment === "interactions" ? (
           <>
-            {!interactionsLoading && interactions.length === 0 ?
+            {!interactionsLoading && interactions && interactions.length === 0 ?
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Interactions</IonTitle>
               :
               <>
@@ -358,7 +363,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
           </>
         ) : (
           <>
-            {!submissionsLoading && submissions.length === 0 ?
+            {!submissionsLoading && submissions && submissions.length === 0 ?
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Posts from User</IonTitle>
               :
               <>

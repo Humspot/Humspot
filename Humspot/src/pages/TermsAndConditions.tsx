@@ -17,7 +17,7 @@ const TermsAndConditions: React.FC = () => {
       <GoBackHeader translucent={true} title="Terms and Conditions" />
 
       <IonContent fullscreen>
-        <h2 style={{ paddingLeft: "20px" }}>Welcome to Humspot</h2>
+        <h2 style={{ paddingLeft: "20px", paddingBottom: 0, marginBottom: 0 }}>Welcome to Humspot</h2>
         <section className="ion-padding">
           <p>
             By downloading or using the app, these terms will
@@ -31,6 +31,17 @@ const TermsAndConditions: React.FC = () => {
             database rights, and other intellectual property rights related
             to it, still belong to David Yaranon.
           </p>
+          <p><strong>Objectionable Content Policy</strong></p>
+          <p>
+            At Humspot, we are committed to maintaining a respectful and safe user environment. You agree that you shall not upload, post, transmit, or make available any content that is unlawful, harmful, threatening, abusive, harassing, tortious, defamatory, vulgar, obscene, libelous, invasive of another’s privacy, hateful, or racially, ethnically, or otherwise objectionable. We reserve the right, at our sole discretion, to review, edit, or delete any material posted by users which we deem to be objectionable, in violation of these terms, or against applicable laws or regulations.
+          </p>
+          <p>
+            You acknowledge that Humspot may or may not pre-screen content, but that Humspot and its designees shall have the right (but not the obligation) in their sole discretion to pre-screen, refuse, or remove any content that is available via the app. Without limiting the foregoing, Humspot and its designees shall have the right to remove any content that violates these terms or is otherwise objectionable.
+          </p>
+          <p>
+            By using the app, you agree to bear all risks associated with the use of any content, including any reliance on the accuracy, completeness, or usefulness of such content. You acknowledge, consent, and agree that Humspot may access, preserve, and disclose your account information and content if required to do so by law or in a good faith belief that such access preservation or disclosure is reasonably necessary to: (a) comply with legal process; (b) enforce these terms; (c) respond to claims that any content violates the rights of third parties; (d) respond to your requests for customer service; or (e) protect the rights, property, or personal safety of Humspot, its users, and the public.
+          </p>
+
           <p>
             David Yaranon is committed to ensuring that the app is
             as useful and efficient as possible. For that reason, we

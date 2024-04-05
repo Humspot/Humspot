@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
-async function sendEmail(e: { reporterEmail: string; reporterUserID: string; suspectEmail: string; suspectUserID: string, details: string }) {
+async function sendEmail(e: { reporterEmail: string; reporterUserID: string; suspectEmail: string; suspectUserID: string, details: string, activityID: string }) {
 
   const mailOptions = {
     from: `app.tellU@gmail.com`,
@@ -44,6 +44,7 @@ async function sendEmail(e: { reporterEmail: string; reporterUserID: string; sus
         <p>Suspect Email: ${e.suspectEmail}</p>
         <p>Suspect userID: ${e.suspectUserID}</p>
         <p>Reason: ${e.details}</p>
+        <p>ActivityID: ${e.activityID}</p>
       </div>
     `
   }
@@ -63,7 +64,7 @@ async function sendEmail(e: { reporterEmail: string; reporterUserID: string; sus
 
 
 export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
-  const { reporterUserID, reporterEmail, suspectUserID, suspectEmail, details } = JSON.parse(gatewayEvent.body);
+  const { reporterUserID, reporterEmail, suspectUserID, suspectEmail, details, activityID } = JSON.parse(gatewayEvent.body);
   if (!reporterUserID || !reporterEmail || !suspectUserID || !suspectEmail || !details) {
     return {
       statusCode: 400,
@@ -72,7 +73,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
   }
 
   try {
-    const res = await sendEmail({ reporterUserID, reporterEmail, suspectUserID, suspectEmail, details });
+    const res = await sendEmail({ reporterUserID, reporterEmail, suspectUserID, suspectEmail, details, activityID });
     return {
       statusCode: 200,
       body: JSON.stringify(res)

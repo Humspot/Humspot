@@ -7,6 +7,7 @@
 import { useRef, useState } from 'react';
 import {
   IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonText,
+  useIonAlert,
   useIonLoading, useIonRouter, useIonViewWillEnter
 } from '@ionic/react';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
@@ -22,6 +23,13 @@ import { handleSignUp } from '../utils/server';
 
 import '../components/Login/AuthPages.css';
 
+const inputNote: React.CSSProperties = {
+  fontSize: '0.85em',
+  textAlign: 'right',
+  color: 'gray',
+  fontFamily: 'Arial',
+};
+
 
 const SignUp: React.FC = () => {
 
@@ -29,14 +37,14 @@ const SignUp: React.FC = () => {
   const router = useIonRouter();
   const Toast = useToast();
   const [present, dismiss] = useIonLoading();
+  const [presentAlert] = useIonAlert();
 
   const emailRef = useRef<HTMLIonInputElement | null>(null);
   const passwordRef = useRef<HTMLIonInputElement | null>(null);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const clickOnSignUp = async () => {
-    if (!passwordRef || !emailRef) return;
+  const clickedOnAgree = async () => {
     await present({ message: 'Please Wait...' });
     const success: boolean = await handleSignUp(
       emailRef.current?.value as string ?? '',
@@ -51,6 +59,29 @@ const SignUp: React.FC = () => {
       t.present();
     }
     await dismiss();
+  }
+
+  const clickOnSignUp = async () => {
+    if (!passwordRef || !emailRef) return;
+    await presentAlert({
+      cssClass: 'ion-alert-logout',
+      header: 'Humspot Sign Up',
+      message: `By signing up to Humspot you confirm that you agree to our Terms of Service and Privacy Policy.`,
+      buttons:
+        [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'alert-cancel-button',
+          },
+          {
+            text: 'I agree',
+            handler: async () => {
+              await clickedOnAgree();
+            },
+          },
+        ]
+    });
   };
 
   useIonViewWillEnter(() => {
@@ -84,13 +115,11 @@ const SignUp: React.FC = () => {
             </IonItem>
             <br />
 
-            <div style={{ height: '5%' }} />
 
             <IonButton className='login-button' onClick={async () => { await clickOnSignUp() }} fill='clear' expand='block' id='signUpButton' >Sign Up</IonButton>
+            <p style={inputNote}><IonText onClick={() => { router.push('/terms-and-conditions') }}>Terms and Conditions</IonText></p>
             <p style={{ fontSize: '0.9rem' }}><IonText color='primary'><span onClick={() => { router.push('/sign-in') }}>Sign In to an Existing Account</span></IonText></p>
-
             <p>OR</p>
-
             <GoogleLoginButton />
 
             <br />

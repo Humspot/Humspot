@@ -6,6 +6,7 @@
 import { useRef, useState } from 'react';
 import {
   IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonText,
+  useIonAlert,
   useIonLoading, useIonRouter, useIonViewWillEnter,
 } from '@ionic/react';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
@@ -34,20 +35,14 @@ const SignIn = () => {
   const router = useIonRouter();
   const Toast = useToast();
   const [present, dismiss] = useIonLoading();
+  const [presentAlert] = useIonAlert();
 
   const emailRef = useRef<HTMLIonInputElement | null>(null);
   const passwordRef = useRef<HTMLIonInputElement | null>(null);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  /**
-   * @description runs when the user clicks on the Sign In button. 
-   * It presents a loading spinner while the username and password is verified and authenticated. 
-   * Upon success, route to /profile.
-   * @see handleSignIn
-   */
-  const clickOnSignIn = async (): Promise<void> => {
-    if (!passwordRef || !emailRef) return;
+  const clickedOnAgree = async () => {
     await present({ message: 'Signing In...' })
     const success = await handleSignIn(
       emailRef.current?.value as string ?? '',
@@ -60,6 +55,35 @@ const SignIn = () => {
       dynamicNavigate(router, '/profile', 'root');
     }
     await dismiss();
+  };
+
+  /**
+   * @description runs when the user clicks on the Sign In button. 
+   * It presents a loading spinner while the username and password is verified and authenticated. 
+   * Upon success, route to /profile.
+   * @see handleSignIn
+   */
+  const clickOnSignIn = async (): Promise<void> => {
+    if (!passwordRef || !emailRef) return;
+    await presentAlert({
+      cssClass: 'ion-alert-logout',
+      header: 'Humspot Sign In',
+      message: `By signing in to a Humspot account you confirm that you agree to our Terms of Service and Privacy Policy.`,
+      buttons:
+        [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'alert-cancel-button',
+          },
+          {
+            text: 'I agree',
+            handler: async () => {
+              await clickedOnAgree();
+            },
+          },
+        ]
+    });
   };
 
   useIonViewWillEnter(() => {

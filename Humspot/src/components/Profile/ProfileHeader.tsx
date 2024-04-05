@@ -4,7 +4,7 @@
  * modal components as well as the user's username.
  */
 
-import { IonToolbar, IonButtons, IonButton, IonIcon, IonHeader, IonCardTitle, IonSkeletonText, useIonRouter, useIonAlert, IonModal, IonContent, IonTitle, IonTextarea, useIonToast } from "@ionic/react";
+import { IonToolbar, IonButtons, IonButton, IonIcon, IonHeader, IonCardTitle, IonSkeletonText, useIonRouter, useIonAlert, IonModal, IonContent, IonTitle, IonTextarea, useIonToast, IonNote } from "@ionic/react";
 import { alertCircleOutline, chevronBackOutline, pencilOutline, settingsOutline, shareOutline } from "ionicons/icons";
 
 import useContext from "../../utils/hooks/useContext";
@@ -41,8 +41,8 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
     if (!humspotUser) return;
     await presentAlert({
       cssClass: 'ion-alert-logout',
-      header: 'Report',
-      message: `Are you sure you want to report ${humspotUser.username}?`,
+      header: 'Report / Block',
+      message: `Are you sure you want to report / block ${humspotUser.username}?`,
       buttons:
         [
           {
@@ -63,6 +63,10 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
   };
 
   const handleReportUser = async () => {
+    if (!details || details.trim().length <= 0) {
+      presentToast({ message: 'Please provide a reason why', color: 'danger', duration: 2000 });
+      return;
+    }
     if (context.humspotUser && humspotUser) {
       setLoading(true);
       const res = await handleClickOnReportButton(context.humspotUser.userID, context.humspotUser.email, humspotUser.userID, humspotUser?.email, details);
@@ -73,7 +77,11 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
       }
       setLoading(false);
     }
-  }
+  };
+
+  const handleBlockUser = async () => {
+
+  };
 
   return (
     <>
@@ -118,7 +126,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
       <IonModal ref={modalRef} presentingElement={context.currentPage}>
         <IonHeader className='ion-no-border'>
           <IonToolbar className='profile-modal-content'>
-            <IonTitle className='profile-modal-title'>Report</IonTitle>
+            <IonTitle className='profile-modal-title'>Report / Block</IonTitle>
             <IonButtons>
               <IonButton className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss() }}>
                 <p>Close</p>
@@ -128,10 +136,12 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
         </IonHeader>
 
         <IonContent className='profile-modal-content' scrollY={false}>
-          <section style={{ padding: '20px' }}>
-            <p>You are reporting {humspotUser ? humspotUser.username : ' a user'}, please provide a reason below</p>
-            <IonTextarea onIonInput={(e) => setDetails(e.detail.value as string)} placeholder="This user is not being nice! ..." rows={3}> </IonTextarea>
-            <IonButton color='secondary' disabled={loading} className="profile-edit-modal-update-button" onClick={handleReportUser} expand="block">Report</IonButton>
+          <section >
+            <p style={{ paddingLeft: '20px', paddingRight: '20px' }}>You are reporting {humspotUser ? humspotUser.username : ' a user'}, please provide a reason below</p>
+            <IonTextarea style={{ padding: '20px' }} onIonInput={(e) => setDetails(e.detail.value as string)} placeholder="This user is not being nice! ..." rows={3}> </IonTextarea>
+            <IonButton color='danger' disabled={loading} className="profile-edit-modal-update-button" onClick={handleReportUser} expand="block">Report</IonButton>
+            <p style={{ fontSize: '0.9rem' }} className='ion-text-center'><IonNote className='ion-text-center'><span>OR</span></IonNote></p>
+            <IonButton color='danger' disabled={loading} className="profile-edit-modal-update-button" onClick={handleBlockUser} expand="block">Block User</IonButton>
           </section>
         </IonContent>
       </IonModal>
