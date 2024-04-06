@@ -1,10 +1,11 @@
 /**
- * AWS Lambda function to remove a user's comment.
+ * AWS Lambda function to remove a user's information from the database.
  */
 
 import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";
 
 import * as mysql from 'mysql2/promise';
+import * as crypto from 'crypto';
 
 const pool: mysql.Pool = mysql.createPool({
   host: process.env.AWS_RDS_HOSTNAME,
@@ -22,7 +23,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
   try {
     const event = JSON.parse(gatewayEvent.body || '{}');
     // Ensure all data has been passed through the event
-    if (!event || typeof event.userID !== 'string' || typeof event.commentID !== 'string') {
+    if (!event || typeof event.blockerUserID !== 'string' || typeof event.blockedUserID !== 'string' || !event.blockerUserID || !event.blockedUserID) {
       return {
         statusCode: 400,
         headers: {
@@ -31,19 +32,20 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: 'Missing userID or commentID', success: false
+          message: 'Missing userIDs for blocker and blocked', success: false
         }),
       };
     }
 
-    const userID: string = event.userID;
-    const commentID: string = event.commentID;
+    const blockerUserID: string = event.blockerUserID;
+    const blockedUserID: string = event.blockedUserID;
+    const blockID: string = crypto.randomBytes(12).toString('hex');
 
     const query: string = `
-      DELETE FROM Comments WHERE commentID = ? and userID = ?;
+      INSERT INTO BlockedUsers (blockID, blockerUserID, blockedUserID) VALUES (?, ?, ?)
     `;
 
-    await conn.execute(query, [commentID, userID]);
+    await conn.execute(query, [blockID, blockerUserID, blockedUserID]);
 
     return {
       statusCode: 200,
@@ -53,7 +55,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
         "Access-Control-Allow-Origin": '*'
       },
       body: JSON.stringify({
-        message: 'Comment deleted successfully',
+        message: 'User blocked successfully',
         success: true
       }),
     };

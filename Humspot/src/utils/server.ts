@@ -2095,6 +2095,8 @@ export const handleDeleteComment = async (userID: string, commentID: string) => 
  */
 export const handleBlockUser = async (blockerUserID: string, blockedUserID: string) => {
   try {
+    console.log(blockerUserID)
+    console.log(blockedUserID);
     if (!blockerUserID || !blockedUserID) throw new Error("No userIDs provided");
     const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_BLOCK_USER, {
       method: 'POST',

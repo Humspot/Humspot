@@ -199,7 +199,7 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
     await presentLoading({ message: "Blocking..." });
     const res = await handleBlockUser(context.humspotUser.userID, reportedUser.userID)
     if (res.success) {
-      presentToast({ message: 'Report sent successfully', color: 'secondary', duration: 2000 });
+      presentToast({ message: 'Successfully blocked user', color: 'secondary', duration: 2000 });
     } else {
       presentToast({ message: 'Something went wrong', color: 'danger', duration: 2000 });
     }
