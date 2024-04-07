@@ -4,8 +4,8 @@
  * profile information (picture + bio).
  */
 
-import { useState } from "react";
-import { IonAvatar, IonBadge, IonCard, IonFab, IonRow, IonSkeletonText } from "@ionic/react";
+import { useEffect, useState } from "react";
+import { IonAvatar, IonBadge, IonCard, IonFab, IonRow, IonSkeletonText, useIonToast } from "@ionic/react";
 
 import useContext from "../../utils/hooks/useContext";
 import avatar from '../../assets/images/avatar.svg';
@@ -23,7 +23,14 @@ type ProfileBioProps = {
 const ProfileBio = (props: ProfileBioProps) => {
 
   const humspotUser = props.user;
+  const [presentToast] = useIonToast();
   const [isBioExpanded, setIsBioExpanded] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (props.user === undefined) {
+      presentToast({ message: "User is blocked!", duration: 3000, color: 'danger' });
+    }
+  }, [props.user])
 
   return (
     <>
@@ -40,7 +47,7 @@ const ProfileBio = (props: ProfileBioProps) => {
           <IonRow className='profile-bio-picture-and-stats-row'>
             <IonAvatar className='profile-bio-avatar-picture'>
               {!humspotUser ?
-                <IonSkeletonText animated style={{ borderRadius: '5px' }} />
+                <IonSkeletonText animated />
                 :
                 <img
                   src={`${humspotUser.profilePicURL ?? avatar}?${uniqueString}`}

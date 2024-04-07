@@ -2095,8 +2095,6 @@ export const handleDeleteComment = async (userID: string, commentID: string) => 
  */
 export const handleBlockUser = async (blockerUserID: string, blockedUserID: string) => {
   try {
-    console.log(blockerUserID)
-    console.log(blockedUserID);
     if (!blockerUserID || !blockedUserID) throw new Error("No userIDs provided");
     const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_BLOCK_USER, {
       method: 'POST',
@@ -2111,4 +2109,25 @@ export const handleBlockUser = async (blockerUserID: string, blockedUserID: stri
     console.error(err)
     return { message: err.toString(), success: false };
   }
-}
+};
+
+
+
+export const handleGetIsUserBlocked = async (currentUserID: string, otherUserID: string) => {
+  try {
+    if (!currentUserID || !otherUserID) throw new Error("No userIDs provided");
+    const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_GET_IS_USER_BLOCKED, {
+      method: 'POST',
+      body: JSON.stringify({
+        currentUserID: currentUserID,
+        otherUserID: otherUserID
+      })
+    });
+    const data: { message: string; success: boolean, isUserBlocked: boolean } = await res.json();
+    console.log(data);
+    return data;
+  } catch (err: any) {
+    console.error(err)
+    return { message: err.toString(), success: false, isUserBlocked: false };
+  }
+};

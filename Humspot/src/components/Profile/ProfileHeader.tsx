@@ -85,7 +85,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
     await presentLoading({ message: "Blocking..." });
     const res = await handleBlockUser(context.humspotUser.userID, humspotUser.userID)
     if (res.success) {
-      presentToast({ message: 'Report sent successfully', color: 'secondary', duration: 2000 });
+      presentToast({ message: 'User blocked', color: 'secondary', duration: 2000 });
     } else {
       presentToast({ message: 'Something went wrong', color: 'danger', duration: 2000 });
     }
