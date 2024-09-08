@@ -1,11 +1,16 @@
+/**
+ * @file User.tsx
+ * @fileoverview the general User page that shows a user's profile information given their userID.
+ */
 
-import { IonContent, IonPage, useIonToast, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
+import { IonContent, IonPage, useIonToast, useIonViewWillEnter } from "@ionic/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import useContext from "../utils/hooks/useContext";
+import { HumspotUser } from "../utils/types";
 import { handleGetIsUserBlocked, handleGetUserInfo } from "../utils/server";
 import ProfileBio from "../components/Profile/ProfileBio";
-import { HumspotUser } from "../utils/types";
 import ProfileHeader from "../components/Profile/ProfileHeader";
 import ProfileSegments from "../components/Profile/ProfileSegments";
 

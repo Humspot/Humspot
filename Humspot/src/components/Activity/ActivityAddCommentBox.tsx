@@ -254,6 +254,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
             ? "Add a comment..."
             : "Log in view and add comments."
         }
+        disabled={!context.humspotUser}
         rows={5}
         ref={commentRef}
         debounce={50}

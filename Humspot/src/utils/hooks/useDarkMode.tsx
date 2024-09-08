@@ -23,7 +23,7 @@ const useDarkMode = (context: ContextType) => {
 
   const handleDarkMode = useCallback(async () => {
     const isChecked = await Preferences.get({ key: "darkMode" });
-    if (isChecked.value === "false") {
+    if (isChecked.value === null || isChecked.value === "false") {
       context.setDarkMode(false);
       await StatusBar.setStyle({ style: Style.Light });
       await Keyboard.setStyle(keyStyleOptionsLight);

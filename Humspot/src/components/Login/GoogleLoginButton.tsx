@@ -1,12 +1,14 @@
 import { useIonRouter } from '@ionic/react';
 import { handleGoogleLoginAndVerifyAWSUser } from '../../utils/server'
+import useContext from '../../utils/hooks/useContext';
 
 const GoogleLoginButton: React.FC = () => {
 
   const router = useIonRouter();
+  const context = useContext();
 
   return (
-    <button className='gsi-material-button' style={{ width: '250px' }} onClick={async () => { router.push("/explore", 'root', 'replace'); await handleGoogleLoginAndVerifyAWSUser() }}>
+    <button className='gsi-material-button' style={{ width: '250px', backgroundColor: context.darkMode ? 'white' : 'black', color: context.darkMode ? 'black' : 'white' }} onClick={async () => { router.push("/explore", 'root', 'replace'); await handleGoogleLoginAndVerifyAWSUser() }}>
       <div className='gsi-material-button-state'></div>
       <div className='gsi-material-button-content-wrapper'>
         <div className='gsi-material-button-icon'>

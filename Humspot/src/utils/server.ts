@@ -64,9 +64,6 @@ Amplify.configure(updatedAwsConfig);
  * @function handleGoogleLoginAndVerifyAWSUser
  * @description Handles login through Google. If successful, the user will be created in AWS IdentityPool.
  *
- * @todo this function will open the web browser to initiate google auth, and then redirect back to the application.
- * This redirection has not been implemented yet (currently only works on localhost); Deep links are required.
- *
  * @returns {Promise<boolean>} whether the auth federated sign in (GOOGLE) is successful
  * 
  * @example
@@ -88,6 +85,25 @@ export const handleGoogleLoginAndVerifyAWSUser = async (): Promise<boolean> => {
   try {
     await Auth.federatedSignIn({
       provider: CognitoHostedUIIdentityProvider.Google,
+    });
+    return true;
+  } catch (error) {
+    console.error("Error during sign-in", error);
+    return false;
+  }
+};
+
+
+/**
+ * @function handleAppleLoginAndVerifyAWSUser
+ * @description Handles login through Apple. If successful, the user will be created in the AWS User Pool.
+ * 
+ * @returns {Promise<boolean>} true if successful Apple sign in, false otherwise
+ */
+export const handleAppleLoginAndVerifyAWSUser = async (): Promise<boolean> => {
+  try {
+    await Auth.federatedSignIn({
+      provider: CognitoHostedUIIdentityProvider.Apple
     });
     return true;
   } catch (error) {

@@ -13,6 +13,9 @@ import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 
 import { useToast } from '@agney/ir-toast';
 
+import AppleWhite from '../assets/images/apple-white.png';
+import AppleBlack from '../assets/images/apple-black.png';
+
 import GoBackHeader from '../components/Shared/GoBackHeader';
 import GoogleLoginButton from '../components/Login/GoogleLoginButton';
 
@@ -119,7 +122,6 @@ const SignIn = () => {
               </IonButton>
             </IonItem>
             <br />
-            <div style={{ height: '5%' }} />
 
             <IonButton className='login-button' onClick={async () => { await clickOnSignIn() }} fill='clear' expand='block' id='signInButton' >Sign In</IonButton>
 
@@ -127,9 +129,10 @@ const SignIn = () => {
 
             <p style={{ fontSize: '0.9rem' }}><IonText color='primary'><span onClick={() => { router.goBack(); }}>Register for an Account</span></IonText></p>
             <p>OR</p>
-
             <GoogleLoginButton />
             <br />
+            {/* <p>OR</p> */}
+            <button onClick={() => { }}><img style={{ borderRadius: '5px', width: '250px' }} src={context.darkMode ? AppleWhite : AppleBlack} /></button>
 
           </section>
         </div>

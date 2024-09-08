@@ -62,7 +62,6 @@ setupIonicReact({ mode: "ios" });
 SplashScreen.show();
 
 const RoutingSystem: React.FC = () => {
-
   const context = useContext();
   const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context);
 

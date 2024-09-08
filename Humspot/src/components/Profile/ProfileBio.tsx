@@ -23,11 +23,13 @@ type ProfileBioProps = {
 const ProfileBio = (props: ProfileBioProps) => {
 
   const humspotUser = props.user;
+  const context = useContext();
   const [presentToast] = useIonToast();
   const [isBioExpanded, setIsBioExpanded] = useState<boolean>(false);
 
   useEffect(() => {
-    if (props.user === undefined) {
+    console.log(props.user);
+    if (props.user === undefined && context.humspotUser !== undefined) {
       presentToast({ message: "User is blocked!", duration: 3000, color: 'danger' });
     }
   }, [props.user])

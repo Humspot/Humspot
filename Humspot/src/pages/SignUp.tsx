@@ -14,12 +14,15 @@ import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 
 import { useToast } from '@agney/ir-toast';
 
+import AppleWhite from '../assets/images/apple-white.png';
+import AppleBlack from '../assets/images/apple-black.png';
+
 import GoBackHeader from '../components/Shared/GoBackHeader';
 import GoogleLoginButton from '../components/Login/GoogleLoginButton';
 
 import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
 import useContext from '../utils/hooks/useContext';
-import { handleSignUp } from '../utils/server';
+import { handleAppleLoginAndVerifyAWSUser, handleSignUp } from '../utils/server';
 
 import '../components/Login/AuthPages.css';
 
@@ -121,7 +124,9 @@ const SignUp: React.FC = () => {
             <p style={{ fontSize: '0.9rem' }}><IonText color='primary'><span onClick={() => { router.push('/sign-in') }}>Sign In to an Existing Account</span></IonText></p>
             <p>OR</p>
             <GoogleLoginButton />
-
+            <br />
+            {/* <p>OR</p> */}
+            <button onClick={async () => { await handleAppleLoginAndVerifyAWSUser() }}><img style={{ borderRadius: '5px', width: '250px' }} src={context.darkMode ? AppleWhite : AppleBlack} /></button>
             <br />
 
           </section>
