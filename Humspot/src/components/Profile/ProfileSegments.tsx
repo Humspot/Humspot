@@ -16,83 +16,115 @@ import placeholder from '../../assets/images/school_placeholder.jpeg';
 import { useContext } from "../../utils/hooks/useContext";
 import { formatDate } from "../../utils/functions/formatDate";
 import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse, HumspotUser } from "../../utils/types";
-import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
+import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID, handleGetApprovedSubmissions } from "../../utils/server";
 
 import SkeletonLoading from "../Shared/SkeletonLoading";
 
 import './Profile.css';
 
+const descriptionStyle: React.CSSProperties = {
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  fontSize: '0.9rem',
+  whiteSpace: 'normal',
+  lineHeight: '1.2em',
+  height: '2.4em'
+};
+
 type ProfileSegmentsProps = {
   user: HumspotUser | null | undefined;
-  submissions: boolean;
+  showSubmissions: boolean;
 };
 
 const ProfileSegments: React.FC<ProfileSegmentsProps> = memo((props: ProfileSegmentsProps) => {
 
-  const { user, submissions } = props;
+  const { user, showSubmissions } = props;
 
   const context = useContext();
   const Toast = useToast();
   const router = useIonRouter();
 
-  const [selectedSegment, setSelectedSegment] = useState<string>("favorites");
+  const [selectedSegment, setSelectedSegment] = useState<string>(showSubmissions ? 'submissions' : 'favorites');
 
   const [favorites, setFavorites] = useState<HumspotFavoriteResponse[]>([]);
   const [visited, setVisited] = useState<HumspotVisitedResponse[]>([]);
   const [interactions, setInteractions] = useState<HumspotInteractionResponse[]>([]);
+  const [submissions, setSubmissions] = useState<{ description: string; name: string; activityID: string; image_url: string }[]>([]);
 
   const [favoritesLoading, setFavoritesLoading] = useState<boolean>(true);
   const [visitedLoading, setVisitedLoading] = useState<boolean>(true);
   const [interactionsLoading, setInteractionsLoading] = useState<boolean>(true);
+  const [submissionsLoading, setSubmissionsLoading] = useState<boolean>(true);
 
   const [favoritesPageCount, setFavoritesPageCount] = useState<number>(2);
   const [visitedPageCount, setVisitedPageCount] = useState<number>(2);
   const [interactionsPageCount, setInteractionsPageCount] = useState<number>(2);
+  const [submissionsPageCount, setSubmissionsPageCount] = useState<number>(2);
 
   const fetchFavorites = useCallback(async () => {
-    if (!context.humspotUser) return;
-    const response = await handleGetFavoritesGivenUserID(1, context.humspotUser.userID);
+    if (!user) return;
+    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === user.userID)
+    const response = await handleGetFavoritesGivenUserID(1, user.userID, isCallingForSelf);
     if (!response.success) {
       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
     }
     setFavorites(response.favorites);
     setFavoritesLoading(false);
-  }, [context.humspotUser]);
+  }, [user]);
 
   useEffect(() => {
     fetchFavorites();
   }, [fetchFavorites]);
 
   const fetchVisited = useCallback(async () => {
-    if (!context.humspotUser) return;
-    const response = await handleGetVisitedGivenUserID(1, context.humspotUser.userID);
+    if (!user) return;
+    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === user.userID)
+    const response = await handleGetVisitedGivenUserID(1, user.userID, isCallingForSelf);
     if (!response.success) {
       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
     }
     setVisited(response.visited);
     setVisitedLoading(false);
-  }, [context.humspotUser]);
+  }, [user]);
 
   useEffect(() => {
     fetchVisited();
   }, [fetchVisited]);
 
   const fetchInteractions = useCallback(async () => {
-    if (!context.humspotUser) return;
-    const response = await handleGetInteractionsGivenUserID(1, context.humspotUser.userID);
+    if (!user) return;
+    const response = await handleGetInteractionsGivenUserID(1, user.userID);
     if (!response.success) {
       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
     }
     setInteractions(response.interactions);
     setInteractionsLoading(false);
-  }, [context.humspotUser]);
+  }, [user]);
 
   useEffect(() => {
     fetchInteractions();
   }, [fetchInteractions]);
+
+  const fetchSubmissions = useCallback(async () => {
+    if (!user) return;
+    const response = await handleGetApprovedSubmissions(1, user.userID);
+    if (!response.success) {
+      const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
+      toast.present();
+    }
+    setSubmissions(response.submissions);
+    setSubmissionsLoading(false);
+  }, [user]);
+
+  useEffect(() => {
+    fetchSubmissions();
+  }, [fetchSubmissions]);
 
   const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => { // called when user swipes down on page
     await fetchFavorites();
@@ -103,9 +135,9 @@ const ProfileSegments: React.FC<ProfileSegmentsProps> = memo((props: ProfileSegm
 
   return (
     <>
-      <IonSegment scrollable={props.submissions} id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
+      <IonSegment scrollable={showSubmissions} id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
 
-        {props.submissions &&
+        {showSubmissions &&
           <IonSegmentButton value="submissions">
             <div className="segment-button" style={{ fontSize: "0.8rem" }}>
               <IonIcon
@@ -193,8 +225,9 @@ const ProfileSegments: React.FC<ProfileSegmentsProps> = memo((props: ProfileSegm
                 </IonCard>
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
-                    if (!context.humspotUser) return;
-                    const response = await handleGetFavoritesGivenUserID(favoritesPageCount, context.humspotUser.userID);
+                    if (!context.humspotUser || !user) return;
+                    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === user.userID)
+                    const response = await handleGetFavoritesGivenUserID(favoritesPageCount, user.userID, isCallingForSelf);
                     if (!response.success) {
                       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
                       toast.present();
@@ -242,8 +275,9 @@ const ProfileSegments: React.FC<ProfileSegmentsProps> = memo((props: ProfileSegm
                 </IonCard>
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
-                    if (!context.humspotUser) return;
-                    const response = await handleGetVisitedGivenUserID(visitedPageCount, context.humspotUser.userID);
+                    if (!context.humspotUser || !user) return;
+                    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === user.userID)
+                    const response = await handleGetVisitedGivenUserID(visitedPageCount, user.userID, isCallingForSelf);
                     if (!response.success) {
                       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
                       toast.present();
@@ -259,7 +293,7 @@ const ProfileSegments: React.FC<ProfileSegmentsProps> = memo((props: ProfileSegm
               </>
             }
           </>
-        ) : (
+        ) : selectedSegment === "interactions" ? (
           <>
             {!interactionsLoading && interactions.length === 0 || props.user === undefined ?
               <IonTitle className="ion-text-center" style={{ display: "flex", height: "65%" }}>No Interactions</IonTitle>
@@ -278,11 +312,14 @@ const ProfileSegments: React.FC<ProfileSegmentsProps> = memo((props: ProfileSegm
                                   <h2>{interaction.name}</h2>
                                   {interaction.interactionType === 'comment' ?
                                     <>
-                                      <p style={{ fontSize: "0.9rem" }}><b>You commented:</b> {interaction.interactionText}</p>
+                                      <p style={{ fontSize: "0.9rem" }}><b>{props.showSubmissions ? 'They' : 'You'} commented:</b> {interaction.interactionText}</p>
                                       <p style={{ fontSize: "0.8rem" }}>{formatDate(interaction.interactionDate as string)}</p>
                                     </>
                                     :
-                                    <p style={{ fontSize: "0.9rem" }}><b>You RSVP'd</b> for this event</p>
+                                    <>
+                                      <p style={{ fontSize: "0.9rem" }}><b>{props.showSubmissions ? 'They' : 'You'}  RSVP'd</b> for this event</p>
+                                      <p>{""}&nbsp;</p>
+                                    </>
                                   }
                                 </IonLabel>
                               </IonItem>
@@ -297,8 +334,8 @@ const ProfileSegments: React.FC<ProfileSegmentsProps> = memo((props: ProfileSegm
                 </IonCard>
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
-                    if (!context.humspotUser) return;
-                    const response = await handleGetInteractionsGivenUserID(interactionsPageCount, context.humspotUser.userID);
+                    if (!context.humspotUser || !user) return;
+                    const response = await handleGetInteractionsGivenUserID(interactionsPageCount, user.userID);
                     if (!response.success) {
                       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
                       toast.present();
@@ -315,6 +352,58 @@ const ProfileSegments: React.FC<ProfileSegmentsProps> = memo((props: ProfileSegm
             }
           </>
         )
+          : (
+            <>
+              {!submissionsLoading && submissions && submissions.length === 0 ?
+                <IonTitle className="ion-text-center" style={{ display: "flex", height: "65%" }}>No Posts from User</IonTitle>
+                :
+                <>
+                  <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>
+                    <IonCardContent className='ion-no-padding'>
+                      <IonList inset={false} style={{ paddingTop: 0, paddingBottom: 0 }}>
+                        {!submissionsLoading ?
+                          submissions.map((submission, index: number) => {
+                            return (
+                              <FadeIn key={submission.activityID + index} delay={(index % 20) * 50}>
+                                <IonItem className='ion-no-padding' role='button' onClick={() => { if (submission.activityID) router.push("/activity/" + submission.activityID) }}>
+                                  <IonThumbnail style={{ marginLeft: "10px" }}><img style={{
+                                    borderRadius: "5px"
+                                  }} src={submission.image_url || placeholder} /></IonThumbnail>
+                                  <IonLabel style={{ paddingLeft: "10px" }
+                                  } >
+                                    <h2>{submission.name}</h2>
+                                    <p style={descriptionStyle}>{submission.description}</p>
+                                  </IonLabel>
+                                </IonItem>
+                              </FadeIn>
+                            )
+                          })
+                          :
+                          <SkeletonLoading count={4} animated={true} height={"5rem"} />
+                        }
+                      </IonList>
+                    </IonCardContent>
+                  </IonCard>
+                  <IonInfiniteScroll
+                    onIonInfinite={async (ev) => {
+                      if (!user) return;
+                      const response = await handleGetApprovedSubmissions(submissionsPageCount, user.userID);
+                      if (!response.success) {
+                        const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
+                        toast.present();
+                      } else {
+                        setSubmissionsPageCount((prev) => prev + 1);
+                        setSubmissions((prev) => [...prev, ...response.submissions]);
+                      }
+                      ev.target.complete();
+                    }}
+                  >
+                    <IonInfiniteScrollContent></IonInfiniteScrollContent>
+                  </IonInfiniteScroll>
+                </>
+              }
+            </>
+          )
         }
         <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
       </IonContent>

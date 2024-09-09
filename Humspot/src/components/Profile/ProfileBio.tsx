@@ -13,10 +13,11 @@ const MAX_BIO_LENGTH: number = 150;
 
 type ProfileBioProps = {
   user: HumspotUser | null | undefined;
+  blocked: boolean;
 }
 const ProfileBio: React.FC<ProfileBioProps> = (props: ProfileBioProps) => {
 
-  const { user } = props;
+  const { user, blocked } = props;
   const context = useContext();
   const router = useIonRouter();
   const [presentToast] = useIonToast();
@@ -38,8 +39,7 @@ const ProfileBio: React.FC<ProfileBioProps> = (props: ProfileBioProps) => {
             <IonAvatar className='profile-bio-avatar-picture'>
               {user === null ?
                 <IonSkeletonText animated />
-                :
-                user === undefined ?
+                : blocked || user === undefined ?
                   <img src={avatar}
                     alt="Default Profile Picture"
                   />
@@ -63,27 +63,34 @@ const ProfileBio: React.FC<ProfileBioProps> = (props: ProfileBioProps) => {
                 </>
               )
               :
-              user === undefined ?
+              blocked ?
                 (
-                  <span style={{ color: context.darkMode ? 'white' : 'black' }}>
-                    Hello, welcome to Humspot! To RSVP for events, add comments, and submit your own activities,
-                    <span style={{ whiteSpace: 'pre', marginLeft: '5px', color: "var(--ion-color-primary)", textDecoration: 'underline' }}
-                      onClick={async () => { context.setShowTabs(false); await timeout(500); router.push("/sign-up") }}>
-                      sign up for an account.
-                    </span>
-                  </span>
+                  <>
+                    You have blocked this user.
+                  </>
                 )
                 :
-                (
-                  <span style={{ color: context.darkMode ? 'white' : 'black' }}>
-                    {isBioExpanded ? user.bio : user.bio && user.bio.length > 0 && user.bio.substring(0, MAX_BIO_LENGTH)}
-                    {user.bio && user.bio.length > MAX_BIO_LENGTH && (
-                      <span className="bio-toggle" onClick={() => setIsBioExpanded((prev) => !prev)}>
-                        {isBioExpanded ? ' Less' : ' ... More'}
+                user === undefined ?
+                  (
+                    <span style={{ color: context.darkMode ? 'white' : 'black' }}>
+                      Hello, welcome to Humspot! To RSVP for events, add comments, and submit your own activities,
+                      <span style={{ whiteSpace: 'pre', marginLeft: '5px', color: "var(--ion-color-primary)", textDecoration: 'underline' }}
+                        onClick={async () => { context.setShowTabs(false); await timeout(500); router.push("/sign-up") }}>
+                        sign up for an account.
                       </span>
-                    )}
-                  </span>
-                )
+                    </span>
+                  )
+                  :
+                  (
+                    <span style={{ color: context.darkMode ? 'white' : 'black' }}>
+                      {isBioExpanded ? user.bio : user.bio && user.bio.length > 0 && user.bio.substring(0, MAX_BIO_LENGTH)}
+                      {user.bio && user.bio.length > MAX_BIO_LENGTH && (
+                        <span className="bio-toggle" onClick={() => setIsBioExpanded((prev) => !prev)}>
+                          {isBioExpanded ? ' Less' : ' ... More'}
+                        </span>
+                      )}
+                    </span>
+                  )
             }
           </p>
         </section>

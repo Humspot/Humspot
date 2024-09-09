@@ -20,11 +20,12 @@ type ProfileHeaderProps = {
   buttons: boolean;
   backButton: boolean;
   shareButton: boolean;
+  blocked: boolean;
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = (props: ProfileHeaderProps) => {
 
-  const { user, buttons, backButton, shareButton } = props;
+  const { user, buttons, backButton, shareButton, blocked } = props;
   const router = useIonRouter();
   const context = useContext();
   const [presentAlert] = useIonAlert();
@@ -94,24 +95,24 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = (props: ProfileHeaderProps) 
 
   return (
     <>
-      <IonHeader className='ion-no-border profile-modal-content' mode='ios' >
-        <IonToolbar style={{ '--background': 'var(--ion-background-color)' }} mode='ios'>
-          {props.backButton &&
-            <IonButtons>
-              <IonButton style={{ fontSize: '1.15em', marginLeft: '-2.5px' }} onClick={() => { router.goBack(); }}>
-                <IonIcon icon={chevronBackOutline} /> <p>Back</p>
+      <IonHeader className='ion-no-border' translucent={false}>
+        <IonToolbar style={{ '--background': 'var(--ion-tab-bar-background)' }}>
+          {backButton &&
+            <IonButtons >
+              <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} onClick={() => { router.goBack(); }}>
+                <IonIcon color='primary' icon={chevronBackOutline} />
               </IonButton>
             </IonButtons>
           }
-          <IonCardTitle slot={props.backButton ? 'end' : 'start'} className='profile-header-title'>
+          <IonCardTitle slot={backButton ? 'end' : 'start'} className='profile-header-title'>
             {user === null
               ? <IonSkeletonText animated style={{ width: "50vw", height: "1.5rem", borderRadius: '5px' }} />
-              : user === undefined ?
-                "Humspot Guest"
-                : user.username
+              : blocked ? "Blocked User"
+                : user === undefined ? "Humspot Guest"
+                  : user.username
             }
           </IonCardTitle>
-          {props.buttons &&
+          {buttons &&
             <IonButtons slot='end'>
               <IonButton disabled={!user} id='open-edit-profile-modal' slot='end'>
                 <IonIcon size='large' style={{ padding: "1%", opacity: user ? '100%' : '0%' }} icon={pencilOutline} />
@@ -121,10 +122,10 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = (props: ProfileHeaderProps) 
               </IonButton>
             </IonButtons>
           }
-          {props.shareButton &&
+          {shareButton &&
             <IonButtons slot='end'>
               <IonButton disabled={!user} slot='end' onClick={() => handleShare('Checkout ' + user?.username + '\'s profile on Humspot!')}>
-                <IonIcon style={{ padding: "1%" }} icon={shareSocialOutline} />
+                <IonIcon color="primary" style={{ padding: "1%" }} icon={shareSocialOutline} />
               </IonButton>
               {user && context.humspotUser && user.userID !== context.humspotUser.userID &&
                 <IonButton disabled={!user} slot='end' onClick={async () => await handleReport()}>
@@ -139,11 +140,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = (props: ProfileHeaderProps) 
       <IonModal ref={modalRef}>
         <IonHeader className='ion-no-border'>
           <IonToolbar className='profile-modal-content'>
-            <IonTitle className='profile-modal-title'>Report / Block</IonTitle>
             <IonButtons>
-              <IonButton className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss() }}>
-                <p>Close</p>
+              <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss() }}>
+                <IonIcon color='primary' icon={chevronBackOutline} />
               </IonButton>
+              <p style={{ fontSize: "1.05rem" }}>Report / Block</p>
             </IonButtons>
           </IonToolbar>
         </IonHeader>

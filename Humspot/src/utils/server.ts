@@ -30,7 +30,8 @@ import {
   GetSubmittedActivitiesResponse,
   OrganizerRequestSubmission,
   SubmissionInfo,
-  HumspotCommentResponse
+  HumspotCommentResponse,
+  HumspotUser
 } from "./types";
 
 import { Capacitor } from '@capacitor/core';
@@ -895,14 +896,16 @@ export const handleGetInteractionsGivenUserID = async (pageNum: number, userID: 
  *
  * @returns {Promise<GetFavoritesResponse>} a status message, and if successful, an array of 10 favorites
  */
-export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: string): Promise<GetFavoritesResponse> => {
+export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: string, isCallingForSelf: boolean = true): Promise<GetFavoritesResponse> => {
   try {
-    const currentUserSession = await Auth.currentSession();
+    if (isCallingForSelf) {
+      const currentUserSession = await Auth.currentSession();
 
-    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+      if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+    }
 
-    const idToken = currentUserSession.getIdToken();
-    const jwtToken = idToken.getJwtToken();
+    // const idToken = currentUserSession.getIdToken();
+    // const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_FAVORITES_GIVEN_USERID_URL +
@@ -914,7 +917,7 @@ export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: str
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
+          // Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
@@ -940,14 +943,16 @@ export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: str
  *
  * @returns {} a status message, and if successful, an array of 10 places most recently visited.
  */
-export const handleGetVisitedGivenUserID = async (pageNum: number, userID: string) => {
+export const handleGetVisitedGivenUserID = async (pageNum: number, userID: string, isCallingForSelf: boolean = true) => {
   try {
-    const currentUserSession = await Auth.currentSession();
+    if (isCallingForSelf) {
+      const currentUserSession = await Auth.currentSession();
 
-    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+      if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+    }
 
-    const idToken = currentUserSession.getIdToken();
-    const jwtToken = idToken.getJwtToken();
+    // const idToken = currentUserSession.getIdToken();
+    // const jwtToken = idToken.getJwtToken();
 
     const response = await fetch(
       import.meta.env.VITE_AWS_API_GATEWAY_GET_VISITED_GIVEN_USERID_URL +
@@ -959,7 +964,7 @@ export const handleGetVisitedGivenUserID = async (pageNum: number, userID: strin
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
+          // Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
@@ -2005,6 +2010,102 @@ export const handleBlockUser = async (blockerUserID: string, blockedUserID: stri
     return data;
   } catch (err: any) {
     console.error(err)
+    return { message: err.toString(), success: false };
+  }
+};
+
+
+export const handleGetIsUserBlocked = async (currentUserID: string, otherUserID: string) => {
+  try {
+    if (!currentUserID || !otherUserID) throw new Error("No userIDs provided");
+    const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_GET_IS_USER_BLOCKED, {
+      method: 'POST',
+      body: JSON.stringify({
+        currentUserID: currentUserID,
+        otherUserID: otherUserID
+      })
+    });
+    const data: { message: string; success: boolean, isUserBlocked: boolean } = await res.json();
+    console.log(data);
+    return data;
+  } catch (err: any) {
+    console.error(err)
+    return { message: err.toString(), success: false, isUserBlocked: false };
+  }
+};
+
+/**
+ * @function handleGetUserInfo
+ * @description gets the user information from the Users table
+ * 
+ * @param {string} uid the user's ID 
+ */
+export const handleGetUserInfo = async (uid: string) => {
+  if (!uid) return { message: "Incorrect user ID", success: false, info: null };
+  try {
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_GET_USER_INFO + "/" + uid,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const responseData: { message: string; success: boolean; info: HumspotUser } = await response.json();
+    console.log(responseData);
+    return responseData;
+  } catch (err) {
+    console.log(err);
+    return { message: "Something went wrong", success: false, info: null };
+  }
+};
+
+export const handleGetApprovedSubmissions = async (pageNum: number, userID: string) => {
+  try {
+    const url: string = import.meta.env.VITE_AWS_API_GATEWAY_GET_APPROVED_SUBMISSIONS_URL + "/" + pageNum + "/" + userID;
+    const response = await fetch(
+      url,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const responseData: { message: string; submissions: { description: string; name: string; activityID: string; image_url: string }[]; success: boolean } = await response.json();
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, submissions: [], success: false };
+  }
+};
+
+/**
+ * @function handleDeleteComment
+ * @description Removes a user's comment from the Comments table in the DB.
+ * 
+ * @param userID 
+ * @param commentID 
+ * @returns 
+ */
+export const handleDeleteComment = async (userID: string, commentID: string) => {
+  try {
+    if (!userID || !commentID) throw new Error('No userID or commentID provided');
+    const res = await fetch(import.meta.env.VITE_AWS_API_GATEWAY_DELETE_COMMENT, {
+      method: 'POST',
+      body: JSON.stringify({
+        userID: userID,
+        commentID: commentID
+      })
+    });
+    const data: { message: string; success: boolean } = await res.json();
+    return data;
+  } catch (err: any) {
+    console.error(err);
     return { message: err.toString(), success: false };
   }
 };

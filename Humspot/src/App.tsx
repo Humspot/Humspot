@@ -55,6 +55,7 @@ import { useContext } from "./utils/hooks/useContext";
 import { usePushNotifications } from "./utils/hooks/usePushNotifications";
 import ProfileActivitiesModal from "./components/Shared/ActivitiesModal";
 import UpcomingEvents from "./pages/UpcomingEvents";
+import User from "./pages/User";
 
 
 setupIonicReact({ mode: "md" });
@@ -106,6 +107,7 @@ const App: React.FC = () => {
               <Route exact path="/activity/:id" component={Activity} />
               <Route exact path="/search/:query" component={Search} />
               <Route exact path="/more-results/:tagName" component={MoreResults} />
+              <Route exact path="/user/:uid" component={User} />
             </IonRouterOutlet>
 
             <IonTabBar
