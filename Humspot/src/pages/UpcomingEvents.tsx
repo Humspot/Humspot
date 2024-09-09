@@ -18,14 +18,14 @@ const UpcomingEvents = () => {
   const [events, setEvents] = useState<GetHumspotEventResponse[] | null>(null);
 
   const handleGetUpcomingEvents = useCallback(async () => {
-    if (context.humspotUser) {
+    // if (context.humspotUser) {
       const res = await handleGetThisWeeksEvents();
       if (res.success) {
         setEvents(res.events);
       } else {
         presentToast({ message: res.message, color: 'danger', duration: 2000 });
       }
-    }
+    // }
   }, [context.humspotUser]);
 
   useIonViewWillEnter(() => {

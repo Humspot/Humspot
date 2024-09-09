@@ -118,16 +118,20 @@ const RoutingSystem: React.FC = () => {
               aria-hidden="true"
               icon={compass}
               color={currentTab == "explore" ? "primary" : ""}
-              size="large"
+              // size="large"
+              style={{ transform: "scale(0.9)" }}
             />
+            <span style={{ transform: "scale(0.9)" }}>Explore</span>
           </IonTabButton>
           <IonTabButton tab="map" href="/map">
             <IonIcon
               aria-hidden="true"
               icon={map}
               color={currentTab == "map" ? "primary" : ""}
-              size="large"
+              // size="large"
+              style={{ transform: "scale(0.9)" }}
             />
+            <span style={{ transform: "scale(0.9)" }}>Event Map</span>
           </IonTabButton>
           <IonTabButton>
             <IonButton fill='clear' id='open-add-activity-modal' color=''>
@@ -136,7 +140,7 @@ const RoutingSystem: React.FC = () => {
                 icon={addCircleOutline}
                 color={context.darkMode ? 'medium' : 'warning'}
                 size="large"
-                style={{ transform: "scale(1.1)" }}
+                style={{ transform: "scale(1.2)" }}
               />
             </IonButton>
           </IonTabButton>
@@ -145,16 +149,20 @@ const RoutingSystem: React.FC = () => {
               aria-hidden="true"
               icon={calendar}
               color={currentTab == "calendar" ? "primary" : ""}
-              size="large"
+              style={{ transform: "scale(0.9)" }}
+            // size="large"
             />
+            <span style={{ transform: "scale(0.9)" }}>Calendar</span>
           </IonTabButton>
           <IonTabButton tab="profile" href="/profile">
             <IonIcon
               aria-hidden="true"
               icon={person}
               color={currentTab == "profile" ? "primary" : ""}
-              size="large"
+              style={{ transform: "scale(0.9)" }}
+            // size="large"
             />
+            <span style={{ transform: "scale(0.9)" }}>Profile</span>
           </IonTabButton>
         </IonTabBar>
 
