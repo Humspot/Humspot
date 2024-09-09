@@ -54,6 +54,10 @@ const updatedAwsConfig = {
     redirectSignIn,
     redirectSignOut,
   },
+  aws_cognito_social_providers: [
+    ...awsconfig.aws_cognito_social_providers,
+    "APPLE"
+  ],
 };
 
 // Configure Amplify

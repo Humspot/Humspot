@@ -46,6 +46,9 @@ const useAWSAuth = (context: ContextType) => {
           console.log("SIGN IN!");
           getUser();
           break;
+        case "signInWithRedirect":
+          console.log("SIGN IN WITH REDIRECT\n\n\n\n");
+          break;
         case "signOut":
           console.log("SIGNED OUT!");
           context.setHumspotUser(null);
