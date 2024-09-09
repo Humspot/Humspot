@@ -20,21 +20,20 @@ import ProfileEditModal from "../components/Profile/ProfileEditModal";
 const Profile: React.FC = () => {
 
   const context = useContext();
-  const router = useIonRouter();
 
   const page = useRef();
 
-  useEffect(() => {
-    if (context.humspotUser === undefined) { // not logged in
-      context.setShowTabs(false);
-      timeout(750).then(() => {
-        context.setShowTabs(false);
-        timeout(750).then(() => {
-          router.push("/sign-up");
-        })
-      })
-    }
-  }, [context.humspotUser]);
+  // useEffect(() => {
+  //   if (context.humspotUser === undefined) { // not logged in
+  //     context.setShowTabs(false);
+  //     timeout(750).then(() => {
+  //       context.setShowTabs(false);
+  //       timeout(750).then(() => {
+  //         router.push("/sign-up");
+  //       })
+  //     })
+  //   }
+  // }, [context.humspotUser]);
 
   useIonViewDidEnter(() => {
     context.setShowTabs(true);

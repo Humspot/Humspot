@@ -4,7 +4,7 @@
  * They are sent a verification email after entering their information.
  */
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonText,
   useIonAlert,
@@ -86,6 +86,12 @@ const SignUp: React.FC = () => {
         ]
     });
   };
+
+  useEffect(() => {
+    if (context.humspotUser) {
+      router.canGoBack() && router.goBack();
+    }
+  }, [context.humspotUser])
 
   useIonViewWillEnter(() => {
     if (context.humspotUser) {

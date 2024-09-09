@@ -196,8 +196,8 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
 
         {selectedSegment === "favorites" ? (
           <>
-            {!favoritesLoading && favorites && favorites.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Favorites</IonTitle>
+            {!favoritesLoading && favorites && favorites.length === 0 || props.user === undefined ?
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "65%" }}>No Favorites</IonTitle>
               :
               <>
                 <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>
@@ -249,8 +249,8 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
           </>
         ) : selectedSegment === "visited" ? (
           <>
-            {!visitedLoading && visited && visited.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Places Visited</IonTitle>
+            {!visitedLoading && visited && visited.length === 0 || props.user === undefined ?
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "65%" }}>No Places Visited</IonTitle>
               :
               <>
                 <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>
@@ -302,8 +302,8 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
           </>
         ) : selectedSegment === "interactions" ? (
           <>
-            {!interactionsLoading && interactions && interactions.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Interactions</IonTitle>
+            {!interactionsLoading && interactions && interactions.length === 0 || props.user === undefined ?
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "65%" }}>No Interactions</IonTitle>
               :
               <>
                 <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>

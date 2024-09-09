@@ -5,13 +5,14 @@
  */
 
 import { useEffect, useState } from "react";
-import { IonAvatar, IonBadge, IonCard, IonFab, IonRow, IonSkeletonText, useIonToast } from "@ionic/react";
+import { IonAvatar, IonBadge, IonCard, IonFab, IonRow, IonSkeletonText, useIonRouter, useIonToast } from "@ionic/react";
 
 import useContext from "../../utils/hooks/useContext";
 import avatar from '../../assets/images/avatar.svg';
 
 import './Profile.css';
 import { HumspotUser } from "../../utils/types";
+import { timeout } from "../../utils/functions/timeout";
 
 let uniqueString: number = new Date().getTime(); // Use a timestamp to force cache refresh when updated profile info.
 const MAX_BIO_LENGTH: number = 150;
@@ -26,6 +27,7 @@ const ProfileBio = (props: ProfileBioProps) => {
   const context = useContext();
   const [presentToast] = useIonToast();
   const [isBioExpanded, setIsBioExpanded] = useState<boolean>(false);
+  const router = useIonRouter();
 
   useEffect(() => {
     console.log(props.user);
@@ -48,13 +50,18 @@ const ProfileBio = (props: ProfileBioProps) => {
         <section id='top-bio'>
           <IonRow className='profile-bio-picture-and-stats-row'>
             <IonAvatar className='profile-bio-avatar-picture'>
-              {!humspotUser ?
+              {humspotUser === null ?
                 <IonSkeletonText animated />
                 :
-                <img
-                  src={`${humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
-                  alt="User Profile Picture"
-                />
+                humspotUser === undefined ?
+                  <img src={avatar}
+                    alt="Default Profile Picture"
+                  />
+                  :
+                  <img
+                    src={`${humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
+                    alt="User Profile Picture"
+                  />
               }
             </IonAvatar>
             {/* {humspotUser && (
@@ -84,25 +91,37 @@ const ProfileBio = (props: ProfileBioProps) => {
 
         <section id='bottom-bio'>
           <p className={`profile-bio-text ${isBioExpanded ? 'expanded' : 'collapsed'}`}>
-            {humspotUser ? (
-              <>
-                {isBioExpanded ? humspotUser.bio : humspotUser.bio && humspotUser.bio.length > 0 && humspotUser.bio.substring(0, MAX_BIO_LENGTH)}
-                {humspotUser.bio && humspotUser.bio.length > MAX_BIO_LENGTH && (
-                  <span className="bio-toggle" onClick={() => setIsBioExpanded((prev) => !prev)}>
-                    {isBioExpanded ? ' Less' : ' ... More'}
-                  </span>
-                )}
-              </>
-            ) : (
-              <>
-                <IonSkeletonText animated style={{ height: "1.1rem", borderRadius: '5px' }} />
-                <IonSkeletonText animated style={{ height: "1.1rem", width: "90%", borderRadius: '5px' }} />
-              </>
-            )}
+            {humspotUser === null ?
+              (
+                <>
+                  <IonSkeletonText animated style={{ height: "1.1rem", borderRadius: '5px' }} />
+                  <IonSkeletonText animated style={{ height: "1.1rem", width: "90%", borderRadius: '5px' }} />
+                </>
+              )
+              :
+              humspotUser === undefined ?
+                (
+                  <>
+                    Hello, welcome to Humspot! Click <span style={{ color: "var(--ion-color-primary)", fontWeight: 1000, textDecoration: 'underline' }} onClick={async () => { context.setShowTabs(false); await timeout(250); router.push("/sign-up") }}>here</span> to sign in!
+                    You'll be able to add custom events, make comments, and add to your favorites.
+                  </>
+                )
+                :
+                (
+                  <>
+                    {isBioExpanded ? humspotUser.bio : humspotUser.bio && humspotUser.bio.length > 0 && humspotUser.bio.substring(0, MAX_BIO_LENGTH)}
+                    {humspotUser.bio && humspotUser.bio.length > MAX_BIO_LENGTH && (
+                      <span className="bio-toggle" onClick={() => setIsBioExpanded((prev) => !prev)}>
+                        {isBioExpanded ? ' Less' : ' ... More'}
+                      </span>
+                    )}
+                  </>
+                )
+            }
           </p>
         </section>
 
-      </IonCard>
+      </IonCard >
     </>
   )
 };
