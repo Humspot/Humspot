@@ -50,10 +50,10 @@ const Profile: React.FC = () => {
       <IonPage ref={page}>
 
         {/* Edit, and Settings button */}
-        <ProfileHeader user={context.humspotUser} backButton={false} buttons={true} shareButton={false} />
+        <ProfileHeader user={context.humspotUser} blocked={false} backButton={false} buttons={true} shareButton={false} />
 
         <IonContent scrollY={false}>
-          <ProfileBio user={context.humspotUser} />
+          <ProfileBio user={context.humspotUser} blocked={false} />
           <ProfileSegments user={context.humspotUser} submissions={false} />
         </IonContent>
 

@@ -20,6 +20,7 @@ type ProfileHeaderProps = {
   buttons: boolean;
   backButton: boolean;
   shareButton: boolean;
+  blocked: boolean;
 }
 
 const ProfileHeader = (props: ProfileHeaderProps) => {
@@ -106,9 +107,11 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
           <IonCardTitle slot={props.backButton ? 'end' : 'start'} className='profile-header-title'>
             {humspotUser === null
               ? <IonSkeletonText animated style={{ width: "50vw", height: "1.5rem", borderRadius: '5px' }} />
-              : humspotUser === undefined ?
-                "Humspot Guest"
-                : humspotUser.username
+              : props.blocked ?
+                "Blocked User"
+                : humspotUser === undefined ?
+                  "Humspot Guest"
+                  : humspotUser.username
             }
           </IonCardTitle>
           {props.buttons &&

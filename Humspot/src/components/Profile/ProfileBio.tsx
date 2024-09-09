@@ -19,6 +19,7 @@ const MAX_BIO_LENGTH: number = 150;
 
 type ProfileBioProps = {
   user: HumspotUser | null | undefined;
+  blocked: boolean;
 }
 
 const ProfileBio = (props: ProfileBioProps) => {
@@ -98,6 +99,11 @@ const ProfileBio = (props: ProfileBioProps) => {
                   <IonSkeletonText animated style={{ height: "1.1rem", width: "90%", borderRadius: '5px' }} />
                 </>
               )
+              :
+              props.blocked ?
+                <>
+                  This user is blocked.
+                </>
               :
               humspotUser === undefined ?
                 (

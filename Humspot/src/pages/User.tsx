@@ -27,6 +27,7 @@ const User: React.FC<{}> = () => {
   const [presentToast] = useIonToast();
 
   const [user, setUser] = useState<HumspotUser | null | undefined>(null);
+  const [userBlocked, setUserBlocked] = useState<boolean>(false);
 
   useIonViewWillEnter(() => {
     if (pageRef && pageRef.current) {
@@ -50,6 +51,7 @@ const User: React.FC<{}> = () => {
         }
         return;
       }
+      setUserBlocked(true);
       setUser(undefined);
     }
 
@@ -64,10 +66,10 @@ const User: React.FC<{}> = () => {
   return (
     <IonPage ref={pageRef}>
 
-      <ProfileHeader user={user} buttons={false} backButton shareButton />
+      <ProfileHeader user={user} blocked={userBlocked} buttons={false} backButton shareButton />
 
       <IonContent scrollY={false}>
-        <ProfileBio user={user} />
+        <ProfileBio user={user} blocked={userBlocked} />
         <ProfileSegments user={user} submissions={true} />
       </IonContent>
 
