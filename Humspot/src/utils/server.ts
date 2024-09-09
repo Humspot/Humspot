@@ -2109,3 +2109,35 @@ export const handleDeleteComment = async (userID: string, commentID: string) => 
     return { message: err.toString(), success: false };
   }
 };
+
+/**
+ * @function handleDeleteAccount
+ * @description deletes the user's AWS amplify account from the user pool and removes their info from the database.
+ * 
+ * @param {string} userID the user's uid
+ * @returns a success status / message indicating successful / failed deletion of account
+ */
+export const handleDeleteAccount = async (userID: string) => {
+  try {
+    const res = await Auth.deleteUser();
+    if (res) {
+      const response = await fetch(
+        import.meta.env.VITE_AWS_API_GATEWAY_DELETE_USER_FROM_DATABASE,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userID: userID }),
+        }
+      );
+      const responseData: { success: boolean; message: string } = await response.json();
+      return responseData;
+    }
+    return { success: false, message: "Error during delete account!" };
+
+  } catch (err) {
+    console.error("Error during delete account " + err);
+    return { success: false, message: "Error during delete account " + err };
+  }
+};
