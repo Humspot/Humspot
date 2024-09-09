@@ -114,7 +114,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
           {props.buttons &&
             <IonButtons slot='end'>
               <IonButton disabled={!humspotUser} id='open-edit-profile-modal' slot='end'>
-                <IonIcon size='large' style={{ padding: "1%" }} icon={pencilOutline} />
+                <IonIcon size='large' style={{ padding: "1%", opacity: humspotUser ? '100%' : '0%' }} icon={pencilOutline} />
               </IonButton>
               <IonButton id='open-profile-page-modal' slot='end'>
                 <IonIcon size='large' style={{ padding: "2.5%" }} icon={settingsOutline} />

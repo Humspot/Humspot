@@ -5,7 +5,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton, IonCol, IonRow } from "@ionic/react";
+import { IonIcon, IonTextarea, useIonLoading, IonFab, IonFabButton, IonCol, IonRow, IonRouterLink, IonText } from "@ionic/react";
 import { arrowUpOutline, banOutline, cameraOutline } from "ionicons/icons";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { Keyboard, KeyboardResize, KeyboardResizeOptions } from "@capacitor/keyboard";

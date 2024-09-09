@@ -1189,6 +1189,7 @@ export const handleUpdateProfilePhoto = async (userID: string, profilePicURL: st
  * 
  * @param {string} activityID the ID of the activity
  * @returns {Promise<GetActivityResponse>} the activity information
+ * @todo do not get comments from the backend if user is not logged in.
  */
 export const handleGetActivity = async (activityID: string): Promise<GetActivityResponse> => {
   try {

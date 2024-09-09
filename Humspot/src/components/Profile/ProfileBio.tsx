@@ -101,21 +101,24 @@ const ProfileBio = (props: ProfileBioProps) => {
               :
               humspotUser === undefined ?
                 (
-                  <>
-                    Hello, welcome to Humspot! Click <span style={{ color: "var(--ion-color-primary)", fontWeight: 1000, textDecoration: 'underline' }} onClick={async () => { context.setShowTabs(false); await timeout(250); router.push("/sign-up") }}>here</span> to sign in!
-                    You'll be able to add custom events, make comments, and add to your favorites.
-                  </>
+                  <span style={{ color: context.darkMode ? 'white' : 'black' }}>
+                    Hello, welcome to Humspot! To RSVP for events, add comments, and submit your own activities,
+                    <span style={{ whiteSpace: 'pre', marginLeft: '5px', color: "var(--ion-color-primary)", textDecoration: 'underline' }}
+                      onClick={async () => { context.setShowTabs(false); await timeout(250); router.push("/sign-up") }}>
+                      sign up for an account.
+                    </span>
+                  </span>
                 )
                 :
                 (
-                  <>
+                  <span style={{ color: context.darkMode ? 'white' : 'black' }}>
                     {isBioExpanded ? humspotUser.bio : humspotUser.bio && humspotUser.bio.length > 0 && humspotUser.bio.substring(0, MAX_BIO_LENGTH)}
                     {humspotUser.bio && humspotUser.bio.length > MAX_BIO_LENGTH && (
                       <span className="bio-toggle" onClick={() => setIsBioExpanded((prev) => !prev)}>
                         {isBioExpanded ? ' Less' : ' ... More'}
                       </span>
                     )}
-                  </>
+                  </span>
                 )
             }
           </p>

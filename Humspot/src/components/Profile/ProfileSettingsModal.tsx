@@ -35,7 +35,8 @@ import {
   constructOutline,
   logoGoogle,
   closeCircleOutline,
-  logoApple
+  logoApple,
+  moon
 } from 'ionicons/icons';
 import { Preferences } from '@capacitor/preferences';
 
@@ -218,16 +219,34 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
                 <p>Close</p>
               </IonButton>
             </IonButtons>
+            <IonButtons slot='end'>
+              <IonButton slot='end' className='profile-modal-close-button' onClick={() => toggleDarkMode(!context.darkMode)}>
+                <IonIcon icon={context.darkMode ? moon : moonOutline}></IonIcon>
+              </IonButton>
+            </IonButtons>
           </IonToolbar>
         </IonHeader>
 
-        <br />
+        {/* <br /> */}
 
         <IonList lines='full'>
-          <IonItem>
-            <IonIcon aria-hidden='true' icon={moonOutline} slot='start' ></IonIcon>
-            <IonLabel><IonToggle checked={context.darkMode} onIonChange={(e) => { toggleDarkMode(e.detail.checked) }}>Dark Mode</IonToggle></IonLabel>
-          </IonItem>
+          {context.humspotUser === undefined &&
+            <>
+              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss().then(async () => { context.setShowTabs(false); await timeout(250); router.push('/sign-up') }) }}>
+                <IonIcon aria-hidden='true' icon={mailOutline} slot='start' ></IonIcon>
+                <IonLabel>Sign In with Email</IonLabel>
+              </IonItem>
+              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss(); router.push('/explore', 'root', 'replace'); await handleGoogleLoginAndVerifyAWSUser() }}>
+                <IonIcon aria-hidden='true' icon={logoGoogle} slot='start' ></IonIcon>
+                <IonLabel>Sign In with Google</IonLabel>
+              </IonItem>
+              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss(); router.push('/explore', 'root', 'replace'); await handleAppleLoginAndVerifyAWSUser() }}>
+                <IonIcon aria-hidden='true' icon={logoApple} slot='start' ></IonIcon>
+                <IonLabel>Sign In with Apple</IonLabel>
+              </IonItem>
+              <br />
+            </>
+          }
           <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} onClick={() => { modalRef?.current?.dismiss().then(() => { router.push('/contact-us') }) }}>
             <IonIcon aria-hidden='true' icon={mailOutline} slot='start' ></IonIcon>
             <IonLabel>Contact Us</IonLabel>
@@ -250,9 +269,10 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
           }
           {context.humspotUser === undefined ?
             <>
+              {/* <p style={{fontSize: "1.25rem", textAlign: 'center', fontWeight: '1000'}}>Account</p>
               <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss().then(async () => { context.setShowTabs(false); await timeout(250); router.push('/sign-up') }) }}>
-                <IonIcon aria-hidden='true' icon={logInOutline} slot='start' ></IonIcon>
-                <IonLabel>Sign Up / Sign In</IonLabel>
+                <IonIcon aria-hidden='true' icon={mailOutline} slot='start' ></IonIcon>
+                <IonLabel>Sign In with Email</IonLabel>
               </IonItem>
               <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss(); router.push('/explore', 'root', 'replace'); await handleGoogleLoginAndVerifyAWSUser() }}>
                 <IonIcon aria-hidden='true' icon={logoGoogle} slot='start' ></IonIcon>
@@ -261,7 +281,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
               <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss(); router.push('/explore', 'root', 'replace'); await handleAppleLoginAndVerifyAWSUser() }}>
                 <IonIcon aria-hidden='true' icon={logoApple} slot='start' ></IonIcon>
                 <IonLabel>Sign In with Apple</IonLabel>
-              </IonItem>
+              </IonItem> */}
             </>
             : context.humspotUser ?
               <>

@@ -5,6 +5,7 @@
  */
 
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
+import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
 
 type ActivityDescriptionProps = {
   description: string;
@@ -19,15 +20,17 @@ const ActivityDescription = (props: ActivityDescriptionProps) => {
   const openTimes: string | null = props.openTimes || null;
 
   return (
-    <section style={{ padding: '10px' }}>
+    <FadeIn>
+      <section style={{ padding: '10px' }}>
 
-      <IonCardHeader className='ion-no-padding ion-no-margin'>
-        <IonCardTitle style={{ fontSize: "1.25rem" }}>Description</IonCardTitle>
-      </IonCardHeader>
-      {openTimes && <><p>Open: {openTimes}</p></>}
-      {description && <p>{description}</p>}
-      {websiteURL && <p> <a href={websiteURL ?? ''} target='_blank' rel='noopener noreferrer'> Visit Site </a> </p>}
-    </section>
+        <IonCardHeader className='ion-no-padding ion-no-margin'>
+          <IonCardTitle style={{ fontSize: "1.25rem" }}>Description</IonCardTitle>
+        </IonCardHeader>
+        {openTimes && <><p>Open: {openTimes}</p></>}
+        {description && <p>{description}</p>}
+        {websiteURL && <p> <a href={websiteURL ?? ''} target='_blank' rel='noopener noreferrer'> Visit Site </a> </p>}
+      </section>
+    </FadeIn>
   );
 };
 

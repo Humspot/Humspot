@@ -7,6 +7,8 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonPage,
+  IonRouterLink,
+  useIonRouter,
   useIonViewDidEnter,
   useIonViewWillEnter,
 } from "@ionic/react";
@@ -43,6 +45,7 @@ const Activity: React.FC<{}> = () => {
 
   const context = useContext();
   const page = useRef();
+  const router = useIonRouter();
 
   const [hasSwipedIn, setHasSwipedIn] = useState<boolean>(false);
 
@@ -113,9 +116,17 @@ const Activity: React.FC<{}> = () => {
           <ActivityDescription description={activity.description} websiteURL={activity.websiteURL} openTimes={activity.openTimes} />
         }
 
-        <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'} setComments={setComments} />
+        {context.humspotUser &&
+          <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'} setComments={setComments} />
+        }
 
-        {comments && comments.length > 0 &&
+        {activity && context.humspotUser === undefined &&
+          <section style={{ padding: '10px', paddingTop: '25%', textAlign: 'center' }}>
+            <p>You must be logged in to view and add comments. Don't have an account? Sign up <span style={{ textDecoration: 'underline', color: 'var(--ion-color-primary)' }} onClick={() => {router.push('/sign-up')}}>here</span> </p>
+          </section>
+        }
+
+        {context.humspotUser && comments && comments.length > 0 &&
           <>
             <div id='top-of-comments-list'></div>
             <br />
@@ -125,10 +136,12 @@ const Activity: React.FC<{}> = () => {
 
         <IonInfiniteScroll
           onIonInfinite={async (ev) => {
-            const response = await handleGetCommentsGivenActivityID(id, pageNum);
-            if (response.success && response.comments && response.comments.length > 0) {
-              setPageNum((prev) => prev + 1);
-              setComments((prev) => [...(prev), ...(response.comments as HumspotCommentResponse[])]);
+            if (!context.humspotUser) {
+              const response = await handleGetCommentsGivenActivityID(id, pageNum);
+              if (response.success && response.comments && response.comments.length > 0) {
+                setPageNum((prev) => prev + 1);
+                setComments((prev) => [...(prev), ...(response.comments as HumspotCommentResponse[])]);
+              }
             }
             ev.target.complete();
           }}
