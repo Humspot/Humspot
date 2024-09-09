@@ -13,6 +13,7 @@ import placeholder from "../../assets/images/placeholder.jpeg"
 import "swiper/css/autoplay";
 import './Activity.css';
 import IonPhotoViewer from "@codesyntax/ionic-react-photo-viewer";
+import { useState } from "react";
 
 type ActivityHeaderProps = {
   photoUrls: string;
@@ -22,14 +23,22 @@ type ActivityHeaderProps = {
 
 const ActivityHeader = (props: ActivityHeaderProps) => {
 
+  const [swiperInstance, setSwiperInstance] = useState<any>(null);
+
   const photoUrls: string = props.photoUrls || '';
   const activityType: string = props.activityType || 'Activity';
   const activityTypeUpper = activityType[0].toUpperCase() + activityType.slice(1);
   const activityLoading: boolean = props.activityLoading || false;
 
+  const handleImageClick = () => {
+    if (swiperInstance) {
+      swiperInstance.autoplay.stop();
+    }
+  };
+
   return (
     <section className='activity-image-swiper-container'>
-      <Swiper modules={[Autoplay, Navigation]} navigation autoplay={{ delay: 2500 }}>
+      <Swiper onSwiper={setSwiperInstance} modules={[Autoplay, Navigation]} navigation autoplay={{ delay: 2500 }}>
         {activityLoading ?
           <SwiperSlide>
             <IonCard className='ion-no-padding ion-no-margin' style={{ width: "97.5vw", marginRight: "5px", marginLeft: "5px" }}>
@@ -47,6 +56,7 @@ const ActivityHeader = (props: ActivityHeaderProps) => {
                     src={url}
                   >
                     <img
+                      onClick={() => { console.log("CLICKED ON IMAGE " + index); handleImageClick(); }}
                       className='activity-header-image-style'
                       alt="Attraction Image"
                       src={url || ''}
