@@ -32,7 +32,8 @@ import {
   logInOutline,
   constructOutline,
   logoGoogle,
-  chevronBackOutline
+  chevronBackOutline,
+  moon
 } from 'ionicons/icons';
 import { Preferences } from '@capacitor/preferences';
 
@@ -154,14 +155,28 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
               </IonButton>
               <p style={{ fontSize: '1.25rem' }}>Settings</p>
             </IonButtons>
+            <IonButtons slot='end'>
+              <IonButton onClick={() => { toggleDarkMode(!context.darkMode) }}>
+                <IonIcon color={'primary'} icon={context.darkMode ? moon : moonOutline} />
+              </IonButton>
+            </IonButtons>
           </IonToolbar>
         </IonHeader>
 
         <IonList lines='full'>
-          <IonItem>
-            <IonIcon aria-hidden='true' icon={moonOutline} style={{ marginRight: '15px' }} slot='start'></IonIcon>
-            <IonLabel><IonToggle checked={context.darkMode} onIonChange={(e) => { toggleDarkMode(e.detail.checked) }}>Dark Mode</IonToggle></IonLabel>
-          </IonItem>
+          {context.humspotUser === undefined &&
+            <>
+              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={() => { context.setShowTabs(false); modalRef?.current?.dismiss(); router.push('/sign-up') }}>
+                <IonIcon aria-hidden='true' icon={mailOutline} style={{ marginRight: '15px' }} slot='start'></IonIcon>
+                <IonLabel>Sign in with Email</IonLabel>
+              </IonItem>
+              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss(); router.push('/explore', 'root', 'replace'); await handleGoogleLoginAndVerifyAWSUser() }}>
+                <IonIcon aria-hidden='true' icon={logoGoogle} style={{ marginRight: '15px' }} slot='start'></IonIcon>
+                <IonLabel>Sign In with Google</IonLabel>
+              </IonItem>
+              <br />
+            </>
+          }
           <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} onClick={() => { modalRef?.current?.dismiss(); router.push('/contact-us') }}>
             <IonIcon aria-hidden='true' icon={mailOutline} style={{ marginRight: '15px' }} slot='start'></IonIcon>
             <IonLabel>Contact Us</IonLabel>
@@ -182,24 +197,12 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
               </IonItem>
             </>
           }
-          {context.humspotUser === undefined ?
-            <>
-              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={() => { context.setShowTabs(false); modalRef?.current?.dismiss(); router.push('/sign-up') }}>
-                <IonIcon aria-hidden='true' icon={logInOutline} style={{ marginRight: '15px' }} slot='start'></IonIcon>
-                <IonLabel>Sign Up / Sign In</IonLabel>
-              </IonItem>
-              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss(); router.push('/explore', 'root', 'replace'); await handleGoogleLoginAndVerifyAWSUser() }}>
-                <IonIcon aria-hidden='true' icon={logoGoogle} style={{ marginRight: '15px' }} slot='start'></IonIcon>
-                <IonLabel>Google Sign In</IonLabel>
-              </IonItem>
-            </>
-            : context.humspotUser ?
-              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={handleShowLogoutDialog}>
-                <IonIcon aria-hidden='true' icon={logOutOutline} style={{ marginRight: '15px' }} slot='start'></IonIcon>
-                <IonLabel color='danger'>Log Out</IonLabel>
-              </IonItem>
-              :
-              <></>
+          {
+            context.humspotUser &&
+            <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={handleShowLogoutDialog}>
+              <IonIcon aria-hidden='true' icon={logOutOutline} style={{ marginRight: '15px' }} slot='start'></IonIcon>
+              <IonLabel color='danger'>Log Out</IonLabel>
+            </IonItem>
           }
         </IonList>
         {context.humspotUser &&

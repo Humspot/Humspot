@@ -54,6 +54,7 @@ import useTabBarVisibility from "./utils/hooks/useTabBarVisibility";
 import { useContext } from "./utils/hooks/useContext";
 import { usePushNotifications } from "./utils/hooks/usePushNotifications";
 import ProfileActivitiesModal from "./components/Shared/ActivitiesModal";
+import UpcomingEvents from "./pages/UpcomingEvents";
 
 
 setupIonicReact({ mode: "md" });
@@ -92,6 +93,7 @@ const App: React.FC = () => {
               <Route exact path="/sign-in" component={SignIn} />
               <Route exact path="/contact-us" component={ContactUs} />
               <Route exact path="/forgot-password" component={ForgotPassword} />
+              <Route exact path="/upcoming-events" component={UpcomingEvents} />
               <Route exact path="/terms-and-conditions" component={TermsAndConditions} />
               <Route exact path="/privacy-policy" component={PrivacyPolicy} />
               <Route exact path="/become-a-coordinator" component={BecomeACoordinator} />
@@ -117,16 +119,20 @@ const App: React.FC = () => {
                   aria-hidden="true"
                   icon={compass}
                   color={currentTab == "explore" ? "primary" : ""}
-                  size="large"
+                  // size="large" 
+                  style={{ transform: "scale(0.9)" }}
                 />
+                Explore
               </IonTabButton>
               <IonTabButton tab="map" href="/map">
                 <IonIcon
                   aria-hidden="true"
                   icon={map}
                   color={currentTab == "map" ? "primary" : ""}
-                  size="large"
+                  // size="large"
+                  style={{ transform: "scale(0.9)" }}
                 />
+                <span style={{ whiteSpace: 'nowrap' }}>Events Map</span>
               </IonTabButton>
               <IonTabButton tab="showModal">
                 <IonIcon
@@ -141,16 +147,20 @@ const App: React.FC = () => {
                   aria-hidden="true"
                   icon={calendar}
                   color={currentTab == "calendar" ? "primary" : ""}
-                  size="large"
+                  style={{ transform: "scale(0.9)" }}
+                // size="large"
                 />
+                Calendar
               </IonTabButton>
               <IonTabButton tab="profile" href="/profile">
                 <IonIcon
                   aria-hidden="true"
                   icon={person}
                   color={currentTab == "profile" ? "primary" : ""}
-                  size="large"
+                  style={{ transform: "scale(0.9)" }}
+                // size="large"
                 />
+                Profile
               </IonTabButton>
             </IonTabBar>
 

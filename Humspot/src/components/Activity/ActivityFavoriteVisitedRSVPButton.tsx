@@ -167,7 +167,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
       <IonButton
         fill='clear'
         color='secondary'
-        style={{ padding: 0, margin: 0, fontSize: '1.15rem' }}
+        style={{ padding: 0, margin: 0, fontSize: '1rem' }}
         onClick={async () => {
           const activityTypeUpper: string = activityType ? activityType[0].toUpperCase() + activityType?.slice(1) : 'Activity';
           await handleShare(`Check out this ${activityTypeUpper} on Humspot!`);

@@ -1,21 +1,32 @@
-import { IonAvatar, IonBadge, IonCard, IonFab, IonRow, IonSkeletonText } from "@ionic/react";
+import { IonAvatar, IonBadge, IonCard, IonFab, IonRow, IonSkeletonText, useIonRouter, useIonToast } from "@ionic/react";
 
 import { useContext } from "../../utils/hooks/useContext";
 import avatar from '../../assets/images/avatar.svg';
 
 import './Profile.css';
+import { HumspotUser } from "../../utils/types";
+import { timeout } from "../../utils/functions/timeout";
+import { useState } from "react";
 
-let uniqueString = new Date().getTime(); // Use a timestamp to force cache refresh when updated profile info.
+let uniqueString: number = new Date().getTime(); // Use a timestamp to force cache refresh when updated profile info.
+const MAX_BIO_LENGTH: number = 150;
 
-const ProfileBio: React.FC = () => {
+type ProfileBioProps = {
+  user: HumspotUser | null | undefined;
+}
+const ProfileBio: React.FC<ProfileBioProps> = (props: ProfileBioProps) => {
 
+  const { user } = props;
   const context = useContext();
+  const router = useIonRouter();
+  const [presentToast] = useIonToast();
+  const [isBioExpanded, setIsBioExpanded] = useState<boolean>(false);
 
   return (
     <>
-      {context.humspotUser && context.humspotUser.accountType !== 'user' &&
+      {user && user.accountType !== 'user' &&
         <IonFab vertical="top" horizontal="end" edge className='profile-card-badge'>
-          <IonBadge style={{ zIndex: 9999 }}>{context.humspotUser.accountType.toUpperCase()}</IonBadge>
+          <IonBadge style={{ zIndex: 9999 }}>{user.accountType.toUpperCase()}</IonBadge>
         </IonFab>
       }
       <IonCard className='ion-no-margin profile-bio-card'>
@@ -25,52 +36,54 @@ const ProfileBio: React.FC = () => {
         <section id='top-bio'>
           <IonRow className='profile-bio-picture-and-stats-row'>
             <IonAvatar className='profile-bio-avatar-picture'>
-              {!context.humspotUser ?
+              {user === null ?
                 <IonSkeletonText animated />
                 :
-                <img
-                  src={`${context.humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
-                  alt="User Profile Picture"
-                />
+                user === undefined ?
+                  <img src={avatar}
+                    alt="Default Profile Picture"
+                  />
+                  :
+                  <img
+                    src={`${user.profilePicURL ?? avatar}?${uniqueString}`}
+                    alt="User Profile Picture"
+                  />
               }
             </IonAvatar>
-            {context.humspotUser && (
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flex: 0.9 }}>
-                <div className="" style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 'bold' }}>
-                    0
-                  </div>
-                  <div style={{ fontSize: '0.95rem' }}>Following</div>
-                </div>
-                <div className="user-stat" style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 'bold' }}>
-                    0
-                  </div>
-                  <div style={{ fontSize: '0.95rem' }}>Visited</div>
-                </div>
-                <div className="user-stat" style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 'bold' }}>
-                    0
-                  </div>
-                  <div style={{ fontSize: '0.95rem' }}>Reviews</div>
-                </div>
-              </div>
-            )}
           </IonRow>
         </section>
 
         <section id='bottom-bio'>
-          <p className='profile-bio-text'>
-            {!context.humspotUser ?
-              <>
-                <IonSkeletonText animated style={{ height: "1.1rem" }} />
-                <IonSkeletonText animated style={{ height: "1.1rem", width: "90%" }} />
-              </>
+          <p className={`profile-bio-text ${isBioExpanded ? 'expanded' : 'collapsed'}`}>
+            {user === null ?
+              (
+                <>
+                  <IonSkeletonText animated style={{ height: "1.1rem" }} />
+                  <IonSkeletonText animated style={{ height: "1.1rem", width: "90%" }} />
+                </>
+              )
               :
-              <>
-                {context.humspotUser.bio}
-              </>
-
+              user === undefined ?
+                (
+                  <span style={{ color: context.darkMode ? 'white' : 'black' }}>
+                    Hello, welcome to Humspot! To RSVP for events, add comments, and submit your own activities,
+                    <span style={{ whiteSpace: 'pre', marginLeft: '5px', color: "var(--ion-color-primary)", textDecoration: 'underline' }}
+                      onClick={async () => { context.setShowTabs(false); await timeout(500); router.push("/sign-up") }}>
+                      sign up for an account.
+                    </span>
+                  </span>
+                )
+                :
+                (
+                  <span style={{ color: context.darkMode ? 'white' : 'black' }}>
+                    {isBioExpanded ? user.bio : user.bio && user.bio.length > 0 && user.bio.substring(0, MAX_BIO_LENGTH)}
+                    {user.bio && user.bio.length > MAX_BIO_LENGTH && (
+                      <span className="bio-toggle" onClick={() => setIsBioExpanded((prev) => !prev)}>
+                        {isBioExpanded ? ' Less' : ' ... More'}
+                      </span>
+                    )}
+                  </span>
+                )
             }
           </p>
         </section>

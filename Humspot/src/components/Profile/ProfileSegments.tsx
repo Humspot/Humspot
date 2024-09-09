@@ -6,7 +6,7 @@
 
 import { memo, useCallback, useEffect, useState } from "react";
 import { IonSegment, IonSegmentButton, IonIcon, IonLabel, IonCard, IonCardContent, IonList, IonItem, IonThumbnail, useIonRouter, IonContent, IonTitle, IonRefresher, RefresherEventDetail, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent } from "@ionic/react";
-import { heart, people, walk } from "ionicons/icons";
+import { heart, listCircle, people, walk } from "ionicons/icons";
 
 import { useToast } from "@agney/ir-toast";
 import FadeIn from '@rcnoverwatcher/react-fade-in-react-18/src/FadeIn';
@@ -15,15 +15,21 @@ import placeholder from '../../assets/images/school_placeholder.jpeg';
 
 import { useContext } from "../../utils/hooks/useContext";
 import { formatDate } from "../../utils/functions/formatDate";
-import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse } from "../../utils/types";
+import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse, HumspotUser } from "../../utils/types";
 import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID } from "../../utils/server";
 
 import SkeletonLoading from "../Shared/SkeletonLoading";
 
 import './Profile.css';
 
+type ProfileSegmentsProps = {
+  user: HumspotUser | null | undefined;
+  submissions: boolean;
+};
 
-const ProfileSegments: React.FC = memo(() => {
+const ProfileSegments: React.FC<ProfileSegmentsProps> = memo((props: ProfileSegmentsProps) => {
+
+  const { user, submissions } = props;
 
   const context = useContext();
   const Toast = useToast();
@@ -97,7 +103,20 @@ const ProfileSegments: React.FC = memo(() => {
 
   return (
     <>
-      <IonSegment id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
+      <IonSegment scrollable={props.submissions} id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
+
+        {props.submissions &&
+          <IonSegmentButton value="submissions">
+            <div className="segment-button" style={{ fontSize: "0.8rem" }}>
+              <IonIcon
+                icon={listCircle}
+                style={{ margin: "5%" }}
+                size="large"
+              ></IonIcon>
+              <IonLabel>Posted Activities</IonLabel>
+            </div>
+          </IonSegmentButton>
+        }
 
         <IonSegmentButton value="favorites">
           <div className="segment-button" style={{ fontSize: "0.8rem" }}>
@@ -144,8 +163,8 @@ const ProfileSegments: React.FC = memo(() => {
 
         {selectedSegment === "favorites" ? (
           <>
-            {!favoritesLoading && favorites.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Favorites</IonTitle>
+            {!favoritesLoading && favorites && favorites.length === 0 || props.user === undefined ?
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "65%" }}>No Favorites</IonTitle>
               :
               <>
                 <IonCard style={{ marginTop: 0 }}>
@@ -193,8 +212,8 @@ const ProfileSegments: React.FC = memo(() => {
           </>
         ) : selectedSegment === "visited" ? (
           <>
-            {!visitedLoading && visited.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Places Visited</IonTitle>
+            {!visitedLoading && visited.length === 0 || props.user === undefined ?
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "65%" }}>No Places Visited</IonTitle>
               :
               <>
                 <IonCard style={{ marginTop: 0 }}>
@@ -242,8 +261,8 @@ const ProfileSegments: React.FC = memo(() => {
           </>
         ) : (
           <>
-            {!interactionsLoading && interactions.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Interactions</IonTitle>
+            {!interactionsLoading && interactions.length === 0 || props.user === undefined ?
+              <IonTitle className="ion-text-center" style={{ display: "flex", height: "65%" }}>No Interactions</IonTitle>
               :
               <>
                 <IonCard style={{ marginTop: 0 }}>

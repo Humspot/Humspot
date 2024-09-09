@@ -190,73 +190,76 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
 
 
   return (
-    <IonFab className='activity-comment-textarea'
-      style={
-        context.darkMode ?
-          { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, border: '3px solid #373737' }
-          : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, border: '3px solid #e6e6e6' }}
-      slot="fixed"
-      vertical="bottom"
-      edge
-    >
-
+    <>
       {context.humspotUser &&
-        <IonFab horizontal="end" vertical="top">
-          <IonRow>
-            <IonCol>
-              {photo &&
-                <img className="comment-img-submit" src={photo} />
-              }
-            </IonCol>
-            <IonFabButton size="small" onClick={handleSubmitComment} style={{ transform: "translateY(-25%)" }}>
-              <IonIcon icon={arrowUpOutline} size="small" />
-            </IonFabButton>
-          </IonRow>
-          <IonRow>
-            <IonCol></IonCol>
-            {!photo ?
-              <IonFabButton size="small" onClick={handleSelectImage} style={{ transform: "translateY(-25%)" }}>
-                <IonIcon icon={cameraOutline} size="small" />
-              </IonFabButton>
-              :
-              <IonFabButton onClick={() => { setPhoto(undefined); setBlob(null) }} size="small" style={{ transform: "translateY(-45%)" }}>
-                <IonIcon size="small" icon={banOutline} />
-              </IonFabButton>
+        <IonFab className='activity-comment-textarea'
+          style={
+            context.darkMode ?
+              { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, border: '3px solid #373737' }
+              : { opacity: isVisible ? 1 : 0, borderBottomLeftRadius: borderRadius, borderBottomRightRadius: borderRadius, border: '3px solid #e6e6e6' }}
+          slot="fixed"
+          vertical="bottom"
+          edge
+        >
+
+          {context.humspotUser &&
+            <IonFab horizontal="end" vertical="top">
+              <IonRow>
+                <IonCol>
+                  {photo &&
+                    <img className="comment-img-submit" src={photo} />
+                  }
+                </IonCol>
+                <IonFabButton size="small" onClick={handleSubmitComment} style={{ transform: "translateY(-25%)" }}>
+                  <IonIcon icon={arrowUpOutline} size="small" />
+                </IonFabButton>
+              </IonRow>
+              <IonRow>
+                <IonCol></IonCol>
+                {!photo ?
+                  <IonFabButton size="small" onClick={handleSelectImage} style={{ transform: "translateY(-25%)" }}>
+                    <IonIcon icon={cameraOutline} size="small" />
+                  </IonFabButton>
+                  :
+                  <IonFabButton onClick={() => { setPhoto(undefined); setBlob(null) }} size="small" style={{ transform: "translateY(-45%)" }}>
+                    <IonIcon size="small" icon={banOutline} />
+                  </IonFabButton>
+                }
+              </IonRow>
+            </IonFab>
+          }
+
+          <IonTextarea
+            mode='ios'
+            color='primary'
+            style={{
+              borderColor: '#eee',
+              borderWidth: '1px',
+              borderRadius: '1px',
+              marginBottom: '10px',
+              paddingRight: "10px",
+              paddingLeft: '10px',
+              marginLeft: 0,
+              fontSize: '14px',
+              width: "70%",
+              color: "var(--ion-color-dark)"
+            }}
+            placeholder={
+              context.humspotUser
+                ? "Add a comment..."
+                : "Log in to add comments."
             }
-          </IonRow>
+            rows={5}
+            ref={commentRef}
+            debounce={50}
+            enterkeyhint="enter"
+            inputMode="text"
+            spellcheck={true}
+            maxlength={500}
+          />
         </IonFab>
       }
-
-      <IonTextarea
-        mode='ios'
-        color='primary'
-        style={{
-          borderColor: '#eee',
-          borderWidth: '1px',
-          borderRadius: '1px',
-          marginBottom: '10px',
-          paddingRight: "10px",
-          paddingLeft: '10px',
-          marginLeft: 0,
-          fontSize: '14px',
-          width: "70%",
-          color: "var(--ion-color-dark)"
-        }}
-        placeholder={
-          context.humspotUser
-            ? "Add a comment..."
-            : "Log in to add comments."
-        }
-        rows={5}
-        ref={commentRef}
-        debounce={50}
-        enterkeyhint="enter"
-        inputMode="text"
-        spellcheck={true}
-        maxlength={500}
-      />
-
-    </IonFab>
+    </>
   );
 };
 

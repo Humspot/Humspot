@@ -32,8 +32,10 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
     e.preventDefault();
     if (props.hasTag) {
       router.push(`/more-results/${encodeURIComponent(props.title.trim())}`);
+    } else {
+      router.push("/upcoming-events");
     }
-  };
+  }
 
   useEffect(() => {
     if (props.activities && !props.loading && swiperRef.current) {

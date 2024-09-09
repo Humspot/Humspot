@@ -459,7 +459,7 @@ export const EventForm = () => {
             </>
           ) : context.humspotUser === undefined ? (
             <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
-              You must be logged in to submit an event!
+              You must be <span onClick={() => router.push('/sign-up')} style={{ color: 'var(--ion-color-primary)', textDecoration: 'underline' }}>logged in</span> to submit an event!
             </div>
           ) : (
             <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>

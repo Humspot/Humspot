@@ -113,11 +113,17 @@ const Activity = () => {
 
         <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'} setComments={setComments} />
 
-        {comments && comments.length > 0 &&
+        {activity && context.humspotUser === undefined &&
+          <section style={{ padding: '10px', paddingTop: '25%', textAlign: 'center' }}>
+            <p>You must be logged in to view and add comments. Don't have an account? Sign up <span style={{ textDecoration: 'underline', color: 'var(--ion-color-primary)' }} onClick={() => { router.push('/sign-up') }}>here</span> </p>
+          </section>
+        }
+
+        {context.humspotUser && comments && comments.length > 0 &&
           <>
             <div id='top-of-comments-list'></div>
             <br />
-            <ActivityCommentsList comments={comments} />
+            <ActivityCommentsList comments={comments} setComments={setComments} />
           </>
         }
 

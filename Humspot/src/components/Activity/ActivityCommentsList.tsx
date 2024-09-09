@@ -16,7 +16,8 @@ import { formatDate } from "../../utils/functions/formatDate";
 
 
 type ActivityCommentsList = {
-  comments: HumspotCommentResponse[]
+  comments: HumspotCommentResponse[];
+  setComments: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 const ActivityCommentsList = memo((props: ActivityCommentsList) => {

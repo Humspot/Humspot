@@ -78,7 +78,7 @@ const MoreResults = () => {
             <p style={{ fontSize: "1.25rem" }}>{tagName}</p>
           </IonButtons>
           <IonButtons slot='end'>
-            <IonButton style={{ fontSize: '1.15rem' }} onClick={async () => await handleShare('Check out activities tagged with ' + tagName + ' on Humspot!')}>
+            <IonButton style={{ fontSize: '1rem' }} onClick={async () => await handleShare('Check out activities tagged with ' + tagName + ' on Humspot!')}>
               <IonIcon color='primary' icon={shareSocialOutline} />
             </IonButton>
           </IonButtons>
