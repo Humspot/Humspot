@@ -20,7 +20,7 @@ import GoBackHeader from '../components/Shared/GoBackHeader';
 import GoogleLoginButton from '../components/Login/GoogleLoginButton';
 
 import useContext from '../utils/hooks/useContext';
-import { handleSignIn } from '../utils/server';
+import { handleAppleLoginAndVerifyAWSUser, handleSignIn } from '../utils/server';
 import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
 
 import '../components/Login/AuthPages.css';
@@ -132,7 +132,7 @@ const SignIn = () => {
             <GoogleLoginButton />
             <br />
             {/* <p>OR</p> */}
-            <button onClick={() => { }}><img style={{ borderRadius: '5px', width: '250px' }} src={context.darkMode ? AppleWhite : AppleBlack} /></button>
+            <button onClick={async () => { router.push("/explore", 'root', 'replace'); await handleAppleLoginAndVerifyAWSUser(); }}><img style={{ borderRadius: '5px', width: '250px' }} src={context.darkMode ? AppleWhite : AppleBlack} /></button>
 
           </section>
         </div>

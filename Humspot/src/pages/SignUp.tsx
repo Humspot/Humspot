@@ -132,7 +132,7 @@ const SignUp: React.FC = () => {
             <GoogleLoginButton />
             <br />
             {/* <p>OR</p> */}
-            <button onClick={async () => { await handleAppleLoginAndVerifyAWSUser() }}><img style={{ borderRadius: '5px', width: '250px' }} src={context.darkMode ? AppleWhite : AppleBlack} /></button>
+            <button onClick={async () => { router.push("/explore", 'root', 'replace'); await handleAppleLoginAndVerifyAWSUser(); }}><img style={{ borderRadius: '5px', width: '250px' }} src={context.darkMode ? AppleWhite : AppleBlack} /></button>
             <br />
 
           </section>
