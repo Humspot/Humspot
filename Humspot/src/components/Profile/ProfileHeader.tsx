@@ -115,10 +115,10 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = (props: ProfileHeaderProps) 
           {buttons &&
             <IonButtons slot='end'>
               <IonButton disabled={!user} id='open-edit-profile-modal' slot='end'>
-                <IonIcon size='large' style={{ padding: "1%", opacity: user ? '100%' : '0%' }} icon={pencilOutline} />
+                <IonIcon color="primary" size='large' style={{ padding: "1%", opacity: user ? '100%' : '0%' }} icon={pencilOutline} />
               </IonButton>
               <IonButton id='open-profile-page-modal' slot='end'>
-                <IonIcon size='large' style={{ padding: "2.5%" }} icon={settingsOutline} />
+                <IonIcon color="primary" size='large' style={{ padding: "2.5%" }} icon={settingsOutline} />
               </IonButton>
             </IonButtons>
           }
