@@ -144,7 +144,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                 :
                 context.humspotUser === undefined ?
                   <>
-                    <p>You must be <span onClick={async () => modalRef.current && modalRef.current.dismiss().then(() => { router.push("/sign-up") })} style={{ color: 'var(--ion-color-primary)', textDecoration: 'underline' }}>logged in</span> to rate an attraction</p>
+                    <p>You must be <span onClick={async () => modalRef.current && modalRef.current.dismiss().then(() => { router.push("/sign-up") })} style={{ color: 'var(--ion-color-primary)', textDecoration: 'underline' }}>signed in</span> to rate an attraction</p>
                   </>
                   :
                   <>

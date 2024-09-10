@@ -108,10 +108,10 @@ const ProfileBio = (props: ProfileBioProps) => {
               humspotUser === undefined ?
                 (
                   <span style={{ color: context.darkMode ? 'white' : 'black' }}>
-                    Hello, welcome to Humspot! To RSVP for events, add comments, and submit your own activities,
-                    <span style={{ whiteSpace: 'pre', marginLeft: '5px', color: "var(--ion-color-primary)", textDecoration: 'underline' }}
+                    You are using Humspot as a guest. To submit events, add comments, and more, &nbsp;
+                    <span style={{ color: "var(--ion-color-primary)", textDecoration: 'underline' }}
                       onClick={async () => { context.setShowTabs(false); await timeout(250); router.push("/sign-up") }}>
-                      sign up for an account.
+                      sign in to an account.
                     </span>
                   </span>
                 )

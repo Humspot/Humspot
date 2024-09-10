@@ -9,7 +9,7 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import useContext from '../../utils/hooks/useContext';
 import { handleAddToFavorites, handleAddToRSVP, handleAddToVisited, handleGetFavoritesAndVisitedAndRSVPStatus } from '../../utils/server';
 import { useToast } from '@agney/ir-toast';
-import { IonButton, IonIcon } from '@ionic/react';
+import { IonButton, IonIcon, useIonAlert, useIonRouter } from '@ionic/react';
 import { calendar, calendarOutline, heart, heartOutline, shareOutline, walk, walkOutline } from 'ionicons/icons';
 import { isPastDate } from '../../utils/functions/calcDates';
 import { handleShare } from '../../utils/functions/handleShare';
@@ -22,6 +22,9 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
 
   const context = useContext();
   const Toast = useToast();
+  const router = useIonRouter();
+
+  const [presentAlert] = useIonAlert();
 
   // null is loading
   const [favorited, setFavorited] = useState<boolean | null>(null);
@@ -29,6 +32,29 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   const [rsvp, setRsvp] = useState<boolean | null>(null);
 
   const clickOnFavorite = async () => {
+    if (context.humspotUser === undefined) {
+      await presentAlert({
+        // cssClass: 'ion-alert-logout',
+        header: 'Sign in to a Humspot Account',
+        message: `To favorite an attraction, please sign in.`,
+        buttons:
+          [
+            {
+              text: 'Back',
+              role: 'cancel',
+              cssClass: 'alert-cancel-button',
+            },
+            {
+              text: 'Sign In',
+              id: 'sign-in-to-account-from-favorites-button',
+              // cssClass: 'alert-cancel-button',
+              handler: async () => {
+                router.push("/sign-up");
+              },
+            },
+          ]
+      });
+    }
     if (!context.humspotUser || favorited === null) return;
     setFavorited(null);
     const res = await handleAddToFavorites(
@@ -50,6 +76,29 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   };
 
   const clickOnVisited = async () => {
+    if (context.humspotUser === undefined) {
+      await presentAlert({
+        // cssClass: 'ion-alert-logout',
+        header: 'Sign in to a Humspot Account',
+        message: `To mark an attraction as visited, please sign in.`,
+        buttons:
+          [
+            {
+              text: 'Back',
+              role: 'cancel',
+              cssClass: 'alert-cancel-button',
+            },
+            {
+              text: 'Sign In',
+              id: 'sign-in-to-account-from-visited-button',
+              // cssClass: 'alert-cancel-button',
+              handler: async () => {
+                router.push("/sign-up");
+              },
+            },
+          ]
+      });
+    }
     if (!context.humspotUser || visited === null) return;
     setVisited(null);
     const res = await handleAddToVisited(
@@ -72,6 +121,29 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   };
 
   const clickOnRsvp = async () => {
+    if (context.humspotUser === undefined) {
+      await presentAlert({
+        // cssClass: 'ion-alert-logout',
+        header: 'Sign in to a Humspot Account',
+        message: `To RSVP for an event, please sign in.`,
+        buttons:
+          [
+            {
+              text: 'Back',
+              role: 'cancel',
+              cssClass: 'alert-cancel-button',
+            },
+            {
+              text: 'Sign In',
+              id: 'sign-in-to-account-from-rsvp-button',
+              // cssClass: 'alert-cancel-button',
+              handler: async () => {
+                router.push("/sign-up");
+              },
+            },
+          ]
+      });
+    }
     if (!context.humspotUser || rsvp === null) return;
     setRsvp(null);
     const res = await handleAddToRSVP(context.humspotUser.userID, id, activityDate);
@@ -95,6 +167,11 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
    * @see handleGetFavoritesAndVisitedAndRSVPStatus
    */
   const getButtonStatus = useCallback(async () => {
+    if(context.humspotUser === undefined) {
+      setFavorited(false);
+      setRsvp(false);
+      setVisited(false);
+    }
     if (!context.humspotUser || !id) return;
     const response = await handleGetFavoritesAndVisitedAndRSVPStatus(context.humspotUser.userID, id);
     setFavorited(response.favorited);
@@ -109,7 +186,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   return (
     <div style={{ zIndex: '1000' }}>
 
-      {context.humspotUser &&
+      {true &&
         <>
           <IonButton
             className='activity-favorites-button'
