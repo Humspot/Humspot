@@ -51,7 +51,7 @@ const ExploreCarouselRecentlyViewed = () => {
   return (
     <>
       {recentActivities.length > 0 &&
-        <IonItemDivider mode='ios' style={{ background: "var(--ion-background-color)", fontSize: "1.50rem", paddingTop: '10px' }}><IonText color='primary'>Recently Viewed</IonText></IonItemDivider>
+        <IonItemDivider mode='ios' style={{ background: "var(--ion-background-color)", fontSize: "1.45rem", paddingTop: '10px', fontWeight: 500 }}><IonText color='primary'>Recently Viewed</IonText></IonItemDivider>
       }
       <Swiper
         ref={swiperRef}

@@ -141,7 +141,7 @@ const App: React.FC = () => {
                   aria-hidden="true"
                   icon={addCircleOutline}
                   color={context.darkMode ? 'medium' : 'warning'}
-                  style={{ transform: "scale(1.25)" }}
+                  style={{ transform: "scale(1.4)" }}
                 />
               </IonTabButton>
               <IonTabButton tab="calendar" href="/calendar">

@@ -51,7 +51,7 @@ const ExploreCarouselGeneral = (props: ExploreCarouselGeneralProps) => {
     <>
       {props.activities && props.activities.length > 0 && !props.loading ?
         <div style={{ display: 'flex', justifyContent: 'right' }}>
-          <IonItemDivider mode='ios' style={{ background: "var(--ion-background-color)", fontSize: "1.50rem", paddingTop: '10px' }}><IonText onClick={handleClickArrow} color='primary'>{props.title}</IonText></IonItemDivider>
+          <IonItemDivider mode='ios' style={{ background: "var(--ion-background-color)", fontSize: "1.45rem", paddingTop: '10px', fontWeight: 500 }}><IonText onClick={handleClickArrow} color='primary'>{props.title}</IonText></IonItemDivider>
           <IonButton fill='clear' style={{ paddingTop: "10px" }} onClick={handleClickArrow}><IonIcon color='primary' icon={arrowForward}></IonIcon></IonButton>
         </div>
         :
