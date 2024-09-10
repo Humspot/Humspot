@@ -7,7 +7,6 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonPage,
-  IonRouterLink,
   useIonRouter,
   useIonViewDidEnter,
   useIonViewWillEnter,
@@ -136,7 +135,7 @@ const Activity: React.FC<{}> = () => {
 
         <IonInfiniteScroll
           onIonInfinite={async (ev) => {
-            if (!context.humspotUser) {
+            if (context.humspotUser) {
               const response = await handleGetCommentsGivenActivityID(id, pageNum);
               if (response.success && response.comments && response.comments.length > 0) {
                 setPageNum((prev) => prev + 1);

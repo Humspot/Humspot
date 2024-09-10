@@ -125,7 +125,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
       await presentAlert({
         // cssClass: 'ion-alert-logout',
         header: 'Sign in to a Humspot Account',
-        message: `To RSVP for an event, please sign in.`,
+        message: `To RSVP for this event, please sign in.`,
         buttons:
           [
             {
