@@ -3,7 +3,7 @@
  * @fileoverview card containing the title of the Activity along with a button to rate the activity (attractions only).
  */
 
-import { IonButton, IonButtons, IonCard, IonCardTitle, IonContent, IonHeader, IonItemDivider, IonModal, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/react'
+import { IonButton, IonButtons, IonCard, IonCardTitle, IonContent, IonHeader, IonItemDivider, IonModal, IonSkeletonText, IonTitle, IonToolbar, useIonRouter } from '@ionic/react'
 import { Rating } from 'react-custom-rating-component'
 import useContext from '../../utils/hooks/useContext';
 import { handleAddRating } from '../../utils/server';
@@ -26,6 +26,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
 
   const context = useContext();
   const Toast = useToast();
+  const router = useIonRouter();
 
   const modalRef = useRef<HTMLIonModalElement | null>(null);
 
@@ -117,12 +118,12 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                 <IonTitle style={{ fontSize: '1.25rem' }}>Rate Attraction</IonTitle>
                 <IonButtons style={{ height: '5vh' }}>
                   <IonButton style={{ fontSize: '1.15em', }} onClick={() => { modalRef.current?.dismiss().then(() => { setNewUserRating(originalUserRating); setHasUpdated(false); }) }}>
-                    <p>Back</p>
+                    <p>Close</p>
                   </IonButton>
                 </IonButtons>
               </IonToolbar>
             </IonHeader>
-            <b><p className='ion-text-center' style={{ padding: '10px' }}>Been here before? Give it a rating to let Humspot users know what you thought!</p></b>
+            <b><p className='ion-text-center' style={{ padding: '10px', paddingLeft: '25px', paddingRight: '25px' }}>Been here before? Give it a rating to let Humspot users know what you thought!</p></b>
             <section style={{
               display: 'flex',
               justifyContent: 'center',
@@ -141,15 +142,22 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                   onChange={(newRating) => { setHasUpdated(true); setNewUserRating(newRating) }}
                 />
                 :
-                <>
-                  <IonSkeletonText style={{ height: '30px', width: '75vw', borderRadius: '5px' }} animated />
-                </>
+                context.humspotUser === undefined ?
+                  <>
+                    <p>You must be <span onClick={async () => modalRef.current && modalRef.current.dismiss().then(() => { router.push("/sign-up") })} style={{ color: 'var(--ion-color-primary)', textDecoration: 'underline' }}>logged in</span> to rate an attraction</p>
+                  </>
+                  :
+                  <>
+                    <IonSkeletonText style={{ height: '30px', width: '75vw', borderRadius: '5px' }} animated />
+                  </>
               }
             </section>
             {!!originalUserRating && !hasUpdated &&
               <p className='ion-text-center'>You previously gave this a {originalUserRating} / 5</p>
             }
-            <IonButton disabled={!hasUpdated || ratingLoading} color='secondary' expand='block' style={{ padding: '10px' }} onClick={async () => await submitRating()}>Submit</IonButton>
+            {context.humspotUser &&
+              <IonButton disabled={!hasUpdated || ratingLoading} color='secondary' expand='block' style={{ padding: '10px' }} onClick={async () => await submitRating()}>Submit</IonButton>
+            }
           </IonContent>
         </IonModal>
       }
