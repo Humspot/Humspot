@@ -21,12 +21,14 @@ import { useContext } from '../utils/hooks/useContext';
 import { handleSignUp } from '../utils/server';
 
 import '../components/Login/AuthPages.css';
+import useIonBackButton from '../utils/hooks/useIonBackButton';
 
 
 const SignUp: React.FC = () => {
 
   const context = useContext();
   const router = useIonRouter();
+  useIonBackButton(50, () => { router.goBack(); }, [router]);
   const Toast = useToast();
   const [present, dismiss] = useIonLoading();
 

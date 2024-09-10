@@ -21,6 +21,7 @@ import { useContext } from '../utils/hooks/useContext';
 
 import placeholder from '../assets/images/school_placeholder.jpeg';
 import { handleShare } from '../utils/functions/handleShare';
+import useIonBackButton from '../utils/hooks/useIonBackButton';
 
 
 type SearchParams = {
@@ -304,6 +305,7 @@ const Search = () => {
   const query: string = params.query ?? '';
 
   const router = useIonRouter();
+  useIonBackButton(50, () => { router.goBack(); }, [router]);
   const context = useContext();
   const contentRef = useRef<HTMLIonContentElement | null>(null);
   const searchRef = useRef<HTMLIonSearchbarElement | null>(null);

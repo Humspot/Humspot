@@ -7,6 +7,7 @@ import { chevronBackOutline, shareOutline, shareSocialOutline } from "ionicons/i
 import { handleShare } from "../utils/functions/handleShare";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import { formatDate } from "../utils/functions/formatDate";
+import useIonBackButton from "../utils/hooks/useIonBackButton";
 
 
 const UpcomingEvents = () => {
@@ -16,6 +17,8 @@ const UpcomingEvents = () => {
   const router = useIonRouter();
 
   const [events, setEvents] = useState<GetHumspotEventResponse[] | null>(null);
+  
+  useIonBackButton(50, () => { router.goBack(); }, [router]);
 
   const handleGetUpcomingEvents = useCallback(async () => {
     // if (context.humspotUser) {

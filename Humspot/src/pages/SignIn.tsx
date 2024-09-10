@@ -20,6 +20,7 @@ import { handleSignIn } from '../utils/server';
 import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
 
 import '../components/Login/AuthPages.css';
+import useIonBackButton from '../utils/hooks/useIonBackButton';
 
 const inputNote: React.CSSProperties = {
   fontSize: '0.85em',
@@ -32,6 +33,7 @@ const SignIn = () => {
 
   const context = useContext();
   const router = useIonRouter();
+  useIonBackButton(50, () => { router.goBack(); }, [router]);
   const Toast = useToast();
   const [present, dismiss] = useIonLoading();
 

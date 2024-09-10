@@ -1,12 +1,15 @@
 import React from "react";
-import { IonPage, IonContent, useIonViewWillEnter } from "@ionic/react";
+import { IonPage, IonContent, useIonViewWillEnter, useIonRouter } from "@ionic/react";
 
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { useContext } from "../utils/hooks/useContext";
+import useIonBackButton from "../utils/hooks/useIonBackButton";
 
 const TermsAndConditions: React.FC = () => {
 
   const context = useContext();
+  const router = useIonRouter();
+  useIonBackButton(50, () => { router.goBack(); }, [router]);
 
   useIonViewWillEnter(() => {
     context.setShowTabs(false);

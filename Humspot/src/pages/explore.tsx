@@ -89,7 +89,6 @@ const ExplorePage = () => {
         {!showFilterList &&
           <>
             <ExploreCarouselRecentlyViewed />
-            <div className='carousel-divider'></div>
             {!highlightsError &&
               <section>
                 <ExploreCarouselGeneral title='Highlights' hasTag activities={highlights} loading={highlightsLoading} />

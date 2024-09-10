@@ -21,6 +21,7 @@ import placeholder from '../assets/images/placeholder.png';
 import { chevronBackOutline, shareSocialOutline } from "ionicons/icons";
 import { useContext } from "../utils/hooks/useContext";
 import { handleShare } from "../utils/functions/handleShare";
+import useIonBackButton from "../utils/hooks/useIonBackButton";
 
 type MoreResultsParams = {
   tagName: string;
@@ -40,6 +41,7 @@ const MoreResults = () => {
   const Toast = useToast();
   const router = useIonRouter();
   const context = useContext();
+  useIonBackButton(50, () => { router.goBack(); }, [router]);
 
   const [loadingFiltersActivities, setLoadingFiltersActivities] = useState<boolean>(false);
   const [filteredActivities, setFilteredActivities] = useState<any[]>();

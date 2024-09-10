@@ -96,7 +96,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = (props: ProfileHeaderProps) 
   return (
     <>
       <IonHeader className='ion-no-border' translucent={false}>
-        <IonToolbar style={{ '--background': 'var(--ion-tab-bar-background)' }}>
+        <IonToolbar style={{ '--background': user === undefined || user && context.humspotUser && user === context.humspotUser ? 'var(--ion-background-color)' : 'var(--ion-tab-bar-background)' }}>
           {backButton &&
             <IonButtons >
               <IonButton style={{ fontSize: '1.15em', marginRight: '15px' }} onClick={() => { router.goBack(); }}>
