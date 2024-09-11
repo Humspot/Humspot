@@ -56,6 +56,7 @@ const AdminPendingOrganizersList = (props: { approvedOrganizers: { username: str
           return (
             <FadeIn key={index}>
               <IonItem
+                button
                 onClick={() => { router.push(`/user/${organizer.userID}`)}}
               >
                 <IonLabel style={{ paddingLeft: "1px" }}>

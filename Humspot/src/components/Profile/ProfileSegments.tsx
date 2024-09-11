@@ -201,7 +201,11 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
         {selectedSegment === "favorites" ? (
           <>
             {!favoritesLoading && favorites && favorites.length === 0 || props.user === undefined ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "65%" }}>No Favorites</IonTitle>
+              <div className='centered-content'>
+                <FadeIn>
+                  <p style={{ fontWeight: '800' }}>No Favorites</p>
+                </FadeIn>
+              </div>
               :
               <>
                 <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>
@@ -210,7 +214,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                       {!favoritesLoading ?
                         favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
                           return (
-                            <FadeIn key={favorite.name + index} delay={(index % 10) * 50}>
+                            <FadeIn key={favorite.name + index} delay={((index % 10) * 50) }>
                               <IonItem className='ion-no-padding' role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
                                 <IonThumbnail style={{ marginLeft: "10px" }}><img style={{
                                   borderRadius: "5px"
@@ -254,7 +258,11 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
         ) : selectedSegment === "visited" ? (
           <>
             {!visitedLoading && visited && visited.length === 0 || props.user === undefined ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "65%" }}>No Places Visited</IonTitle>
+              <div className='centered-content'>
+                <FadeIn>
+                  <p style={{ fontWeight: '800' }}>No Places Visited</p>
+                </FadeIn>
+              </div>
               :
               <>
                 <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>
@@ -307,7 +315,11 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
         ) : selectedSegment === "interactions" ? (
           <>
             {!interactionsLoading && interactions && interactions.length === 0 || props.user === undefined ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "65%" }}>No Interactions</IonTitle>
+              <div className='centered-content'>
+                <FadeIn>
+                  <p style={{ fontWeight: '800' }}>No Interactions</p>
+                </FadeIn>
+              </div>
               :
               <>
                 <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>
@@ -369,7 +381,9 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
           <>
             {!submissionsLoading && submissions && submissions.length === 0 ?
               <div className='centered-content'>
-                <p>No posts from user</p>
+                <FadeIn>
+                  <p style={{ fontWeight: '800' }}>No Posts from User</p>
+                </FadeIn>
               </div>
               :
               <>

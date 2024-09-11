@@ -86,6 +86,7 @@ function AdminSubmissionsList(props: { submissions: any[], loading: boolean; }) 
           return (
             <FadeIn key={index}>
               <IonItem
+                button
                 onClick={() => {
                   router.push("/admin-dashboard/submission/" + submission.submissionID)
                 }}

@@ -129,6 +129,7 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
             return (
               <FadeIn key={index}>
                 <IonItem
+                  button
                   onClick={() => { setOrganizerInfo({ name: organizer.name, description: organizer.description, userID: organizer.userID, email: organizer.email, index: index, id: organizer.submissionID }); modalRef.current?.present(); }}
                 >
                   <IonLabel>
