@@ -43,9 +43,9 @@ const SubmittedActivitiesPage = () => {
             :
             submittedActivities ? submittedActivities.map((activity, index: number) => {
               return (
-                <IonItem button key={index} onClick={() => { }}>
-                  <IonLabel style={{ paddingLeft: "10px" }}>
-                    <h1 style={{ fontSize: "1.2rem" }}>{activity.activityType.toUpperCase()} - <b>{activity.name}</b></h1>
+                <IonItem key={index} onClick={() => { }}>
+                  <IonLabel>
+                    <h1 style={{ fontSize: "1.2rem" }}>{activity.activityType[0].toUpperCase() + activity.activityType.substring(1, activity.activityType.length)} - <b>{activity.name}</b></h1>
                     <p style={{ fontSize: "1.05rem" }}>{activity.description}</p>
                     <p style={{ fontSize: "0.9rem" }}>Submitted on {extractDateFromSqlDatetime(activity.submissionDate)}</p>
                   </IonLabel>

@@ -8,18 +8,13 @@ import {
   IonItem,
   useIonRouter,
   IonCardTitle,
+  IonTitle,
 } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 
 function AdminSubmissionsList(props: { submissions: any[], loading: boolean; }) {
 
   const router = useIonRouter();
-
-  if (!props.loading && props.submissions.length <= 0) {
-    return (
-      <IonCardTitle className="ion-text-center" style={{ fontSize: '1.25rem', padding: '5px' }}>No Submissions</IonCardTitle>
-    )
-  }
 
   return (
     <IonList lines='full'>

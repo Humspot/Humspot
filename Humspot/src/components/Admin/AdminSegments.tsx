@@ -8,6 +8,7 @@ import {
   IonRefresher,
   IonRefresherContent,
   RefresherEventDetail,
+  IonTitle,
 } from "@ionic/react";
 import { useCallback, useEffect, useState } from "react";
 import useContext from "../../utils/hooks/useContext";
@@ -28,7 +29,7 @@ const AdminSegment: React.FC = () => {
   const [organizers, setOrganizers] = useState<any[]>([]);
   const [organizersLoading, setOrganizersLoading] = useState<boolean>(false);
 
-  const [approvedOrganizers, setApprovedOrganizers] = useState<{ username: string }[]>([]);
+  const [approvedOrganizers, setApprovedOrganizers] = useState<{ username: string, userID: string }[]>([]);
   const [approvedOrganizersLoading, setApprovedOrganizersLoading] = useState<boolean>(false);
 
   const fetchSubmissions = useCallback(async () => {
@@ -76,27 +77,27 @@ const AdminSegment: React.FC = () => {
 
   return (
     <>
-      <div style={{ marginLeft: "2.5%", marginRight: "2.5%", backgroundColor: "var(--ion-background-color)" }}>
+      <div style={{ marginLeft: "2.5%", marginRight: "2.5%", marginTop: '10px', backgroundColor: "var(--ion-background-color)" }}>
         <IonSegment
           scrollable
-          // className="ion-justify-content-center"
+          id="admin-segment"
           value={selectedSegment}
           onIonChange={(e) => setSelectedSegment(e.detail.value as string)}
         >
           <IonSegmentButton value="pendingActivities">
-            <div className="segment-button" style={{ fontSize: "0.8rem" }}>
+            <div style={{ fontSize: "0.8rem" }}>
               <IonLabel>Pending Activities</IonLabel>
             </div>
           </IonSegmentButton>
 
           <IonSegmentButton value="pendingOrganizer">
-            <div className="segment-button" style={{ fontSize: "0.8rem" }}>
+            <div style={{ fontSize: "0.8rem" }}>
               <IonLabel>Pending Organizers</IonLabel>
             </div>
           </IonSegmentButton>
 
           <IonSegmentButton value="approvedOrganizer">
-            <div className="segment-button" style={{ fontSize: "0.8rem" }}>
+            <div style={{ fontSize: "0.8rem" }}>
               <IonLabel>Approved Organizers</IonLabel>
             </div>
           </IonSegmentButton>
@@ -109,21 +110,40 @@ const AdminSegment: React.FC = () => {
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
-        {selectedSegment === "pendingActivities" ? (
-          <IonCard style={{ marginBottom: '2.5vh' }}>
-            <AdminSubmissionsList submissions={submissions} loading={submissionsLoading} />
-          </IonCard>
-        ) : selectedSegment === "pendingOrganizer" ? (
-          <IonCard style={{ marginBottom: '2.5vh' }}>
-            <AdminPendingOrganizersList organizers={organizers} setOrganizers={setOrganizers} loading={organizersLoading} />
-          </IonCard>
-        ) : selectedSegment === "approvedOrganizer" ? (
-          <IonCard style={{ marginBottom: '2.5vh' }}>
-            <AdminApprovedOrganizersList approvedOrganizers={approvedOrganizers} loading={approvedOrganizersLoading} />
-          </IonCard>
-        ) : (
-          <></>
-        )
+        {selectedSegment === "pendingActivities" ?
+          <>
+            {
+              !submissionsLoading && submissions.length <= 0 ?
+                <>
+                  <IonTitle className="ion-text-center" style={{ display: "flex", height: "75%" }}>No Submissions</IonTitle>
+                  <IonTitle className="ion-text-center" style={{ display: "flex", height: "82.5%", whiteSpace: 'nowrap', fontSize: '0.8rem', fontWeight: '500' }}>Swipe down to reload</IonTitle>
+                </>
+                :
+                <IonCard style={{ marginBottom: '2.5vh', marginTop: '10px', marginLeft: '2.5%', marginRight: '2.5%' }}>
+                  <AdminSubmissionsList submissions={submissions} loading={submissionsLoading} />
+                </IonCard>
+            }
+          </>
+          : selectedSegment === "pendingOrganizer" ?
+            <>
+              {!organizersLoading && organizers.length <= 0 ?
+                <>
+                  <IonTitle className="ion-text-center" style={{ display: "flex", height: "75%" }}>No Requests</IonTitle>
+                  <IonTitle className="ion-text-center" style={{ display: "flex", height: "82.5%", whiteSpace: 'nowrap', fontSize: '0.8rem', fontWeight: '500' }}>Swipe down to reload</IonTitle>
+                </>
+                :
+                <IonCard style={{ marginBottom: '2.5vh', marginTop: '10px', marginLeft: '2.5%', marginRight: '2.5%' }}>
+                  <AdminPendingOrganizersList organizers={organizers} setOrganizers={setOrganizers} loading={organizersLoading} />
+                </IonCard>
+              }
+            </>
+            : selectedSegment === "approvedOrganizer" ? (
+              <IonCard style={{ marginBottom: '2.5vh', marginTop: '10px', marginLeft: '2.5%', marginRight: '2.5%' }}>
+                <AdminApprovedOrganizersList approvedOrganizers={approvedOrganizers} loading={approvedOrganizersLoading} />
+              </IonCard>
+            ) : (
+              <></>
+            )
         }
       </IonContent>
     </>

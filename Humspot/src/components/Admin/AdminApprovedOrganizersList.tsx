@@ -1,7 +1,9 @@
-import { IonList, IonSkeletonText, IonItem, IonLabel, } from "@ionic/react";
+import { IonList, IonSkeletonText, IonItem, IonLabel, useIonRouter, } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 
-const AdminPendingOrganizersList = (props: { approvedOrganizers: { username: string }[]; loading: boolean; }) => {
+const AdminPendingOrganizersList = (props: { approvedOrganizers: { username: string, userID: string }[]; loading: boolean; }) => {
+
+  const router = useIonRouter();
 
   return (
     <IonList lines='full'>
@@ -54,7 +56,7 @@ const AdminPendingOrganizersList = (props: { approvedOrganizers: { username: str
           return (
             <FadeIn key={index}>
               <IonItem
-                onClick={() => { }}
+                onClick={() => { router.push(`/user/${organizer.userID}`)}}
               >
                 <IonLabel style={{ paddingLeft: "1px" }}>
                   <h2>{organizer.username}</h2>

@@ -198,6 +198,34 @@
   }
 }
 
+#admin-segment {
+  width: auto;
+  --indicator-box-shadow: 0 0 5px rgba(23, 17, 17, 0);
+}
+
+#admin-segment ion-segment-button {
+  --color: gray;
+  height: 5vh;
+  --indicator-box-shadow: 0 0 5px rgba(0, 0, 0, 0);
+}
+
+#admin-segment ion-segment-button.segment-button-checked {
+  --color: var(--ion-color-primary);
+  --indicator-box-shadow: 0 0 5px rgba(0, 0, 0, 0);
+}
+
+#admin-segment ion-segment-button {
+  --color-checked: var(--ion-color-primary-contrast);
+  --indicator-color: var(--ion-color-primary);
+  --indicator-box-shadow: 0 0 5px rgba(0, 0, 0, 0);
+}
+
+#admin-segment .segment-button {
+  display: flex;
+  align-items: center;
+  --indicator-box-shadow: 0 0 5px rgba(0, 0, 0, 0);
+}
+
 .submisson-description {
   .description {
     display: -webkit-box;

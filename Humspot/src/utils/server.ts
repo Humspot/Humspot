@@ -1796,7 +1796,7 @@ export const handleDenyOrganizer = async (approverID: string, submitterID: strin
  * @param userID 
  * @returns 
  */
-export const handleGetApprovedOrganizerSubmissions = async (pageNum: number, userID: string): Promise<{ message: string; success: boolean; organizerList: { username: string }[] }> => {
+export const handleGetApprovedOrganizerSubmissions = async (pageNum: number, userID: string): Promise<{ message: string; success: boolean; organizerList: { username: string, userID: string }[] }> => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -1897,6 +1897,43 @@ export const handleSubmitAttractionForApproval = async (event: HumspotAttraction
           Authorization: `Bearer ${jwtToken}`,
         },
         body: JSON.stringify(event),
+      }
+    );
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+    return responseData;
+  } catch (error) {
+    console.error("Error calling API Gateway", error);
+    return { message: "Error calling API Gateway" + error, success: false };
+  }
+};
+
+export const handleDenyActivitySubmission = async (adminUserID: string, addedByUserID: string, reason: string) => {
+  try {
+    const currentUserSession = await Auth.currentSession();
+
+    if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+
+    const idToken = currentUserSession.getIdToken();
+    const jwtToken = idToken.getJwtToken();
+
+    const info = {
+      adminUserID: adminUserID,
+      addedByUserID: addedByUserID,
+      reason: reason
+    }
+
+    const response = await fetch(
+      import.meta.env.VITE_AWS_API_GATEWAY_DENY_ACTIVITY,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        body: JSON.stringify(info),
       }
     );
 

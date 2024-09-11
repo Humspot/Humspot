@@ -39,7 +39,7 @@ const User: React.FC<{}> = () => {
     if (context.humspotUser) {
       const { success, isUserBlocked } = await handleGetIsUserBlocked(context.humspotUser.userID, uid);
       if (!success) {
-        presentToast({ message: "Something went wrong", duration: 2000, color: "danger" });
+        presentToast({ message: "Something went wrong!!", duration: 2000, color: "danger" });
         return;
       }
       if (!isUserBlocked) {
@@ -47,7 +47,7 @@ const User: React.FC<{}> = () => {
         if (res.success) {
           setUser(res.info);
         } else {
-          presentToast({ message: "Something went wrong", color: "danger", duration: 2000 });
+          presentToast({ message: "Something went wrong!", color: "danger", duration: 2000 });
         }
         return;
       }

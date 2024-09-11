@@ -1,5 +1,5 @@
 import { useToast } from "@agney/ir-toast";
-import { IonList, IonSkeletonText, IonItem, IonLabel, IonModal, IonContent, IonTitle, IonButton, IonFab, IonTextarea, IonLoading, IonCardTitle, IonButtons, IonHeader, IonToolbar } from "@ionic/react";
+import { IonList, IonSkeletonText, IonItem, IonLabel, IonModal, IonContent, IonTitle, IonButton, IonFab, IonTextarea, IonLoading, IonCardTitle, IonButtons, IonHeader, IonToolbar, IonCol, useIonRouter } from "@ionic/react";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 import { useRef, useState } from "react";
 import useContext from "../../utils/hooks/useContext";
@@ -19,6 +19,7 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
 
   const context = useContext();
   const Toast = useToast();
+  const router = useIonRouter();
 
   const [organizerInfo, setOrganizerInfo] = useState<Organizer | null>(null);
   const modalRef = useRef<HTMLIonModalElement | null>(null);
@@ -130,7 +131,7 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
                 <IonItem
                   onClick={() => { setOrganizerInfo({ name: organizer.name, description: organizer.description, userID: organizer.userID, email: organizer.email, index: index, id: organizer.submissionID }); modalRef.current?.present(); }}
                 >
-                  <IonLabel style={{ paddingLeft: "10px" }}>
+                  <IonLabel>
                     <h2>{organizer.name}</h2>
                     <p>{organizer.description}</p>
                   </IonLabel>
@@ -141,11 +142,11 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
         }
       </IonList>
 
-      <IonModal ref={modalRef} canDismiss={canDismiss} trigger="open-add-activity-modal" handle={false} breakpoints={[0, 0.99]} initialBreakpoint={0.99}>
+      <IonModal ref={modalRef} presentingElement={context.currentPage} handle={false}>
         <IonContent style={{ '--background': 'var(--ion-item-background' }}>
           <IonHeader className='ion-no-border'>
             <IonToolbar className='profile-modal-toolbar'>
-              <IonTitle className='profile-modal-title'>Submission Info</IonTitle>
+              <IonTitle className='profile-modal-title'>Organizer Request</IonTitle>
               <IonButtons>
                 <IonButton className='profile-modal-close-button' onClick={() => { modalRef.current?.dismiss() }}>
                   <p>Close</p>
@@ -156,18 +157,30 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
           <IonLoading isOpen={loading} message={"Submitting..."} />
           {organizerInfo &&
             <>
-              <h1 style={{ paddingLeft: "15px", paddingRight: "10px", paddingTop: "0", paddingBottom: "0", fontSize: "1.05rem" }}><b>Name: </b>{organizerInfo.name}</h1>
-              <h2 style={{ paddingLeft: "15px", paddingRight: "10px", paddingTop: "0", paddingBottom: "0", fontSize: "1.05rem" }}><b>Email:</b> {organizerInfo.email}</h2>
-              <p style={{ paddingLeft: "15px", paddingRight: "10px", paddingTop: "5px", paddingBottom: "0", fontSize: "0.9rem" }}>{organizerInfo.description}</p>
+              <h1 style={{ paddingLeft: "15px", paddingRight: "10px", paddingTop: "0", paddingBottom: "0", fontSize: "1.05rem" }}>
+                <IonCol><b>Name: </b></IonCol>
+                <IonCol>
+                  <span style={{ color: 'var(--ion-color-primary)', textDecoration: 'underline' }} onClick={async () => { modalRef.current && await modalRef.current.dismiss(); router.push(`/user/${organizerInfo.userID}`) }}>
+                    {organizerInfo.name}
+                  </span>
+                </IonCol>
+              </h1>
+              <h2 style={{ paddingLeft: "15px", paddingRight: "10px", paddingTop: "0", paddingBottom: "0", fontSize: "1.05rem" }}>
+                <IonCol><b>Email: </b></IonCol>
+                <IonCol>{organizerInfo.email}</IonCol>
+              </h2>
+              <p style={{ paddingLeft: "15px", paddingRight: "10px", paddingTop: "5px", paddingBottom: "0", fontSize: "1.05rem" }}>
+                <IonCol><b>Details: </b></IonCol>
+                <IonCol>{organizerInfo.description}</IonCol>
+              </p>
 
-              <IonFab vertical='bottom' style={{ width: "100vw" }}>
-                <IonItem lines='full'>
-                  <IonLabel position='stacked'>Message to User (optional)</IonLabel>
-                  <IonTextarea maxlength={500} rows={3} ref={descRef} placeholder="Thanks for requesting to become an organizer..." />
-                </IonItem>
-                <IonButton color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmitApproval()}>Approve</IonButton>
-                <IonButton color='danger' expand="block" style={{ padding: "10px" }} onClick={async () => { await handleDenyApproval() }}>Deny</IonButton>
-              </IonFab>
+              <br />
+              <IonItem lines='none'>
+                <IonLabel position='stacked'>Message to User (optional)</IonLabel>
+                <IonTextarea maxlength={500} rows={3} ref={descRef} placeholder="Thanks for requesting to become an organizer..." />
+              </IonItem>
+              <IonButton color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmitApproval()}>Approve</IonButton>
+              <IonButton color='danger' expand="block" style={{ padding: "10px" }} onClick={async () => { await handleDenyApproval() }}>Deny</IonButton>
             </>
           }
         </IonContent>

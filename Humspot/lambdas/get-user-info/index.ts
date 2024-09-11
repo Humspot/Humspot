@@ -38,6 +38,13 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     `;
 
     const [rows]: any = await conn.query(query, [userID]);
+    if (!rows || rows.length <= 0 || !rows[0]) {
+      return {
+        statusCode: 404,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: "User " + userID + " does not exist!", success: false }),
+      };
+    }
 
     return {
       statusCode: 200,

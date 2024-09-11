@@ -286,7 +286,7 @@ export const EventForm = () => {
 
     let color = "danger";
     if (response.success) {
-      color = "success";
+      color = "secondary";
     }
     const t = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: color });
     t.present();

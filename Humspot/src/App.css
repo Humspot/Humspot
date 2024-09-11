@@ -47,3 +47,11 @@ ion-segment-buttom::before {
 .ion-photo-viewer img {
   border-radius: 5px !important;
 }
+
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 65%; /* Full viewport height */
+  text-align: center; /* Center text horizontally within the element */
+}

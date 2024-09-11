@@ -48,8 +48,6 @@ const ApprovedActivitiesPage = () => {
       <GoBackHeader translucent={true} title="Approved Submissions" />
 
       <IonContent>
-        <br />
-
         <IonList className='ion-no-padding' lines="full">
           {loading ?
             <SkeletonLoading count={6} height={"5rem"} animated={true} />
@@ -57,7 +55,7 @@ const ApprovedActivitiesPage = () => {
             approvedActivities ? approvedActivities.map((activity, index: number) => {
               return (
                 <FadeIn key={activity.activityID + index} delay={(index % 20) * 50}>
-                  <IonItem className='ion-no-padding' role='button' onClick={() => { if (activity.activityID) router.push("/activity/" + activity.activityID) }}>
+                  <IonItem button className='ion-no-padding' role='button' onClick={() => { if (activity.activityID) router.push("/activity/" + activity.activityID) }}>
                     <IonThumbnail style={{ marginLeft: "10px" }}><img style={{
                       borderRadius: "5px"
                     }} src={activity.image_url || placeholder} /></IonThumbnail>

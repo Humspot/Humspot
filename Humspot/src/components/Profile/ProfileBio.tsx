@@ -13,6 +13,7 @@ import avatar from '../../assets/images/avatar.svg';
 import './Profile.css';
 import { HumspotUser } from "../../utils/types";
 import { timeout } from "../../utils/functions/timeout";
+import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 
 let uniqueString: number = new Date().getTime(); // Use a timestamp to force cache refresh when updated profile info.
 const MAX_BIO_LENGTH: number = 150;
@@ -101,31 +102,35 @@ const ProfileBio = (props: ProfileBioProps) => {
               )
               :
               props.blocked ?
-                <>
+                <FadeIn>
                   This user is blocked.
-                </>
-              :
-              humspotUser === undefined ?
-                (
-                  <span style={{ color: context.darkMode ? 'white' : 'black' }}>
-                    You are using Humspot as a guest. To submit events, add comments, and more, &nbsp;
-                    <span style={{ color: "var(--ion-color-primary)", textDecoration: 'underline' }}
-                      onClick={async () => { context.setShowTabs(false); await timeout(250); router.push("/sign-up") }}>
-                      sign in to an account.
-                    </span>
-                  </span>
-                )
+                </FadeIn>
                 :
-                (
-                  <span style={{ color: context.darkMode ? 'white' : 'black' }}>
-                    {isBioExpanded ? humspotUser.bio : humspotUser.bio && humspotUser.bio.length > 0 && humspotUser.bio.substring(0, MAX_BIO_LENGTH)}
-                    {humspotUser.bio && humspotUser.bio.length > MAX_BIO_LENGTH && (
-                      <span className="bio-toggle" onClick={() => setIsBioExpanded((prev) => !prev)}>
-                        {isBioExpanded ? ' Less' : ' ... More'}
+                humspotUser === undefined ?
+                  (
+                    <FadeIn>
+                      <span style={{ color: context.darkMode ? 'white' : 'black' }}>
+                        You are using Humspot as a guest. To submit events, add comments, and more, &nbsp;
+                        <span style={{ color: "var(--ion-color-primary)", textDecoration: 'underline' }}
+                          onClick={async () => { context.setShowTabs(false); await timeout(250); router.push("/sign-up") }}>
+                          sign in to an account.
+                        </span>
                       </span>
-                    )}
-                  </span>
-                )
+                    </FadeIn>
+                  )
+                  :
+                  (
+                    <FadeIn>
+                      <span style={{ color: context.darkMode ? 'white' : 'black' }}>
+                        {isBioExpanded ? humspotUser.bio : humspotUser.bio && humspotUser.bio.length > 0 && humspotUser.bio.substring(0, MAX_BIO_LENGTH)}
+                        {humspotUser.bio && humspotUser.bio.length > MAX_BIO_LENGTH && (
+                          <span className="bio-toggle" onClick={() => setIsBioExpanded((prev) => !prev)}>
+                            {isBioExpanded ? ' Less' : ' ... More'}
+                          </span>
+                        )}
+                      </span>
+                    </FadeIn>
+                  )
             }
           </p>
         </section>

@@ -9,6 +9,7 @@ import { IonModal, IonList, IonItem, IonIcon, IonLabel, useIonRouter, IonContent
 import { calendarOutline, clipboardOutline, listCircleOutline, locationOutline } from "ionicons/icons";
 
 import useContext from "../../utils/hooks/useContext";
+import { timeout } from "../../utils/functions/timeout";
 
 const ActivitiesModal: React.FC = () => {
 
@@ -51,12 +52,12 @@ const ActivitiesModal: React.FC = () => {
           <br />
           {context.humspotUser &&
             <>
-              <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/submitted-activities") }) }}>
+              <IonItem onClick={() => { modalRef?.current?.dismiss().then(async () => { context.setShowTabs(false); await timeout(250); router.push("/submitted-activities") }) }}>
                 <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
                 <IonLabel>See Pending Submissions</IonLabel>
               </IonItem>
               <br />
-              <IonItem onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/approved-activities") }) }}>
+              <IonItem onClick={() => { modalRef?.current?.dismiss().then(async () => { context.setShowTabs(false); await timeout(250); router.push("/approved-activities") }) }}>
                 <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
                 <IonLabel>See Approved Submissions</IonLabel>
               </IonItem>

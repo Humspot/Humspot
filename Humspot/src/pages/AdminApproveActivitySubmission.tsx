@@ -5,7 +5,7 @@ import GoBackHeader from "../components/Shared/GoBackHeader";
 import useContext from "../utils/hooks/useContext";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { handleApproveActivitySubmission, handleGetSubmissionInfo } from "../utils/server";
+import { handleApproveActivitySubmission, handleDenyActivitySubmission, handleGetSubmissionInfo } from "../utils/server";
 import { SubmissionInfo } from "../utils/types";
 import { useToast } from "@agney/ir-toast";
 import { canDismiss } from "../utils/functions/canDismiss";
@@ -37,17 +37,29 @@ const AdminApproveActivitySubmission = () => {
     setIsSubmitting(true);
     const res = await handleApproveActivitySubmission(context.humspotUser.userID, submissionInfo, descRef?.current?.value ?? '');
     if (res.success) {
-      const t = Toast.create({ message: "Activity approved!", position: 'bottom', duration: 2000, color: "secondary" });
+      const t = Toast.create({ message: "Activity submission approved!", position: 'bottom', duration: 2000, color: "secondary" });
       t.present();
       router.goBack();
     } else {
       const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
     }
+    setIsSubmitting(false);
   };
 
   const handleDeny = async () => {
-
+    if (!context.humspotUser || !submissionInfo) return;
+    setLoading(true);
+    const res = await handleDenyActivitySubmission(context.humspotUser.userID, submissionInfo.addedByUserID, descRef?.current?.value ?? '');
+    if (res.success) {
+      const t = Toast.create({ message: "Activity submission denied.", position: 'bottom', duration: 2000, color: "secondary" });
+      t.present();
+      router.goBack();
+    } else {
+      const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
+      t.present();
+    }
+    setLoading(false);
   };
 
   const fetchSubmissionInfo = useCallback(async () => {
@@ -63,7 +75,7 @@ const AdminApproveActivitySubmission = () => {
 
   return (
     <IonPage>
-      <GoBackHeader translucent={true} title={submissionInfo?.activityType ? "Approve " + submissionInfo.activityType : ""} />
+      <GoBackHeader translucent={true} title={submissionInfo?.activityType ? "Approve " + submissionInfo.activityType[0].toUpperCase() + submissionInfo.activityType.substring(1, submissionInfo.activityType.length) : ""} />
 
       <IonContent >
 
@@ -185,7 +197,7 @@ const AdminApproveActivitySubmission = () => {
               <IonToolbar style={{ '--background': 'black' }}>
                 <IonButtons >
                   <IonButton style={{ fontSize: '1.25em', marginLeft: '5px' }} onClick={() => { mapModalRef && mapModalRef.current && mapModalRef.current.dismiss() }}>
-                    <IonIcon icon={chevronBackOutline} />
+                    Close
                   </IonButton>
                   <IonTitle>Map Pin View</IonTitle>
                 </IonButtons>
@@ -201,7 +213,7 @@ const AdminApproveActivitySubmission = () => {
                   center={[parseFloat(submissionInfo?.latitude ?? ''), parseFloat(submissionInfo?.longitude ?? '')]}
                 >
                   {submissionInfo?.latitude && submissionInfo.longitude &&
-                    <Marker width={40} anchor={[parseFloat(submissionInfo.latitude), parseFloat(submissionInfo.longitude)]}></Marker>
+                    <Marker color="var(--ion-color-secondary)" width={40} anchor={[parseFloat(submissionInfo.latitude), parseFloat(submissionInfo.longitude)]}></Marker>
                   }
                 </Map>
               </div>

@@ -135,55 +135,59 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
 
   return (
     <>
-      <IonSegment scrollable={props.submissions} id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
+      {!submissionsLoading && !favoritesLoading && !visitedLoading && !interactionsLoading &&
+        <FadeIn>
+          <IonSegment scrollable={props.submissions} id='profile-segment' value={selectedSegment} onIonChange={(e) => { setSelectedSegment(e.detail.value as string) }}>
 
-        {props.submissions &&
-          <IonSegmentButton value="submissions">
-            <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-              <IonIcon
-                icon={listCircle}
-                style={{ margin: "5%" }}
-                size="large"
-              ></IonIcon>
-              <IonLabel>Posted Activities</IonLabel>
-            </div>
-          </IonSegmentButton>
-        }
+            {props.submissions &&
+              <IonSegmentButton value="submissions">
+                <div className="segment-button" style={{ fontSize: "0.8rem" }}>
+                  <IonIcon
+                    icon={listCircle}
+                    style={{ margin: "5%" }}
+                    size="large"
+                  ></IonIcon>
+                  <IonLabel>Posted Activities</IonLabel>
+                </div>
+              </IonSegmentButton>
+            }
 
-        <IonSegmentButton value="favorites">
-          <div className="segment-button" style={{ fontSize: "0.8rem" }}>
-            <IonIcon
-              icon={heart}
-              style={{ margin: "5%" }}
-              size="large"
-            ></IonIcon>
-            <IonLabel>Favorites</IonLabel>
-          </div>
-        </IonSegmentButton>
+            <IonSegmentButton value="favorites">
+              <div className="segment-button" style={{ fontSize: "0.8rem" }}>
+                <IonIcon
+                  icon={heart}
+                  style={{ margin: "5%" }}
+                  size="large"
+                ></IonIcon>
+                <IonLabel>Favorites</IonLabel>
+              </div>
+            </IonSegmentButton>
 
-        <IonSegmentButton value="visited" className="segment-button" style={{ fontSize: "0.8rem" }}>
-          <div className="segment-button">
-            <IonIcon
-              icon={walk}
-              style={{ margin: "5%" }}
-              size="large"
-            ></IonIcon>
-            <IonLabel>Visited</IonLabel>
-          </div>
-        </IonSegmentButton>
+            <IonSegmentButton value="visited" className="segment-button" style={{ fontSize: "0.8rem" }}>
+              <div className="segment-button">
+                <IonIcon
+                  icon={walk}
+                  style={{ margin: "5%" }}
+                  size="large"
+                ></IonIcon>
+                <IonLabel>Visited</IonLabel>
+              </div>
+            </IonSegmentButton>
 
-        <IonSegmentButton value="interactions" className="segment-button" style={{ fontSize: "0.7rem" }}>
-          <div className="segment-button">
-            <IonIcon
-              icon={people}
-              style={{ margin: "5%" }}
-              size="large"
-            ></IonIcon>
-            <IonLabel>Interactions</IonLabel>
-          </div>
-        </IonSegmentButton>
+            <IonSegmentButton value="interactions" className="segment-button" style={{ fontSize: "0.7rem" }}>
+              <div className="segment-button">
+                <IonIcon
+                  icon={people}
+                  style={{ margin: "5%" }}
+                  size="large"
+                ></IonIcon>
+                <IonLabel>Interactions</IonLabel>
+              </div>
+            </IonSegmentButton>
 
-      </IonSegment >
+          </IonSegment>
+        </FadeIn>
+      }
 
       <div style={{ height: '7.5px' }} />
 
@@ -364,7 +368,9 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
         ) : (
           <>
             {!submissionsLoading && submissions && submissions.length === 0 ?
-              <IonTitle className="ion-text-center" style={{ display: "flex", height: "50%" }}>No Posts from User</IonTitle>
+              <div className='centered-content'>
+                <p>No posts from user</p>
+              </div>
               :
               <>
                 <IonCard className='ion-no-margin' style={{ marginLeft: '10px', marginRight: '10px' }}>
