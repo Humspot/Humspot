@@ -5,26 +5,25 @@
 
 import { useCallback, useEffect } from "react"
 import { App, URLOpenListenerEvent } from "@capacitor/app";
-import { useIonLoading, useIonRouter } from "@ionic/react";
+import { useIonRouter } from "@ionic/react";
 
-import { Auth } from "aws-amplify";
-import { timeout } from "./utils/functions/timeout";
+// import { Auth } from "aws-amplify";
+// import { timeout } from "./utils/functions/timeout";
 
 const AppUrlRouter = (): null => {
 
   const router = useIonRouter();
-  const [present, dismiss] = useIonLoading();
 
   const checkRoute = useCallback(() => {
     App.addListener('appUrlOpen', async (event: URLOpenListenerEvent) => {
-      if (event.url.includes('/redirect-sign-in')) { // if user has just signed in using Google
-        await present({ message: "Logging in ..." });
-        (Auth as any)._handleAuthResponse(event.url)
-        await timeout(5000); // hacky workaround to ensure user is logged in. Look into...
-        window.location.reload();
-        await dismiss();
-        return;
-      }
+      // if (event.url.includes('/redirect-sign-in')) { // if user has just signed in using Google
+      //   await present({ message: "Logging in ..." });
+      //   (Auth as any)._handleAuthResponse(event.url)
+      //   await timeout(5000); // hacky workaround to ensure user is logged in. Look into...
+      //   window.location.reload();
+      //   await dismiss();
+      //   return;
+      // }
 
       const domain: string = 'humspotapp.com'
       const slug: string[] = event.url.split(domain);

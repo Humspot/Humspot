@@ -118,7 +118,6 @@ const RoutingSystem: React.FC = () => {
               aria-hidden="true"
               icon={compass}
               color={currentTab == "explore" ? "primary" : ""}
-              // size="large"
               style={{ transform: "scale(0.9)" }}
             />
             <span style={{ transform: "scale(0.9)" }}>Explore</span>
@@ -128,7 +127,6 @@ const RoutingSystem: React.FC = () => {
               aria-hidden="true"
               icon={map}
               color={currentTab == "map" ? "primary" : ""}
-              // size="large"
               style={{ transform: "scale(0.9)" }}
             />
             <span style={{ transform: "scale(0.9)" }}>Event Map</span>
@@ -150,7 +148,6 @@ const RoutingSystem: React.FC = () => {
               icon={calendar}
               color={currentTab == "calendar" ? "primary" : ""}
               style={{ transform: "scale(0.9)" }}
-            // size="large"
             />
             <span style={{ transform: "scale(0.9)" }}>Calendar</span>
           </IonTabButton>
@@ -160,7 +157,6 @@ const RoutingSystem: React.FC = () => {
               icon={person}
               color={currentTab == "profile" ? "primary" : ""}
               style={{ transform: "scale(0.9)" }}
-            // size="large"
             />
             <span style={{ transform: "scale(0.9)" }}>Profile</span>
           </IonTabButton>

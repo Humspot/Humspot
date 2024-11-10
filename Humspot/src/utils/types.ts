@@ -17,6 +17,22 @@ export type HumspotUser = {
   requestForCoordinatorSubmitted: number;
 };
 
+export type AuthProvider = "google" | "apple" | "phone" | "custom";
+
+export type NewHumspotUser = {
+  userID: string;
+  phoneNumber: string;
+  email: string | null;
+  profilePicUrl: string | null;
+  username: string | null;
+  accountType: "user" | "admin" | "organizer" | "guest";
+  accountStatus: "active" | "restricted";
+  authProvider: AuthProvider;
+  dateCreated: string;
+  bio: string | null;
+  requestForCoordinatorSubmitted: boolean;
+}
+
 export type HumspotEvent = {
   name: string;
   description: string;

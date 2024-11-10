@@ -21,6 +21,14 @@
 				"sound",
 				"alert"
 			]
+		},
+		"FirebaseAuthentication": {
+			"skipNativeAuth": false,
+			"providers": [
+				"apple.com",
+				"google.com",
+				"phone"
+			]
 		}
 	}
 }

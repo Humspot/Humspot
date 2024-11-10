@@ -8,7 +8,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import useContext from "../utils/hooks/useContext";
-import { HumspotUser } from "../utils/types";
+import { HumspotUser, NewHumspotUser } from "../utils/types";
 import { handleGetIsUserBlocked, handleGetUserInfo } from "../utils/server";
 import ProfileBio from "../components/Profile/ProfileBio";
 import ProfileHeader from "../components/Profile/ProfileHeader";
@@ -26,7 +26,7 @@ const User: React.FC<{}> = () => {
   const context = useContext();
   const [presentToast] = useIonToast();
 
-  const [user, setUser] = useState<HumspotUser | null | undefined>(null);
+  const [user, setUser] = useState<NewHumspotUser | null | undefined>(null);
   const [userBlocked, setUserBlocked] = useState<boolean>(false);
 
   useIonViewWillEnter(() => {
@@ -36,8 +36,8 @@ const User: React.FC<{}> = () => {
   }, [pageRef]);
 
   const fetchUserInfo = useCallback(async (uid: string) => {
-    if (context.humspotUser) {
-      const { success, isUserBlocked } = await handleGetIsUserBlocked(context.humspotUser.userID, uid);
+    if (context.newHumspotUser) {
+      const { success, isUserBlocked } = await handleGetIsUserBlocked(context.newHumspotUser.userID, uid);
       if (!success) {
         presentToast({ message: "Something went wrong!!", duration: 2000, color: "danger" });
         return;
@@ -55,7 +55,7 @@ const User: React.FC<{}> = () => {
       setUser(undefined);
     }
 
-  }, [context.humspotUser]);
+  }, [context.newHumspotUser]);
 
   useEffect(() => {
     if (uid) {

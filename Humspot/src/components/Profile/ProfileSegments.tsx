@@ -15,7 +15,7 @@ import placeholder from '../../assets/images/school_placeholder.jpeg';
 
 import useContext from "../../utils/hooks/useContext";
 import { formatDate } from "../../utils/functions/formatDate";
-import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse, HumspotUser } from "../../utils/types";
+import { HumspotInteractionResponse, HumspotFavoriteResponse, HumspotVisitedResponse, HumspotUser, NewHumspotUser } from "../../utils/types";
 import { handleGetInteractionsGivenUserID, handleGetFavoritesGivenUserID, handleGetVisitedGivenUserID, handleGetApprovedSubmissions } from "../../utils/server";
 
 import SkeletonLoading from "../Shared/SkeletonLoading";
@@ -23,7 +23,7 @@ import SkeletonLoading from "../Shared/SkeletonLoading";
 import './Profile.css';
 
 type ProfileSegmentsProps = {
-  user: HumspotUser | null | undefined;
+  user: NewHumspotUser | null | undefined;
   submissions: boolean;
 };
 

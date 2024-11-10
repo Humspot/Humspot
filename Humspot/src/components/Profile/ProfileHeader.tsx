@@ -10,13 +10,13 @@ import { alertCircleOutline, chevronBackOutline, pencilOutline, settingsOutline,
 import useContext from "../../utils/hooks/useContext";
 
 import './Profile.css';
-import { HumspotUser } from "../../utils/types";
+import { HumspotUser, NewHumspotUser } from "../../utils/types";
 import { handleShare } from "../../utils/functions/handleShare";
 import { useRef, useState } from "react";
 import { handleBlockUser, handleClickOnReportButton } from "../../utils/server";
 
 type ProfileHeaderProps = {
-  user: HumspotUser | null | undefined;
+  user: NewHumspotUser | null | undefined;
   buttons: boolean;
   backButton: boolean;
   shareButton: boolean;

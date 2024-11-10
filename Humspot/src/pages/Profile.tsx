@@ -23,18 +23,6 @@ const Profile: React.FC = () => {
 
   const page = useRef();
 
-  // useEffect(() => {
-  //   if (context.humspotUser === undefined) { // not logged in
-  //     context.setShowTabs(false);
-  //     timeout(750).then(() => {
-  //       context.setShowTabs(false);
-  //       timeout(750).then(() => {
-  //         router.push("/sign-up");
-  //       })
-  //     })
-  //   }
-  // }, [context.humspotUser]);
-
   useIonViewDidEnter(() => {
     context.setShowTabs(true);
   }, []);
@@ -42,6 +30,7 @@ const Profile: React.FC = () => {
   useIonViewWillEnter(() => {
     if (page && page.current) {
       context.setCurrentPage(page.current);
+      context.setNewHumspotUser(undefined);
     }
   }, [page]);
 
@@ -50,11 +39,11 @@ const Profile: React.FC = () => {
       <IonPage ref={page}>
 
         {/* Edit, and Settings button */}
-        <ProfileHeader user={context.humspotUser} blocked={false} backButton={false} buttons={true} shareButton={false} />
+        <ProfileHeader user={context.newHumspotUser} blocked={false} backButton={false} buttons={true} shareButton={false} />
 
         <IonContent scrollY={false}>
-          <ProfileBio user={context.humspotUser} blocked={false} />
-          <ProfileSegments user={context.humspotUser} submissions={false} />
+          <ProfileBio user={context.newHumspotUser} blocked={false} />
+          <ProfileSegments user={context.newHumspotUser} submissions={false} />
         </IonContent>
 
         {/* Modal where users can edit their profile */}

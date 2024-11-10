@@ -31,37 +31,115 @@ import {
   OrganizerRequestSubmission,
   SubmissionInfo,
   HumspotCommentResponse,
-  HumspotUser
+  HumspotUser,
+  NewHumspotUser
 } from "./types";
 
 import { Capacitor } from '@capacitor/core';
 import { Preferences } from "@capacitor/preferences";
 
-// Determine if the app is running on web or as a native app
-const isWebPlatform = !Capacitor.isNativePlatform();
+import {
+  createUserWithEmailAndPassword, getAuth, indexedDBLocalPersistence,
+  initializeAuth, sendPasswordResetEmail, signInWithEmailAndPassword,
+  signOut, updateProfile, deleteUser, EmailAuthProvider, reauthenticateWithCredential,
+  PhoneAuthProvider,
+  signInWithCredential,
+  User,
+} from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { addDoc, collection, getFirestore, serverTimestamp } from "firebase/firestore";
+import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
+import { generateUsername } from "unique-username-generator";
 
-const redirectSignIn = isWebPlatform
-  ? 'http://localhost:5173/'
-  : 'https://humspotapp.com/redirect-sign-in/';
-const redirectSignOut = isWebPlatform
-  ? 'http://localhost:5173/'
-  : 'https://humspotapp.com/redirect-sign-in/';
-
-const updatedAwsConfig = {
-  ...awsconfig,
-  oauth: {
-    ...awsconfig.oauth,
-    redirectSignIn,
-    redirectSignOut,
-  },
-  aws_cognito_social_providers: [
-    ...awsconfig.aws_cognito_social_providers,
-    "APPLE"
-  ],
+const firebaseConfig = {
+  apiKey: "AIzaSyD6u9LH3tMSd0UEBlFCWYQq7gquIBPVPsY",
+  authDomain: "humspot-web-deep-links.firebaseapp.com",
+  projectId: "humspot-web-deep-links",
+  storageBucket: "humspot-web-deep-links.firebasestorage.app",
+  messagingSenderId: "878855660202",
+  appId: "1:878855660202:web:817e1120c777fbf596e6d3"
 };
 
-// Configure Amplify
-Amplify.configure(updatedAwsConfig);
+const app = initializeApp(firebaseConfig);
+const auth = Capacitor.isNativePlatform() ?
+  initializeAuth(app, {
+    persistence: indexedDBLocalPersistence,
+  }) :
+  getAuth();
+export default auth;
+
+const db = getFirestore(app);
+
+/**
+ * @function verifyPhoneNumber
+ * @description sends an SMS message to the user with a code to verify phone number.
+ * 
+ * @param {string} phoneNumber 
+ */
+export const verifyPhoneNumber = async (phoneNumber: string) => {
+  return new Promise<User | null>(async (resolve, reject) => {
+    try {
+      await FirebaseAuthentication.addListener('phoneCodeSent', async (event) => {
+        const verificationCode = window.prompt(
+          'Please enter the verification code that was sent to your mobile device.'
+        );
+
+        if (!verificationCode) {
+          resolve(null);
+          return;
+        }
+
+        const credential = PhoneAuthProvider.credential(
+          event.verificationId,
+          verificationCode
+        );
+
+        const userCredential = await signInWithCredential(auth, credential);
+        resolve(userCredential.user);
+      });
+
+      await FirebaseAuthentication.signInWithPhoneNumber({
+        phoneNumber: phoneNumber,
+        timeout: 0,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+
+/**
+ * @function createFirestoreUser
+ * @description creates a document in the "users" collection of the Firestore db. 
+ * The user's phone number and username is set; the user's email, bio, and profilePicUrl are set to null.
+ * 
+ * @param {string} phoneNumber 
+ * @param {string | undefined} username
+ * @returns {Promise<{username: string; userID: string} | null>} the newly created document ID, or null if something went wrong
+ */
+export const createFirestoreUser = async (phoneNumber: string, username?: string): Promise<{ username: string; userID: string } | null> => {
+  if (!phoneNumber) return null;
+  try {
+    const name: string = username ?? generateUsername("-", 4, 15);
+    const docRef = await addDoc(collection(db, "users"), {
+      email: null,
+      phoneNumber,
+      profilePicUrl: null,
+      username: name,
+      accountType: "user",
+      accountStatus: "active",
+      authProvider: "phone",
+      dateCreated: serverTimestamp(),
+      bio: null,
+      requestForCoordinatorSubmitted: false
+    });
+    return { username: name, userID: docRef.id };
+  } catch (err) {
+    console.error("Error creating Firestore user", err);
+    return null;
+  }
+}
 
 
 /**
@@ -2078,7 +2156,7 @@ export const handleGetUserInfo = async (uid: string) => {
       }
     );
 
-    const responseData: { message: string; success: boolean; info: HumspotUser } = await response.json();
+    const responseData: { message: string; success: boolean; info: NewHumspotUser } = await response.json();
     console.log(responseData);
     return responseData;
   } catch (err) {

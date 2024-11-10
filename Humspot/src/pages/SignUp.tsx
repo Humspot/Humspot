@@ -4,11 +4,11 @@
  * They are sent a verification email after entering their information.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonText,
   useIonAlert,
-  useIonLoading, useIonRouter, useIonViewWillEnter
+  useIonLoading, useIonRouter, useIonViewDidEnter, useIonViewWillEnter
 } from '@ionic/react';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 
@@ -22,9 +22,11 @@ import GoogleLoginButton from '../components/Login/GoogleLoginButton';
 
 import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
 import useContext from '../utils/hooks/useContext';
-import { handleAppleLoginAndVerifyAWSUser, handleSignUp } from '../utils/server';
+import { createFirestoreUser, handleAppleLoginAndVerifyAWSUser, handleSignUp, verifyPhoneNumber } from '../utils/server';
 
 import '../components/Login/AuthPages.css';
+import { NewHumspotUser } from '../utils/types';
+import { formatPhoneNumber } from '../utils/functions/formatPhone';
 
 const inputNote: React.CSSProperties = {
   fontSize: '0.85em',
@@ -42,21 +44,42 @@ const SignUp: React.FC = () => {
   const [present, dismiss] = useIonLoading();
   const [presentAlert] = useIonAlert();
 
-  const emailRef = useRef<HTMLIonInputElement | null>(null);
-  const passwordRef = useRef<HTMLIonInputElement | null>(null);
+  const phoneRef = React.useRef<HTMLIonInputElement | null>(null);
+  const [phoneNumber, setPhoneNumber] = React.useState<string>('');
 
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const validatePhoneNumber = (): boolean => {
+    if (phoneNumber.trim().length <= 0) return false;
+    const regex = /^\+\d{1,3}-\d{1,14}$/;
+    return regex.test(phoneNumber);
+  }
 
   const clickedOnAgree = async () => {
     await present({ message: 'Please Wait...' });
-    const success: boolean = await handleSignUp(
-      emailRef.current?.value as string ?? '',
-      passwordRef.current?.value as string ?? '',
-    );
-    if (success) { // route to verify page, on success email is sent with code
-      const t = Toast.create({ message: 'Success! Check your email for a verification code', position: 'bottom', duration: 2000, color: 'secondary' });
-      t.present();
-      dynamicNavigate(router, '/verify-email/' + encodeURIComponent(emailRef.current?.value as string) + '/sign-up-verify', 'root')
+    const success = await verifyPhoneNumber(phoneNumber);
+    if (success) { // create new user in Firestore upon successful phone auth
+      const userInfo: { username: string; userID: string } | null = await createFirestoreUser(phoneNumber);
+      if (userInfo) {
+        const user: NewHumspotUser = {
+          userID: userInfo.userID,
+          username: userInfo.username,
+          phoneNumber,
+          accountType: "user",
+          accountStatus: "active",
+          authProvider: "phone",
+          dateCreated: (new Date()).toISOString(),
+          email: null,
+          profilePicUrl: null,
+          bio: null,
+          requestForCoordinatorSubmitted: false
+        }
+        context.setNewHumspotUser(user);
+        const t = Toast.create({ message: 'Signed In!', duration: 2000, position: 'bottom', color: 'success' });
+        t.present();
+        router.goBack();
+      } else {
+        const t = Toast.create({ message: 'Failed to create user. Please try again.', position: 'bottom', duration: 2000, color: 'danger' });
+        t.present();
+      }
     } else {
       const t = Toast.create({ message: 'Something went wrong!', position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
@@ -65,7 +88,11 @@ const SignUp: React.FC = () => {
   }
 
   const clickOnSignUp = async () => {
-    if (!passwordRef || !emailRef) return;
+    if (!validatePhoneNumber()) {
+      const t = Toast.create({ message: 'Invalid phone number!', position: 'bottom', duration: 2000, color: 'danger' });
+      t.present();
+      return;
+    }
     await presentAlert({
       cssClass: 'ion-alert-logout',
       header: 'Humspot Sign Up',
@@ -87,11 +114,23 @@ const SignUp: React.FC = () => {
     });
   };
 
+  const handlePhoneNumberChange = (value: string) => {
+    const formattedPhoneNumber = formatPhoneNumber(value);
+    console.log(formattedPhoneNumber);
+    setPhoneNumber(formattedPhoneNumber);
+  };
+
   useEffect(() => {
-    if (context.humspotUser) {
+    if (context.newHumspotUser) {
       router.canGoBack() && router.goBack();
     }
-  }, [context.humspotUser])
+  }, [context.newHumspotUser]);
+
+  useIonViewDidEnter(() => {
+    if (phoneRef.current) {
+      phoneRef.current.setFocus();
+    }
+  });
 
   useIonViewWillEnter(() => {
     if (context.humspotUser) {
@@ -107,15 +146,18 @@ const SignUp: React.FC = () => {
     <IonPage>
       <GoBackHeader translucent={true} title='Sign Up' />
       <IonContent scrollY={false}>
-        <div className='center-content'>
-          <section className='center-container'>
+        <div>
+          <section>
 
-            <IonLabel id='email-label' className='login-label'>Email</IonLabel>
+            <IonLabel id='phone-number-label' className='login-label'>Enter your phone number</IonLabel>
             <IonItem lines='none' className='login-input'>
-              <IonInput aria-labelledby='email-label' type='email' ref={emailRef} placeholder='email@email.com' />
+              <IonInput aria-labelledby='phone-number-label' type='tel' ref={phoneRef} value={phoneNumber} onIonInput={(e) => handlePhoneNumberChange(e.target.value as string)} />
             </IonItem>
 
-            <IonLabel id='password-label' className='login-label'>Password</IonLabel>
+            <IonButton className='login-button' onClick={async () => { await clickOnSignUp() }} fill='clear' expand='block' id='signUpButton' >Send Code</IonButton>
+
+
+            {/* <IonLabel id='password-label' className='login-label'>Password</IonLabel>
             <IonItem lines='none' className='login-input'>
               <IonInput aria-labelledby='password-label' clearOnEdit={false} type={showPassword ? 'text' : 'password'} ref={passwordRef} placeholder='••••••••' />
               <IonButton slot='end' fill='clear' onClick={() => { setShowPassword(!showPassword) }}>
@@ -131,9 +173,8 @@ const SignUp: React.FC = () => {
             <p>OR</p>
             <GoogleLoginButton />
             <br />
-            {/* <p>OR</p> */}
             <button onClick={async () => { router.push("/explore", 'root', 'replace'); await handleAppleLoginAndVerifyAWSUser(); }}><img style={{ borderRadius: '5px', width: '250px' }} src={context.darkMode ? AppleWhite : AppleBlack} /></button>
-            <br />
+            <br /> */}
 
           </section>
         </div>

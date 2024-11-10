@@ -11,7 +11,7 @@ import useContext from "../../utils/hooks/useContext";
 import avatar from '../../assets/images/avatar.svg';
 
 import './Profile.css';
-import { HumspotUser } from "../../utils/types";
+import { HumspotUser, NewHumspotUser } from "../../utils/types";
 import { timeout } from "../../utils/functions/timeout";
 import FadeIn from "@rcnoverwatcher/react-fade-in-react-18/src/FadeIn";
 
@@ -19,7 +19,7 @@ let uniqueString: number = new Date().getTime(); // Use a timestamp to force cac
 const MAX_BIO_LENGTH: number = 150;
 
 type ProfileBioProps = {
-  user: HumspotUser | null | undefined;
+  user: NewHumspotUser | null | undefined;
   blocked: boolean;
 }
 
@@ -61,7 +61,7 @@ const ProfileBio = (props: ProfileBioProps) => {
                   />
                   :
                   <img
-                    src={`${humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
+                    src={`${humspotUser.profilePicUrl ?? avatar}?${uniqueString}`}
                     alt="User Profile Picture"
                   />
               }

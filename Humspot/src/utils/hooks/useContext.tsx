@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { HumspotUser } from "../types";
+import { HumspotUser, NewHumspotUser } from "../types";
 
 type Props = {
   children: React.ReactNode;
@@ -13,6 +13,8 @@ type Props = {
 export type ContextType = {
   humspotUser: HumspotUser | null | undefined; // null if loading, undefined if not logged in
   setHumspotUser: React.Dispatch<React.SetStateAction<HumspotUser | null | undefined>>;
+  newHumspotUser: NewHumspotUser | null | undefined; // null if loading, undefined if not logged in
+  setNewHumspotUser: React.Dispatch<React.SetStateAction<NewHumspotUser | null | undefined>>;
   darkMode: boolean;
   setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
   showTabs: boolean;
@@ -26,6 +28,7 @@ export type ContextType = {
 export const Context = React.createContext<ContextType | null>(null);
 export const ContextProvider = ({ children }: Props) => {
   const [humspotUser, setHumspotUser] = React.useState<HumspotUser | null | undefined>(null);
+  const [newHumspotUser, setNewHumspotUser] = React.useState<NewHumspotUser | null | undefined>(null); // null if loading, undefined if not logged in
   const [darkMode, setDarkMode] = React.useState<boolean>(true);
   const [showTabs, setShowTabs] = React.useState<boolean>(true);
   const [recentlyViewedUpdated, setRecentlyViewedUpdated] = React.useState<boolean>(false);
@@ -35,6 +38,8 @@ export const ContextProvider = ({ children }: Props) => {
     () => ({
       humspotUser,
       setHumspotUser,
+      newHumspotUser,
+      setNewHumspotUser,
       darkMode,
       setDarkMode,
       showTabs,
@@ -44,7 +49,7 @@ export const ContextProvider = ({ children }: Props) => {
       currentPage,
       setCurrentPage
     }),
-    [humspotUser, setHumspotUser, darkMode, setDarkMode, showTabs, setShowTabs, recentlyViewedUpdated, setRecentlyViewedUpdated, currentPage, setCurrentPage]
+    [humspotUser, setHumspotUser, newHumspotUser, setNewHumspotUser, darkMode, setDarkMode, showTabs, setShowTabs, recentlyViewedUpdated, setRecentlyViewedUpdated, currentPage, setCurrentPage]
   );
 
   return (
