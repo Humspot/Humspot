@@ -202,9 +202,11 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
           <>
             {!favoritesLoading && favorites && favorites.length === 0 || props.user === undefined ?
               <div className='centered-content'>
-                <FadeIn>
-                  <p style={{ fontWeight: '800' }}>No Favorites</p>
-                </FadeIn>
+                {props.user &&
+                  <FadeIn>
+                    <p style={{ fontWeight: '800' }}>No Favorites</p>
+                  </FadeIn>
+                }
               </div>
               :
               <>
@@ -214,7 +216,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                       {!favoritesLoading ?
                         favorites.map((favorite: HumspotFavoriteResponse, index: number) => {
                           return (
-                            <FadeIn key={favorite.name + index} delay={((index % 10) * 50) }>
+                            <FadeIn key={favorite.name + index} delay={((index % 10) * 50)}>
                               <IonItem className='ion-no-padding' role='button' onClick={() => { if (favorite.activityID) router.push("/activity/" + favorite.activityID) }}>
                                 <IonThumbnail style={{ marginLeft: "10px" }}><img style={{
                                   borderRadius: "5px"
