@@ -6,38 +6,31 @@
 
 import React from 'react';
 import {
-  IonButton, IonContent, IonFab, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonText,
-  useIonAlert,
+  IonButton, IonContent, IonFab, IonInput, IonItem, IonLabel, IonPage, useIonAlert,
   useIonLoading, useIonRouter, useIonViewDidEnter, useIonViewWillEnter
 } from '@ionic/react';
-import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 
 import { useToast } from '@agney/ir-toast';
 
-import AppleWhite from '../assets/images/apple-white.png';
-import AppleBlack from '../assets/images/apple-black.png';
-
 import GoBackHeader from '../components/Shared/GoBackHeader';
-import GoogleLoginButton from '../components/Login/GoogleLoginButton';
 
 import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
 import useContext from '../utils/hooks/useContext';
 import { sendPhoneVerificationCode } from '../utils/server';
 
 import '../components/Login/AuthPages.css';
-import { NewHumspotUser } from '../utils/types';
 import { formatPhoneNumber, formatToE164 } from '../utils/functions/formatPhone';
 import { timeout } from '../utils/functions/timeout';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
-import { Keyboard, KeyboardStyle } from '@capacitor/keyboard';
+import { Keyboard, KeyboardResize, KeyboardResizeOptions } from '@capacitor/keyboard';
 
-const inputNote: React.CSSProperties = {
-  fontSize: '0.85em',
-  textAlign: 'right',
-  color: 'gray',
-  fontFamily: 'Arial',
+const resizeOptions: KeyboardResizeOptions = {
+  mode: KeyboardResize.None,
 };
 
+const defaultResizeOptions: KeyboardResizeOptions = {
+  mode: KeyboardResize.Body,
+};
 
 const SignUp: React.FC = () => {
 
@@ -45,10 +38,11 @@ const SignUp: React.FC = () => {
   const router = useIonRouter();
   const Toast = useToast();
   const [present, dismiss] = useIonLoading();
-  const [presentAlert] = useIonAlert();
+  const [presentAlert, dismissAlert] = useIonAlert();
 
   const phoneRef = React.useRef<HTMLIonInputElement | null>(null);
   const [phoneNumber, setPhoneNumber] = React.useState<string>('');
+  const [kbHeight, setKbHeight] = React.useState<number | null>(null);
 
   const handlePhoneNumberChange = (value: string) => {
     const formattedPhoneNumber = formatPhoneNumber(value);
@@ -64,8 +58,9 @@ const SignUp: React.FC = () => {
 
   const clickedOnAgree = async () => {
     try {
-      await timeout(500);
+      await dismissAlert();
       await present({ message: 'Please Wait...' });
+      await Keyboard.hide();
       const formattedPhoneNumber: string = formatToE164(phoneNumber);
       const success: boolean = await sendPhoneVerificationCode(formattedPhoneNumber);
       if (!success) {
@@ -103,7 +98,7 @@ const SignUp: React.FC = () => {
           {
             text: 'I agree',
             handler: async () => {
-              clickedOnAgree();
+              await clickedOnAgree();
             },
           },
         ]
@@ -130,6 +125,23 @@ const SignUp: React.FC = () => {
     handlePhoneCodeSent();
   }, [handlePhoneCodeSent]);
 
+  React.useEffect(() => {
+    const keyboardShowListener = Keyboard.addListener('keyboardWillShow', async (info) => {
+      await Keyboard.setResizeMode(resizeOptions);
+      setKbHeight(info.keyboardHeight);
+    });
+
+    const keyboardHideListener = Keyboard.addListener('keyboardWillHide', async () => {
+      await Keyboard.setResizeMode(defaultResizeOptions);
+    });
+
+    return () => {
+      Keyboard.setResizeMode(defaultResizeOptions);
+      keyboardShowListener.remove();
+      keyboardHideListener.remove();
+    };
+  }, []);
+
   useIonViewDidEnter(async () => {
     context.setPhoneNumber('');
     if (phoneRef.current) {
@@ -149,17 +161,23 @@ const SignUp: React.FC = () => {
 
   return (
     <IonPage>
-      <GoBackHeader translucent={true} title='Sign Up' />
+      <GoBackHeader translucent={true} title='Login' onBeforeBack={async () => await Keyboard.hide()} />
       <IonContent scrollY={false}>
         <div>
           <section>
 
             <IonLabel id='phone-number-label' className='login-label'>Enter your phone number</IonLabel>
             <IonItem lines='none' className='login-input'>
-              <IonInput aria-labelledby='phone-number-label' type='tel' ref={phoneRef} value={phoneNumber} onIonInput={(e) => handlePhoneNumberChange(e.target.value as string)} />
+              <IonInput aria-labelledby='phone-number-label' type='tel' ref={phoneRef} value={phoneNumber} onIonInput={(e) => handlePhoneNumberChange(e.target.value as string)}
+                onBlur={e => {
+                  if (e.relatedTarget === null) {
+                    e.target.focus();
+                  }
+                }}
+              />
             </IonItem>
 
-            <IonFab vertical="bottom" horizontal="center" style={{ width: '100%', paddingBottom: '10px' }}>
+            <IonFab className='login-confirm' vertical="bottom" horizontal="center" style={kbHeight ? { bottom: `${kbHeight}px` } : { bottom: '45%' }}>
               <IonButton className='login-button' onClick={async () => { await clickOnSignUp() }} fill='clear' expand='block' id='signUpButton' >Send Code</IonButton>
             </IonFab>
 

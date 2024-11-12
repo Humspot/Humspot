@@ -6,6 +6,7 @@ type GoBackHeaderProps = {
   title: string;
   buttons?: any;
   translucent?: boolean;
+  onBeforeBack?: () => Promise<any> | any;
 };
 
 const GoBackHeader: React.FC<GoBackHeaderProps> = (props: GoBackHeaderProps) => {
@@ -17,7 +18,7 @@ const GoBackHeader: React.FC<GoBackHeaderProps> = (props: GoBackHeaderProps) => 
     <IonHeader className='ion-no-border' translucent={props.translucent}>
       <IonToolbar style={{ '--background': 'var(--ion-tab-bar-background)' }}>
         <IonButtons >
-          <IonButton style={{ fontSize: '1.15em', marginLeft: '-2.5px' }} onClick={() => { router.canGoBack() ? router.goBack() : dynamicNavigate(router, '/explore', 'root') }}>
+          <IonButton style={{ fontSize: '1.15em', marginLeft: '-2.5px' }} onClick={() => { props.onBeforeBack && props.onBeforeBack(); router.canGoBack() ? router.goBack() : dynamicNavigate(router, '/explore', 'root') }}>
             <IonIcon icon={chevronBackOutline} /> <p>Back</p>
           </IonButton>
           <IonTitle>{title}</IonTitle>

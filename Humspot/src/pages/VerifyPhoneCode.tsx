@@ -1,21 +1,28 @@
 
-import { IonPage, IonContent, useIonRouter, useIonLoading } from "@ionic/react";
+import { IonPage, IonContent, useIonRouter, useIonLoading, useIonViewDidEnter } from "@ionic/react";
 import React from "react";
 import VerificationInput from "react-verification-input";
 import GoBackHeader from "../components/Shared/GoBackHeader";
 import { useToast } from "@agney/ir-toast";
 import { PhoneAuthProvider, signInWithCredential } from "firebase/auth";
 import { useParams } from 'react-router-dom';
-import auth, { createOrGetFirestoreUser } from "../utils/server";
-import { NewHumspotUser } from "../utils/types";
+import auth from "../utils/server";
 import useContext from "../utils/hooks/useContext";
 import { dynamicNavigate } from "../utils/functions/dynamicNavigate";
-import { Keyboard } from "@capacitor/keyboard";
+import { Keyboard, KeyboardResize, KeyboardResizeOptions } from "@capacitor/keyboard";
 import { timeout } from "../utils/functions/timeout";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 type SearchParams = {
   verificationId: string;
+};
+
+const resizeOptions: KeyboardResizeOptions = {
+  mode: KeyboardResize.None,
+};
+
+const defaultResizeOptions: KeyboardResizeOptions = {
+  mode: KeyboardResize.Body,
 };
 
 const codeLength: number = 6;
@@ -28,6 +35,8 @@ const VerifyPhoneCode = () => {
   const router = useIonRouter();
   const context = useContext();
   const [present, dismiss] = useIonLoading();
+
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
 
   const [input, setInput] = React.useState<string>('');
   const [user, loading, error] = useAuthState(auth);
@@ -57,6 +66,21 @@ const VerifyPhoneCode = () => {
   };
 
   React.useEffect(() => {
+    const keyboardShowListener = Keyboard.addListener('keyboardWillShow', async (info) => {
+      await Keyboard.setResizeMode(resizeOptions);
+    });
+
+    const keyboardHideListener = Keyboard.addListener('keyboardWillHide', async () => {
+      await Keyboard.setResizeMode(defaultResizeOptions);
+    });
+
+    return () => {
+      keyboardShowListener.remove();
+      keyboardHideListener.remove();
+    };
+  }, []);
+
+  React.useEffect(() => {
     if (input.length === codeLength) {
       handleVerify();
     }
@@ -68,20 +92,36 @@ const VerifyPhoneCode = () => {
       dynamicNavigate(router, '/explore', 'root');
       timeout(500).then(() => window.location.reload());
     }
-  }, [user, router])
+  }, [user, router]);
+
+  useIonViewDidEnter(async () => {
+    context.setPhoneNumber('');
+    if (inputRef.current) {
+      await timeout(500);
+      inputRef.current.focus();
+    }
+  });
 
   return (
     <IonPage>
 
-      <GoBackHeader translucent={true} title='Verify Phone' />
+      <GoBackHeader translucent={true} title='Verify Phone' onBeforeBack={async () => await Keyboard.hide()} />
 
       <IonContent scrollY={false}>
         <div className='center-content'>
           <section className='center-container'>
             <p style={{ fontSize: '1.1rem' }}>Enter the code that was texted to you</p>
             <VerificationInput
+              ref={inputRef}
               autoFocus={true}
-              inputProps={{ type: 'tel', autoFocus: true }}
+              inputProps={{
+                type: 'tel', autoFocus: true,
+                onBlur: (e) => {
+                  if (e.relatedTarget === null) {
+                    e.target.focus();
+                  }
+                }
+              }}
               classNames={context.darkMode ? {
                 container: "container",
                 character: "character-dark",

@@ -14,10 +14,16 @@
 }
 
 .center-content {
-  height: 75vh;
+  height: 50vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.login-confirm {
+  transition: bottom 0.35s cubic-bezier(0.1, 0.76, 0.55, 0.9), opacity 300ms ease-in-out, border-radius 0.5s ease;
+  width: 100%;
+  padding-bottom: 10px;
 }
 
 .center-container {

@@ -407,9 +407,9 @@ export const handleLogout = async (): Promise<boolean> => {
 export const handleDeleteAccount = async (userID: string) => {
   try {
     if (!auth.currentUser) throw new Error("No user ID to delete");
-    await auth.currentUser?.delete();
     const docRef = doc(db, 'users', userID);
     await deleteDoc(docRef);
+    await auth.currentUser?.delete();
     return { success: true, message: "Account deleted successfully" };
   } catch (err) {
     console.error("Error during delete account " + err);

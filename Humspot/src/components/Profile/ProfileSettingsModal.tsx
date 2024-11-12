@@ -106,9 +106,9 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
     const res = await handleDeleteAccount(userID);
     if (res.success) {
       await handleLogout();
-      await presentToast({ message: res.message, color: 'secondary' });
+      await presentToast({ message: res.message, color: 'secondary', duration: 3000 });
     } else {
-      await presentToast({ message: res.message, color: 'danger' });
+      await presentToast({ message: res.message, color: 'danger', duration: 3000 });
     }
     await dismiss();
   };
