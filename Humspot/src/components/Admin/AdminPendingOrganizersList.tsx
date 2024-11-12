@@ -29,9 +29,9 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
   const descRef = useRef<HTMLIonTextareaElement | null>(null);
 
   const handleDenyApproval = async () => {
-    if (!organizerInfo || !context.humspotUser) return;
+    if (!organizerInfo || !context.newHumspotUser) return;
     setLoading(true);
-    const res = await handleDenyOrganizer(context.humspotUser.userID, organizerInfo.userID, organizerInfo.email ?? '', organizerInfo.id, (descRef.current?.value) ?? '');
+    const res = await handleDenyOrganizer(context.newHumspotUser.userID, organizerInfo.userID, organizerInfo.email ?? '', organizerInfo.id, (descRef.current?.value) ?? '');
     if (res.success) {
       const updatedOrganizers = props.organizers.filter((_, index) => index !== organizerInfo.index);
       props.setOrganizers(updatedOrganizers);
@@ -46,9 +46,9 @@ const AdminPendingOrganizersList = (props: { organizers: any[]; setOrganizers: R
   }
 
   const handleSubmitApproval = async () => {
-    if (!organizerInfo || !context.humspotUser) return;
+    if (!organizerInfo || !context.newHumspotUser) return;
     setLoading(true);
-    const res = await handleApproveOrganizer(context.humspotUser.userID, organizerInfo.userID, organizerInfo.email ?? '', organizerInfo.id, (descRef.current?.value) ?? '');
+    const res = await handleApproveOrganizer(context.newHumspotUser.userID, organizerInfo.userID, organizerInfo.email ?? '', organizerInfo.id, (descRef.current?.value) ?? '');
     if (res.success) {
       const updatedOrganizers = props.organizers.filter((_, index) => index !== organizerInfo.index);
       props.setOrganizers(updatedOrganizers);

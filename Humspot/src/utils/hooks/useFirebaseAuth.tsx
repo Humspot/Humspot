@@ -11,36 +11,38 @@ import auth, { createOrGetFirestoreUser } from "../server";
 
 const useFirebaseAuth = (context: ContextType) => {
 
-  const getUser = async (uid: string, phoneNumber: string | null): Promise<void> => {
-    try {
-      if (!uid || !phoneNumber) throw new Error('No phone number provided');
-      const currentUser = auth.currentUser;
-      if (currentUser) {
+  const getUser = async (): Promise<void> => {
+    if (auth && auth.currentUser) {
+      try {
+        const uid: string = auth.currentUser.uid;
+        const phoneNumber: string | null = auth.currentUser.phoneNumber;
+        if (!uid || !phoneNumber) throw new Error('No phone number provided');
         const newHumspotUser: NewHumspotUser | null = await createOrGetFirestoreUser(uid, phoneNumber);
         if (newHumspotUser) {
           context.setNewHumspotUser(newHumspotUser);
-          window.location.href = "/";
-          window.location.reload();
         }
+      } catch (error) {
+        console.error("Not signed in:", error);
+        context.setNewHumspotUser(undefined);
       }
-    } catch (error) {
-      console.error("Not signed in:", error);
-      context.setHumspotUser(undefined);
     }
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
+      console.log(auth);
+      console.log(user);
       if (user) {
         console.log("User signed in!");
-        getUser(user.uid, user.phoneNumber);
+        getUser();
       } else {
         console.log("User signed out!");
         context.setNewHumspotUser(undefined);
-        window.location.href = "/";
-        window.location.reload();
       }
     });
+
+    getUser();
+
     return () => unsubscribe();
   }, []);
 

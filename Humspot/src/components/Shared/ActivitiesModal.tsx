@@ -50,7 +50,7 @@ const ActivitiesModal: React.FC = () => {
             <IonLabel>Submit an Event <i>(Organizers Only)</i></IonLabel>
           </IonItem>
           <br />
-          {context.humspotUser &&
+          {context.newHumspotUser &&
             <>
               <IonItem onClick={() => { modalRef?.current?.dismiss().then(async () => { context.setShowTabs(false); await timeout(250); router.push("/submitted-activities") }) }}>
                 <IonIcon aria-hidden="true" icon={listCircleOutline} slot="start"></IonIcon>
@@ -64,7 +64,7 @@ const ActivitiesModal: React.FC = () => {
               <br />
             </>
           }
-          {context.humspotUser?.accountType === 'user' &&
+          {context.newHumspotUser?.accountType === 'user' &&
             <>
               <IonItem role='button' onClick={() => { modalRef?.current?.dismiss().then(() => { router.push("/become-a-coordinator") }) }}>
                 <IonIcon aria-hidden="true" icon={clipboardOutline} slot="start"></IonIcon>

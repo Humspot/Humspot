@@ -33,9 +33,9 @@ const AdminApproveActivitySubmission = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleApprove = async () => {
-    if (!context.humspotUser || !submissionInfo) return;
+    if (!context.newHumspotUser || !submissionInfo) return;
     setIsSubmitting(true);
-    const res = await handleApproveActivitySubmission(context.humspotUser.userID, submissionInfo, descRef?.current?.value ?? '');
+    const res = await handleApproveActivitySubmission(context.newHumspotUser.userID, submissionInfo, descRef?.current?.value ?? '');
     if (res.success) {
       const t = Toast.create({ message: "Activity submission approved!", position: 'bottom', duration: 2000, color: "secondary" });
       t.present();
@@ -48,9 +48,9 @@ const AdminApproveActivitySubmission = () => {
   };
 
   const handleDeny = async () => {
-    if (!context.humspotUser || !submissionInfo) return;
+    if (!context.newHumspotUser || !submissionInfo) return;
     setLoading(true);
-    const res = await handleDenyActivitySubmission(context.humspotUser.userID, submissionInfo.addedByUserID, descRef?.current?.value ?? '');
+    const res = await handleDenyActivitySubmission(context.newHumspotUser.userID, submissionInfo.addedByUserID, descRef?.current?.value ?? '');
     if (res.success) {
       const t = Toast.create({ message: "Activity submission denied.", position: 'bottom', duration: 2000, color: "secondary" });
       t.present();
@@ -63,12 +63,12 @@ const AdminApproveActivitySubmission = () => {
   };
 
   const fetchSubmissionInfo = useCallback(async () => {
-    if (!context.humspotUser) return;
+    if (!context.newHumspotUser) return;
     setLoading(true);
-    const res = await handleGetSubmissionInfo(context.humspotUser.userID, id);
+    const res = await handleGetSubmissionInfo(context.newHumspotUser.userID, id);
     setSubmissionInfo(res.submissionInfo);
     setLoading(false);
-  }, [context.humspotUser])
+  }, [context.newHumspotUser])
   useEffect(() => {
     fetchSubmissionInfo();
   }, [fetchSubmissionInfo])
@@ -84,7 +84,7 @@ const AdminApproveActivitySubmission = () => {
 
         <IonLoading message={"Submitting..."} isOpen={isSubmitting} />
 
-        {context.humspotUser?.accountType !== 'user' ?
+        {context.newHumspotUser?.accountType !== 'user' ?
           <>
             {submissionInfo &&
               <div style={{ background: 'var(--ion-background-color)', padding: '5px' }}>

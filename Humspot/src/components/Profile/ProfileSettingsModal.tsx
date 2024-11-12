@@ -11,7 +11,6 @@ import {
   IonItem,
   IonIcon,
   IonLabel,
-  IonToggle,
   IonContent,
   IonTitle,
   useIonRouter,
@@ -31,17 +30,15 @@ import {
   mailOutline,
   shieldOutline,
   readerOutline,
-  logInOutline,
   constructOutline,
-  logoGoogle,
   closeCircleOutline,
-  logoApple,
+  callOutline,
   moon
 } from 'ionicons/icons';
 import { Preferences } from '@capacitor/preferences';
 
 import useContext from '../../utils/hooks/useContext';
-import { handleAppleLoginAndVerifyAWSUser, handleDeleteAccount, handleGoogleLoginAndVerifyAWSUser, handleLogout } from '../../utils/server';
+import { handleDeleteAccount, handleLogout } from '../../utils/server';
 
 import './Profile.css';
 import { Keyboard, KeyboardStyleOptions, KeyboardStyle } from '@capacitor/keyboard';
@@ -97,6 +94,8 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
    * @see handleLogout
    */
   const clickOnLogout = async (): Promise<void> => {
+    await timeout(500);
+    modalRef.current && modalRef.current.dismiss();
     await present({ message: 'Logging Out...' })
     await handleLogout();
     await dismiss();
@@ -157,8 +156,8 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
             cssClass: 'alert-cancel-button',
             text: 'I\'m sure, delete my account',
             handler: async () => {
-              if (!context.humspotUser) return;
-              await clickOnDeleteAccount(context.humspotUser.userID);
+              if (!context.newHumspotUser) return;
+              await clickOnDeleteAccount(context.newHumspotUser.userID);
             },
           },
         ]
@@ -230,19 +229,11 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
         {/* <br /> */}
 
         <IonList lines='full'>
-          {context.humspotUser === undefined &&
+          {context.newHumspotUser === undefined &&
             <>
               <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss().then(async () => { context.setShowTabs(false); await timeout(250); router.push('/sign-up') }) }}>
-                <IonIcon aria-hidden='true' icon={mailOutline} slot='start' ></IonIcon>
-                <IonLabel>Sign In with Email</IonLabel>
-              </IonItem>
-              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss(); router.push('/explore', 'root', 'replace'); await handleGoogleLoginAndVerifyAWSUser() }}>
-                <IonIcon aria-hidden='true' icon={logoGoogle} slot='start' ></IonIcon>
-                <IonLabel>Sign In with Google</IonLabel>
-              </IonItem>
-              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss(); router.push('/explore', 'root', 'replace'); await handleAppleLoginAndVerifyAWSUser() }}>
-                <IonIcon aria-hidden='true' icon={logoApple} slot='start' ></IonIcon>
-                <IonLabel>Sign In with Apple</IonLabel>
+                <IonIcon aria-hidden='true' icon={callOutline} slot='start' ></IonIcon>
+                <IonLabel>Sign In with Phone Number</IonLabel>
               </IonItem>
               <br />
             </>
@@ -259,7 +250,7 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
             <IonIcon aria-hidden='true' icon={readerOutline} slot='start' ></IonIcon>
             <IonLabel>Terms and Conditions</IonLabel>
           </IonItem>
-          {context.humspotUser?.accountType === 'admin' &&
+          {context.newHumspotUser?.accountType === 'admin' &&
             <>
               <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={() => { modalRef?.current?.dismiss().then(() => { router.push('/admin-dashboard') }) }}>
                 <IonIcon aria-hidden='true' icon={constructOutline} slot='start'></IonIcon>
@@ -267,23 +258,10 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
               </IonItem>
             </>
           }
-          {context.humspotUser === undefined ?
+          {context.newHumspotUser === undefined ?
             <>
-              {/* <p style={{fontSize: "1.25rem", textAlign: 'center', fontWeight: '1000'}}>Account</p>
-              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss().then(async () => { context.setShowTabs(false); await timeout(250); router.push('/sign-up') }) }}>
-                <IonIcon aria-hidden='true' icon={mailOutline} slot='start' ></IonIcon>
-                <IonLabel>Sign In with Email</IonLabel>
-              </IonItem>
-              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss(); router.push('/explore', 'root', 'replace'); await handleGoogleLoginAndVerifyAWSUser() }}>
-                <IonIcon aria-hidden='true' icon={logoGoogle} slot='start' ></IonIcon>
-                <IonLabel>Sign In with Google</IonLabel>
-              </IonItem>
-              <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={async () => { modalRef?.current?.dismiss(); router.push('/explore', 'root', 'replace'); await handleAppleLoginAndVerifyAWSUser() }}>
-                <IonIcon aria-hidden='true' icon={logoApple} slot='start' ></IonIcon>
-                <IonLabel>Sign In with Apple</IonLabel>
-              </IonItem> */}
             </>
-            : context.humspotUser ?
+            : context.newHumspotUser ?
               <>
                 <IonItem style={{ marginTop: '10px', marginBottom: '10px' }} role='button' onClick={handleShowLogoutDialog}>
                   <IonIcon aria-hidden='true' icon={logOutOutline} slot='start' ></IonIcon>
@@ -298,9 +276,9 @@ const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = (props) => {
               <></>
           }
         </IonList>
-        {context.humspotUser &&
+        {context.newHumspotUser &&
           <IonFab vertical='bottom' horizontal='center' style={{ paddingBottom: "15px" }}>
-            <IonCardTitle style={{ fontSize: '0.8rem', fontWeight: '500', textAlign: 'center' }}>Logged in as:<div style={{ padding: '1px' }}></div> <span style={{ fontSize: '1rem', color: 'var(--ion-color-primary)' }}>{context.humspotUser.email}</span></IonCardTitle>
+            <IonCardTitle style={{ fontSize: '0.8rem', fontWeight: '500', textAlign: 'center' }}>Logged in as:<div style={{ padding: '1px' }}></div> <span style={{ fontSize: '1rem', color: 'var(--ion-color-primary)' }}>{context.newHumspotUser.email}</span></IonCardTitle>
           </IonFab>
         }
       </IonContent>

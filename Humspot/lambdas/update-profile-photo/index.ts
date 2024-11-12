@@ -23,7 +23,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
   try {
     const requestData = JSON.parse(event.body || '{}');
 
-    if (!requestData || !requestData.userID || !requestData.profilePicURL) {
+    if (!requestData || !requestData.userID || !requestData.profilePicUrl) {
       return {
         statusCode: 400,
         headers: {
@@ -32,14 +32,14 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
           "Access-Control-Allow-Origin": '*'
         },
         body: JSON.stringify({
-          message: 'Missing fields in user data!! Fields (userID, profilePicURL) are required.',
+          message: 'Missing fields in user data!! Fields (userID, profilePicUrl) are required.',
           success: false
         }),
       };
     }
 
-    const params = [requestData.profilePicURL, requestData.userID];
-    const sql = `UPDATE Users SET profilePicURL = ? WHERE userID = ?`;
+    const params = [requestData.profilePicUrl, requestData.userID];
+    const sql = `UPDATE Users SET profilePicUrl = ? WHERE userID = ?`;
     await connection.execute(sql, params);
 
     return {

@@ -20,12 +20,12 @@ const SubmittedActivitiesPage = () => {
   }, []);
 
   const fetchSubmittedActivities = useCallback(async () => {
-    if (!context.humspotUser || !context.humspotUser.userID) return;
+    if (!context.newHumspotUser || !context.newHumspotUser.userID) return;
     setLoading(true);
-    const res = await handleGetSubmittedActivities(context.humspotUser.userID, 1);
+    const res = await handleGetSubmittedActivities(context.newHumspotUser.userID, 1);
     setSubmittedActivities(res.submittedActivities)
     setLoading(false);
-  }, [context.humspotUser])
+  }, [context.newHumspotUser])
 
   useEffect(() => {
     fetchSubmittedActivities();

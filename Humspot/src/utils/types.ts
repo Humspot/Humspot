@@ -6,7 +6,7 @@
 export type HumspotUser = {
   userID: string;
   email: string | null;
-  profilePicURL: string;
+  profilePicUrl: string;
   awsUsername: string | null;
   accountType: "user" | "admin" | "organizer" | "guest";
   accountStatus: "active" | "restricted";
@@ -199,7 +199,7 @@ export type HumspotCommentResponse = {
   commentID: string;
   commentText: string | null;
   photoUrl: string | null;
-  profilePicURL: string | null;
+  profilePicUrl: string | null;
   userID: string;
   username: string;
 }

@@ -32,7 +32,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   const [rsvp, setRsvp] = useState<boolean | null>(null);
 
   const clickOnFavorite = async () => {
-    if (context.humspotUser === undefined) {
+    if (context.newHumspotUser === undefined) {
       await presentAlert({
         // cssClass: 'ion-alert-logout',
         header: 'Sign in to a Humspot Account',
@@ -55,10 +55,10 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
           ]
       });
     }
-    if (!context.humspotUser || favorited === null) return;
+    if (!context.newHumspotUser || favorited === null) return;
     setFavorited(null);
     const res = await handleAddToFavorites(
-      context.humspotUser.userID,
+      context.newHumspotUser.userID,
       id
     );
     if (res && !res.removed) {
@@ -76,7 +76,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   };
 
   const clickOnVisited = async () => {
-    if (context.humspotUser === undefined) {
+    if (context.newHumspotUser === undefined) {
       await presentAlert({
         // cssClass: 'ion-alert-logout',
         header: 'Sign in to a Humspot Account',
@@ -99,10 +99,10 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
           ]
       });
     }
-    if (!context.humspotUser || visited === null) return;
+    if (!context.newHumspotUser || visited === null) return;
     setVisited(null);
     const res = await handleAddToVisited(
-      context.humspotUser.userID,
+      context.newHumspotUser.userID,
       id,
       new Date().toISOString()
     );
@@ -121,7 +121,7 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
   };
 
   const clickOnRsvp = async () => {
-    if (context.humspotUser === undefined) {
+    if (context.newHumspotUser === undefined) {
       await presentAlert({
         // cssClass: 'ion-alert-logout',
         header: 'Sign in to a Humspot Account',
@@ -144,9 +144,9 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
           ]
       });
     }
-    if (!context.humspotUser || rsvp === null) return;
+    if (!context.newHumspotUser || rsvp === null) return;
     setRsvp(null);
-    const res = await handleAddToRSVP(context.humspotUser.userID, id, activityDate);
+    const res = await handleAddToRSVP(context.newHumspotUser.userID, id, activityDate);
     if (res.success && !res.removed) {
       setRsvp(true);
       const t = Toast.create({ message: "RSVP'd for event!", position: 'bottom', duration: 2000, color: 'secondary' });
@@ -167,17 +167,17 @@ const ActivityFavoriteVisitedButtons = (props: { id: string, activityType: 'even
    * @see handleGetFavoritesAndVisitedAndRSVPStatus
    */
   const getButtonStatus = useCallback(async () => {
-    if(context.humspotUser === undefined) {
+    if (context.newHumspotUser === undefined) {
       setFavorited(false);
       setRsvp(false);
       setVisited(false);
     }
-    if (!context.humspotUser || !id) return;
-    const response = await handleGetFavoritesAndVisitedAndRSVPStatus(context.humspotUser.userID, id);
+    if (!context.newHumspotUser || !id) return;
+    const response = await handleGetFavoritesAndVisitedAndRSVPStatus(context.newHumspotUser.userID, id);
     setFavorited(response.favorited);
     setVisited(response.visited);
     setRsvp(response.rsvp);
-  }, [context.humspotUser]);
+  }, [context.newHumspotUser]);
   useEffect(() => {
     getButtonStatus();
   }, [getButtonStatus])

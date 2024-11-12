@@ -76,9 +76,9 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
       presentToast({ message: 'Please provide a reason why', color: 'danger', duration: 2000 });
       return;
     }
-    if (context.humspotUser && reportedUser) {
+    if (context.newHumspotUser && reportedUser) {
       setLoading(true);
-      const res = await handleClickOnReportButton(context.humspotUser.userID, context.humspotUser.email, reportedUser.userID, '', details, reportedUser.activityID);
+      const res = await handleClickOnReportButton(context.newHumspotUser.userID, context.newHumspotUser.email, reportedUser.userID, '', details, reportedUser.activityID);
       if (res.success) {
         presentToast({ message: 'Report sent successfully', color: 'secondary', duration: 2000 });
       } else {
@@ -89,9 +89,9 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
   };
 
   const clickOnDeleteComment = async (commentID: string) => {
-    if (!context.humspotUser) return;
+    if (!context.newHumspotUser) return;
     await presentLoading({ message: "Deleting..." });
-    const res = await handleDeleteComment(context.humspotUser.userID, commentID);
+    const res = await handleDeleteComment(context.newHumspotUser.userID, commentID);
     if (res.success) {
       const newComments: any[] = [];
       for (let i = 0; i < comments.length; ++i) {
@@ -132,8 +132,8 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
   };
 
   const handleShowActionSheet = async (comment: HumspotCommentResponse) => {
-    if (!context.humspotUser) return;
-    if (comment.userID !== context.humspotUser.userID) {
+    if (!context.newHumspotUser) return;
+    if (comment.userID !== context.newHumspotUser.userID) {
       await presentActionSheet(({
         header: `${comment.username}'s Comment`,
         buttons: [
@@ -195,9 +195,9 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
   };
 
   const handleClickOnBlockUser = async () => {
-    if (!context.humspotUser || !reportedUser) return;
+    if (!context.newHumspotUser || !reportedUser) return;
     await presentLoading({ message: "Blocking..." });
-    const res = await handleBlockUser(context.humspotUser.userID, reportedUser.userID)
+    const res = await handleBlockUser(context.newHumspotUser.userID, reportedUser.userID)
     if (res.success) {
       presentToast({ message: 'Successfully blocked user', color: 'secondary', duration: 2000 });
     } else {
@@ -220,7 +220,7 @@ const ActivityCommentsList = memo((props: ActivityCommentsList) => {
               <IonLabel class="ion-text-wrap">
                 <IonRow>
                   <IonAvatar class="activity-comment-avatar">
-                    <img src={comment.profilePicURL ?? avatar} onClick={() => router.push("/user/" + comment.userID)} />
+                    <img src={comment.profilePicUrl ?? avatar} onClick={() => router.push("/user/" + comment.userID)} />
                   </IonAvatar>
                   <p className='activity-comment-username'> {comment.username.length >= 25 ? comment.username.substring(0, 25) + '...' : comment.username} <IonNote style={{ fontSize: '0.75rem' }}> - {formatDate(comment.commentDate)}</IonNote></p>
                 </IonRow>

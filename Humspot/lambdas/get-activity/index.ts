@@ -81,7 +81,7 @@ export const handler = async (gatewayEvent: APIGatewayEvent, context: Context): 
 
     // Comments query with User data for each comment
     const queryComments: string = `
-      SELECT Comments.*, Users.username, Users.profilePicURL 
+      SELECT Comments.*, Users.username, Users.profilePicUrl 
       FROM Comments 
       JOIN Users ON Comments.userID = Users.userID 
       WHERE Comments.activityID = ? 

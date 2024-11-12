@@ -33,7 +33,7 @@ const ProfileBio = (props: ProfileBioProps) => {
 
   useEffect(() => {
     console.log(props.user);
-    if (props.user === undefined && context.humspotUser !== undefined) {
+    if (props.user === undefined && context.newHumspotUser !== undefined) {
       presentToast({ message: "User is blocked!", duration: 3000, color: 'danger' });
     }
   }, [props.user])

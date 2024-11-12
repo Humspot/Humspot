@@ -114,7 +114,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
    * @see handleAddComment
    */
   const handleSubmitComment = async (): Promise<void> => {
-    if (!context.humspotUser) return;
+    if (!context.newHumspotUser) return;
     if (!commentRef || !commentRef.current || !commentRef.current.value?.trim()) {
       const toast = Toast.create({ message: "Please enter a comment", position: 'bottom', duration: 2000, color: 'danger' });
       toast.present();
@@ -125,7 +125,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
 
     const humspotComment: HumspotCommentSubmit = {
       commentText: commentRef.current.value as string,
-      userID: context.humspotUser.userID,
+      userID: context.newHumspotUser.userID,
       activityID: id,
       photoUrl: photo ?? null
     };
@@ -136,11 +136,11 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       t.present();
       const addToCommentsArray = {
         commentText: commentRef.current.value as string,
-        userID: context.humspotUser.userID,
+        userID: context.newHumspotUser.userID,
         activityID: id,
         photoUrl: photo ?? null,
-        profilePicURL: context.humspotUser.profilePicURL,
-        username: context.humspotUser.username,
+        profilePicUrl: context.newHumspotUser.profilePicUrl,
+        username: context.newHumspotUser.username,
         commentDate: (new Date().toISOString()),
         commentID: res.commentID
       };
@@ -208,7 +208,7 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
       edge
     >
 
-      {context.humspotUser &&
+      {context.newHumspotUser &&
         <IonFab horizontal="end" vertical="top">
           <IonRow>
             <IonCol>
@@ -250,11 +250,11 @@ const ActivityAddCommentBox = (props: { id: string, activityName: string; setCom
           color: "var(--ion-color-dark)"
         }}
         placeholder={
-          context.humspotUser
+          context.newHumspotUser
             ? "Add a comment..."
             : "Log in view and add comments."
         }
-        disabled={!context.humspotUser}
+        disabled={!context.newHumspotUser}
         rows={5}
         ref={commentRef}
         debounce={50}

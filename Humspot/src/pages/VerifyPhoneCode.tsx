@@ -11,6 +11,8 @@ import { NewHumspotUser } from "../utils/types";
 import useContext from "../utils/hooks/useContext";
 import { dynamicNavigate } from "../utils/functions/dynamicNavigate";
 import { Keyboard } from "@capacitor/keyboard";
+import { timeout } from "../utils/functions/timeout";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 type SearchParams = {
   verificationId: string;
@@ -28,6 +30,7 @@ const VerifyPhoneCode = () => {
   const [present, dismiss] = useIonLoading();
 
   const [input, setInput] = React.useState<string>('');
+  const [user, loading, error] = useAuthState(auth);
 
   const handleChange = (value: string) => {
     setInput(value);
@@ -48,6 +51,7 @@ const VerifyPhoneCode = () => {
       console.error(err);
       const t = Toast.create({ message: "Invalid code", duration: 2000, color: 'danger', position: 'bottom' });
       t.present();
+    } finally {
       await dismiss();
     }
   };
@@ -57,6 +61,14 @@ const VerifyPhoneCode = () => {
       handleVerify();
     }
   }, [input]);
+
+  React.useEffect(() => {
+    if (user) {
+      window.location.href = "/";
+      dynamicNavigate(router, '/explore', 'root');
+      timeout(500).then(() => window.location.reload());
+    }
+  }, [user, router])
 
   return (
     <IonPage>
@@ -68,6 +80,8 @@ const VerifyPhoneCode = () => {
           <section className='center-container'>
             <p style={{ fontSize: '1.1rem' }}>Enter the code that was texted to you</p>
             <VerificationInput
+              autoFocus={true}
+              inputProps={{ type: 'tel', autoFocus: true }}
               classNames={context.darkMode ? {
                 container: "container",
                 character: "character-dark",
@@ -77,7 +91,6 @@ const VerifyPhoneCode = () => {
                 character: "character-light",
                 characterSelected: "character--selected",
               }}
-              autoFocus
               onChange={handleChange}
             // onComplete={handleVerify}
             />

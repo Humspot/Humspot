@@ -69,9 +69,9 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
       presentToast({ message: 'Please provide a reason why', color: 'danger', duration: 2000 });
       return;
     }
-    if (context.humspotUser && humspotUser) {
+    if (context.newHumspotUser && humspotUser) {
       setLoading(true);
-      const res = await handleClickOnReportButton(context.humspotUser.userID, context.humspotUser.email, humspotUser.userID, humspotUser?.email, details);
+      const res = await handleClickOnReportButton(context.newHumspotUser.userID, context.newHumspotUser.email, humspotUser.userID, humspotUser?.email, details);
       if (res.success) {
         presentToast({ message: 'Report sent successfully', color: 'secondary', duration: 2000 });
       } else {
@@ -82,9 +82,9 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
   };
 
   const handleClickOnBlockUser = async () => {
-    if (!context.humspotUser || !humspotUser) return;
+    if (!context.newHumspotUser || !humspotUser) return;
     await presentLoading({ message: "Blocking..." });
-    const res = await handleBlockUser(context.humspotUser.userID, humspotUser.userID)
+    const res = await handleBlockUser(context.newHumspotUser.userID, humspotUser.userID)
     if (res.success) {
       presentToast({ message: 'User blocked', color: 'secondary', duration: 2000 });
     } else {
@@ -129,7 +129,7 @@ const ProfileHeader = (props: ProfileHeaderProps) => {
               <IonButton disabled={!humspotUser} slot='end' onClick={() => handleShare('Checkout ' + humspotUser?.username + '\'s profile on Humspot!')}>
                 <IonIcon style={{ padding: "1%" }} icon={shareOutline} />
               </IonButton>
-              {humspotUser && context.humspotUser && humspotUser.userID !== context.humspotUser.userID &&
+              {humspotUser && context.newHumspotUser && humspotUser.userID !== context.newHumspotUser.userID &&
                 <IonButton disabled={!humspotUser} slot='end' onClick={async () => await handleReport()}>
                   <IonIcon color='danger' style={{ paddingTop: "10%" }} icon={alertCircleOutline} />
                 </IonButton>

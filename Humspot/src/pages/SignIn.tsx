@@ -90,10 +90,10 @@ const SignIn = () => {
   };
 
   useIonViewWillEnter(() => {
-    if (context.humspotUser) {
+    if (context.newHumspotUser) {
       router.push('/explore');
     }
-  }, [context.humspotUser]);
+  }, [context.newHumspotUser]);
 
   useIonViewWillEnter(() => {
     context.setShowTabs(false);

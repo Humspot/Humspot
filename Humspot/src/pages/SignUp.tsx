@@ -133,24 +133,15 @@ const SignUp: React.FC = () => {
   useIonViewDidEnter(async () => {
     context.setPhoneNumber('');
     if (phoneRef.current) {
-      if (context.darkMode) {
-        await Keyboard.setStyle({
-          style: KeyboardStyle.Dark
-        });
-      } else {
-        await Keyboard.setStyle({
-          style: KeyboardStyle.Light
-        });
-      }
       phoneRef.current.setFocus();
     }
   });
 
   useIonViewWillEnter(() => {
-    if (context.humspotUser) {
+    if (context.newHumspotUser) {
       dynamicNavigate(router, '/explore', 'root');
     }
-  }, [context.humspotUser]);
+  }, [context.newHumspotUser]);
 
   useIonViewWillEnter(() => {
     context.setShowTabs(false);

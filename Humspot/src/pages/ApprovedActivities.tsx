@@ -32,12 +32,12 @@ const ApprovedActivitiesPage = () => {
   }, []);
 
   const fetchSubmittedActivities = useCallback(async () => {
-    if (!context.humspotUser || !context.humspotUser.userID) return;
+    if (!context.newHumspotUser || !context.newHumspotUser.userID) return;
     setLoading(true);
-    const res = await handleGetApprovedSubmissions(1, context.humspotUser.userID);
+    const res = await handleGetApprovedSubmissions(1, context.newHumspotUser.userID);
     setApprovedActivities(res.submissions);
     setLoading(false);
-  }, [context.humspotUser])
+  }, [context.newHumspotUser])
 
   useEffect(() => {
     fetchSubmittedActivities();

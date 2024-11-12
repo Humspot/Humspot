@@ -50,7 +50,7 @@ import {
   User,
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, getDocs, getFirestore, query, serverTimestamp, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import { FirebaseAuthentication, SignInWithPhoneNumberOptions } from "@capacitor-firebase/authentication";
 import { generateUsername } from "./functions/generateUsername";
 
@@ -168,11 +168,13 @@ export const createOrGetFirestoreUser = async (
   try {
     const existingUser = await findExistingUser(phoneNumber);
     if (existingUser.user && existingUser.exists) {
+      console.log("USER EXISTS");
       return existingUser.user;
     }
 
     const name: string = username ? username.trim() : generateUsername().trim();
-    await addDoc(collection(db, "users", docID), {
+    const docRef = doc(db, "users", docID);
+    await setDoc(docRef, {
       email: null,
       phoneNumber,
       profilePicUrl: null,
@@ -404,23 +406,11 @@ export const handleLogout = async (): Promise<boolean> => {
  */
 export const handleDeleteAccount = async (userID: string) => {
   try {
-    const res = await Auth.deleteUser();
-    if (res) {
-      const response = await fetch(
-        import.meta.env.VITE_AWS_API_GATEWAY_DELETE_USER_FROM_DATABASE,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userID: userID }),
-        }
-      );
-      const responseData: { success: boolean; message: string } = await response.json();
-      return responseData;
-    }
-    return { success: false, message: "Error during delete account!" };
-
+    if (!auth.currentUser) throw new Error("No user ID to delete");
+    await auth.currentUser?.delete();
+    const docRef = doc(db, 'users', userID);
+    await deleteDoc(docRef);
+    return { success: true, message: "Account deleted successfully" };
   } catch (err) {
     console.error("Error during delete account " + err);
     return { success: false, message: "Error during delete account " + err };
@@ -788,7 +778,7 @@ export const handleAddToFavorites = async (userID: string, activityID: string): 
  * 
  * @example 
  * ```ts 
- * const userID: string = context.humspotUser.userID; // from global user context, or some other method
+ * const userID: string = context.newHumspotUser.userID; // from global user context, or some other method
  * const { activityID } = useParams<PageParams>(); // from current page URL, or some other method
  * const visitDate: string = new Date().toISOString(); 
  * const res = await handleAddToVisited(userID, activityID, visitDate);
@@ -852,7 +842,7 @@ export const handleAddToVisited = async (userID: string, activityID: string, vis
  * 
  * @example 
  * ```ts 
- * const userID: string = context.humspotUser.userID; // from global user context, or some other method
+ * const userID: string = context.newHumspotUser.userID; // from global user context, or some other method
  * const { activityID } = useParams<PageParams>(); // from current page URL, or some other method
  * const res = await handleAddToRSVP(userID, activityID, activityDate);
  * if (res.success) {
@@ -919,7 +909,7 @@ export const handleAddToRSVP = async (userID: string, activityID: string, activi
  * const image = await Camera.getPhoto({...}); // using Capacitor Camera API
  * const path = await fetch(image.webPath!);
  * const blob: Blob = await path.blob();
- * const userID; string = context.humspotUser.userID; // from global context variable, or some other method
+ * const userID; string = context.newHumspotUser.userID; // from global context variable, or some other method
  * const res = await handleAddProfileImageToS3(userID, blob);
  * if (res.success) {
  *  // set profile photo URl to res.photoUrl;
@@ -986,7 +976,7 @@ export const handleAddProfileImageToS3 = async (userID: string, blob: Blob): Pro
  * 
  * @example 
  * ```ts
- * const comment: HumpspotCommentSubmit = { commentText: 'This is a comment!', userID: context.humspotUser.userID, activityID: `123456`, photoUrl: null };
+ * const comment: HumpspotCommentSubmit = { commentText: 'This is a comment!', userID: context.newHumspotUser.userID, activityID: `123456`, photoUrl: null };
  * await handleAddComment(comment, null, 'Cool Activity'); // no image is uploaded with comment
  * ```
  */
@@ -1170,9 +1160,9 @@ export const handleGetFavoritesGivenUserID = async (pageNum: number, userID: str
 export const handleGetVisitedGivenUserID = async (pageNum: number, userID: string, isCallingForSelf: boolean = true) => {
   try {
     if (isCallingForSelf) {
-      const currentUserSession = await Auth.currentSession();
+      const currentUser = auth.currentUser;
 
-      if (!currentUserSession.isValid()) throw new Error("Invalid auth session");
+      if (!currentUser) throw new Error("Invalid auth session");
     }
 
     // const idToken = currentUserSession.getIdToken();
@@ -1286,9 +1276,9 @@ export const handleUpdateUserProfile = async (userID: string, username: string, 
  * @description Calls the AWS API gateway /update-profile-photo which updates the profile photo of the user.
  * 
  * @param {string} userID 
- * @param {string} profilePicURL 
+ * @param {string} profilePicUrl 
  */
-export const handleUpdateProfilePhoto = async (userID: string, profilePicURL: string) => {
+export const handleUpdateProfilePhoto = async (userID: string, profilePicUrl: string) => {
   try {
     const currentUserSession = await Auth.currentSession();
 
@@ -1299,7 +1289,7 @@ export const handleUpdateProfilePhoto = async (userID: string, profilePicURL: st
 
     const updateFields: Record<string, string> = {
       userID: userID,
-      profilePicURL: profilePicURL
+      profilePicUrl: profilePicUrl
     }
 
     const response = await fetch(

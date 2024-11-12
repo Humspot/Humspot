@@ -5,11 +5,10 @@
  * @see /src/components/Profile for the components / CSS used on this page.
  */
 
-import { IonContent, IonPage, useIonRouter, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
+import { IonContent, IonPage, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
 
-import { memo, useEffect, useRef } from "react";
+import { memo, useRef } from "react";
 import useContext from "../utils/hooks/useContext";
-import { timeout } from "../utils/functions/timeout";
 
 import ProfileBio from "../components/Profile/ProfileBio";
 import ProfileSegments from "../components/Profile/ProfileSegments";
@@ -30,7 +29,6 @@ const Profile: React.FC = () => {
   useIonViewWillEnter(() => {
     if (page && page.current) {
       context.setCurrentPage(page.current);
-      context.setNewHumspotUser(undefined);
     }
   }, [page]);
 

@@ -37,10 +37,10 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
   const [hasLoadedInitial, setHasLoadedInitial] = useState<boolean>(false);
 
   const submitRating = async () => {
-    if (!context.humspotUser) return;
+    if (!context.newHumspotUser) return;
     if (!newUserRating) return;
     setRatingLoading(true);
-    const res = await handleAddRating(context.humspotUser.userID, props.id, newUserRating);
+    const res = await handleAddRating(context.newHumspotUser.userID, props.id, newUserRating);
     if (res.success) {
       const t = Toast.create({ message: 'Rating added!', position: 'bottom', duration: 2000, color: 'secondary' });
       t.present();
@@ -53,9 +53,9 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
   };
 
   const getUserRating = useCallback(async () => {
-    if (!context.humspotUser) return;
+    if (!context.newHumspotUser) return;
     setRatingLoading(true);
-    const res = await getUserRatingGivenUserID(context.humspotUser.userID, props.id);
+    const res = await getUserRatingGivenUserID(context.newHumspotUser.userID, props.id);
     if (res.success) {
       setOriginalUserRating(res.ratingInfo?.rating ?? 0);
       setRatingLoading(false);
@@ -65,7 +65,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
     }
     setRatingLoading(false);
     setHasLoadedInitial(true);
-  }, [context.humspotUser]);
+  }, [context.newHumspotUser]);
 
   useEffect(() => {
     getUserRating();
@@ -92,7 +92,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                     </IonButton>
                   </div>
 
-                  {/* {context.humspotUser &&
+                  {/* {context.newHumspotUser &&
                     <div>
                       <IonButton className='ion-no-padding ion-no-margin' slot='start' fill='clear' style={{ color: '#3D6876' }} id='add-rating-button'>
                         Add Rating
@@ -142,7 +142,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
                   onChange={(newRating) => { setHasUpdated(true); setNewUserRating(newRating) }}
                 />
                 :
-                context.humspotUser === undefined ?
+                context.newHumspotUser === undefined ?
                   <>
                     <p>You must be <span onClick={async () => modalRef.current && modalRef.current.dismiss().then(() => { router.push("/sign-up") })} style={{ color: 'var(--ion-color-primary)', textDecoration: 'underline' }}>signed in</span> to rate an attraction</p>
                   </>
@@ -155,7 +155,7 @@ const ActivityHeaderTitle = (props: ActivityHeaderTitleProps) => {
             {!!originalUserRating && !hasUpdated &&
               <p className='ion-text-center'>You previously gave this a {originalUserRating} / 5</p>
             }
-            {context.humspotUser &&
+            {context.newHumspotUser &&
               <IonButton disabled={!hasUpdated || ratingLoading} color='secondary' expand='block' style={{ padding: '10px' }} onClick={async () => await submitRating()}>Submit</IonButton>
             }
           </IonContent>

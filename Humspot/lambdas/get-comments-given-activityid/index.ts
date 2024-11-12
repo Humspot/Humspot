@@ -44,7 +44,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
 
     const queryComments: string = `
-      SELECT Comments.*, Users.username, Users.profilePicURL 
+      SELECT Comments.*, Users.username, Users.profilePicUrl 
       FROM Comments 
       JOIN Users ON Comments.userID = Users.userID 
       WHERE Comments.activityID = ?

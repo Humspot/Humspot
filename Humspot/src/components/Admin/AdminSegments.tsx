@@ -33,34 +33,34 @@ const AdminSegment: React.FC = () => {
   const [approvedOrganizersLoading, setApprovedOrganizersLoading] = useState<boolean>(false);
 
   const fetchSubmissions = useCallback(async () => {
-    if (!context.humspotUser) return;
+    if (!context.newHumspotUser) return;
     setSubmissionsLoading(true);
     const response = await handleGetPendingActivitySubmissions(
       1,
-      context.humspotUser.userID
+      context.newHumspotUser.userID
     );
     setSubmissions(response.pendingSubmissions);
     setSubmissionsLoading(false);
-  }, [context.humspotUser]);
+  }, [context.newHumspotUser]);
   useEffect(() => {
     fetchSubmissions();
   }, [fetchSubmissions]);
 
   const fetchOrganizerSubmissions = useCallback(async () => {
-    if (!context.humspotUser) return;
+    if (!context.newHumspotUser) return;
     setOrganizersLoading(true);
-    const res = await handleGetPendingOrganizerSubmissions(1, context.humspotUser.userID);
+    const res = await handleGetPendingOrganizerSubmissions(1, context.newHumspotUser.userID);
     setOrganizers(res.pendingOrganizers);
     setOrganizersLoading(false);
-  }, [context.humspotUser]);
+  }, [context.newHumspotUser]);
   useEffect(() => {
     fetchOrganizerSubmissions();
   }, [fetchOrganizerSubmissions]);
 
   const fetchApprovedOrganizers = useCallback(async () => {
-    if (!context.humspotUser) return;
+    if (!context.newHumspotUser) return;
     setApprovedOrganizersLoading(true);
-    const res = await handleGetApprovedOrganizerSubmissions(1, context.humspotUser.userID);
+    const res = await handleGetApprovedOrganizerSubmissions(1, context.newHumspotUser.userID);
     setApprovedOrganizers(res.organizerList);
     setApprovedOrganizersLoading(false);
   }, []);

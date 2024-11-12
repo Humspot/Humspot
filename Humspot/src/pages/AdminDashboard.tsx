@@ -21,7 +21,7 @@ const AdminDashboard = () => {
 
   return (
     <IonPage ref={pageRef}>
-      {context.humspotUser?.accountType == 'admin' &&
+      {context.newHumspotUser?.accountType == 'admin' &&
         <>
           <GoBackHeader translucent={true} title={"Admin Dashboard"} />
           <IonContent scrollY={false}>

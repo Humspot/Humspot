@@ -42,7 +42,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
   const [presentingElement, setPresentingElement] = useState<HTMLElement | undefined>(undefined);
 
   const clickUpdateProfilePhoto = async () => {
-    if (!context.humspotUser) {
+    if (!context.newHumspotUser) {
       const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
       return;
@@ -69,14 +69,14 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
         toast.present();
         return;
       } else {
-        const res = await handleAddProfileImageToS3(context.humspotUser.userID, blobRes);
-        const added = await handleUpdateProfilePhoto(context.humspotUser.userID, res.photoUrl);
+        const res = await handleAddProfileImageToS3(context.newHumspotUser.userID, blobRes);
+        const added = await handleUpdateProfilePhoto(context.newHumspotUser.userID, res.photoUrl);
         if (!added.success) {
           const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
           t.present();
         }
-        let tempUser = { ...context.humspotUser, profilePicURL: `${res.photoUrl}?${uniqueString}` };
-        context.setHumspotUser(tempUser);
+        let tempUser = { ...context.newHumspotUser, profilePicUrl: `${res.photoUrl}?${uniqueString}` };
+        context.setNewHumspotUser(tempUser);
         const t = Toast.create({ message: "File uploaded successfully", position: 'bottom', duration: 2000, color: 'secondary' });
         t.present();
       }
@@ -85,7 +85,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
   };
 
   const clickUpdateProfile = async () => {
-    if (!context.humspotUser || !usernameRef.current || !bioRef.current) {
+    if (!context.newHumspotUser || !usernameRef.current || !bioRef.current) {
       const t = Toast.create({ message: "Something went wrong", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
       return;
@@ -95,17 +95,17 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
       t.present();
       return;
     }
-    if (usernameRef.current.value === context.humspotUser.username
-      && bioRef.current.value === context.humspotUser.bio) {
+    if (usernameRef.current.value === context.newHumspotUser.username
+      && bioRef.current.value === context.newHumspotUser.bio) {
       const t = Toast.create({ message: "Nothing to update", position: 'bottom', duration: 2000, color: "danger" });
       t.present();
       return;
     }
     present({ message: "Updating..." });
-    const res = await handleUpdateUserProfile(context.humspotUser.userID, (usernameRef.current.value as string).replace(/\s/g, ""), (bioRef.current.value as string));
+    const res = await handleUpdateUserProfile(context.newHumspotUser.userID, (usernameRef.current.value as string).replace(/\s/g, ""), (bioRef.current.value as string));
     if (res.success) {
-      let tempUser = { ...context.humspotUser, username: (usernameRef.current.value as string).replace(/\s/g, ""), bio: bioRef.current.value as string };
-      context.setHumspotUser(tempUser);
+      let tempUser = { ...context.newHumspotUser, username: (usernameRef.current.value as string).replace(/\s/g, ""), bio: bioRef.current.value as string };
+      context.setNewHumspotUser(tempUser);
       const t = Toast.create({ message: "Updated profile successfully", position: 'bottom', duration: 2000, color: 'secondary' });
       t.present();
       modalRef.current && modalRef.current.dismiss();
@@ -122,7 +122,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
 
   return (
     <IonModal ref={modalRef} trigger="open-edit-profile-modal" presentingElement={presentingElement}>
-      {!context.humspotUser ? // loading
+      {!context.newHumspotUser ? // loading
         <>
           <IonLoading message={"Loading Profile Info..."} />
         </>
@@ -147,7 +147,7 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
               <IonAvatar className="profile-edit-modal-user-avatar">
                 <img
                   style={{ opacity: "0.5" }}
-                  src={`${context.humspotUser.profilePicURL ?? avatar}?${uniqueString}`}
+                  src={`${context.newHumspotUser.profilePicUrl ?? avatar}?${uniqueString}`}
                   alt="User Profile Picture"
                 />
                 <IonIcon size="large" icon={cameraReverseOutline}
@@ -161,11 +161,11 @@ const ProfileEditModal: React.FC<ProfileEditModalProps> = (props) => {
               <IonList lines='none'>
                 <IonItem>
                   <IonLabel position="fixed">Username</IonLabel>
-                  <IonInput aria-label="Username" ref={usernameRef} maxlength={50} value={context.humspotUser.username}></IonInput>
+                  <IonInput aria-label="Username" ref={usernameRef} maxlength={50} value={context.newHumspotUser.username}></IonInput>
                 </IonItem>
                 <IonItem>
                   <IonLabel position="fixed" style={{ alignSelf: 'flex-start' }}>About</IonLabel>
-                  <IonTextarea aria-label="About" ref={bioRef} maxlength={250} rows={4} value={context.humspotUser.bio} />
+                  <IonTextarea aria-label="About" ref={bioRef} maxlength={250} rows={4} value={context.newHumspotUser.bio} />
                 </IonItem>
               </IonList>
             </section>

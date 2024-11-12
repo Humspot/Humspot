@@ -44,19 +44,18 @@ import AdminDashboard from "./pages/AdminDashboard";
 import MoreResults from "./pages/MoreResults";
 import ContactUs from "./pages/ContactUs";
 import Search from "./pages/Search";
+import User from "./pages/User";
+import ApprovedActivitiesPage from "./pages/ApprovedActivities";
+import UpcomingEvents from "./pages/UpcomingEvents";
+import VerifyPhoneCode from "./pages/VerifyPhoneCode";
 import AdminApproveActivitySubmission from "./pages/AdminApproveActivitySubmission";
 
 import AppUrlRouter from "./AppUrlRouter";
-import useAWSAuth from "./utils/hooks/useAWSAuth";
 import useDarkMode from "./utils/hooks/useDarkMode";
 import useTabBarVisibility from "./utils/hooks/useTabBarVisibility";
 import useContext from "./utils/hooks/useContext";
 import usePushNotifications from "./utils/hooks/usePushNotifications";
 import ProfileActivitiesModal from "./components/Shared/ActivitiesModal";
-import User from "./pages/User";
-import ApprovedActivitiesPage from "./pages/ApprovedActivities";
-import UpcomingEvents from "./pages/UpcomingEvents";
-import VerifyPhoneCode from "./pages/VerifyPhoneCode";
 import useFirebaseAuth from "./utils/hooks/useFirebaseAuth";
 
 

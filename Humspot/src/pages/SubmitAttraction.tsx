@@ -332,7 +332,7 @@ const SubmitAttractionPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (!context.humspotUser || !context.humspotUser.userID) return;
+    if (!context.newHumspotUser || !context.newHumspotUser.userID) return;
     if (!isFormValid()) {
       const t = Toast.create({
         message: "Please fill out all input fields!",
@@ -367,11 +367,11 @@ const SubmitAttractionPage = () => {
       description: descRef?.current?.value! as string,
       location: locationRef?.current?.value! as string,
       websiteURL: (websiteUrlRef?.current?.value! as string) ?? "",
-      addedByUserID: context.humspotUser.userID,
+      addedByUserID: context.newHumspotUser.userID,
       openTimes: (openTimesRef?.current?.value! as string) ?? null,
       latitude: mapPinLatLong ? mapPinLatLong[0] : null,
       longitude: mapPinLatLong ? mapPinLatLong[1] : null,
-      organizer: context.humspotUser.username ?? "",
+      organizer: context.newHumspotUser.username ?? "",
       tags: selectedTags,
 
       photoUrls: uploadedPhotoUrls,
@@ -431,7 +431,7 @@ const SubmitAttractionPage = () => {
       <GoBackHeader translucent={true} title="Submit Attraction" />
       <IonContent fullscreen>
 
-        {context.humspotUser ? (
+        {context.newHumspotUser ? (
           <>
             <div
               style={{
@@ -668,7 +668,7 @@ const SubmitAttractionPage = () => {
               />
             </div>
           </>
-        ) : context.humspotUser === null ? (
+        ) : context.newHumspotUser === null ? (
           <>
             <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
               Loading...

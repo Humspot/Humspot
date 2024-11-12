@@ -29,7 +29,7 @@ const pool = mysql.createPool({
 type HumspotUser = {
   userID: string;
   email: string | null;
-  profilePicURL: string | null;
+  profilePicUrl: string | null;
   username: string | null;
   accountType: 'user' | 'admin' | 'organizer' | 'guest';
   accountStatus: 'active' | 'restricted';
@@ -100,11 +100,11 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     const userID: string = crypto.randomBytes(12).toString('hex');
 
     const query = `
-      INSERT INTO Users (userID, username, email, authProvider, accountType, accountStatus, profilePicURL, dateCreated, notificationsToken) 
+      INSERT INTO Users (userID, username, email, authProvider, accountType, accountStatus, profilePicUrl, dateCreated, notificationsToken) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
     const notificationsToken = requestData.notificationsToken || null;
-    const parameters = [userID, requestData.username, requestData.email, requestData.authProvider, requestData.accountType, 'active', requestData.profilePicURL || null, currentDate, notificationsToken];
+    const parameters = [userID, requestData.username, requestData.email, requestData.authProvider, requestData.accountType, 'active', requestData.profilePicUrl || null, currentDate, notificationsToken];
 
     await connection.query(query, parameters);
 
@@ -115,7 +115,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
       authProvider: requestData.authProvider,
       accountType: requestData.accountType,
       accountStatus: 'active',
-      profilePicURL: requestData.profilePicURL || null,
+      profilePicUrl: requestData.profilePicUrl || null,
       dateCreated: currentDate,
     }
 

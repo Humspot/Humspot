@@ -8,7 +8,7 @@ import GoBackHeader from "../components/Shared/GoBackHeader";
 import { useRef } from "react";
 import useContext from "../utils/hooks/useContext";
 import { useToast } from "@agney/ir-toast";
-import { OrganizerRequestSubmission } from "../utils/types";
+import { NewHumspotUser, OrganizerRequestSubmission } from "../utils/types";
 import { handleSubmitRequestToBecomeOrganizer } from "../utils/server";
 
 const BecomeAnOrganizer: React.FC = () => {
@@ -29,7 +29,7 @@ const BecomeAnOrganizer: React.FC = () => {
   };
 
   const handleSubmitRequest = async () => {
-    if (!context.humspotUser) return;
+    if (!context.newHumspotUser) return;
     if (!isFormValid()) {
       const t = Toast.create({ message: "Please enter a name and an email", position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
@@ -40,13 +40,13 @@ const BecomeAnOrganizer: React.FC = () => {
       name: nameRef?.current?.value as string ?? '',
       description: descRef?.current?.value as string ?? '',
       email: emailRef?.current?.value as string ?? '',
-      userID: context.humspotUser.userID
+      userID: context.newHumspotUser.userID
     };
     present({ message: "Submitting request..." })
     const res = await handleSubmitRequestToBecomeOrganizer(data);
     if (res.success) {
-      let tempUser = { ...context.humspotUser, requestForCoordinatorSubmitted: 1 };
-      context.setHumspotUser(tempUser);
+      let tempUser: NewHumspotUser = { ...context.newHumspotUser, requestForCoordinatorSubmitted: true };
+      context.setNewHumspotUser(tempUser);
     }
     dismiss();
   };
@@ -63,7 +63,7 @@ const BecomeAnOrganizer: React.FC = () => {
         <div style={{ padding: '10px' }}>
           <p>To be able to submit events to Humspot, you must be an approved Organizer.</p>
         </div>
-        {context.humspotUser?.requestForCoordinatorSubmitted === 0 ?
+        {context.newHumspotUser?.requestForCoordinatorSubmitted === false ?
           <div style={{ background: 'var(--ion-background-color)', padding: '5px' }}>
             <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
               <IonLabel position='stacked'>Name</IonLabel>
@@ -77,7 +77,7 @@ const BecomeAnOrganizer: React.FC = () => {
               <IonLabel position='stacked'>Reason for request (optional)</IonLabel>
               <IonTextarea rows={3} maxlength={350} ref={descRef} />
             </IonItem>
-            <IonButton disabled={!context.humspotUser} color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmitRequest()}>Submit</IonButton>
+            <IonButton disabled={!context.newHumspotUser} color='secondary' expand="block" style={{ padding: "10px" }} onClick={async () => await handleSubmitRequest()}>Submit</IonButton>
           </div>
           :
           <div className='ion-text-center' style={{ display: 'flex', height: '50%', padding: '20px' }}>

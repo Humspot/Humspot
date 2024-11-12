@@ -245,7 +245,7 @@ export const EventForm = () => {
   }
 
   const handleSubmit = async () => {
-    if (!context.humspotUser || !context.humspotUser.userID) return;
+    if (!context.newHumspotUser || !context.newHumspotUser.userID) return;
     if (!isFormValid()) {
       const t = Toast.create({ message: 'Please fill out all input fields!', position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
@@ -272,10 +272,10 @@ export const EventForm = () => {
       description: descRef?.current?.value! as string,
       location: locationRef?.current?.value! as string,
       websiteURL: websiteUrlRef?.current?.value! as string,
-      addedByUserID: context.humspotUser.userID,
+      addedByUserID: context.newHumspotUser.userID,
       latitude: mapPinLatLong ? mapPinLatLong[0] : null,
       longitude: mapPinLatLong ? mapPinLatLong[1] : null,
-      organizer: context.humspotUser.username ?? '',
+      organizer: context.newHumspotUser.username ?? '',
       tags: selectedTags,
       date: selectedDateTime.toISOString().split('T')[0],
       time: selectedDateTime.toTimeString().split(' ')[0],
@@ -320,7 +320,7 @@ export const EventForm = () => {
       <GoBackHeader translucent={true} title="Submit Event" />
       <IonContent fullscreen>
 
-        {context.humspotUser && context.humspotUser.accountType !== 'user' ?
+        {context.newHumspotUser && context.newHumspotUser.accountType !== 'user' ?
           <>
             <div style={{ background: 'var(--ion-background-color)', padding: '5px' }}>
               <IonItem style={{ '--background': 'var(--ion-background-color)' }} lines='full'>
@@ -456,13 +456,13 @@ export const EventForm = () => {
             </div>
 
           </>
-          : context.humspotUser === null ? (
+          : context.newHumspotUser === null ? (
             <>
               <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
                 Loading...
               </div>
             </>
-          ) : context.humspotUser === undefined ? (
+          ) : context.newHumspotUser === undefined ? (
             <div className="ion-text-center access-denied-message" style={{ padding: "10px" }}>
               <span style={{ color: 'var(--ion-color-primary)', textDecoration: 'underline' }} onClick={() => router.push("/sign-in")}>Sign In</span> to a Humspot account before submitting an event
             </div>
@@ -473,7 +473,7 @@ export const EventForm = () => {
           )
         }
 
-        {context.humspotUser?.accountType !== 'user' &&
+        {context.newHumspotUser?.accountType !== 'user' &&
           <IonModal ref={mapModalRef} canDismiss={canDismiss} onIonModalWillPresent={handleAddressValidation} trigger='address-verification' handle={false} /* presentingElement={pageRef?.current!} */>
             <IonContent fullscreen>
               <IonLoading isOpen={addressValidating} />

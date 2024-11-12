@@ -66,7 +66,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
 
   const fetchFavorites = useCallback(async () => {
     if (!humspotUser) return;
-    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === humspotUser.userID)
+    const isCallingForSelf: boolean = (context.newHumspotUser !== null && context.newHumspotUser !== undefined && context.newHumspotUser.userID === humspotUser.userID)
     const response = await handleGetFavoritesGivenUserID(1, humspotUser.userID, isCallingForSelf);
     if (!response.success) {
       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
@@ -82,7 +82,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
 
   const fetchVisited = useCallback(async () => {
     if (!humspotUser) return;
-    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === humspotUser.userID)
+    const isCallingForSelf: boolean = (context.newHumspotUser !== null && context.newHumspotUser !== undefined && context.newHumspotUser.userID === humspotUser.userID)
     const response = await handleGetVisitedGivenUserID(1, humspotUser.userID, isCallingForSelf);
     if (!response.success) {
       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
@@ -240,7 +240,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
                     if (!humspotUser) return;
-                    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === humspotUser.userID)
+                    const isCallingForSelf: boolean = (context.newHumspotUser !== null && context.newHumspotUser !== undefined && context.newHumspotUser.userID === humspotUser.userID)
                     const response = await handleGetFavoritesGivenUserID(favoritesPageCount, humspotUser.userID, isCallingForSelf);
                     if (!response.success) {
                       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });
@@ -297,7 +297,7 @@ const ProfileSegments = memo((props: ProfileSegmentsProps) => {
                 <IonInfiniteScroll
                   onIonInfinite={async (ev) => {
                     if (!humspotUser) return;
-                    const isCallingForSelf: boolean = (context.humspotUser !== null && context.humspotUser !== undefined && context.humspotUser.userID === humspotUser.userID)
+                    const isCallingForSelf: boolean = (context.newHumspotUser !== null && context.newHumspotUser !== undefined && context.newHumspotUser.userID === humspotUser.userID)
                     const response = await handleGetVisitedGivenUserID(visitedPageCount, humspotUser.userID, isCallingForSelf);
                     if (!response.success) {
                       const toast = Toast.create({ message: response.message, position: 'bottom', duration: 2000, color: 'danger' });

@@ -61,7 +61,7 @@ const Activity: React.FC<{}> = () => {
     if ("activity" in res && res.activity) {
       setActivity(res.activity);
       console.log(res.activity.comments);
-      if (context.humspotUser) {
+      if (context.newHumspotUser) {
         setComments(res.activity.comments);
       } else {
         setComments([]);
@@ -70,10 +70,10 @@ const Activity: React.FC<{}> = () => {
       context.setRecentlyViewedUpdated(true);
     }
     setActivityLoading(false);
-  }, [id, context.humspotUser]);
+  }, [id, context.newHumspotUser]);
   useEffect(() => {
     if (id) fetchActivity(id);
-  }, [id, context.humspotUser]);
+  }, [id, context.newHumspotUser]);
 
   useIonViewWillEnter(() => {
     context.setShowTabs(false);
@@ -115,17 +115,17 @@ const Activity: React.FC<{}> = () => {
           <ActivityDescription description={activity.description} websiteURL={activity.websiteURL} openTimes={activity.openTimes} />
         }
 
-        {context.humspotUser &&
+        {context.newHumspotUser &&
           <ActivityAddCommentBox id={id} activityName={activity?.name ?? 'X'} setComments={setComments} />
         }
 
-        {activity && context.humspotUser === undefined &&
+        {activity && context.newHumspotUser === undefined &&
           <section style={{ padding: '10px', paddingTop: '25%', textAlign: 'center' }}>
-            <p>You must be <span style={{ textDecoration: 'underline', color: 'var(--ion-color-primary)' }} onClick={() => {router.push('/sign-up')}}>signed in </span> to view and add comments</p>
+            <p>You must be <span style={{ textDecoration: 'underline', color: 'var(--ion-color-primary)' }} onClick={() => { router.push('/sign-up') }}>signed in </span> to view and add comments</p>
           </section>
         }
 
-        {context.humspotUser && comments && comments.length > 0 &&
+        {context.newHumspotUser && comments && comments.length > 0 &&
           <>
             <div id='top-of-comments-list'></div>
             <br />
@@ -135,7 +135,7 @@ const Activity: React.FC<{}> = () => {
 
         <IonInfiniteScroll
           onIonInfinite={async (ev) => {
-            if (context.humspotUser) {
+            if (context.newHumspotUser) {
               const response = await handleGetCommentsGivenActivityID(id, pageNum);
               if (response.success && response.comments && response.comments.length > 0) {
                 setPageNum((prev) => prev + 1);
