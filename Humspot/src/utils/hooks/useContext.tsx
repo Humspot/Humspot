@@ -17,6 +17,8 @@ export type ContextType = {
   setNewHumspotUser: React.Dispatch<React.SetStateAction<NewHumspotUser | null | undefined>>;
   darkMode: boolean;
   setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
+  phoneNumber: string;
+  setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
   showTabs: boolean;
   setShowTabs: React.Dispatch<React.SetStateAction<boolean>>;
   recentlyViewedUpdated: boolean;
@@ -31,6 +33,7 @@ export const ContextProvider = ({ children }: Props) => {
   const [newHumspotUser, setNewHumspotUser] = React.useState<NewHumspotUser | null | undefined>(null); // null if loading, undefined if not logged in
   const [darkMode, setDarkMode] = React.useState<boolean>(true);
   const [showTabs, setShowTabs] = React.useState<boolean>(true);
+  const [phoneNumber, setPhoneNumber] = React.useState<string>('');
   const [recentlyViewedUpdated, setRecentlyViewedUpdated] = React.useState<boolean>(false);
   const [currentPage, setCurrentPage] = React.useState<any>(null);
 
@@ -40,6 +43,8 @@ export const ContextProvider = ({ children }: Props) => {
       setHumspotUser,
       newHumspotUser,
       setNewHumspotUser,
+      phoneNumber,
+      setPhoneNumber,
       darkMode,
       setDarkMode,
       showTabs,
@@ -49,7 +54,7 @@ export const ContextProvider = ({ children }: Props) => {
       currentPage,
       setCurrentPage
     }),
-    [humspotUser, setHumspotUser, newHumspotUser, setNewHumspotUser, darkMode, setDarkMode, showTabs, setShowTabs, recentlyViewedUpdated, setRecentlyViewedUpdated, currentPage, setCurrentPage]
+    [humspotUser, setHumspotUser, newHumspotUser, setNewHumspotUser, phoneNumber, setPhoneNumber, darkMode, setDarkMode, showTabs, setShowTabs, recentlyViewedUpdated, setRecentlyViewedUpdated, currentPage, setCurrentPage]
   );
 
   return (

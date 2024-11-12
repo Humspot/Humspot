@@ -32,7 +32,10 @@ import {
   SubmissionInfo,
   HumspotCommentResponse,
   HumspotUser,
-  NewHumspotUser
+  NewHumspotUser,
+  AuthProvider,
+  AccountType,
+  AccountStatus
 } from "./types";
 
 import { Capacitor } from '@capacitor/core';
@@ -47,9 +50,9 @@ import {
   User,
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, getFirestore, serverTimestamp } from "firebase/firestore";
-import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
-import { generateUsername } from "unique-username-generator";
+import { addDoc, collection, getDocs, getFirestore, query, serverTimestamp, where } from "firebase/firestore";
+import { FirebaseAuthentication, SignInWithPhoneNumberOptions } from "@capacitor-firebase/authentication";
+import { generateUsername } from "./functions/generateUsername";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD6u9LH3tMSd0UEBlFCWYQq7gquIBPVPsY",
@@ -71,58 +74,105 @@ export default auth;
 const db = getFirestore(app);
 
 /**
- * @function verifyPhoneNumber
+ * @function sendPhoneVerificationCode
  * @description sends an SMS message to the user with a code to verify phone number.
  * 
  * @param {string} phoneNumber 
  */
-export const verifyPhoneNumber = async (phoneNumber: string) => {
-  return new Promise<User | null>(async (resolve, reject) => {
-    try {
-      await FirebaseAuthentication.addListener('phoneCodeSent', async (event) => {
-        const verificationCode = window.prompt(
-          'Please enter the verification code that was sent to your mobile device.'
-        );
-
-        if (!verificationCode) {
-          resolve(null);
-          return;
-        }
-
-        const credential = PhoneAuthProvider.credential(
-          event.verificationId,
-          verificationCode
-        );
-
-        const userCredential = await signInWithCredential(auth, credential);
-        resolve(userCredential.user);
-      });
-
-      await FirebaseAuthentication.signInWithPhoneNumber({
-        phoneNumber: phoneNumber,
-        timeout: 0,
-      });
-    } catch (error) {
-      reject(error);
+export const sendPhoneVerificationCode = async (phoneNumber: string): Promise<boolean> => {
+  try {
+    if (Capacitor.isNativePlatform()) {
+      await FirebaseAuthentication.setLanguageCode({ languageCode: 'en' });
     }
-  });
+
+    let verificationFailed = false;
+    await FirebaseAuthentication.addListener('phoneVerificationFailed', (error) => {
+      console.error('Phone verification failed:', error);
+      verificationFailed = true;
+    });
+
+    const verifyConfig: SignInWithPhoneNumberOptions = {
+      phoneNumber,
+    };
+
+    const response = await FirebaseAuthentication.signInWithPhoneNumber(verifyConfig);
+
+    if (verificationFailed || !response) {
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.error('Phone verification error:', err);
+    return false;
+  }
 };
 
 
 /**
- * @function createFirestoreUser
- * @description creates a document in the "users" collection of the Firestore db. 
- * The user's phone number and username is set; the user's email, bio, and profilePicUrl are set to null.
+ * @function findExistingUser
  * 
  * @param {string} phoneNumber 
- * @param {string | undefined} username
- * @returns {Promise<{username: string; userID: string} | null>} the newly created document ID, or null if something went wrong
+ * @returns 
  */
-export const createFirestoreUser = async (phoneNumber: string, username?: string): Promise<{ username: string; userID: string } | null> => {
+export const findExistingUser = async (phoneNumber: string) => {
+  try {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("phoneNumber", "==", phoneNumber));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      return {
+        user: {
+          username: doc.data().username as string | null,
+          userID: doc.id as string,
+          phoneNumber,
+          email: doc.data().email as string | null,
+          profilePicUrl: doc.data().profilePicUrl as string | null,
+          accountType: doc.data().accountType as AccountType,
+          accountStatus: doc.data().accountStatus as AccountStatus,
+          authProvider: doc.data().authProvider as AuthProvider,
+          dateCreated: doc.data().dateCreated as string,
+          bio: doc.data().bio as string | null,
+          requestForCoordinatorSubmitted: doc.data().requestForCoordinatorSubmitted as boolean,
+        },
+        exists: true
+      }
+    }
+
+    return { user: null, exists: false };
+  } catch (error) {
+    console.error("Error finding existing user:", error);
+    throw error;
+  }
+};
+
+
+/**
+ * @function createOrGetFirestoreUser
+ * @description creates a document in the "users" collection of the Firestore db if it is a new user, otherwise
+ * return existing document. If new, the user's phone number and username is set and 
+ * the user's email, bio, and profilePicUrl are set to null.
+ * 
+ * @param {string} docID
+ * @param {string} phoneNumber 
+ * @param {string | undefined} username
+ * @returns {Promise<{username: string; userID: string} | null>} the username and document ID, or null if something went wrong
+ */
+export const createOrGetFirestoreUser = async (
+  docID: string,
+  phoneNumber: string,
+  username?: string
+): Promise<NewHumspotUser | null> => {
   if (!phoneNumber) return null;
   try {
-    const name: string = username ?? generateUsername("-", 4, 15);
-    const docRef = await addDoc(collection(db, "users"), {
+    const existingUser = await findExistingUser(phoneNumber);
+    if (existingUser.user && existingUser.exists) {
+      return existingUser.user;
+    }
+
+    const name: string = username ? username.trim() : generateUsername().trim();
+    await addDoc(collection(db, "users", docID), {
       email: null,
       phoneNumber,
       profilePicUrl: null,
@@ -134,12 +184,26 @@ export const createFirestoreUser = async (phoneNumber: string, username?: string
       bio: null,
       requestForCoordinatorSubmitted: false
     });
-    return { username: name, userID: docRef.id };
+
+    return {
+      userID: docID,
+      email: null,
+      phoneNumber,
+      profilePicUrl: null,
+      username: name,
+      accountType: "user",
+      accountStatus: "active",
+      authProvider: "phone",
+      dateCreated: new Date().toISOString(),
+      bio: null,
+      requestForCoordinatorSubmitted: false
+    }
   } catch (err) {
-    console.error("Error creating Firestore user", err);
+    console.error(err);
+    console.error("Error in createOrGetFirestoreUser:");
     return null;
   }
-}
+};
 
 
 /**
@@ -322,7 +386,7 @@ export const handleSignIn = async (email: string, password: string): Promise<boo
  */
 export const handleLogout = async (): Promise<boolean> => {
   try {
-    await Auth.signOut();
+    await signOut(auth);
     return true;
   } catch (error) {
     console.error("Error during sign out " + error);

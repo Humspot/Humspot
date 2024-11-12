@@ -4,9 +4,9 @@
  * They are sent a verification email after entering their information.
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import {
-  IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonText,
+  IonButton, IonContent, IonFab, IonIcon, IonInput, IonItem, IonLabel, IonPage, IonText,
   useIonAlert,
   useIonLoading, useIonRouter, useIonViewDidEnter, useIonViewWillEnter
 } from '@ionic/react';
@@ -22,11 +22,14 @@ import GoogleLoginButton from '../components/Login/GoogleLoginButton';
 
 import { dynamicNavigate } from '../utils/functions/dynamicNavigate';
 import useContext from '../utils/hooks/useContext';
-import { createFirestoreUser, handleAppleLoginAndVerifyAWSUser, handleSignUp, verifyPhoneNumber } from '../utils/server';
+import { sendPhoneVerificationCode } from '../utils/server';
 
 import '../components/Login/AuthPages.css';
 import { NewHumspotUser } from '../utils/types';
-import { formatPhoneNumber } from '../utils/functions/formatPhone';
+import { formatPhoneNumber, formatToE164 } from '../utils/functions/formatPhone';
+import { timeout } from '../utils/functions/timeout';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import { Keyboard, KeyboardStyle } from '@capacitor/keyboard';
 
 const inputNote: React.CSSProperties = {
   fontSize: '0.85em',
@@ -47,44 +50,37 @@ const SignUp: React.FC = () => {
   const phoneRef = React.useRef<HTMLIonInputElement | null>(null);
   const [phoneNumber, setPhoneNumber] = React.useState<string>('');
 
+  const handlePhoneNumberChange = (value: string) => {
+    const formattedPhoneNumber = formatPhoneNumber(value);
+    setPhoneNumber(formattedPhoneNumber);
+  };
+
   const validatePhoneNumber = (): boolean => {
-    if (phoneNumber.trim().length <= 0) return false;
-    const regex = /^\+\d{1,3}-\d{1,14}$/;
-    return regex.test(phoneNumber);
+    const formattedPhoneNumber = formatToE164(phoneNumber);
+    if (formattedPhoneNumber.trim().length <= 0) return false;
+    const usPhoneRegex = /^\+1\d{10}$/;
+    return usPhoneRegex.test(formattedPhoneNumber);
   }
 
   const clickedOnAgree = async () => {
-    await present({ message: 'Please Wait...' });
-    const success = await verifyPhoneNumber(phoneNumber);
-    if (success) { // create new user in Firestore upon successful phone auth
-      const userInfo: { username: string; userID: string } | null = await createFirestoreUser(phoneNumber);
-      if (userInfo) {
-        const user: NewHumspotUser = {
-          userID: userInfo.userID,
-          username: userInfo.username,
-          phoneNumber,
-          accountType: "user",
-          accountStatus: "active",
-          authProvider: "phone",
-          dateCreated: (new Date()).toISOString(),
-          email: null,
-          profilePicUrl: null,
-          bio: null,
-          requestForCoordinatorSubmitted: false
-        }
-        context.setNewHumspotUser(user);
-        const t = Toast.create({ message: 'Signed In!', duration: 2000, position: 'bottom', color: 'success' });
+    try {
+      await timeout(500);
+      await present({ message: 'Please Wait...' });
+      const formattedPhoneNumber: string = formatToE164(phoneNumber);
+      const success: boolean = await sendPhoneVerificationCode(formattedPhoneNumber);
+      if (!success) {
+        const t = Toast.create({ message: 'Failed to verify phone number. Please try again.', position: 'bottom', duration: 2000, color: 'danger' });
         t.present();
-        router.goBack();
       } else {
-        const t = Toast.create({ message: 'Failed to create user. Please try again.', position: 'bottom', duration: 2000, color: 'danger' });
-        t.present();
+        context.setPhoneNumber(formattedPhoneNumber);
       }
-    } else {
+    } catch (err) {
+      console.error('Error occurred:', err);
       const t = Toast.create({ message: 'Something went wrong!', position: 'bottom', duration: 2000, color: 'danger' });
       t.present();
+    } finally {
+      await dismiss();
     }
-    await dismiss();
   }
 
   const clickOnSignUp = async () => {
@@ -107,27 +103,45 @@ const SignUp: React.FC = () => {
           {
             text: 'I agree',
             handler: async () => {
-              await clickedOnAgree();
+              clickedOnAgree();
             },
           },
         ]
     });
   };
 
-  const handlePhoneNumberChange = (value: string) => {
-    const formattedPhoneNumber = formatPhoneNumber(value);
-    console.log(formattedPhoneNumber);
-    setPhoneNumber(formattedPhoneNumber);
-  };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (context.newHumspotUser) {
       router.canGoBack() && router.goBack();
     }
   }, [context.newHumspotUser]);
 
-  useIonViewDidEnter(() => {
+  const handlePhoneCodeSent = React.useCallback(async () => {
+    await FirebaseAuthentication.addListener('phoneCodeSent', async (event) => {
+      console.log('Code sent event received:', event);
+      await dismiss();
+      await Keyboard.hide();
+      dynamicNavigate(router, `/verify-phone-code/${event.verificationId}`, 'forward');
+    });
+  }, [router]);
+
+  React.useEffect(() => {
+    handlePhoneCodeSent();
+  }, [handlePhoneCodeSent]);
+
+  useIonViewDidEnter(async () => {
+    context.setPhoneNumber('');
     if (phoneRef.current) {
+      if (context.darkMode) {
+        await Keyboard.setStyle({
+          style: KeyboardStyle.Dark
+        });
+      } else {
+        await Keyboard.setStyle({
+          style: KeyboardStyle.Light
+        });
+      }
       phoneRef.current.setFocus();
     }
   });
@@ -154,7 +168,9 @@ const SignUp: React.FC = () => {
               <IonInput aria-labelledby='phone-number-label' type='tel' ref={phoneRef} value={phoneNumber} onIonInput={(e) => handlePhoneNumberChange(e.target.value as string)} />
             </IonItem>
 
-            <IonButton className='login-button' onClick={async () => { await clickOnSignUp() }} fill='clear' expand='block' id='signUpButton' >Send Code</IonButton>
+            <IonFab vertical="bottom" horizontal="center" style={{ width: '100%', paddingBottom: '10px' }}>
+              <IonButton className='login-button' onClick={async () => { await clickOnSignUp() }} fill='clear' expand='block' id='signUpButton' >Send Code</IonButton>
+            </IonFab>
 
 
             {/* <IonLabel id='password-label' className='login-label'>Password</IonLabel>

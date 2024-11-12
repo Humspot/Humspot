@@ -1,5 +1,6 @@
 import { IonButton, IonButtons, IonHeader, IonIcon, IonTitle, IonToolbar, useIonRouter } from "@ionic/react"
 import { chevronBackOutline } from "ionicons/icons";
+import { dynamicNavigate } from "../../utils/functions/dynamicNavigate";
 
 type GoBackHeaderProps = {
   title: string;
@@ -15,9 +16,8 @@ const GoBackHeader: React.FC<GoBackHeaderProps> = (props: GoBackHeaderProps) => 
   return (
     <IonHeader className='ion-no-border' translucent={props.translucent}>
       <IonToolbar style={{ '--background': 'var(--ion-tab-bar-background)' }}>
-        {/* <IonTitle style={{ fontSize: "1.25rem" }}>{title}</IonTitle> */}
         <IonButtons >
-          <IonButton style={{ fontSize: '1.15em', marginLeft: '-2.5px' }} onClick={() => { router.goBack(); }}>
+          <IonButton style={{ fontSize: '1.15em', marginLeft: '-2.5px' }} onClick={() => { router.canGoBack() ? router.goBack() : dynamicNavigate(router, '/explore', 'root') }}>
             <IonIcon icon={chevronBackOutline} /> <p>Back</p>
           </IonButton>
           <IonTitle>{title}</IonTitle>

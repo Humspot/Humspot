@@ -56,6 +56,8 @@ import ProfileActivitiesModal from "./components/Shared/ActivitiesModal";
 import User from "./pages/User";
 import ApprovedActivitiesPage from "./pages/ApprovedActivities";
 import UpcomingEvents from "./pages/UpcomingEvents";
+import VerifyPhoneCode from "./pages/VerifyPhoneCode";
+import useFirebaseAuth from "./utils/hooks/useFirebaseAuth";
 
 
 setupIonicReact({ mode: "ios" });
@@ -65,7 +67,7 @@ const RoutingSystem: React.FC = () => {
   const context = useContext();
   const { tabBarDisplay, tabBarOpacity } = useTabBarVisibility(context);
 
-  useAWSAuth(context);
+  useFirebaseAuth(context);
   useDarkMode(context);
   usePushNotifications();
 
@@ -104,6 +106,7 @@ const RoutingSystem: React.FC = () => {
           <Route exact path="/activity/:id" component={Activity} />
           <Route exact path="/search/:query" component={Search} />
           <Route exact path="/more-results/:tagName" component={MoreResults} />
+          <Route exact path="/verify-phone-code/:verificationId" component={VerifyPhoneCode} />
           <Route exact path="/user/:uid" component={User} />
         </IonRouterOutlet>
 

@@ -18,6 +18,8 @@ export type HumspotUser = {
 };
 
 export type AuthProvider = "google" | "apple" | "phone" | "custom";
+export type AccountType = "user" | "admin" | "organizer" | "guest";
+export type AccountStatus = "active" | "restricted";
 
 export type NewHumspotUser = {
   userID: string;
@@ -25,8 +27,8 @@ export type NewHumspotUser = {
   email: string | null;
   profilePicUrl: string | null;
   username: string | null;
-  accountType: "user" | "admin" | "organizer" | "guest";
-  accountStatus: "active" | "restricted";
+  accountType: AccountType;
+  accountStatus: AccountStatus;
   authProvider: AuthProvider;
   dateCreated: string;
   bio: string | null;

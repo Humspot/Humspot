@@ -14,7 +14,7 @@
 }
 
 .center-content {
-  height: 90vh;
+  height: 75vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,7 +28,7 @@
 
 
 .login-button {
-  width: 50%;
+  width: 90%;
   margin: auto;
   margin-top: 1vh;
   margin-bottom: 1vh;
@@ -37,6 +37,30 @@
   /* font-size: large; */
   border-radius: 5px;
   background: var(--ion-color-primary);
+  padding-left: 5%;
+  padding-right: 5%;
+  color: white;
+}
+
+.character-dark {
+  border: none;
+  font-size: 20px;
+  border-radius: 8px;
+  color: #fff;
+  background-color: #222;
+  box-shadow: 0 2px 0 #444;
+}
+.character-light { 
+  border: none;
+  font-size: 20px;
+  border-radius: 8px;
+  color: #272729;
+  background-color: var(--ion-toolbar-background);
+  box-shadow: 0 2px 0 #e4e2f5;
+}
+
+.character--selected {
+  outline: 2px solid var(--ion-color-primary) !important;
 }
 
 .edit-modal-button {
